@@ -179,6 +179,8 @@ private fun LiveScreen(
         notice?.let { Text(it) }
         val reading = state.reading
         if (reading != null) {
+            Text(if (state.precision == Precision.COARSE) "Approximate location · raw diagnostics only" else "Precise location",
+                modifier = Modifier.testTag("live-precision"))
             Text(reading.status.name.readable(), modifier = Modifier.testTag("live-fix-status"))
             reading.fix?.let { fix ->
                 val emulator = Build.HARDWARE in setOf("ranchu", "goldfish") || Build.MODEL.startsWith("sdk_")
@@ -188,7 +190,7 @@ private fun LiveScreen(
                     fix.mock -> "Android mock location"
                     else -> "Android location"
                 }, modifier = Modifier.testTag("live-fix-source"))
-                Text("Provider ${fix.provider ?: "unknown"} · ${state.precision.name.readable()}")
+                Text("Provider ${fix.provider ?: "unknown"}")
                 Text("Accuracy ${fix.accuracy?.let { "${it.toInt()} m" } ?: "unknown"}")
             }
             reading.tracking?.let { Text("${it.signal.name.readable()} · ${it.route.name.readable()} · ${it.source.name.readable()}") }

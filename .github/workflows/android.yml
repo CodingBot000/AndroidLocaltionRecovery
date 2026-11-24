@@ -100,4 +100,11 @@ jobs:
           arch: x86_64
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -no-audio -no-boot-anim
-          script: tools/run_live_instrumentation.sh
+          script: LIVE_TEST_REPORT=build/reports/platform-live-api36.txt tools/run_live_instrumentation.sh
+      - name: Preserve Live instrumentation results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-api36-instrumentation
+          path: build/reports/platform-live-api36.txt
+          if-no-files-found: ignore

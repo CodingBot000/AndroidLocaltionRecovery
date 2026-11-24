@@ -61,7 +61,9 @@ internal class AndroidLocationSource(private val context: Context) : LocationSou
             }
 
             override fun onProviderDisabled(provider: String) {
-                if (this === listener) issue(LiveIssue.PROVIDER_DISABLED)
+                if (this === listener) {
+                    issue(this@AndroidLocationSource.issue(precision) ?: LiveIssue.PROVIDER_DISABLED)
+                }
             }
 
             @Suppress("OVERRIDE_DEPRECATION")

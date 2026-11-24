@@ -62,9 +62,12 @@ class LiveLifecycleTest {
             rule.waitUntil(12_000) { LiveSessions.updates.value.reading?.status == FixStatus.OUTSIDE_COVERAGE }
             assertNull(LiveSessions.updates.value.reading?.tracking)
         }
-        rule.activityRule.scenario.recreate()
-        assertEquals(active.token, LiveSessions.updates.value.token)
-        assertForeground(true)
+        repeat(3) {
+            rule.activityRule.scenario.recreate()
+            assertEquals(active.token, LiveSessions.updates.value.token)
+            assertForeground(true)
+            assertTrue(listenerPresent())
+        }
 
         assertTrue(device.pressHome())
         assertForeground(true)
@@ -99,7 +102,7 @@ class LiveLifecycleTest {
             assertForeground(true)
             assertTrue(listenerPresent())
             if (mockProvider) {
-                inject(if (cycle < 10) "37.5275,126.922" else "37.543162,127.05305")
+                inject(if (cycle < 10) "37.5275,126.922" else "37.544,127.054")
                 rule.waitUntil(10_000) { LiveSessions.updates.value.latestFixProcessingNs != null }
                 fixTimes += checkNotNull(LiveSessions.updates.value.latestFixProcessingNs)
             }
@@ -137,7 +140,10 @@ class LiveLifecycleTest {
         assertReleased()
     }
 
-    private fun start() = rule.onNodeWithTag("live-start").performClick()
+    private fun start() {
+        rule.waitUntil(12_000) { rule.activity.hasWindowFocus() }
+        rule.onNodeWithTag("live-start").performClick()
+    }
 
     private fun choose(map: String, route: String? = null) {
         rule.waitUntil(10_000) {
@@ -153,7 +159,14 @@ class LiveLifecycleTest {
 
     private fun inject(position: String) = shell("cmd location providers set-test-provider-location gps --location $position --accuracy 3")
 
-    private fun waitPhase(phase: SessionPhase) = rule.waitUntil(20_000) { LiveSessions.updates.value.phase == phase }
+    private fun waitPhase(phase: SessionPhase) {
+        try {
+            rule.waitUntil(20_000) { LiveSessions.updates.value.phase == phase }
+        } catch (timeout: androidx.compose.ui.test.ComposeTimeoutException) {
+            val actual = LiveSessions.updates.value
+            throw AssertionError("Expected $phase, observed ${actual.phase}, issue ${actual.issue}", timeout)
+        }
+    }
 
     private fun assertForeground(expected: Boolean) {
         rule.waitUntil(10_000) {

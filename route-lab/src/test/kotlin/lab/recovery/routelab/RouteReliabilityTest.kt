@@ -224,10 +224,12 @@ class RouteReliabilityTest {
         val pending = coordinator.state.value
         fake.reply(0)
         runCurrent()
-        assertEquals(pending.copy(staleResponses = 1), coordinator.state.value)
-        assertEquals(scenario.roads.plannedRoute, coordinator.planEdges())
+        val afterLateA = coordinator.state.value
+        val edgesAfterLateA = coordinator.planEdges()
         fake.reply(1)
         runCurrent()
+        assertEquals(pending.copy(staleResponses = 1), afterLateA)
+        assertEquals(scenario.roads.plannedRoute, edgesAfterLateA)
         assertEquals(RoutePhase.SUCCEEDED, coordinator.state.value.phase)
         assertEquals(alternatives.getValue(startB), coordinator.planEdges())
     }

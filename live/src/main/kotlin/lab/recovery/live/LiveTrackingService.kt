@@ -12,6 +12,7 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.os.SystemClock
+import android.os.Trace
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,7 @@ import lab.recovery.map.MapDefinition
 import lab.recovery.map.RoadGraph
 import lab.recovery.simulation.FixtureSource
 import lab.recovery.simulation.ScenarioRepository
+import java.io.IOException
 
 internal data class LiveMap(val definition: MapDefinition, val projection: OsmProjection?, val route: RoadGraph?)
 
@@ -104,9 +106,11 @@ class LiveTrackingService : Service() {
     private fun begin(initial: LiveState) {
         token = initial.token
         try {
-            val ongoing = notification(token)
-            if (Build.VERSION.SDK_INT >= 29) startForeground(notificationId, ongoing, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
-            else startForeground(notificationId, ongoing)
+            trace("Live promote foreground") {
+                val ongoing = notification(token)
+                if (Build.VERSION.SDK_INT >= 29) startForeground(notificationId, ongoing, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
+                else startForeground(notificationId, ongoing)
+            }
         } catch (_: SecurityException) {
             finish(LiveIssue.PERMISSION_CHANGED)
             return
@@ -122,7 +126,7 @@ class LiveTrackingService : Service() {
                 }
                 marker = preferences
                 preferences.edit().putBoolean("inProgress", true).apply()
-                val map = withContext(Dispatchers.IO) { loadMap(initial) }
+                val map = withContext(Dispatchers.IO) { trace("Live prepare offline map") { loadMap(initial) } }
                 val location = LocationSubscription(source, initial.precision)
                 subscription = location
                 runSession(initial, map, activeToken, location)
@@ -130,22 +134,21 @@ class LiveTrackingService : Service() {
                 throw cancelled
             } catch (_: SecurityException) {
                 finish(LiveIssue.PERMISSION_CHANGED)
-            } catch (_: java.io.IOException) {
+            } catch (_: IOException) {
                 finish(LiveIssue.MAP_UNAVAILABLE)
             } catch (_: IllegalArgumentException) {
-                finish(LiveIssue.MAP_UNAVAILABLE)
-            } catch (_: lab.recovery.simulation.InvalidFixture) {
                 finish(LiveIssue.MAP_UNAVAILABLE)
             }
         }
     }
 
     private fun loadMap(initial: LiveState): LiveMap {
-        val repository = ScenarioRepository(FixtureSource(assets::open))
+        val fixtures = FixtureSource(assets::open)
+        val repository = ScenarioRepository(fixtures)
         val map = repository.readOsmMap(requireNotNull(initial.mapId))
         val control = try {
-            assets.open("projection-controls.json").bufferedReader().use(ProjectionControl::read)[map.id]
-        } catch (_: java.io.IOException) {
+            fixtures.open("projection-controls.json").bufferedReader().use(ProjectionControl::read)[map.id]
+        } catch (_: IOException) {
             null
         } catch (_: RuntimeException) {
             null // A malformed control cannot enable matching.
@@ -263,6 +266,15 @@ class LiveTrackingService : Service() {
             .setOnlyAlertOnce(true)
             .addAction(action)
             .build()
+    }
+
+    private inline fun <T> trace(section: String, block: () -> T): T {
+        Trace.beginSection(section)
+        try {
+            return block()
+        } finally {
+            Trace.endSection()
+        }
     }
 
     private companion object {

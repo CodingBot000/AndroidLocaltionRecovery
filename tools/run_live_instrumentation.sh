@@ -22,8 +22,13 @@ trap restore EXIT
 "$adb" shell pm grant lab.recovery.live android.permission.ACCESS_COARSE_LOCATION
 "$adb" shell pm grant lab.recovery.live android.permission.ACCESS_FINE_LOCATION
 
-output="$(mktemp)"
-trap 'rm -f "$output"; restore' EXIT
+if [[ -n "${LIVE_TEST_REPORT:-}" ]]; then
+  output="$LIVE_TEST_REPORT"
+  mkdir -p "$(dirname "$output")"
+else
+  output="$(mktemp)"
+  trap 'rm -f "$output"; restore' EXIT
+fi
 "$adb" shell am instrument -w -r -e class lab.recovery.live.LiveLifecycleTest \
   lab.recovery.live.test/androidx.test.runner.AndroidJUnitRunner | tee "$output"
 grep -q '^OK (' "$output"
