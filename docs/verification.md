@@ -60,3 +60,10 @@ ARM64 API 36 에뮬레이터에서 비행기 모드를 켜고 Wi-Fi를 끈 뒤 �
 ```
 
 [평가 요약](evaluation-report.md) · [평가 JSON](evaluation-results.json) · [데모](demo.md) · [알고리즘](algorithm.md)
+
+## P09 기준선
+
+- `f2042f2`에서 JVM·Android 단위 테스트, Lint, Debug·unsigned Release·계측 APK 빌드에 성공했다. API 36 에뮬레이터(비행기 모드)에서 세로 계측 6/6이 통과했다.
+- 기존 v1 원본 23개의 SHA-256은 [legacy-fixtures.sha256](legacy-fixtures.sha256)에 기록했다.
+- [기존 원격 실행](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45382104156)은 SDK 설치 전 `sdkmanager: command not found`로 종료했다. Android SDK 설정 액션으로 도구를 구성하고 SDK 설치 명령의 성공을 확인하도록 수정했다.
+- 기존 Macrobenchmark는 15초 DEMO와 이전 UI의 물리 단말 기록이다. 확장 앱과 동일 조건으로 재측정하기 전 개선률을 산출하지 않는다.
