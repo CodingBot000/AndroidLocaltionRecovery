@@ -37,6 +37,8 @@ HELD_OUT = (4, 11, 7, 10, 13, 17, 14, 9, 5, 16)
 def build_case(number, seed, held_out=False):
     map_number, duration, route, title, ko, kind = CASES[number - 1]
     map_id = f"M{map_number:02}"
+    if held_out and number in (4, 14):
+        route = {4: "HGCDM", 14: "ABC"}[number]
     actual = route
     times = None
     stops = [(19, 24)] if number in (1, 3, 14, 15) else []
@@ -117,6 +119,9 @@ def build_case(number, seed, held_out=False):
         actual = "ABXYZ"
         times = [0, 21, 48, 72, 94, 120] if not held_out else [0, 22, 51, 74, 96, 120]
         check("REROUTE_RECOMMENDED")
+        if held_out:
+            add(32, "jump")
+            check("IMPLAUSIBLE_MOVE", second=32)
     elif number == 12:
         add(51, "side_jump")
     elif number == 13:

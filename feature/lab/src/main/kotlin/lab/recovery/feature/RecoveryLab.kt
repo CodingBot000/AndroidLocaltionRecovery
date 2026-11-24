@@ -1,10 +1,8 @@
 package lab.recovery.feature
 
-import lab.recovery.map.Road
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,13 +16,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Slider
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -34,6 +25,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,17 +46,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import lab.recovery.location.DecisionEvent
-import lab.recovery.location.ObservationDecision
 import lab.recovery.location.PositionSource
 import lab.recovery.location.SignalState
-import lab.recovery.simulation.Distribution
-import lab.recovery.simulation.Evaluation
-import lab.recovery.simulation.PlaybackSpeeds
-import java.util.Locale
 
 internal val Background = Color(0xFF101716)
 internal val Panel = Color(0xFF172120)
@@ -74,15 +63,16 @@ internal val Sky = Color(0xFF9ACAF0)
 
 @Composable
 fun RecoveryLab(model: LabViewModel) {
-    val state by model.state.collectAsStateWithLifecycle()
+    val state = model.state.collectAsStateWithLifecycle()
     MaterialTheme(colorScheme = darkColorScheme(
         primary = Mint, onPrimary = Color(0xFF0B3023), surface = Panel, onSurface = Ink,
         background = Background, onBackground = Ink, outline = Rule, error = Coral,
         secondary = Sky, onSurfaceVariant = Muted,
     )) {
         Surface(Modifier.fillMaxSize(), color = Background) {
-            Box(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing), contentAlignment = Alignment.TopCenter) {
-                LabScreen(state, model::send)
+            BoxWithConstraints(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
+                contentAlignment = Alignment.TopCenter) {
+                LabScreen(state, model::send, (maxHeight * 0.51f).coerceAtLeast(230.dp))
             }
         }
     }
@@ -90,249 +80,133 @@ fun RecoveryLab(model: LabViewModel) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun LabScreen(state: UiState, onIntent: (UiIntent) -> Unit) {
-    var expandedLogs by remember(state.runId) { mutableStateOf(false) }
-    val logs = if (expandedLogs) state.logs.asReversed() else state.logs.takeLast(6).asReversed()
+private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHeight: Dp) {
+    val selection by remember(state) { derivedStateOf { state.value.selected } }
+    val entries by remember(state) { derivedStateOf { state.value.choices } }
+    val error by remember(state) { derivedStateOf { state.value.error } }
+    val evaluation by remember(state) { derivedStateOf { state.value.evaluation } }
+    val runId by remember(state) { derivedStateOf { state.value.runId } }
+    var expandedLogs by remember(runId) { mutableStateOf(false) }
+    var diagnostics by rememberSaveable { mutableStateOf(false) }
+    val logCount by remember(state) { derivedStateOf { state.value.logs.size } }
+    var night by rememberSaveable { mutableStateOf(false) }
+    val language = LocalConfiguration.current.locales[0].language
     LazyColumn(
-        modifier = Modifier.widthIn(max = 760.dp).fillMaxWidth().testTag("lab-screen").semantics { testTagsAsResourceId = true },
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+        modifier = Modifier.widthIn(max = 760.dp).fillMaxWidth().testTag("lab-screen")
+            .semantics { testTagsAsResourceId = true },
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         item {
-            Column(Modifier.padding(start = 18.dp, end = 18.dp, top = 14.dp)) {
-                Text("Location Recovery Lab", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-                Text("Synthetic GPS playback", color = Muted, style = MaterialTheme.typography.bodySmall)
-                Spacer(Modifier.height(12.dp))
-                ScenarioMenu(state.selected, onIntent)
+            Column(Modifier.padding(start = 12.dp, end = 12.dp, top = 4.dp)) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(stringResource(R.string.lab_title), style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                    TextButton(onClick = { night = !night }, modifier = Modifier.testTag("map-theme")) {
+                        Text(stringResource(if (night) R.string.map_night else R.string.map_day))
+                    }
+                }
+                ScenarioMenu(selection, entries, onIntent)
                 Text(
-                    text = stringResource(state.selected.description),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 4.dp, top = 6.dp, end = 4.dp)
-                        .testTag("scenario-description")
-                        .semantics { liveRegion = LiveRegionMode.Polite },
-                    color = Muted,
-                    style = MaterialTheme.typography.bodyMedium,
+                    text = selection.catalog?.description?.forLanguage(language)
+                        ?: selection.description.takeIf { it != 0 }?.let { stringResource(it) }.orEmpty(),
+                    modifier = Modifier.fillMaxWidth().padding(start = 4.dp, top = 3.dp, end = 4.dp)
+                        .testTag("scenario-description").semantics { liveRegion = LiveRegionMode.Polite },
+                    color = Muted, style = MaterialTheme.typography.bodySmall,
                 )
             }
         }
         item {
-            Column(
-                Modifier.padding(horizontal = 18.dp).fillMaxWidth()
-                    .border(1.dp, Rule, RoundedCornerShape(20.dp)).background(Panel, RoundedCornerShape(20.dp)).padding(14.dp),
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()) {
-                    val statusColor = when (state.snapshot.signal) {
-                        SignalState.TRACKING -> Mint
-                        SignalState.LOST -> Coral
-                        SignalState.DEGRADED, SignalState.RECOVERING -> Amber
-                        SignalState.ACQUIRING -> Muted
-                    }
-                    Text(state.snapshot.signal.name, color = statusColor, style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Bold, modifier = Modifier.testTag("signal"))
-                    val duration = state.scenario?.durationMs ?: 0L
-                    Text("${time(state.snapshot.nowMs)} / ${time(duration)}", color = Muted,
-                        style = MaterialTheme.typography.labelMedium, fontFamily = FontFamily.Monospace,
-                        modifier = Modifier.testTag("virtual-time"))
-                }
-                Spacer(Modifier.height(10.dp))
-                TrackingMap(state, Modifier.fillMaxWidth().height(202.dp))
-                MapLegend(state.showTruth, { onIntent(UiIntent.ToggleTruth) })
-                val duration = state.scenario?.durationMs ?: 0L
-                val progress = if (duration > 0) state.snapshot.nowMs.toFloat() / duration else 0f
-                LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth(),
-                    color = Mint, trackColor = Rule, gapSize = 0.dp, drawStopIndicator = {})
-                Spacer(Modifier.height(12.dp))
-                PlaybackControls(state, onIntent)
+            Column(Modifier.padding(horizontal = 12.dp).fillMaxWidth()) {
+                val current = state.value
+                DriveHud(current)
+                Spacer(Modifier.height(5.dp))
+                TrackingMap(current, Modifier.fillMaxWidth().height(mapHeight), night)
+                MapLegend(current.showTruth, { onIntent(UiIntent.ToggleTruth) })
             }
-        }
-        state.error?.let { error ->
-            item { Text(error, color = Coral, modifier = Modifier.padding(horizontal = 18.dp).testTag("error")) }
-        }
-        item { Diagnostics(state, Modifier.padding(horizontal = 18.dp)) }
-        state.evaluation?.let { evaluation ->
-            item { EvaluationPanel(evaluation, Modifier.padding(horizontal = 18.dp)) }
-        }
-        if (state.playback == Playback.COMPLETE && state.evaluation == null) {
-            item { Text("Calculating results…", color = Muted, modifier = Modifier.padding(horizontal = 18.dp)) }
         }
         item {
-            Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp), verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Decision log", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                if (state.logs.size > 6) TextButton(onClick = { expandedLogs = !expandedLogs }) {
-                    Text(if (expandedLogs) "Show recent" else "Show all ${state.logs.size}")
-                }
+            Column(Modifier.padding(horizontal = 12.dp)) {
+                val current = state.value
+                val duration = current.scenario?.durationMs ?: 0L
+                val progress = if (duration > 0) current.snapshot.nowMs.toFloat() / duration else 0f
+                LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth(),
+                    color = Mint, trackColor = Rule, gapSize = 0.dp, drawStopIndicator = {})
+                PlaybackControls(current, onIntent)
             }
         }
-        if (logs.isEmpty()) {
-            item { Text("Play or step to see engine decisions.", color = Muted, modifier = Modifier.padding(horizontal = 18.dp)) }
+        error?.let { item { Text(it, color = Coral, modifier = Modifier.padding(horizontal = 12.dp).testTag("error")) } }
+        item {
+            OutlinedButton(onClick = { diagnostics = !diagnostics }, modifier = Modifier.padding(horizontal = 12.dp)
+                .testTag("diagnostics-toggle")) {
+                Text(stringResource(if (diagnostics) R.string.hide_diagnostics else R.string.show_diagnostics))
+            }
         }
-        items(logs) { event -> LogLine(event, Modifier.padding(horizontal = 18.dp)) }
+        if (diagnostics) {
+            item { Diagnostics(state.value, Modifier.padding(horizontal = 12.dp)) }
+            item {
+                val logs = state.value.logs
+                Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(stringResource(R.string.decision_log), style = MaterialTheme.typography.titleMedium)
+                    if (logs.size > 6) TextButton(onClick = { expandedLogs = !expandedLogs }) {
+                        Text(if (expandedLogs) stringResource(R.string.recent_log) else stringResource(R.string.all_log, logs.size))
+                    }
+                }
+                if (logs.isEmpty()) Text(stringResource(R.string.empty_log), color = Muted, modifier = Modifier.padding(horizontal = 12.dp))
+            }
+            items(if (expandedLogs) logCount else minOf(6, logCount)) { index ->
+                val logs = state.value.logs
+                logs.getOrNull(logs.lastIndex - index)?.let { LogLine(it, Modifier.padding(horizontal = 12.dp)) }
+            }
+        }
+        evaluation?.let { item { EvaluationPanel(it, Modifier.padding(horizontal = 12.dp)) } }
         item { Spacer(Modifier.height(12.dp)) }
     }
 }
 
 @Composable
-private fun ScenarioMenu(selected: ScenarioChoice, onIntent: (UiIntent) -> Unit) {
-    var open by remember { mutableStateOf(false) }
-    Box(Modifier.fillMaxWidth()) {
-        OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().testTag("scenario-menu")) {
-            Text(if (selected.id == "DEMO") selected.title else "${selected.id} · ${selected.title}",
-                modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text("▾", color = Muted)
-        }
-        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
-            scenarioChoices.forEach { choice ->
-                DropdownMenuItem(
-                    text = { Text("${choice.id} · ${choice.title}") },
-                    onClick = { open = false; onIntent(UiIntent.Select(choice)) },
-                    modifier = Modifier.testTag("scenario-${choice.id}"),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun PlaybackControls(state: UiState, onIntent: (UiIntent) -> Unit) {
-    val controllable = state.playback in setOf(Playback.READY, Playback.PLAYING, Playback.PAUSED)
-    Column {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Button(
-                onClick = { onIntent(UiIntent.PlayPause) }, enabled = controllable,
-                modifier = Modifier.weight(1f).testTag("play-pause"), colors = ButtonDefaults.buttonColors(containerColor = Mint),
-            ) {
-                Text(if (state.playback == Playback.PLAYING) "Pause" else "Play")
-            }
-            OutlinedButton(onClick = { onIntent(UiIntent.Step) }, enabled = controllable,
-                modifier = Modifier.testTag("step")) { Text("Step") }
-            TextButton(onClick = { onIntent(UiIntent.Reset) }, modifier = Modifier.testTag("reset")) { Text("Reset") }
-        }
-        val speedLabel = stringResource(R.string.playback_speed)
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(speedLabel, color = Muted, style = MaterialTheme.typography.labelMedium)
-            Text(
-                formatSpeed(state.speed),
-                color = Mint,
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.testTag("speed-value"),
-            )
-        }
-        Slider(
-            value = state.speed,
-            onValueChange = { onIntent(UiIntent.Speed(PlaybackSpeeds.snap(it))) },
-            valueRange = PlaybackSpeeds.range,
-            steps = PlaybackSpeeds.values.size - 2,
-            modifier = Modifier.fillMaxWidth()
-                .testTag("speed-slider")
-                .semantics { contentDescription = speedLabel },
-        )
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(formatSpeed(PlaybackSpeeds.range.start), color = Muted, style = MaterialTheme.typography.labelSmall)
-            Text(formatSpeed(PlaybackSpeeds.range.endInclusive), color = Muted, style = MaterialTheme.typography.labelSmall)
-        }
-    }
-}
-
-private fun formatSpeed(speed: Float): String = speed.toString().removeSuffix(".0") + "×"
-
-@Composable
-private fun Diagnostics(state: UiState, modifier: Modifier) {
+private fun DriveHud(state: UiState) {
     val snapshot = state.snapshot
-    val obs = snapshot.lastObservation
-    Column(modifier.fillMaxWidth()) {
-        Text("Position diagnostics", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(8.dp))
-        Metric("Source / confidence", "${snapshot.source.label()} / ${snapshot.confidence.name.lowercase()}", "position-source")
-        Metric("Road / route", "${snapshot.roadId ?: "—"} / ${snapshot.route.name.lowercase().replace('_', ' ')}")
-        Metric("Last received accuracy", obs?.accuracyMeters?.takeIf { it.isFinite() }?.let { "${number(it)} m" } ?: "—")
-        Metric("Measurement → receipt", obs?.let { "${it.receivedAtMs - it.measuredAtMs} ms" } ?: "—")
-        Metric("Time since last fix", snapshot.lastAcceptedAtMs?.let { "${snapshot.nowMs - it} ms" } ?: "—")
-        Metric("Last decision", snapshot.lastDecision?.name ?: "—")
-        snapshot.drUnavailable?.let { Metric("Estimation unavailable", it.name) }
+    val statusColor = when (snapshot.signal) {
+        SignalState.TRACKING -> Mint
+        SignalState.LOST -> Coral
+        SignalState.DEGRADED, SignalState.RECOVERING -> Amber
+        SignalState.ACQUIRING -> Muted
     }
-}
-
-@Composable
-private fun EvaluationPanel(result: Evaluation, modifier: Modifier) {
-    var expanded by remember(result) { mutableStateOf(false) }
-    Column(modifier.fillMaxWidth().border(1.dp, Rule, RoundedCornerShape(16.dp)).padding(12.dp).testTag("evaluation")) {
-        Text("Run results", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        Metric("Observations", result.observations.toString(), "evaluation-count")
-        Metric("False rejection / invalid acceptance", "${result.falseRejection.display()} / ${result.invalidAcceptance.display()}")
-        Metric("Low-quality use", result.lowQualityUse.display())
-        Metric("Match accuracy / coverage", "${result.matchAccuracy.display()} / ${result.matchCoverage.display()}")
-        Metric("Mean raw / accepted error", "${number(result.rawErrorMeters.mean)} / ${number(result.acceptedErrorMeters.mean)} m")
-        Metric("Mean DR error", "${number(result.drErrorMeters.mean)} m")
-        Metric("Recovery delay", result.recoveryDelayMs.takeIf { it.isNotEmpty() }?.joinToString { "$it ms" } ?: "N/A")
-        Metric("Route departure alerts", result.departureCount.toString())
-        TextButton(onClick = { expanded = !expanded }) { Text(if (expanded) "Hide full results" else "View full results") }
-        if (expanded) {
-            Metric("Fixture / schema", "${result.scenarioId} / ${result.schemaVersion}")
-            Text(result.sha256, color = Muted, style = MaterialTheme.typography.bodySmall)
-            Metric("Unfinished recoveries", result.incompleteRecoveries.toString())
-            Metric("Departure false alarms / misses", "${result.departureFalsePositives} / ${result.departureMisses}")
-            Metric("Ambiguous / without match", "${result.ambiguousMatches.display()} / ${result.missingMatches.display()}")
-            DistributionRow("Raw error", result.rawErrorMeters)
-            DistributionRow("Accepted error", result.acceptedErrorMeters)
-            DistributionRow("DR error", result.drErrorMeters)
-            DistributionRow("Raw error on accepted fixes", result.pairedRawErrorMeters)
-            Metric("Signal loss delay", result.lossDelayMs.takeIf { it.isNotEmpty() }?.joinToString { "$it ms" } ?: "N/A")
-            Metric("Re-alignment distance", result.realignmentMeters.takeIf { it.isNotEmpty() }?.joinToString { "${number(it)} m" } ?: "N/A")
-            Metric("Departure detection delay", result.departureDelayMs.takeIf { it.isNotEmpty() }?.joinToString { "$it ms" } ?: "N/A")
-            result.availabilityRatios.forEach { (source, count) -> Metric(source.label(), count.display()) }
-            result.recoveryOutcomes.forEach { (outcome, count) -> Metric(outcome.name.lowercase(), count.toString()) }
-            result.decisions.forEach { (label, decisions) ->
-                Text(label.name, style = MaterialTheme.typography.labelMedium, color = Muted)
-                decisions.forEach { (decision, count) -> Metric(decision.name.lowercase().replace('_', ' '), count.toString()) }
-            }
-            Metric("Tick / signal timeout", "${result.settings.tickMs} / ${result.settings.signalLossMs} ms")
-        }
+    val source = stringResource(when (snapshot.source) {
+        PositionSource.NONE -> R.string.position_none
+        PositionSource.OBSERVED -> R.string.position_observed
+        PositionSource.MAP_MATCHED -> R.string.position_matched
+        PositionSource.DEAD_RECKONED -> R.string.position_estimated
+        PositionSource.LAST_KNOWN -> R.string.position_last
+    })
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        Text(snapshot.signal.name, color = statusColor, style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold, modifier = Modifier.testTag("signal"))
+        val progress = "${time(snapshot.nowMs)} / ${time(state.scenario?.durationMs ?: 0L)}"
+        Text(progress, color = Ink,
+            style = MaterialTheme.typography.labelMedium, fontFamily = FontFamily.Monospace,
+            modifier = Modifier.testTag("virtual-time").semantics {
+                contentDescription = progress + " · " + state.speed.toString().removeSuffix(".0") + "×"
+            })
     }
+    val route = androidx.compose.ui.res.stringResource(when (snapshot.route) {
+        lab.recovery.location.RouteStatus.UNKNOWN -> R.string.route_unknown
+        lab.recovery.location.RouteStatus.ON_ROUTE -> R.string.route_on
+        lab.recovery.location.RouteStatus.SUSPECTED_OFF_ROUTE -> R.string.route_suspected
+        lab.recovery.location.RouteStatus.OFF_ROUTE -> R.string.route_off
+    })
+    val receivedAccuracy = snapshot.lastObservation?.accuracyMeters?.takeIf { it.isFinite() && it >= 0 }
+    val speed = snapshot.lastObservation?.takeIf { it.measuredAtMs == snapshot.lastAcceptedAtMs && snapshot.lastDecision == lab.recovery.location.Reason.ACCEPTED }
+        ?.speedMps?.takeIf { it.isFinite() && it >= 0 }
+    val quality = stringResource(R.string.hud_accuracy, receivedAccuracy?.let { "${number(it)} m" } ?: "—")
+    val velocity = stringResource(R.string.hud_speed, speed?.let { "${number(it)} m/s" } ?: "—")
+    val candidates = if (snapshot.recoveryCandidates == 0) "" else
+        " · " + stringResource(R.string.hud_candidates, snapshot.recoveryCandidates)
+    Text("${state.scenario?.map?.id?.plus(" · ").orEmpty()}$source · $route$candidates",
+        color = if (snapshot.route == lab.recovery.location.RouteStatus.OFF_ROUTE) Coral else Muted,
+        style = MaterialTheme.typography.labelSmall, modifier = Modifier.testTag("map-status"))
+    Text("$velocity · $quality" + (snapshot.drUnavailable?.let { " · ${it.name}" } ?: ""),
+        style = MaterialTheme.typography.labelSmall, color = Muted, modifier = Modifier.testTag("tracking-detail"))
 }
-
-@Composable
-private fun DistributionRow(label: String, distribution: Distribution) {
-    Metric("$label (n=${distribution.count})", "${number(distribution.median)} median / ${number(distribution.p95)} p95 / ${number(distribution.maximum)} max")
-}
-
-@Composable
-private fun Metric(label: String, value: String, tag: String? = null) {
-    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = Muted)
-        Text(value, modifier = if (tag == null) Modifier else Modifier.testTag(tag), style = MaterialTheme.typography.bodySmall)
-    }
-}
-
-@Composable
-private fun LogLine(event: DecisionEvent, modifier: Modifier) {
-    Column(modifier.fillMaxWidth()) {
-        HorizontalDivider(color = Rule)
-        Row(Modifier.padding(vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(time(event.timeMs), color = Muted, fontFamily = FontFamily.Monospace,
-                style = MaterialTheme.typography.bodySmall)
-            Text(event.reason.name, color = when (event.decision) {
-                ObservationDecision.REJECTED -> Coral
-                ObservationDecision.LOW_QUALITY, ObservationDecision.RECOVERY_PENDING -> Amber
-                ObservationDecision.ACCEPTED -> Mint
-                null -> Ink
-            }, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
-            event.observation?.let { Text(it.id, color = Muted, style = MaterialTheme.typography.bodySmall) }
-        }
-    }
-}
-
-internal fun PositionSource.label() = when (this) {
-    PositionSource.NONE -> "No fix"
-    PositionSource.OBSERVED -> "Observed"
-    PositionSource.MAP_MATCHED -> "Map matched"
-    PositionSource.DEAD_RECKONED -> "Dead reckoned"
-    PositionSource.LAST_KNOWN -> "Last known"
-}
-private fun time(milliseconds: Long): String = String.format(Locale.ROOT, "%02d:%04.1f", milliseconds / 60000, milliseconds % 60000 / 1000.0)
-private fun number(value: Double?): String = value?.let { String.format(Locale.ROOT, "%.1f", it) } ?: "—"

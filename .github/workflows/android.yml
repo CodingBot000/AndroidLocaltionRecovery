@@ -23,10 +23,25 @@ jobs:
           packages: 'platform-tools platforms;android-36 build-tools;35.0.0'
       - name: Verify Android SDK tools
         run: sdkmanager --version
+      - name: Verify fixture sources
+        run: |
+          sha256sum --check docs/legacy-fixtures.sha256
+          python3 -B tools/extended/generate.py --output "$RUNNER_TEMP/generated-fixtures"
+          diff -r fixtures/extended "$RUNNER_TEMP/generated-fixtures"
       - name: Build and validate
-        run: ./gradlew :core:location:test :core:simulation:test :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease :app:assembleDebugAndroidTest
-      - name: Run independent evaluation
+        run: >-
+          ./gradlew verifyModuleBoundaries :core:map:test :core:location:test :core:simulation:test
+          :feature:lab:testDebugUnitTest :ui:map:testDebugUnitTest :app:testDebugUnitTest
+          :feature:lab:lintDebug :ui:map:lintDebug :app:lintDebug :app:assembleDebug
+          :app:assembleRelease :app:assembleDebugAndroidTest :benchmark:assembleBenchmark
+      - name: Verify APK assets and offline manifest
+        run: python3 tools/check_apk.py app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release-unsigned.apk
+      - name: Run legacy evaluation
         run: ./gradlew :core:simulation:run --args='fixtures/evaluation build/reports/evaluation.json build/reports/evaluation.md'
+      - name: Run legacy demo evaluation
+        run: ./gradlew :core:simulation:run --args='fixtures/development build/reports/legacy-demo.json build/reports/legacy-demo.md'
+      - name: Run extended evaluation
+        run: ./gradlew :core:simulation:run --args='fixtures/extended build/reports/extended.json build/reports/extended.md'
       - name: Preserve verification reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -35,4 +50,8 @@ jobs:
           path: |
             **/build/test-results/**
             app/build/reports/**
+            feature/lab/build/reports/lint-results-debug.*
+            ui/map/build/reports/lint-results-debug.*
             build/reports/evaluation.*
+            build/reports/legacy-demo.*
+            build/reports/extended.*

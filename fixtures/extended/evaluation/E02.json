@@ -41,7 +41,7 @@
     {"id":"o029","measured":29000,"received":29000,"x":443.8728,"y":4.2329,"accuracy":4.0,"speed":16.459,"heading":87.8389,"label":"NORMAL"},
     {"id":"o030","measured":30000,"received":30000,"x":459.0678,"y":5.162,"accuracy":4.0,"speed":16.3,"heading":87.8389,"label":"NORMAL"},
     {"id":"o031","measured":31000,"received":31000,"x":475.5156,"y":5.5074,"accuracy":4.0,"speed":16.2033,"heading":87.8389,"label":"NORMAL"},
-    {"id":"o032","measured":32000,"received":32000,"x":492.3674,"y":6.5593,"accuracy":4.0,"speed":16.1708,"heading":87.8389,"label":"NORMAL"},
+    {"id":"o032","measured":32000,"received":32000,"x":971.6745000000001,"y":-298.5217,"accuracy":4.0,"speed":16.1708,"heading":87.8389,"label":"INVALID"},
     {"id":"o033","measured":33000,"received":33000,"x":506.8993,"y":6.4735,"accuracy":4.0,"speed":16.2031,"heading":87.8389,"label":"NORMAL"},
     {"id":"o034","measured":34000,"received":34000,"x":524.5781,"y":6.7601,"accuracy":4.0,"speed":16.2995,"heading":87.8389,"label":"NORMAL"},
     {"id":"o035","measured":35000,"received":35000,"x":539.9535,"y":8.3845,"accuracy":4.0,"speed":16.4583,"heading":87.8389,"label":"NORMAL"},
@@ -736,6 +736,7 @@
   ],
   "expected":[
     {"reason":"REROUTE_RECOMMENDED","count":1,"time":null},
+    {"reason":"IMPLAUSIBLE_MOVE","count":1,"time":32000},
     {"reason":"RUN_COMPLETED","count":1,"time":120000},
     {"reason":"SIGNAL_LOST","count":0,"time":null}
   ],

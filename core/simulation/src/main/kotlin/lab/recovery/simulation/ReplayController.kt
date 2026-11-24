@@ -5,6 +5,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,13 +39,14 @@ sealed interface ReplayIntent {
 }
 
 class ReplayController(
-    private val scope: CoroutineScope,
+    parentScope: CoroutineScope,
     initial: String,
     private val load: (String) -> Scenario,
     private val worker: CoroutineDispatcher = Dispatchers.Default,
     private val io: CoroutineDispatcher = Dispatchers.IO,
     clock: ReplayClock = MonotonicReplayClock,
 ) : AutoCloseable {
+    private val scope = CoroutineScope(parentScope.coroutineContext + SupervisorJob(parentScope.coroutineContext[Job]))
     private val timeline = ReplayTimeline(clock)
     private val clock = clock
     private var history = ReplayHistory()
@@ -179,9 +182,10 @@ class ReplayController(
 
     private suspend fun advanceBatch() {
         val backlog = cursor?.nextTimeMs()?.let { (timeline.position() - it).toLong().coerceAtLeast(0) } ?: 0L
-        repeat(12) { index ->
-            val next = cursor?.nextTimeMs() ?: return@repeat
-            if (index == 0 || next <= timeline.position()) advance()
+        for (index in 0 until 12) {
+            val next = cursor?.nextTimeMs() ?: break
+            if (index > 0 && next > timeline.position()) break
+            advance()
         }
         mutableState.value = state.value.copy(backlogMs = backlog)
         publishTrail()
@@ -235,5 +239,6 @@ class ReplayController(
         cursor = null
         cancelTasks()
         commands.cancel()
+        scope.cancel()
     }
 }

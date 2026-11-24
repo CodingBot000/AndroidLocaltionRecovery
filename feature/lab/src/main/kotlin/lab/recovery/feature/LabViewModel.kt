@@ -6,11 +6,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CancellationException
+import lab.recovery.simulation.CatalogEntry
 import lab.recovery.simulation.Evaluation
+import lab.recovery.simulation.ScenarioRepository
 import lab.recovery.simulation.MonotonicReplayClock
 import lab.recovery.simulation.ReplayClock
 import lab.recovery.simulation.ReplayController
@@ -23,8 +27,9 @@ typealias Playback = lab.recovery.simulation.Playback
 data class ScenarioChoice(
     val id: String,
     val title: String,
-    @StringRes val description: Int,
+    @param:StringRes val description: Int,
     val path: String = "evaluation/$id.json",
+    val catalog: CatalogEntry? = null,
 )
 val scenarioChoices = listOf(
     ScenarioChoice("DEMO", "Jump, loss & recovery", R.string.scenario_demo_description, "development/DEMO.json"),
@@ -47,7 +52,13 @@ val scenarioChoices = listOf(
     ScenarioChoice("S17", "Invalid observations", R.string.scenario_s17_description),
 )
 
-data class UiState(val replay: ReplayState, val selected: ScenarioChoice, val showTruth: Boolean, val error: String?) {
+data class UiState(
+    val replay: ReplayState,
+    val selected: ScenarioChoice,
+    val showTruth: Boolean,
+    val error: String?,
+    val choices: List<ScenarioChoice> = scenarioChoices,
+) {
     val runId get() = replay.runId
     val playback get() = replay.playback
     val speed get() = replay.speed
@@ -72,17 +83,42 @@ class LabViewModel(
     worker: CoroutineDispatcher = Dispatchers.Default,
     io: CoroutineDispatcher = Dispatchers.IO,
     clock: ReplayClock = MonotonicReplayClock,
+    initial: ScenarioChoice = scenarioChoices.first(),
+    catalogChoices: (() -> List<ScenarioChoice>)? = null,
 ) : ViewModel() {
-    private val byId = scenarioChoices.associateBy(ScenarioChoice::id)
+    constructor(repository: ScenarioRepository, legacyBenchmark: Boolean = false) : this(
+        load = { if (it.path.isEmpty()) repository.read(it.id) else repository.readLegacy(it.path) },
+        initial = if (legacyBenchmark) scenarioChoices.first() else ScenarioChoice("DEMO_LONG", "DEMO_LONG", 0, ""),
+        catalogChoices = {
+            repository.catalog.entries.filterNot(CatalogEntry::evaluation).map {
+                ScenarioChoice(it.id, it.title.english, 0, "", it)
+            }
+        },
+    )
+
+    private val legacy = scenarioChoices.associateBy(ScenarioChoice::id)
+    private val choices = MutableStateFlow(if (catalogChoices == null) scenarioChoices else listOf(initial) + scenarioChoices)
     private val showTruth = MutableStateFlow(true)
     private val commandError = MutableStateFlow<String?>(null)
-    private val controller = ReplayController(viewModelScope, scenarioChoices.first().id,
-        { load(byId.getValue(it)) }, worker, io, clock)
+    private val controller = ReplayController(viewModelScope, initial.id,
+        { id -> load(legacy[id] ?: ScenarioChoice(id, id, 0, "")) }, worker, io, clock)
 
-    val state = combine(controller.state, showTruth, commandError) { replay, truth, error ->
-        UiState(replay, byId.getValue(replay.selected), truth, replay.error ?: error)
+    val state = combine(controller.state, showTruth, commandError, choices) { replay, truth, error, entries ->
+        UiState(replay, entries.firstOrNull { it.id == replay.selected } ?: initial, truth, replay.error ?: error, entries)
     }.stateIn(viewModelScope, SharingStarted.Eagerly,
-        UiState(controller.state.value, scenarioChoices.first(), true, null))
+        UiState(controller.state.value, initial, true, null, choices.value))
+
+    init {
+        if (catalogChoices != null) viewModelScope.launch {
+            try {
+                choices.value = withContext(io) { catalogChoices() } + scenarioChoices
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                commandError.value = error.message ?: "Unable to open the scenario catalog"
+            }
+        }
+    }
 
     fun send(intent: UiIntent) {
         if (intent == UiIntent.ToggleTruth) {

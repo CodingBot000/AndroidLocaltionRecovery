@@ -1,7 +1,7 @@
 package lab.recovery.feature
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -9,12 +9,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import lab.recovery.location.PositionSource
+import lab.recovery.location.Reason
 import lab.recovery.map.MapVisualData
 import lab.recovery.uimap.MapMarker
 import lab.recovery.uimap.MapOverlay
@@ -44,8 +44,10 @@ internal fun TrackingMap(state: UiState, modifier: Modifier, dark: Boolean = fal
                 PositionSource.LAST_KNOWN -> MarkerKind.LAST_KNOWN
                 else -> MarkerKind.FIX
             }
-            val heading = raw?.takeIf { it.measuredAtMs == snapshot.lastAcceptedAtMs && (it.speedMps ?: 0.0) >= 1.0 }
-                ?.headingDegrees
+            val heading = raw?.takeIf {
+                snapshot.lastDecision == Reason.ACCEPTED && it.measuredAtMs == snapshot.lastAcceptedAtMs &&
+                    (it.speedMps ?: 0.0) >= 1.0
+            }?.headingDegrees
             MapMarker(point, kind, heading)
         },
         raw = raw?.point,
@@ -62,7 +64,7 @@ internal fun TrackingMap(state: UiState, modifier: Modifier, dark: Boolean = fal
 
 @Composable
 internal fun MapLegend(truthEnabled: Boolean, toggle: () -> Unit) {
-    Row(horizontalArrangement = Arrangement.spacedBy(9.dp), verticalAlignment = Alignment.CenterVertically,
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(9.dp), itemVerticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
         modifier = Modifier.padding(vertical = 1.dp)) {
         TextButton(onClick = toggle, modifier = Modifier.testTag("truth-toggle")) {
             Text(if (truthEnabled) stringResource(R.string.legend_truth) else stringResource(R.string.legend_truth_off), color = if (truthEnabled) Sky else Muted,

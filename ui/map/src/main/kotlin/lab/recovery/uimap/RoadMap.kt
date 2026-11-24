@@ -85,11 +85,11 @@ private class Geometry(scene: MapScene) {
     val route = worldPath(routePoints)
     val routeTunnels = scene.route.roads.filter { it.tunnel || byId[it.id]?.structure == RoadStructure.TUNNEL }
         .map { worldPath(it.points) }
-    val arrows = (0.2..0.8).let { range -> listOf(range.start, 0.5, range.endInclusive) }
-        .map { scene.route.at(it * scene.route.length) }
+    val arrows = listOf(0.2, 0.5, 0.8).map { scene.route.at(it * scene.route.length) }
     val labels = scene.visual.labels
     val routeBounds = Bounds.from(routePoints)
-    val worldBounds = Bounds.from(scene.network.nodes.values.map { it.point } + routePoints)
+    private val bounds = Bounds.from(scene.network.nodes.values.map { it.point } + routePoints)
+    val cameraBounds = Bounds(bounds.minX - 70, bounds.minY - 70, bounds.maxX + 70, bounds.maxY + 70)
     val start = routePoints.first()
 }
 
@@ -113,7 +113,7 @@ fun RoadMap(
         val height = viewport.height.toDouble()
         val fitted = data.routeBounds.fit(width, height, padding)
         return when (mode) {
-            CameraMode.FOLLOW -> Projection(latest.vehicle?.point ?: data.start,
+            CameraMode.FOLLOW -> Projection(latest.vehicle?.point?.let(data.cameraBounds::clamp) ?: data.start,
                 maxOf(fitted, width / 380.0, 0.01), width, height)
             CameraMode.OVERVIEW -> Projection(data.routeBounds.center, fitted, width, height)
             CameraMode.FREE -> free?.copy(width = width, height = height)
@@ -126,10 +126,7 @@ fun RoadMap(
         val current = projection(data)
         val min = data.routeBounds.fit(current.width, current.height, padding) * 0.5
         val next = current.manipulated(anchor, pan, zoom, min, maxOf(min, current.width / 35.0))
-        val margin = 70.0
-        val bounds = data.worldBounds
-        val limits = Bounds(bounds.minX - margin, bounds.minY - margin, bounds.maxX + margin, bounds.maxY + margin)
-        free = next.copy(center = limits.clamp(next.center))
+        free = next.copy(center = data.cameraBounds.clamp(next.center))
         mode = CameraMode.FREE
     }
 

@@ -22,10 +22,23 @@ class ExtendedScenarioTest {
         val groups = entries.map { repository.read(it.id) }.groupBy { it.map!!.id }
         val topology = groups.values.map { scenarios ->
             val network = scenarios.first().roads.network
-            network.edges.values.map { network.outgoing(it.id).size }.sorted() to
-                network.nodes.values.map { node ->
-                    network.edges.values.count { it.to == node.id } to network.edges.values.count { it.from == node.id }
-                }.sortedWith(compareBy({ it.first }, { it.second }))
+            val transitions = network.edges.values.map { network.outgoing(it.id).size }.sorted()
+            val remaining = network.nodes.keys.toMutableSet()
+            val components = mutableListOf<Int>()
+            val adjacency = network.edges.values.flatMap { listOf(it.from to it.to, it.to to it.from) }.groupBy({ it.first }, { it.second })
+            while (remaining.isNotEmpty()) {
+                val frontier = ArrayDeque(listOf(remaining.first()))
+                var count = 0
+                while (frontier.isNotEmpty()) {
+                    val node = frontier.removeFirst()
+                    if (remaining.remove(node)) {
+                        count++
+                        frontier.addAll(adjacency[node].orEmpty())
+                    }
+                }
+                components += count
+            }
+            transitions to components.sorted()
         }
         assertEquals(10, topology.distinct().size)
         assertTrue(groups.values.count { group -> group.map { it.roads.plannedRoute }.distinct().size >= 2 } >= 2)
