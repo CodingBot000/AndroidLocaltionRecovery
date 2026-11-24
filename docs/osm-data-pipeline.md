@@ -51,3 +51,16 @@ OSM 전용 상한은 지도와 시나리오 합계 12MiB, 방향성 에지 22,00
 [국내 지도 상세 레이어와 LOD](korea-map-design.md) · [실제 지도 화면](osm-visual-verification.md)
 
 함부르크의 이전 OSM 데이터와 평가는 전환 기준선 `79827f5`의 Git 이력에 보존한다.
+
+
+## 고난도 OSM 평가 재현
+
+`fixtures/osm/challenge`는 한국 OSM 지도 체크섬과 기존 가상 주행의 경로·실제 궤적을 참조한다. 편향과 수신 장애만 다르게 생성한다. CD의 개발용 변형과 CE의 독립 평가를 각각 8개 제공한다. 일반 OSM catalog에는 추가하지 않는다. 데이터 검사기는 기본 궤적과 체크섬의 일치, 분리된 시드 및 관측을 검사한다.
+
+```bash
+build/osm-venv/bin/python -B tools/osm/generate_challenge.py
+python3 -B tools/osm/verify.py
+./gradlew :core:simulation:run --args='fixtures/osm/challenge build/reports/osm-challenge.json build/reports/osm-challenge.md'
+```
+
+[독립 평가 결과](osm-challenge-report.md)

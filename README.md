@@ -30,6 +30,7 @@ python3 -B tools/extended/generate.py
 python3 -B tools/extended/check_terrain.py
 python3 -B tools/osm/verify.py
 ./gradlew :core:simulation:run --args='fixtures/osm build/reports/osm-evaluation.json build/reports/osm-evaluation.md'
+./gradlew :core:simulation:run --args='fixtures/osm/challenge build/reports/osm-challenge.json build/reports/osm-challenge.md'
 ./gradlew :core:simulation:run --args='fixtures/evaluation build/reports/legacy.json build/reports/legacy.md'
 ./gradlew :core:simulation:run --args='fixtures/extended build/reports/extended.json build/reports/extended.md'
 ```
@@ -62,3 +63,5 @@ Android와 JVM은 동일한 fixture와 파서를 사용한다. 엔진은 가상 
 - [단위·계측·빌드·오프라인 검증](docs/verification.md) · [기기와 측정 환경](docs/physical-device-validation.md)
 
 위치 오차와 복구 지연은 실제 지도 형상 위에서 가상 관측을 재생해 얻은 값이다. 실제 환경의 위치 정확도나 내비게이션 성능을 추정하는 데에는 별도의 실측이 필요하다.
+
+[성능 리팩터링 전후 측정](docs/refactor-performance.md) · [고난도 독립 평가](docs/osm-challenge-report.md)

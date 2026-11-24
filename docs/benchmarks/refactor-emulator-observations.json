@@ -1,0 +1,172 @@
+{
+  "baseline": {
+    "switchMs": [
+      77.216541,
+      73.750167,
+      66.440959
+    ],
+    "memory": {
+      "cold_O10": {
+        "pssKiB": 97737,
+        "allocatedDalvikKiB": 33601
+      },
+      "first_O07": {
+        "pssKiB": 113287,
+        "allocatedDalvikKiB": 5485
+      },
+      "cycled_O07": {
+        "pssKiB": 98109,
+        "allocatedDalvikKiB": 5517
+      },
+      "cycled_O10": {
+        "pssKiB": 180119,
+        "allocatedDalvikKiB": 33661
+      }
+    },
+    "trace": {
+      "frameRows": [
+        {
+          "jank_type": "SurfaceFlinger CPU Deadline Missed, App Deadline Missed, Buffer Stuffing",
+          "frames": "53"
+        },
+        {
+          "jank_type": "SurfaceFlinger CPU Deadline Missed, App Deadline Missed",
+          "frames": "4"
+        },
+        {
+          "jank_type": "Prediction Error, App Deadline Missed, Buffer Stuffing",
+          "frames": "2"
+        },
+        {
+          "jank_type": "SurfaceFlinger CPU Deadline Missed, Buffer Stuffing",
+          "frames": "1"
+        },
+        {
+          "jank_type": "SurfaceFlinger CPU Deadline Missed",
+          "frames": "1"
+        },
+        {
+          "jank_type": "Display HAL, App Deadline Missed, Buffer Stuffing",
+          "frames": "1"
+        },
+        {
+          "jank_type": "Buffer Stuffing, SurfaceFlinger Stuffing",
+          "frames": "1"
+        },
+        {
+          "jank_type": "App Deadline Missed, SurfaceFlinger Stuffing",
+          "frames": "1"
+        },
+        {
+          "jank_type": "App Deadline Missed, Buffer Stuffing, SurfaceFlinger Stuffing",
+          "frames": "1"
+        }
+      ],
+      "threads": [
+        {
+          "thread": "RenderThread",
+          "running_ms": "8959.320000"
+        },
+        {
+          "thread": "UI thread",
+          "running_ms": "543.830000"
+        },
+        {
+          "thread": "Jit thread pool",
+          "running_ms": "137.300000"
+        },
+        {
+          "thread": "hwuiTask0",
+          "running_ms": "20.910000"
+        },
+        {
+          "thread": "hwuiTask1",
+          "running_ms": "19.180000"
+        },
+        {
+          "thread": "binder:9208_6",
+          "running_ms": "17.500000"
+        }
+      ]
+    }
+  },
+  "after": {
+    "switchMs": [
+      207.3345,
+      200.933084,
+      285.065125
+    ],
+    "memory": {
+      "cold_O10": {
+        "pssKiB": 103880,
+        "allocatedDalvikKiB": 36857
+      },
+      "first_O07": {
+        "pssKiB": 118728,
+        "allocatedDalvikKiB": 5714
+      },
+      "cycled_O07": {
+        "pssKiB": 100460,
+        "allocatedDalvikKiB": 5730
+      },
+      "cycled_O10": {
+        "pssKiB": 188772,
+        "allocatedDalvikKiB": 36905
+      }
+    },
+    "trace": {
+      "frameRows": [
+        {
+          "jank_type": "SurfaceFlinger CPU Deadline Missed, App Deadline Missed, Buffer Stuffing",
+          "frames": "47"
+        },
+        {
+          "jank_type": "Prediction Error, App Deadline Missed, Buffer Stuffing",
+          "frames": "3"
+        },
+        {
+          "jank_type": "App Deadline Missed, Buffer Stuffing, SurfaceFlinger Stuffing",
+          "frames": "2"
+        },
+        {
+          "jank_type": "App Deadline Missed, Buffer Stuffing",
+          "frames": "2"
+        },
+        {
+          "jank_type": "SurfaceFlinger CPU Deadline Missed, App Deadline Missed",
+          "frames": "1"
+        },
+        {
+          "jank_type": "App Deadline Missed, SurfaceFlinger Stuffing",
+          "frames": "1"
+        }
+      ],
+      "threads": [
+        {
+          "thread": "RenderThread",
+          "running_ms": "8514.300000"
+        },
+        {
+          "thread": "UI thread",
+          "running_ms": "492.530000"
+        },
+        {
+          "thread": "Jit thread pool",
+          "running_ms": "134.490000"
+        },
+        {
+          "thread": "hwuiTask1",
+          "running_ms": "19.300000"
+        },
+        {
+          "thread": "hwuiTask0",
+          "running_ms": "17.730000"
+        },
+        {
+          "thread": "binder:11979_3",
+          "running_ms": "13.380000"
+        }
+      ]
+    }
+  }
+}
