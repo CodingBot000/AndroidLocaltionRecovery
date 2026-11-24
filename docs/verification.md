@@ -96,6 +96,18 @@ ARM64 API 36 에뮬레이터에서 비행기 모드를 켜고 Wi-Fi를 끈 뒤 �
 
 별도 복제본 두 곳에서 결함을 각각 주입했다. 좌표가 같으면 입체교차의 연결을 허용하는 변경에는 `RoadNetworkTest.levelsAndExplicitTurnsControlConnectivity`가 실패했다. Step에서 엔진 진행을 생략하는 변경에는 `ReplayControllerTest.aStepProcessesAllEventsAtTheNextScheduledTimestamp`가 실패했다. 정상 소스에서 두 테스트와 전체 단위 테스트를 다시 실행해 통과했다.
 
-[확장 코드 원격 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45393491037) · [평가 요약](extended-evaluation-report.md) · [지도별 화면](demo.md) · [내구 및 성능 환경](physical-device-validation.md)
+[확장 코드 원격 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45393491037) · [확장 결과 커밋 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45394373488) · [평가 요약](extended-evaluation-report.md) · [지도별 화면](demo.md) · [내구 및 성능 환경](physical-device-validation.md)
 
-확장 물리 단말의 콜드 스타트·프레임 지표와 동등한 기준선 재측정은 **BLOCKED**다. 에뮬레이터에서 두 벤치마크 대상의 시나리오 ID, 재생 시간, 1× 준비 상태를 확인했다. TalkBack 실제 음성 동작은 **NOT_RUN**이다.
+확장 물리 단말의 콜드 스타트·프레임 지표와 동등한 기준선 재측정은 **BLOCKED**다. 에뮬레이터에서 두 벤치마크 대상의 시나리오 ID, 재생 시간, 1× 준비 상태를 확인했다.
+
+
+### TalkBack
+
+Android 16 API 36 에뮬레이터에서 TalkBack 16.0을 활성화하고 접근성 계측을 세 번 실행했다. 주행 상태의 접근성 포커스와 Overview·확대·Follow·Step·Play/Pause의 포커스 이벤트 및 클릭 후 상태를 확인했다. 같은 실행에서 접근성 음성 합성 트랙의 시작과 녹화에 음성 신호가 포함된 것을 확인했다. 에뮬레이터의 TalkBack 설정은 종료 후 복원했다.
+
+TalkBack을 활성화한 API 36 세로 환경에서 다음 계측 클래스로 재현할 수 있다.
+
+```bash
+./gradlew :app:connectedDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=lab.recovery.app.TalkBackInstrumentedTest
+```
