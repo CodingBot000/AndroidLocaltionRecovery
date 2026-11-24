@@ -53,6 +53,8 @@ internal data class MapStyle(
     val truth: Color,
     val chrome: Color,
     val chromeText: Color,
+    val school: LandStyle,
+    val sport: LandStyle,
 ) {
     fun land(type: LandUse) = when (type) {
         LandUse.BLOCK, LandUse.RESIDENTIAL -> LandStyle(residential)
@@ -61,6 +63,9 @@ internal data class MapStyle(
         LandUse.BUILDING -> building
         LandUse.PARK -> park
         LandUse.WATER -> water
+        LandUse.SCHOOL -> school
+        LandUse.SPORT -> sport
+        LandUse.PARKING -> LandStyle(industrial)
     }
 
     fun road(type: RoadClass, structure: RoadStructure): RoadStyle {
@@ -88,6 +93,7 @@ internal data class MapStyle(
             route = Color(0xFF2569DF), routeHalo = Color.White, driven = Color(0xFF1374A8), estimate = Color(0xFFB46D10),
             raw = Color(0xFFC73836), text = Color(0xFF34424C), muted = Color(0xFF60717C), labelHalo = Color(0xFFF5F6F2),
             truth = Color(0xFF7252A0), chrome = Color(0xFFF8FAF7), chromeText = Color(0xFF34424C),
+            school = LandStyle(Color(0xFFF1E5CC), Color(0xFFD9C79E)), sport = LandStyle(Color(0xFFD9E8C3), Color(0xFFAAC48D)),
         )
         val Night = MapStyle(
             background = Color(0xFF191F29), residential = Color(0xFF232C35), commercial = Color(0xFF29313A),
@@ -102,6 +108,7 @@ internal data class MapStyle(
             route = Color(0xFF548FFE), routeHalo = Color(0xFF142439), driven = Color(0xFF6FC3F3), estimate = Color(0xFFFFC47B),
             raw = Color(0xFFFF8C84), text = Color(0xFFE6EDF3), muted = Color(0xFFA6B4C2), labelHalo = Color(0xFF19222C),
             truth = Color(0xFFC9B4FF), chrome = Color(0xFF263241), chromeText = Color(0xFFE6EDF3),
+            school = LandStyle(Color(0xFF3B332A), Color(0xFF675642)), sport = LandStyle(Color(0xFF304637), Color(0xFF49684F)),
         )
     }
 }

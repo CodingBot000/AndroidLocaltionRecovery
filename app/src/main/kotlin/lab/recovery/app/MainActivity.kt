@@ -7,6 +7,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.compose.ReportDrawnWhen
+import androidx.compose.runtime.collectAsState
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
@@ -29,6 +31,12 @@ class MainActivity : ComponentActivity() {
             }
         }
         val model = ViewModelProvider(this, factory)[LabViewModel::class.java]
-        setContent { RecoveryLab(model) }
+        val optimizedMap = packageName != "lab.recovery.app.benchmark" ||
+            !intent.getBooleanExtra("benchmarkRawMap", false)
+        setContent {
+            val screen = model.state.collectAsState()
+            ReportDrawnWhen { screen.value.scenario != null }
+            RecoveryLab(model, optimizedMap)
+        }
     }
 }

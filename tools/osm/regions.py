@@ -1,14 +1,14 @@
-"""Hamburg study areas: ID, theme, display names, geographic bbox, preferred route anchors."""
+"""South Korean study areas: ID, theme, display names, geographic bbox, route anchor."""
 
 REGIONS = [
-    ("O01", "Urban grid", "Eimsbüttel", "아임스뷔텔", (9.935,53.557,9.977,53.584), (9.954,53.571)),
-    ("O02", "Motorway exits", "Moorfleet", "모어플레트", (10.048,53.474,10.125,53.513), (10.090,53.501)),
-    ("O03", "Tunnel", "A7 Tunnel Corridor", "A7 터널 회랑", (9.877,53.499,9.956,53.566), (9.920,53.534)),
-    ("O04", "Parallel roads", "Barmbek", "바름베크", (10.018,53.574,10.071,53.609), (10.047,53.589)),
-    ("O05", "Grade-separated interchange", "Hamburg-Nordwest", "함부르크 북서 교차로", (9.865,53.591,9.957,53.636), (9.908,53.618)),
-    ("O06", "Water and bridges", "Elbbrücken", "엘베 교량", (9.988,53.507,10.059,53.552), (10.029,53.529)),
-    ("O07", "Suburban streets", "Volksdorf", "폴크스도르프", (10.135,53.634,10.181,53.665), (10.155,53.650)),
-    ("O08", "Curving hillside", "Blankenese", "블랑케네제", (9.780,53.545,9.825,53.568), (9.802,53.553)),
-    ("O09", "Traffic corridor", "Wandsbek", "반츠베크", (10.058,53.565,10.116,53.599), (10.078,53.575)),
-    ("O10", "Mixed corridor", "Harburg", "하르부르크", (9.945,53.440,10.031,53.490), (9.983,53.461)),
+    ("O01", "Urban grid", "Yeouido, Seoul", "서울 여의도", (126.902,37.515,126.942,37.540), (126.925,37.523)),
+    ("O02", "Motorway exits", "Pangyo IC, Seongnam", "성남 판교 나들목", (127.067,37.376,127.135,37.423), (127.100,37.399)),
+    ("O03", "Tunnel", "Namsan, Seoul", "서울 남산 터널 회랑", (126.966,37.529,127.009,37.573), (126.986,37.547)),
+    ("O04", "Parallel roads", "Samseong, Seoul", "서울 삼성동", (127.038,37.495,127.077,37.526), (127.061,37.509)),
+    ("O05", "Grade-separated interchange", "Suseo IC, Seoul", "서울 수서 나들목", (127.081,37.469,127.140,37.506), (127.105,37.489)),
+    ("O06", "Water and bridges", "Suyeong River, Busan", "부산 수영강", (129.099,35.144,129.148,35.183), (129.124,35.164)),
+    ("O07", "Suburban streets", "Unjung, Seongnam", "성남 운중동", (127.013,37.376,127.067,37.410), (127.039,37.389)),
+    ("O08", "Curving hillside", "Sanbok-doro, Busan", "부산 산복도로", (128.988,35.076,129.048,35.119), (129.020,35.093)),
+    ("O09", "Traffic corridor", "Dunsan, Daejeon", "대전 둔산동", (127.365,36.331,127.417,36.371), (127.386,36.351)),
+    ("O10", "Mixed corridor", "Seongsu, Seoul", "서울 성수동", (127.023,37.519,127.085,37.569), (127.052,37.545)),
 ]

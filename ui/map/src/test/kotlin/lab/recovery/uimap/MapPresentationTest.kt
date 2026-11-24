@@ -59,4 +59,25 @@ class MapPresentationTest {
         assertEquals(listOf(tunnel, park),
             arrangeLabels(listOf(road, park, duplicate, overlapsChrome, cropped, tunnel), viewport, listOf(chrome), 5))
     }
+    @Test fun spatialIndexMatchesBoundsScanAndRenderingOrder() {
+        val shapes = listOf(
+            Bounds(-450.0, -450.0, 450.0, 450.0),
+            Bounds(-1.0, -1.0, 0.0, 0.0),
+            Bounds(190.0, 191.0, 200.0, 201.0),
+            Bounds(800.0, 800.0, 821.0, 820.0),
+            Bounds(-9000.0, -9000.0, 9000.0, 9000.0),
+        )
+        val index = SpatialIndex(shapes) { it }
+        for (area in listOf(Bounds(-40.0, -40.0, 250.0, 250.0),
+            Bounds(-30000.0, -30000.0, 30000.0, 30000.0), Bounds(192.0, 192.0, 192.0, 192.0))) {
+            assertEquals(shapes.filter { it.intersects(area) }, index.visible(area))
+        }
+    }
+
+    @Test fun renderingSimplificationPreservesEndpointsAndProtectsSourceGeometry() {
+        val original = listOf(Point2D(0.0, 0.0), Point2D(5.0, .25), Point2D(10.0, 0.0), Point2D(10.0, 10.0))
+        assertEquals(listOf(original[0], original[2], original[3]), simplifyLine(original, 1.0))
+        assertEquals(Point2D(5.0, .25), original[1])
+        assertEquals(original, simplifyLine(original, .1))
+    }
 }

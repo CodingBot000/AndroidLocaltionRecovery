@@ -1,4 +1,4 @@
-"""Extract privacy-filtered vector districts from one pinned Geofabrik PBF."""
+"""Extract privacy-filtered Korean vector districts from one pinned Geofabrik PBF."""
 
 import argparse
 from collections import Counter, defaultdict
@@ -15,11 +15,12 @@ from shapely import LineString, Polygon
 
 from regions import REGIONS
 
-SOURCE = "https://download.geofabrik.de/europe/germany/hamburg/hamburg-261101.osm.pbf"
+SOURCE = "https://download.geofabrik.de/asia/south-korea/south-korea-261101.osm.pbf"
 SNAPSHOT = "2026-11-01T21:21:36Z"
 # Verified against the actual downloaded payload. This is also checked before every import.
-SOURCE_HASH = "5172f8e0a1da45a996ed25ec1641763f3da9677a0742c6f92b24b02eea8003f0"
-ACQUIRED = "2026-11-24"
+SOURCE_HASH = "055f00dea8bdc13b1805d305b4bd2e2b0c419c4be0a93f0e7b751bd965db5009"
+ACQUIRED = "2026-11-25"
+CRS = "EPSG:5179"
 ROUND_M = 2
 CLASSES = {
     "motorway": "EXPRESSWAY", "trunk": "EXPRESSWAY",
@@ -99,13 +100,41 @@ def road_attributes(tags):
     if level > 0 and structure == "SURFACE":
         structure = "ELEVATED"
     # OSM public street names, never addresses, POIs, contributor fields, or building names.
-    label = (tags.get("name") or tags.get("ref")) if highway != "service" else None
+    label = (tags.get("name:ko") or tags.get("name") or tags.get("ref")) if highway != "service" else None
     return CLASSES[highway], structure, max(-8, min(8, level)), direction, label[:80] if label else None
+
+
+def poi_info(tags):
+    amenity = tags.get("amenity")
+    leisure = tags.get("leisure")
+    railway = tags.get("railway")
+    kind = None
+    if railway in {"station", "halt"} or (tags.get("public_transport") == "station" and
+            (tags.get("train") == "yes" or tags.get("subway") == "yes")):
+        kind = "STATION"
+    elif amenity in {"school", "university", "college", "parking", "fuel"}:
+        kind = {"school": "SCHOOL", "university": "SCHOOL", "college": "SCHOOL",
+                "parking": "PARKING", "fuel": "FUEL"}[amenity]
+    elif leisure == "park":
+        kind = "PARK"
+    elif leisure in {"pitch","sports_centre","stadium"}:
+        kind = "SPORT"
+    if kind is None:
+        return None
+    # Parking and fuel symbols intentionally omit operator, brand, and commercial names.
+    name = (tags.get("name:ko") or tags.get("name")) if kind in {"STATION", "SCHOOL", "PARK", "SPORT"} else None
+    return kind, name[:80] if name else None
 
 
 def area_kind(tags):
     if tags.get("natural") in {"water", "bay"} or tags.get("waterway") == "riverbank":
         return "WATER"
+    if tags.get("amenity") in {"school","university","college"} and not tags.get("building"):
+        return "SCHOOL"
+    if tags.get("leisure") in {"pitch","sports_centre","stadium"} and not tags.get("building"):
+        return "SPORT"
+    if tags.get("amenity") == "parking" and not tags.get("building"):
+        return "PARKING"
     if tags.get("building") not in ("no", None) or tags.get("building:part") not in ("no", None):
         return "BUILDING"
     if tags.get("leisure") in {"park", "garden", "recreation_ground", "nature_reserve"} or tags.get("natural") in {
@@ -131,6 +160,8 @@ class Extract(osmium.SimpleHandler):
         self.regions = REGIONS
         self.ways = defaultdict(list)
         self.walks = defaultdict(list)
+        self.rails = defaultdict(list)
+        self.pois = defaultdict(list)
         self.areas = defaultdict(list)
         self.restrictions = []
         self.incomplete = Counter()
@@ -139,17 +170,32 @@ class Extract(osmium.SimpleHandler):
         bounds = extent(coords)
         return [region[0] for region in self.regions if overlaps(bounds, region[4])]
 
+    def node(self, node):
+        if not node.location.valid() or len(node.tags) == 0:
+            return
+        lon, lat = node.location.lon, node.location.lat
+        regions = self.areas_for([(lon, lat)])
+        if not regions:
+            return
+        info = poi_info(dict(node.tags))
+        if info:
+            for region in regions:
+                self.pois[region].append((info, (lon, lat)))
+
     def way(self, way):
         tags = dict(way.tags)
         attrs = road_attributes(tags)
         pedestrian = (tags.get("highway") in WALK and tags.get("area") != "yes" and
                       tags.get("footway") not in {"sidewalk", "crossing", "traffic_island"})
-        if not (attrs or pedestrian):
+        rail = (tags.get("railway") in {"rail", "light_rail", "tram", "narrow_gauge"} and
+                tags.get("tunnel", "no") in {"no", "false", "0"} and tags.get("service") not in {"yard", "siding"})
+        if not (attrs or pedestrian or rail):
             return
-        if any(not node.location.valid() for node in way.nodes):
-            self.incomplete["motorRoad" if attrs else "walkway"] += 1
+        coords = [(node.location.lon, node.location.lat) for node in way.nodes if node.location.valid()]
+        if len(coords) != len(way.nodes):
+            if coords and self.areas_for(coords):
+                self.incomplete["motorRoad" if attrs else "visualLine"] += 1
             return
-        coords = [(node.location.lon, node.location.lat) for node in way.nodes]
         if len(coords) < 2:
             return
         if attrs:
@@ -158,11 +204,13 @@ class Extract(osmium.SimpleHandler):
                 self.ways[region].append(record)
         else:
             for region in self.areas_for(coords):
-                self.walks[region].append(coords)
+                (self.rails if rail else self.walks)[region].append(coords)
 
     def area(self, area):
-        kind = area_kind(dict(area.tags))
-        if kind is None:
+        tags = dict(area.tags)
+        kind = area_kind(tags)
+        info = poi_info(tags)
+        if kind is None and info is None:
             return
         for outer in area.outer_rings():
             if any(not node.location.valid() for node in outer):
@@ -174,7 +222,7 @@ class Extract(osmium.SimpleHandler):
                 continue
             inners = [[(node.location.lon, node.location.lat) for node in ring] for ring in area.inner_rings(outer)]
             for region in regions:
-                self.areas[region].append((kind, boundary, inners))
+                self.areas[region].append((kind, boundary, inners, info))
 
     def relation(self, relation):
         tags = dict(relation.tags)
@@ -272,8 +320,10 @@ def ring(points):
 
 
 def visual_geometry(data, region, project, clip):
-    polygons, walks, omitted = [], [], Counter()
-    for kind, outer, inners in data.areas[region]:
+    polygons, points_of_interest, omitted = [], [], Counter()
+    for info, coord in data.pois[region]:
+        points_of_interest.append((info, project(*coord)))
+    for kind, outer, inners, info in data.areas[region]:
         polygon = Polygon([project(*p) for p in outer], [[project(*p) for p in inner] for inner in inners])
         if not polygon.is_valid:
             omitted["invalidArea"] += 1
@@ -282,21 +332,49 @@ def visual_geometry(data, region, project, clip):
             if shape.area < (6 if kind == "BUILDING" else 20):
                 omitted["belowAreaLOD"] += 1
                 continue
+            if info and (info[0] in {"PARKING", "FUEL", "STATION"} or shape.area >= 200):
+                anchor = shape.representative_point()
+                points_of_interest.append((info, [round(anchor.x, ROUND_M), round(anchor.y, ROUND_M)]))
+            if not kind:
+                continue
             points = ring(shape.exterior.coords)
             holes = [ring(inner.coords) for inner in shape.interiors]
             if len(points) < 3 or any(len(hole) < 3 for hole in holes) or not Polygon(points, holes).is_valid:
                 omitted["invalidQuantizedArea"] += 1
                 continue
-            polygons.append(dict(type=kind, points=points, holes=holes) if holes else dict(type=kind, points=points))
-    for coords in data.walks[region]:
-        for line in parts(LineString([project(*p) for p in coords]).intersection(clip).simplify(0.8), "LineString"):
-            if line.length < 9:
-                continue
-            points = [[round(x, ROUND_M), round(y, ROUND_M)] for x, y in line.coords]
-            points = [p for i,p in enumerate(points) if i == 0 or p != points[i-1]]
-            if len(points) > 1:
-                walks.append(points)
-    return polygons, walks, dict(omitted)
+            row = dict(type=kind, points=points)
+            if holes:
+                row["holes"] = holes
+            if kind != "BUILDING":
+                for level, tolerance in (("mid", 2.0), ("overview", 7.0)):
+                    reduced = shape.simplify(tolerance, preserve_topology=True)
+                    contours = [ring(reduced.exterior.coords), *[ring(inner.coords) for inner in reduced.interiors]]
+                    if sum(map(len, contours)) < len(points) + sum(map(len, holes)) and all(len(c) >= 3 for c in contours) and Polygon(contours[0], contours[1:]).is_valid:
+                        row[level] = contours
+            polygons.append(row)
+
+    def lines(source):
+        output = []
+        for coords in source:
+            for line in parts(LineString([project(*p) for p in coords]).intersection(clip).simplify(0.8), "LineString"):
+                if line.length < 9:
+                    continue
+                points = [[round(x, ROUND_M), round(y, ROUND_M)] for x, y in line.coords]
+                points = [p for i,p in enumerate(points) if i == 0 or p != points[i-1]]
+                if len(points) > 1:
+                    output.append(points)
+        return output
+
+    pois, keys = [], set()
+    for (kind, name), point in points_of_interest:
+        key = (kind, name, round(point[0]/18), round(point[1]/18))
+        if key not in keys:
+            keys.add(key)
+            row = dict(type=kind, point=point)
+            if name:
+                row["name"] = name
+            pois.append(row)
+    return polygons, lines(data.walks[region]), lines(data.rails[region]), pois, dict(omitted)
 
 
 def convert(source, output):
@@ -315,7 +393,7 @@ def convert(source, output):
         raise ValueError("The pinned source contains incomplete motor-road node references")
     tools = {name: version(name) for name in ("osmium", "pyproj", "shapely")}
     manifests = []
-    projector = Transformer.from_crs("EPSG:4326", "EPSG:32632", always_xy=True)
+    projector = Transformer.from_crs("EPSG:4326", CRS, always_xy=True)
     for region, theme, name, ko, bbox, anchor in REGIONS:
         origin = projector.transform((bbox[0]+bbox[2])/2, (bbox[1]+bbox[3])/2)
 
@@ -326,40 +404,42 @@ def convert(source, output):
         polygon = Polygon([project(bbox[0],bbox[1]), project(bbox[2],bbox[1]),
                            project(bbox[2],bbox[3]), project(bbox[0],bbox[3])])
         nodes, edges, links, restricted = graph(data.ways[region], project, data.restrictions)
-        polygons, walks, omitted = visual_geometry(data, region, project, polygon)
+        polygons, walks, rails, pois, omitted = visual_geometry(data, region, project, polygon)
         origin = list(origin)
         bounds = list(polygon.bounds)
         source_meta = dict(dataset="OSM", url=SOURCE, snapshot=SNAPSHOT, acquired=ACQUIRED, sha256=fingerprint,
                            license="ODbL-1.0", licenseUrl="https://opendatacommons.org/licenses/odbl/1-0/",
                            attribution="© OpenStreetMap contributors")
         model = dict(schemaVersion=3, visualVersion=1, mapId=region, name=name, nameKo=ko,
-                     source=source_meta, projection=dict(crs="EPSG:32632", origin=origin, bounds=bounds, bbox=bbox),
+                     source=source_meta, projection=dict(crs=CRS, origin=origin, bounds=bounds, bbox=bbox),
                      nodes=nodes, edges=edges, transitions=links, polygons=polygons,
-                     labels=[dict(text=name, point=project(*anchor))], walkways=walks)
+                     labels=[dict(text=ko, point=project(*anchor))], walkways=walks, railways=rails, pois=pois)
         path = output / "maps" / f"{region}.json"
         write_json(path, model)
         stats = dict(nodes=len(nodes), directedEdges=len(edges), segments=sum(len(e["points"])-1 for e in edges),
                      polygons=len(polygons), buildings=sum(p["type"]=="BUILDING" for p in polygons),
-                     holes=sum(len(p.get("holes", [])) for p in polygons), walkways=len(walks))
+                     holes=sum(len(p.get("holes", [])) for p in polygons), walkways=len(walks),
+                     railways=len(rails), pois=len(pois), koreanRoadNames=len({e["name"] for e in edges
+                         if "name" in e and any("가" <= ch <= "힣" for ch in e["name"])}))
         ways = {item[0] for item in data.ways[region]}
         restrictions = [rule for rule in data.restrictions if ways.intersection(rule[0])]
-        regional_input = json.dumps([data.ways[region],data.areas[region],data.walks[region],restrictions], ensure_ascii=False,
+        regional_input = json.dumps([data.ways[region],data.areas[region],data.walks[region],data.rails[region],data.pois[region],restrictions], ensure_ascii=False,
                                     separators=(",", ":")).encode()
-        manifests.append(dict(id=region, name=name, nameKo=ko, theme=theme, bbox=bbox, crs="EPSG:32632", origin=origin,
+        manifests.append(dict(id=region, name=name, nameKo=ko, theme=theme, bbox=bbox, crs=CRS, origin=origin,
                               normalizedExtractSha256=sha256(regional_input).hexdigest(), file=f"maps/{region}.json",
                               outputSha256=digest(path), bytes=path.stat().st_size, counts=stats,
                               restrictedIncomingEdges=restricted, omitted=omitted))
         print(region, stats, path.stat().st_size)
     write_json(output / "manifest.json", dict(schemaVersion=1, source=source_meta, tools=tools,
                parameters=dict(precisionMeters=.01, buildingAreaMinM2=6, walkwayMinMeters=9,
-                               areaSimplifyMeters=.8, buildingSimplifyMeters=.35, extract="complete ways by bbox", sidewalkFeatures="excluded"),
+                               areaSimplifyMeters=.8, buildingSimplifyMeters=.35, extract="complete ways by bbox", sidewalkFeatures="excluded", landLodMeters=[2.0,7.0]),
                incompleteSourceWays=dict(data.incomplete), regions=manifests))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=("acquire","import"))
-    parser.add_argument("--source", type=Path, default=Path("build/osm-source/hamburg-261101.osm.pbf"))
+    parser.add_argument("--source", type=Path, default=Path("build/osm-source/south-korea-261101.osm.pbf"))
     parser.add_argument("--output", type=Path, default=Path("fixtures/osm"))
     args = parser.parse_args()
     if args.command == "acquire":

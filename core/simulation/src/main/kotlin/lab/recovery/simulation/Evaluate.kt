@@ -66,7 +66,7 @@ fun main(args: Array<String>) = runBlocking {
 private fun createReport(result: EvaluationRun): String = buildString {
     appendLine("# 가상 위치 평가 결과")
     appendLine()
-    appendLine("합성 fixture의 JVM 재생 결과다. 비율은 건수/표본 수로 표시한다. N/A는 분모 또는 표본이 없음을 뜻한다.")
+    appendLine("가상 관측의 JVM 재생 결과다. 비율은 건수/표본 수로 표시한다. N/A는 분모 또는 표본이 없음을 뜻한다.")
     appendLine()
     appendLine("| 시나리오 | 입력 | 오거부 | 오채택 | 저품질 사용 | 매칭 정확도 | 매칭 커버리지 | 원시 평균 m | 채택 평균 m | DR 평균 m | 복구 지연 ms | 이탈 권고 | 검증 |")
     appendLine("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|---|")

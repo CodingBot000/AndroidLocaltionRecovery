@@ -38,11 +38,28 @@ def scenario(graph, number, independent):
         grades = HIGHWAY if number in (2,6,7) else LOCAL if number in (3,9,14) else CITY
         if number == 2:
             grades = {"RAMP"}
+        if number in (6,7):
+            grades = CITY | HIGHWAY
+            target = (2200 if number == 6 else 2490) + (50 if independent else 0)
         if structure == "BRIDGE":
             grades = CITY | HIGHWAY
         route = actual = graph.straight(target, grades, structure, shift)
-    stops = [(19,24)] if number in (1,3,14,15) else [(42,49)] if number == 8 else [(14,17)] if representative else []
+    stops = [(19,24)] if number in (1,3,14,15) else [(14,17)] if representative else []
     truth,speeds = drive(graph,actual,duration,stops,seed)
+    bridge_loss = None
+    if number == 8:
+        def on_bridge(rows, second):
+            return graph.edges[rows[second*5]["road"]]["structure"] == "BRIDGE"
+        for stop in range(25, duration-18):
+            if not on_bridge(truth, stop):
+                continue
+            candidate, velocity = drive(graph,actual,duration,[(stop,stop+7)],seed)
+            if all(on_bridge(candidate, t) for t in range(stop-6,stop+7)):
+                truth, speeds = candidate, velocity
+                bridge_loss = stop-3, stop+11
+                break
+        if bridge_loss is None:
+            raise ValueError("The selected bridge cannot accommodate the braking / dropout scenario")
     faults,expected,recovery = {},[],[]
 
     def put(time, *values):
@@ -106,7 +123,8 @@ def scenario(graph, number, independent):
         if number == 7:
             expect("DR_LIMIT")
     if number == 8:
-        outage(39+shift,56+shift)
+        outage(*bridge_loss)
+        expect("DR_STARTED")
     if number == 9:
         base = 55+shift
         outage(43+shift,base,restore=False)
@@ -151,7 +169,7 @@ def scenario(graph, number, independent):
     if number in (10,12):
         best = nearby_parallel(graph,truth)
         if best is None:
-            raise ValueError("Barmbek does not contain a nearby distinct parallel way on the route")
+            raise ValueError("No distinct nearby parallel road on the selected route")
         at,point,neighbor = best
         observation = fixes[at]
         if number == 10:
@@ -196,9 +214,12 @@ def nearby_parallel(graph, truth):
 
 def generate(output):
     regions={}
-    for id,_,name,ko,_,anchor in REGIONS:
+    for id,theme,_,_,_,anchor in REGIONS:
         path=output/"maps"/f"{id}.json"
-        regions[id]=RegionGraph(json.loads(path.read_text()),anchor)
+        region = RegionGraph(json.loads(path.read_text()),anchor)
+        if theme == "Suburban streets":
+            region.focus_neighborhood()
+        regions[id] = region
     entries=[]
     for number,independent in [(n,False) for n in range(1,19)]+[(n,True) for n in HELD_OUT]:
         region=regions[f"O{CASES[number-1][0]:02}"]

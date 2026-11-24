@@ -33,4 +33,4 @@
 분포의 중간값은 중앙 표본의 평균으로, p95는 nearest-rank 방식으로 계산한다. 원시·채택·DR은 표본 범위가 다르며 같은 관측의 비교는 JSON의 paired 항목을 사용한다.
 가상 입력과 합성 도로에서만 측정했으며 실제 GNSS 정확도나 단말 처리량을 뜻하지 않는다. JSON 원본은 fixture 체크섬, 엔진 설정, 표본 수와 분포, 복구·이탈 지표를 포함한다.
 
-[별도 OSM 도로 기반 가상 주행 평가](osm-evaluation-report.md)
+[별도 국내 OSM 도로 기반 가상 주행 평가](osm-evaluation-report.md)

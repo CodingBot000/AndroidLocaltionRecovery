@@ -50,8 +50,9 @@ fun RoadMap(
     strings: MapStrings,
     modifier: Modifier = Modifier,
     credits: MapCredits? = null,
+    optimized: Boolean = true,
 ) {
-    val geometry = remember(scene) { scene?.let(::MapGeometry) }
+    val geometry = remember(scene, optimized) { scene?.let { MapGeometry(it, optimized) } }
     var mode by remember(scene) { mutableStateOf(CameraMode.FOLLOW) }
     var free by remember(scene) { mutableStateOf<Projection?>(null) }
     var viewport by remember { mutableStateOf(IntSize.Zero) }
@@ -61,6 +62,7 @@ fun RoadMap(
     var creditBounds by remember { mutableStateOf(Rect.Zero) }
     val style = if (dark) MapStyle.Night else MapStyle.Day
     val latest by rememberUpdatedState(overlay)
+    val followPoint by rememberUpdatedState(overlay.vehicle?.point)
     val padding = with(LocalDensity.current) { 19.dp.toPx().toDouble() }
     fun projection(data: MapGeometry): Projection {
         val width = viewport.width.toDouble()
@@ -69,7 +71,7 @@ fun RoadMap(
         val fitted = routeBounds.fit(width, height, padding)
         val overview = Projection(routeBounds.center, fitted, width, height)
         return when (mode) {
-            CameraMode.FOLLOW -> Projection(latest.vehicle?.point?.let(data.cameraBounds::clamp) ?: data.start,
+            CameraMode.FOLLOW -> Projection(followPoint?.let(data.cameraBounds::clamp) ?: data.start,
                 maxOf(fitted, width / data.followMeters, .01), width, height).followOffset()
             CameraMode.OVERVIEW -> overview
             CameraMode.FREE -> free?.copy(width = width, height = height) ?: overview
@@ -111,9 +113,19 @@ fun RoadMap(
             val camera = projection(data)
             val detail = mapDetail(mode, camera.visibleMeters)
             drawMap(data, camera, style, detail)
+            if (!optimized) {
+                drawOverlay(latest, camera, style)
+                val occupied = listOf(modeBounds, controlsBounds, creditBounds, tunnelBounds)
+                drawMapLabels(data, camera, detail, style, latest, occupied, paint)
+            }
+        }
+        if (optimized) Canvas(Modifier.matchParentSize()) {
+            val data = geometry ?: return@Canvas
+            if (viewport.width < 1 || viewport.height < 1) return@Canvas
+            val camera = projection(data)
             drawOverlay(latest, camera, style)
-            val occupied = listOf(modeBounds, controlsBounds, creditBounds) + if (hasTunnel) listOf(tunnelBounds) else emptyList()
-            drawMapLabels(data, camera, detail, style, latest, occupied, paint)
+            val occupied = listOf(modeBounds, controlsBounds, creditBounds, tunnelBounds)
+            drawMapLabels(data, camera, mapDetail(mode, camera.visibleMeters), style, latest, occupied, paint)
         }
         if (geometry != null) {
             credits?.let {

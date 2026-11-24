@@ -44,37 +44,44 @@ internal fun DrawScope.drawMap(data: MapGeometry, projection: Projection, style:
         translate(origin.x, origin.y)
         scale(scale, scale, Offset.Zero)
     }) {
-        for ((geometry, type) in data.land) {
-            if (!geometry.bounds.intersects(visible) || (type == LandUse.BUILDING && detail != Detail.DETAIL)) continue
+        for ((geometry, type) in data.visibleLand(visible)) {
+            if (type == LandUse.BUILDING && detail != Detail.DETAIL) continue
             val paint = style.land(type)
-            drawPath(geometry.shape, paint.fill)
-            paint.edge?.let { drawPath(geometry.shape, it, style = stroke(if (type == LandUse.BUILDING) .55f else 1.1f)) }
+            val shape = data.path(geometry, detail)
+            drawPath(shape, paint.fill)
+            paint.edge?.let { drawPath(shape, it, style = stroke(if (type == LandUse.BUILDING) .55f else 1.1f)) }
         }
         if (walkwayDash != null) {
-            for (walk in data.walks) if (walk.bounds.intersects(visible)) {
-                drawPath(walk.shape, style.muted.copy(alpha = .54f), style = stroke(1.5f, walkwayDash))
+            for (walk in data.visibleWalks(visible)) {
+                drawPath(data.path(walk, detail), style.muted.copy(alpha = .5f), style = stroke(1.3f, walkwayDash))
             }
         }
-        for (layer in data.roadLayers) {
+        val railDash = dash(5f, 3f)
+        for (rail in data.visibleRails(visible)) {
+            val path = data.path(rail, detail)
+            drawPath(path, style.labelHalo, style = stroke(if (detail == Detail.OVERVIEW) 2f else 3f))
+            drawPath(path, style.muted.copy(alpha = .85f), style = stroke(1.4f, railDash))
+        }
+        for (layer in data.visibleRoads(visible)) {
             val roads = layer.filter { road ->
-                road.geometry.bounds.intersects(visible) &&
-                    roadVisible(road.visual.roadClass, road.visual.structure, detail, road.planned, projection.visibleMeters)
+                roadVisible(road.visual.roadClass, road.visual.structure, detail, road.planned, projection.visibleMeters)
             }
             for (road in roads) {
                 val (geometry, visual) = road
                 val paint = style.road(visual.roadClass, visual.structure)
                 val edgeWidth = if (visual.structure == RoadStructure.BRIDGE || visual.structure == RoadStructure.ELEVATED) 2f else 0f
-                drawPath(geometry.shape, paint.casing, style = stroke((paint.casingDp + edgeWidth) * roadFactor))
+                drawPath(if (road.planned) geometry.shape else data.path(geometry, detail), paint.casing, style = stroke((paint.casingDp + edgeWidth) * roadFactor))
             }
             for (road in roads) {
                 val (geometry, visual) = road
                 val paint = style.road(visual.roadClass, visual.structure)
-                drawPath(geometry.shape, paint.fill, style = stroke(paint.fillDp * roadFactor))
+                val shape = if (road.planned) geometry.shape else data.path(geometry, detail)
+                drawPath(shape, paint.fill, style = stroke(paint.fillDp * roadFactor))
                 when {
                     visual.structure == RoadStructure.TUNNEL ->
-                        drawPath(geometry.shape, style.tunnel.casing, style = stroke(1.2f, tunnelDash))
+                        drawPath(shape, style.tunnel.casing, style = stroke(1.2f, tunnelDash))
                     visual.roadClass == RoadClass.EXPRESSWAY && highwayDash != null ->
-                        drawPath(geometry.shape, paint.casing.copy(alpha = .65f), style = stroke(1f, highwayDash))
+                        drawPath(if (road.planned) geometry.shape else data.path(geometry, detail), paint.casing.copy(alpha = .65f), style = stroke(1f, highwayDash))
                 }
             }
         }

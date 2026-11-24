@@ -31,7 +31,7 @@ import lab.recovery.uimap.MarkerKind
 import lab.recovery.uimap.RoadMap
 
 @Composable
-internal fun TrackingMap(state: UiState, modifier: Modifier, dark: Boolean = false) {
+internal fun TrackingMap(state: UiState, modifier: Modifier, dark: Boolean = false, optimized: Boolean = true) {
     val scenario = state.scenario
     val source = scenario?.map?.osm
     var sourceOpen by remember(scenario) { mutableStateOf(false) }
@@ -68,7 +68,7 @@ internal fun TrackingMap(state: UiState, modifier: Modifier, dark: Boolean = fal
         stringResource(R.string.camera_overview), stringResource(R.string.camera_free),
         stringResource(R.string.camera_zoom_in), stringResource(R.string.camera_zoom_out), stringResource(R.string.map_tunnel))
     key(state.runId) {
-        RoadMap(scene, overlay, dark, strings, modifier, source?.let { MapCredits(it.attribution) { sourceOpen = true } })
+        RoadMap(scene, overlay, dark, strings, modifier, source?.let { MapCredits(it.attribution) { sourceOpen = true } }, optimized)
     }
     if (sourceOpen && source != null) {
         AlertDialog(onDismissRequest = { sourceOpen = false },

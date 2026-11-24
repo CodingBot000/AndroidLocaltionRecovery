@@ -64,7 +64,7 @@ internal val Coral = Color(0xFFFF9F91)
 internal val Sky = Color(0xFF9ACAF0)
 
 @Composable
-fun RecoveryLab(model: LabViewModel) {
+fun RecoveryLab(model: LabViewModel, optimizedMap: Boolean = true) {
     val state = model.state.collectAsStateWithLifecycle()
     MaterialTheme(colorScheme = darkColorScheme(
         primary = Mint, onPrimary = Color(0xFF0B3023), surface = Panel, onSurface = Ink,
@@ -74,7 +74,7 @@ fun RecoveryLab(model: LabViewModel) {
         Surface(Modifier.fillMaxSize(), color = Background) {
             BoxWithConstraints(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
                 contentAlignment = Alignment.TopCenter) {
-                LabScreen(state, model::send, (maxHeight * 0.55f).coerceAtLeast(230.dp))
+                LabScreen(state, model::send, (maxHeight * 0.55f).coerceAtLeast(230.dp), optimizedMap)
             }
         }
     }
@@ -82,7 +82,7 @@ fun RecoveryLab(model: LabViewModel) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHeight: Dp) {
+private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHeight: Dp, optimizedMap: Boolean) {
     val selection by remember(state) { derivedStateOf { state.value.selected } }
     val entries by remember(state) { derivedStateOf { state.value.choices } }
     val error by remember(state) { derivedStateOf { state.value.error } }
@@ -129,7 +129,7 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
                 val current = state.value
                 DriveHud(current)
                 Spacer(Modifier.height(5.dp))
-                TrackingMap(current, Modifier.fillMaxWidth().height(mapHeight), night)
+                TrackingMap(current, Modifier.fillMaxWidth().height(mapHeight), night, optimizedMap)
                 MapLegend(current.showTruth, { onIntent(UiIntent.ToggleTruth) })
             }
         }

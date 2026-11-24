@@ -1,0 +1,21 @@
+{
+  "koreaScenario": "ODEMO_LONG",
+  "model": "API 36 ARM64 emulator",
+  "resolution": [
+    1080,
+    2400
+  ],
+  "build": "profileable benchmark",
+  "mode": "CompilationMode.None",
+  "iterationsPerMode": 1,
+  "sampledPssKiBAtReady": {
+    "rawGeometry": 93683,
+    "indexedGeometry": 88455
+  },
+  "apkBytes": {
+    "hamburgDebug": 22519586,
+    "hamburgUnsignedRelease": 16714104,
+    "koreaDebug": 21026430,
+    "koreaUnsignedRelease": 15362720
+  }
+}

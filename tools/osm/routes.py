@@ -6,7 +6,7 @@ import math
 
 import networkx as nx
 from pyproj import Transformer
-from shapely import LineString, Point
+from shapely import LineString, Point, Polygon
 
 
 class RegionGraph:
@@ -25,6 +25,20 @@ class RegionGraph:
         self.anchor = Point(x-ox,y-oy)
         self.distances = {key: line.distance(self.anchor) for key, line in self.lines.items()}
         self.bounds = data["projection"]["bounds"]
+
+    def focus_neighborhood(self):
+        """Prefer a mapped residential cluster with room around its Follow viewport."""
+        buildings = [Polygon(row["points"]).centroid for row in self.data["polygons"] if row["type"] == "BUILDING"]
+        xmin,ymin,xmax,ymax = self.bounds
+        choices = [self.lines[key].interpolate(.5, normalized=True) for key, edge in self.edges.items()
+                   if edge["roadClass"] in {"LOCAL", "COLLECTOR"}]
+        choices = [p for p in choices if xmin+225<=p.x<=xmax-225 and ymin+270<=p.y<=ymax-270]
+        if choices and buildings:
+            def score(point):
+                count = sum(abs(b.x-point.x) <= 240 and abs(b.y-point.y) <= 280 for b in buildings)
+                return count, -point.distance(self.anchor)
+            self.anchor = max(choices, key=score)
+            self.distances = {key: line.distance(self.anchor) for key, line in self.lines.items()}
 
     def length(self, route):
         return sum(self.lengths[key] for key in route)

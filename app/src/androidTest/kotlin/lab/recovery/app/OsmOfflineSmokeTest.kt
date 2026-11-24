@@ -44,8 +44,8 @@ class OsmOfflineSmokeTest {
 
         val checks = if (capture) listOf(
             Triple("O01", "OL01", 24_000), Triple("O02", "OL02", 28_000), Triple("O03", "OL07", 54_000),
-            Triple("O04", "OL10", 35_000), Triple("O05", "OL13", 43_000), Triple("O06", "OL08", 37_000),
-            Triple("O07", "OL03", 31_000), Triple("O08", "OL09", 37_000), Triple("O09", "OL05", 23_000),
+            Triple("O04", "OL10", 35_000), Triple("O05", "OL13", 43_000), Triple("O06", "OL08", 56_000),
+            Triple("O07", "OL03", 52_000), Triple("O08", "OL09", 37_000), Triple("O09", "OL05", 23_000),
             Triple("O10", "ODEMO_LONG", 28_000),
         ) else listOf(Triple("O01", "OL01", 1_000))
         for ((map, id, at) in checks) {
@@ -72,7 +72,11 @@ class OsmOfflineSmokeTest {
             val snapshot = model.state.value.snapshot
             rule.onNodeWithTag("tracking-map").assertIsDisplayed()
             rule.onNodeWithTag("osm-attribution").assertIsDisplayed()
-            if (capture) capture("$map-follow")
+            if (capture) {
+                capture("$map-follow")
+                repeat(2) { rule.onNodeWithTag("zoom-out").performClick() }
+                capture("$map-mid")
+            }
             rule.onNodeWithTag("overview").performClick()
             rule.onNodeWithTag("osm-attribution").assertIsDisplayed()
             if (capture) capture("$map-overview")

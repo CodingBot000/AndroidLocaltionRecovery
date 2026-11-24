@@ -6,6 +6,8 @@ import lab.recovery.map.LandPolygon
 import lab.recovery.map.LandUse
 import lab.recovery.map.MapDefinition
 import lab.recovery.map.MapLabel
+import lab.recovery.map.MapPoi
+import lab.recovery.map.PoiType
 import lab.recovery.map.MapVisualData
 import lab.recovery.map.Point2D
 import lab.recovery.map.OsmProvenance
@@ -105,8 +107,9 @@ private fun parseMap(root: JsonObject, id: String, checksum: String, profile: Fi
     require(root["schemaVersion"].integer() == schema.toLong() && root["mapId"].string() == id)
     val nodeRows = root.getAsJsonArray("nodes")
     val edgeRows = root.getAsJsonArray("edges")
-    val graphLimit = if (osm == null) 512 else 12000
-    require(nodeRows.size() in 2..graphLimit && edgeRows.size() in 1..graphLimit)
+    val nodeLimit = if (osm == null) 512 else 12000
+    val edgeLimit = if (osm == null) 512 else 22000
+    require(nodeRows.size() in 2..nodeLimit && edgeRows.size() in 1..edgeLimit)
     val nodes = nodeRows.map {
         val row = it.asJsonObject
         RoadNode(row["id"].string().identifier(), row["point"].point(), row.level())
@@ -149,9 +152,12 @@ private fun parseMap(root: JsonObject, id: String, checksum: String, profile: Fi
         val coordinates = ring(row.getAsJsonArray("points"), 3)
         val holes = row.getAsJsonArray("holes")?.map { ring(it.asJsonArray, 3) }.orEmpty()
         require(osm != null || holes.isEmpty())
+        val mid = row.getAsJsonArray("mid")?.map { ring(it.asJsonArray, 3) }.orEmpty()
+        val overview = row.getAsJsonArray("overview")?.map { ring(it.asJsonArray, 3) }.orEmpty()
+        require(osm != null || (mid.isEmpty() && overview.isEmpty()))
         val id = row["id"]?.string()?.identifier()
         val parcel = row["parcelId"]?.string()?.identifier()
-        LandPolygon(LandUse.valueOf(row["type"].string()), coordinates, id, parcel, holes)
+        LandPolygon(LandUse.valueOf(row["type"].string()), coordinates, id, parcel, holes, mid, overview)
     }
     val labels = labelRows.map {
         val row = it.asJsonObject
@@ -165,16 +171,22 @@ private fun parseMap(root: JsonObject, id: String, checksum: String, profile: Fi
             polygon.parcelId in parcelIds || ((version == 1 || osm != null) && polygon.parcelId == null)
         } else polygon.parcelId == null
     })
-    val paths = root.getAsJsonArray("walkways")?.map { element ->
+    fun lines(field: String): List<List<Point2D>> = root.getAsJsonArray(field)?.map { element ->
         val points = element.asJsonArray
         vertices += points.size()
         require(points.size() in 2..(if (osm == null) 64 else 20000) && vertices <= vertexLimit)
         points.map(JsonElement::point).also { route ->
             require(route.zipWithNext().all { (a, b) -> a != b })
         }
+    }.orEmpty().also { require(it.size <= (if (osm == null) 64 else 15000)) }
+    val walks = lines("walkways")
+    val rails = lines("railways")
+    val pois = root.getAsJsonArray("pois")?.map {
+        val row = it.asJsonObject
+        MapPoi(PoiType.valueOf(row["type"].string()), row["point"].point(), row["name"]?.string()?.label())
     }.orEmpty()
-    require(paths.size <= (if (osm == null) 64 else 15000))
-    return MapDefinition(id, schema, network, MapVisualData(visuals, polygons, labels, paths, version), checksum, osm)
+    require(pois.size <= 4096 && (osm != null || (rails.isEmpty() && pois.isEmpty())))
+    return MapDefinition(id, schema, network, MapVisualData(visuals, polygons, labels, walks, version, rails, pois), checksum, osm)
 }
 
 private fun osmProvenance(root: JsonObject): OsmProvenance {
