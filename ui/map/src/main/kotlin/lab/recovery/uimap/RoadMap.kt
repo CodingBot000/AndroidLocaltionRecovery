@@ -94,6 +94,7 @@ fun RoadMap(
     }
     var mode by remember(scene, runId) { mutableStateOf(CameraMode.FOLLOW) }
     var free by remember(scene, runId) { mutableStateOf<Projection?>(null) }
+    var manualScale by remember(scene, runId) { mutableStateOf<Double?>(null) }
     var viewport by remember { mutableStateOf(IntSize.Zero) }
     var controlsBounds by remember { mutableStateOf(Rect.Zero) }
     var modeBounds by remember { mutableStateOf(Rect.Zero) }
@@ -111,7 +112,8 @@ fun RoadMap(
         val overview = Projection(routeBounds.center, fitted, width, height)
         return when (mode) {
             CameraMode.FOLLOW -> Projection(followPoint?.let(data.cameraBounds::clamp) ?: data.start,
-                maxOf(fitted, width / data.followMeters, .01), width, height).followOffset()
+                manualScale?.coerceIn(cameraZoomRange(fitted, width))
+                    ?: maxOf(fitted, width / data.followMeters, .01), width, height).followOffset()
             CameraMode.OVERVIEW -> overview
             CameraMode.FREE -> free?.copy(width = width, height = height) ?: overview
         }
@@ -120,9 +122,11 @@ fun RoadMap(
     fun manipulate(anchor: Point2D, pan: Point2D, zoom: Double) {
         val data = geometry ?: return
         val current = projection(data)
-        val min = data.route.bounds.fit(current.width, current.height, padding) * .5
-        val next = current.manipulated(anchor, pan, zoom, min, maxOf(min, current.width / 35.0))
+        val limits = cameraZoomRange(data.route.bounds.fit(current.width, current.height, padding), current.width)
+        val next = current.manipulated(anchor, pan, zoom, limits.start, limits.endInclusive)
         free = next.copy(center = data.cameraBounds.clamp(next.center))
+        // Overview and pan do not replace the last scale the user chose by zooming.
+        if (zoom != 1.0) manualScale = next.scale
         mode = CameraMode.FREE
     }
 

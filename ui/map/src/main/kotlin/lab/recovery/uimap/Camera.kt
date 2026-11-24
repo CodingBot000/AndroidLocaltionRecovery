@@ -47,3 +47,8 @@ internal data class Projection(val center: Point2D, val scale: Double, val width
         return copy(center = nextCenter, scale = nextScale)
     }
 }
+
+internal fun cameraZoomRange(fittedScale: Double, viewportWidth: Double): ClosedFloatingPointRange<Double> {
+    val minimum = fittedScale * .5
+    return minimum..maxOf(minimum, viewportWidth / 35.0)
+}
