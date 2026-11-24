@@ -137,69 +137,107 @@ internal fun DrawScope.drawOverlay(overlay: MapOverlay, projection: Projection, 
             Stroke(if (trail.estimated) 3.2.dp.toPx() else 2.8.dp.toPx(), cap = StrokeCap.Round,
                 join = StrokeJoin.Round, pathEffect = if (trail.estimated) dash else null))
     }
-    overlay.lastKnown?.let {
-        drawCircle(style.muted, 6.dp.toPx(), projection.offset(it), style = Stroke(2.dp.toPx()))
+    val raw = overlay.raw?.let(projection::offset)
+    val rawMarker = raw?.let { at ->
+        val padding = 8.dp.toPx().coerceAtMost(size.minDimension / 2)
+        Offset(at.x.coerceIn(padding, size.width - padding), at.y.coerceIn(padding, size.height - padding))
     }
-    overlay.truth?.let {
-        val at = projection.offset(it)
-        val radius = 5.dp.toPx()
-        drawRect(style.truth, at - Offset(radius, radius), Size(radius * 2, radius * 2), style = Stroke(2.dp.toPx()))
-    }
-    overlay.raw?.let { point ->
-        val at = projection.offset(point)
-        val padding = 8.dp.toPx().coerceAtMost(minOf(size.width, size.height) / 2)
-        val shown = Offset(at.x.coerceIn(padding, size.width - padding), at.y.coerceIn(padding, size.height - padding))
+    raw?.let { at ->
         overlay.accuracyMeters?.let { meters ->
             val radius = (meters * projection.scale).toFloat()
-            if (at == shown && radius.isFinite() && radius >= 1f) {
+            if (at == rawMarker && radius.isFinite() && radius >= 1f) {
                 drawCircle(style.raw.copy(alpha = .12f), radius.coerceAtMost(size.minDimension * .25f), at)
             }
         }
-        val r = 4.dp.toPx()
-        drawLine(style.raw, shown - Offset(r, r), shown + Offset(r, r), 2.dp.toPx(), StrokeCap.Round)
-        drawLine(style.raw, shown - Offset(r, -r), shown + Offset(r, -r), 2.dp.toPx(), StrokeCap.Round)
     }
-    overlay.vehicle?.let { drawVehicle(it, projection.offset(it.point), style) }
+
+    val vehicle = overlay.vehicle
+    if (vehicle?.kind == MarkerKind.FIX) {
+        drawVehicle(projection.offset(vehicle.point), vehicle.heading, style)
+    }
+
+    // Keep diagnostic symbols above the direction glyph, including when several fixes coincide.
+    if (vehicle?.kind == MarkerKind.LAST_KNOWN) {
+        drawLastKnown(projection.offset(vehicle.point), style, current = true)
+    } else {
+        overlay.lastKnown?.takeUnless { vehicle?.kind == MarkerKind.FIX && it == vehicle.point }?.let {
+            drawLastKnown(projection.offset(it), style, current = false)
+        }
+    }
+    overlay.truth?.let {
+        val at = projection.offset(it)
+        val radius = 7.dp.toPx()
+        val corner = at - Offset(radius, radius)
+        val dimensions = Size(radius * 2, radius * 2)
+        drawRect(style.labelHalo, corner, dimensions, style = Stroke(4.dp.toPx()))
+        drawRect(style.truth, corner, dimensions, style = Stroke(2.dp.toPx()))
+    }
+    rawMarker?.let { drawRawCross(it, style) }
+    vehicle?.let { marker ->
+        val at = projection.offset(marker.point)
+        when (marker.kind) {
+            MarkerKind.FIX -> {
+                drawCircle(style.labelHalo, 3.dp.toPx(), at)
+                drawCircle(style.driven, 1.9.dp.toPx(), at)
+            }
+            MarkerKind.ESTIMATE -> drawEstimate(at, style)
+            MarkerKind.LAST_KNOWN -> Unit
+        }
+    }
 }
 
-private fun DrawScope.drawVehicle(marker: MapMarker, at: Offset, style: MapStyle) {
+private fun DrawScope.drawRawCross(at: Offset, style: MapStyle) {
+    val radius = 5.dp.toPx()
+    val descending = Offset(radius, radius)
+    val ascending = Offset(radius, -radius)
+    fun stroke(color: Color, width: Float) {
+        drawLine(color, at - descending, at + descending, width, StrokeCap.Round)
+        drawLine(color, at - ascending, at + ascending, width, StrokeCap.Round)
+    }
+    stroke(style.labelHalo, 4.dp.toPx())
+    stroke(style.raw, 2.dp.toPx())
+}
+
+private fun DrawScope.drawLastKnown(at: Offset, style: MapStyle, current: Boolean) {
+    val radius = if (current) 11.dp.toPx() else 6.dp.toPx()
+    drawCircle(style.labelHalo, radius, at, style = Stroke(4.dp.toPx()))
+    drawCircle(style.muted, radius, at, style = Stroke(2.dp.toPx()))
+    if (current) {
+        val dash = Offset(3.dp.toPx(), 0f)
+        drawLine(style.labelHalo, at - dash, at + dash, 4.dp.toPx(), StrokeCap.Round)
+        drawLine(style.muted, at - dash, at + dash, 2.dp.toPx(), StrokeCap.Round)
+    }
+}
+
+private fun DrawScope.drawEstimate(at: Offset, style: MapStyle) {
     val r = 12.dp.toPx()
-    when (marker.kind) {
-        MarkerKind.FIX -> {
-            val heading = marker.heading
-            if (heading == null) {
-                drawCircle(style.routeHalo, r, at)
-                drawCircle(style.route, r * .74f, at)
-                drawCircle(style.routeHalo, r * .27f, at)
-            } else {
-                rotate(heading.toFloat(), at) {
-                    val arrow = Path().apply {
-                        moveTo(at.x, at.y-r)
-                        lineTo(at.x+r*.76f, at.y+r*.62f)
-                        lineTo(at.x, at.y+r*.25f)
-                        lineTo(at.x-r*.76f, at.y+r*.62f)
-                        close()
-                    }
-                    drawPath(arrow, style.routeHalo, style = Stroke(5.dp.toPx(), join = StrokeJoin.Round))
-                    drawPath(arrow, style.route)
-                }
-            }
+    val diamond = Path().apply {
+        moveTo(at.x, at.y - r)
+        lineTo(at.x + r * .84f, at.y)
+        lineTo(at.x, at.y + r)
+        lineTo(at.x - r * .84f, at.y)
+        close()
+    }
+    drawPath(diamond, style.labelHalo, style = Stroke(4.5.dp.toPx(), join = StrokeJoin.Round))
+    drawPath(diamond, style.estimate, style = Stroke(2.5.dp.toPx(), join = StrokeJoin.Round))
+}
+
+private fun DrawScope.drawVehicle(at: Offset, heading: Double?, style: MapStyle) {
+    val r = 12.dp.toPx()
+    if (heading == null) {
+        drawCircle(style.routeHalo, r, at)
+        drawCircle(style.route, r * .74f, at)
+        return
+    }
+    rotate(heading.toFloat(), at) {
+        val arrow = Path().apply {
+            moveTo(at.x, at.y - r)
+            lineTo(at.x + r * .76f, at.y + r * .62f)
+            lineTo(at.x, at.y + r * .25f)
+            lineTo(at.x - r * .76f, at.y + r * .62f)
+            close()
         }
-        MarkerKind.ESTIMATE -> {
-            val path = Path().apply {
-                moveTo(at.x, at.y-r)
-                lineTo(at.x+r*.84f, at.y)
-                lineTo(at.x, at.y+r)
-                lineTo(at.x-r*.84f, at.y)
-                close()
-            }
-            drawPath(path, style.chrome)
-            drawPath(path, style.estimate, style = Stroke(2.5.dp.toPx(), join = StrokeJoin.Round))
-        }
-        MarkerKind.LAST_KNOWN -> {
-            drawCircle(style.chrome, r, at)
-            drawCircle(style.muted, r * .8f, at, style = Stroke(2.dp.toPx()))
-            drawLine(style.muted, at - Offset(3.dp.toPx(), 0f), at + Offset(3.dp.toPx(), 0f), 2.dp.toPx())
-        }
+        drawPath(arrow, style.routeHalo, style = Stroke(5.dp.toPx(), join = StrokeJoin.Round))
+        drawPath(arrow, style.route)
     }
 }
