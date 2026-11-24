@@ -166,7 +166,6 @@ class LiveTrackingService : Service() {
         val session = LiveSession(started, initial.precision, map.projection, map.route)
         val messages = Channel<RawFix>(fixCapacity)
         inbox = messages
-        publish { it.copy(phase = SessionPhase.ACTIVE, map = map, reading = session.tick(started)) }
         location.open(fix = { fix ->
             if (token == activeToken) {
                 val queued = messages.trySend(fix).isSuccess
@@ -178,7 +177,8 @@ class LiveTrackingService : Service() {
                 else finish(issue)
             }
         })
-        if (LiveSessions.state.value.phase != SessionPhase.ACTIVE) return
+        if (LiveSessions.state.value.phase != SessionPhase.STARTING) return
+        publish { it.copy(phase = SessionPhase.ACTIVE, map = map, reading = session.tick(started)) }
         var nextPolicyCheck = started
         var nextTick = started + tickNanos
         while (token == activeToken) {

@@ -51,7 +51,7 @@ class LiveLifecycleTest {
         val active = LiveSessions.updates.value
         assertEquals(Precision.FINE, active.precision)
         assertTrue(active.token > 0)
-        assertTrue("A real framework listener must be present", listenerPresent())
+        assertListener(true)
         if (mockProvider) {
             inject("37.5275,126.922")
             rule.waitUntil(12_000) { LiveSessions.updates.value.reading?.status == FixStatus.TRACKING }
@@ -66,16 +66,16 @@ class LiveLifecycleTest {
             rule.activityRule.scenario.recreate()
             assertEquals(active.token, LiveSessions.updates.value.token)
             assertForeground(true)
-            assertTrue(listenerPresent())
+            assertListener(true)
         }
 
         assertTrue(device.pressHome())
         assertForeground(true)
-        assertTrue(listenerPresent())
+        assertListener(true)
         device.sleep()
         assertFalse(device.isScreenOn)
         assertForeground(true)
-        assertTrue(listenerPresent())
+        assertListener(true)
         device.wakeUp()
         shell("wm dismiss-keyguard")
         shell("am start -n lab.recovery.live/.LiveActivity -f 0x20000000")
@@ -100,7 +100,7 @@ class LiveLifecycleTest {
             waitPhase(SessionPhase.ACTIVE)
             startTimes += SystemClock.elapsedRealtime() - before
             assertForeground(true)
-            assertTrue(listenerPresent())
+            assertListener(true)
             if (mockProvider) {
                 inject(if (cycle < 10) "37.5275,126.922" else "37.544,127.054")
                 rule.waitUntil(10_000) { LiveSessions.updates.value.latestFixProcessingNs != null }
@@ -131,7 +131,7 @@ class LiveLifecycleTest {
         waitPhase(SessionPhase.ERROR)
         assertEquals(LiveIssue.PROVIDER_DISABLED, LiveSessions.updates.value.issue)
         assertForeground(false)
-        assertFalse(listenerPresent())
+        assertListener(false)
         shell("cmd location providers set-test-provider-enabled gps true")
         assertForeground(false)
         start()
@@ -177,8 +177,12 @@ class LiveLifecycleTest {
     private fun assertReleased() {
         waitPhase(SessionPhase.IDLE)
         assertForeground(false)
-        assertFalse(listenerPresent())
+        assertListener(false)
         assertNull(LiveSessions.updates.value.reading)
+    }
+
+    private fun assertListener(expected: Boolean) {
+        rule.waitUntil(10_000) { listenerPresent() == expected }
     }
 
     private fun listenerPresent(): Boolean {

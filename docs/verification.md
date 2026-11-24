@@ -172,7 +172,7 @@ Android 계측 10건은 API 36 에뮬레이터에서 통과했다. 세로 회귀
 
 ## P25–P32 Android 플랫폼 신뢰성
 
-기준선은 `83a5e7f4774edcb636feb714378b3c1a557ce284`다. P17–P24와 수동 확대 유지 변경이 포함됐으며, 별도 기능 브랜치는 이 SHA에서 시작했다. 구현·계측 확인 대상은 `af584b0`이다. PR #2의 base는 미병합 P17–P24를 포함하는 `codex/map-performance`다. [검토용 PR #2](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2) · [상위 PR #1](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/1) · [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45458847968/job/138675557669)
+기준선은 `83a5e7f4774edcb636feb714378b3c1a557ce284`다. P17–P24와 수동 확대 유지 변경이 포함됐으며, 별도 기능 브랜치는 이 SHA에서 시작했다. 성능 원본의 구현 커밋은 `af584b0`이다. 이후 CI에서 발견한 위치 등록 상태 전이를 수정하고 계측을 다시 실행했다. PR #2의 base는 미병합 P17–P24를 포함하는 `codex/map-performance`다. [검토용 PR #2](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2) · [상위 PR #1](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/1) · [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45458847968/job/138675557669)
 
 | 단계 | 상태 | 증거 |
 |---|---|---|
