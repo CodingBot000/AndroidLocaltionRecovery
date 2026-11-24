@@ -1,0 +1,57 @@
+{
+  "sourceCommit": "ca0cfe9",
+  "model": "SM-S908N",
+  "environment": "physical-device",
+  "androidApi": 36,
+  "variant": "debug",
+  "airplaneMode": true,
+  "wifiEnabled": false,
+  "testsPassed": 9,
+  "testsTotal": 9,
+  "scenario": "DEMO_LONG",
+  "durationMs": 180000,
+  "speed": 1.0,
+  "elapsedMs": 180048,
+  "samples": [
+    {
+      "phase": "ready",
+      "virtualMs": 0,
+      "totalPssKiB": 204909,
+      "backlogMs": 0,
+      "diagnosticEvents": 0,
+      "trailSamples": 0
+    },
+    {
+      "phase": "estimated",
+      "virtualMs": 87000,
+      "totalPssKiB": 208153,
+      "backlogMs": 0,
+      "diagnosticEvents": 95,
+      "trailSamples": 98
+    },
+    {
+      "phase": "limit",
+      "virtualMs": 96000,
+      "totalPssKiB": 212562,
+      "backlogMs": 0,
+      "diagnosticEvents": 96,
+      "trailSamples": 142
+    },
+    {
+      "phase": "complete",
+      "virtualMs": 180000,
+      "totalPssKiB": 250413,
+      "backlogMs": 3,
+      "diagnosticEvents": 187,
+      "trailSamples": 214
+    },
+    {
+      "phase": "after-three-resets",
+      "virtualMs": 400,
+      "totalPssKiB": 259089,
+      "backlogMs": 0,
+      "diagnosticEvents": 2,
+      "trailSamples": 1
+    }
+  ]
+}

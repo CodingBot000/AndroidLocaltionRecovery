@@ -58,7 +58,7 @@ adb logcat -d -s RecoveryEndurance:I '*:S'
 ./gradlew :benchmark:connectedBenchmarkAndroidTest
 ```
 
-확장 Macrobenchmark는 Release 상속 변형을 대상으로 콜드 스타트, 15초 기존 DEMO, M10의 첫 45초를 각 7회 측정하도록 구성했다. 확장 검증 시점에 연결된 물리 단말이 없어 해당 단말의 프레임·시작 속도와 기준선 동등 조건 재측정은 BLOCKED다. 위에 보존한 S22 Ultra 결과는 확장 전 빌드의 기록이다.
+확장 Macrobenchmark는 Release 상속 변형을 대상으로 콜드 스타트, 15초 기존 DEMO, M10의 첫 45초를 각 7회 측정하도록 구성했다. 같은 S22 Ultra에 기준선과 확장 빌드를 순서대로 설치한 결과는 아래에 기록했다.
 
 ### 1× 재생 표본
 
@@ -73,3 +73,44 @@ adb logcat -d -s RecoveryEndurance:I '*:S'
 | after-three-resets | 400 | 113,366 | 0 |
 
 [에뮬레이터 내구 측정 원본](benchmarks/api36-emulator-endurance.json)
+
+
+## P16 Galaxy S22 Ultra 재측정
+
+SM-S908N 물리 단말, Android 16(API 36), 1080×2316 및 측정 전후 120Hz 표시 모드에서 Macrobenchmark를 실행했다. 앱은 Release 상속 벤치마크 변형이고 컴파일 방식은 Full이다. 기준선은 `f2042f2`, 확장 빌드는 `ca0cfe9`의 앱 소스를 사용했다. 확장 빌드를 먼저 실행했다. 배터리 잔량은 확장 빌드 전후 70–83%, 기준선 전후 83–90%였다. 두 실행 모두 시작·종료 열 상태는 0이고, Macrobenchmark가 기록한 열 제한 대기는 0초였다.
+
+| 대상 | 반복 | TTID 중앙값 / p95 |
+|---|---:|---:|
+| 기준선 콜드 스타트 | 7 | 487.7 / 524.1ms |
+| 확장 콜드 스타트 | 7 | 464.0 / 547.0ms |
+
+TTID는 최초 화면 표시까지의 시간이다. 이 표의 TTID p95는 7개 표본의 nearest-rank 값이다.
+
+| 대상 | 반복 | 프레임 표본 | CPU 시간 중앙값 / p95 | 시한 초과 중앙값 / p95 |
+|---|---:|---:|---:|---:|
+| 기준선 DEMO, 1×, 0–15초 | 7 | 537 | 16.8 / 34.8ms | −14.6 / 15.9ms |
+| 확장 DEMO, 1×, 0–15초 | 7 | 566 | 17.8 / 28.3ms | −13.6 / 17.3ms |
+| 확장 DEMO_LONG M10, 1×, 0–45초 | 7 | 1,585 | 22.8 / 42.5ms | −8.7 / 13.6ms |
+
+동일 DEMO에서 CPU 시간 p95는 줄고 시한 초과 p95는 늘었다. M10 지표에는 확장된 지도와 UI의 별도 작업량이 반영된다. 시한 초과가 양수인 표본은 Android의 목표 표시 시각을 넘겼다. [Android FrameTimingMetric](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-metrics)
+
+[기준선 측정 원본](benchmarks/sm-s908n-p16-baseline.json) · [확장 측정 원본](benchmarks/sm-s908n-p16-expanded.json)
+
+
+### 실기기 오프라인 주행
+
+S22 Ultra Debug APK에서 세로 계측 8건과 180초 내구 계측 1건이 통과했다. 비행기 모드와 Wi-Fi 꺼짐을 확인한 상태에서 DEMO_LONG을 1×로 실행했으며 실제 경과는 180.048초였다. 완료 시 진단 187건과 위치 이력 214개를 보유했고, 세 차례 초기화 후 새 실행의 진단·이력만 쌓이는 것을 확인했다. 시작 전 비행기 모드 꺼짐 및 Wi-Fi 켜짐 상태를 복원했다.
+
+| 시점 | 가상 시간 ms | PSS KiB | 표본 backlog ms |
+|---|---:|---:|---:|
+| ready | 0 | 204,909 | 0 |
+| estimated | 87,000 | 208,153 | 0 |
+| limit | 96,000 | 212,562 | 0 |
+| complete | 180,000 | 250,413 | 3 |
+| after-three-resets | 400 | 259,089 | 0 |
+
+PSS는 재생 완료와 반복 초기화 이후에도 시작 시점보다 높았다. 이번 계측은 프로세스 PSS의 다섯 시점과 버퍼 상한을 관찰했다. 객체 유지나 메모리 누수 판정에는 별도 장기 계측이 필요하다. [실기기 내구 원본](benchmarks/sm-s908n-p16-endurance.json)
+
+### M10 렌더링 추적
+
+별도의 M10 45초 재생 1회에서 Perfetto Trace Processor로 `measureBlock` 구간을 조회했다. 앱 화면의 프레임 타임라인 행 273개 중 43개에는 `App Deadline Missed` 분류가 포함됐다. 앱 UI 스레드와 RenderThread의 스케줄링 실행 시간 합계는 각각 6.63초와 3.30초였다. RenderThread의 `DrawFrame` 구간 최대는 40.82ms였다. 이 추적은 UI 및 렌더링 스레드 수준을 보여주며 지도 그리기의 개별 함수 비용은 계측 범위에 포함되지 않았다. [Perfetto Trace Processor](https://perfetto.dev/docs/reference/trace-processor-cli)

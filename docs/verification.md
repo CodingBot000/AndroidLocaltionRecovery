@@ -88,6 +88,8 @@ ARM64 API 36 에뮬레이터에서 비행기 모드를 켜고 Wi-Fi를 끈 뒤 �
 | API 36 일반 세로 계측 | 8/8 |
 | API 36 한국어·작은 세로 화면·130% 글꼴 재실행 | 2/2 |
 | API 36 오프라인 1× 내구 | PASS |
+| Galaxy S22 Ultra 오프라인 세로·내구 계측 | 9/9 |
+| TalkBack 활성화 상태의 접근성 계측 반복 | 3/3 |
 | v1 S 계열 기대값 및 로드 오류 | 51/51 |
 | 기존 DEMO 기대값 | 4/4 |
 | v2 주행 기대 이벤트·최종 신호 상태 | 174/174 |
@@ -98,12 +100,12 @@ ARM64 API 36 에뮬레이터에서 비행기 모드를 켜고 Wi-Fi를 끈 뒤 �
 
 [확장 코드 원격 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45393491037) · [확장 결과 커밋 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45394373488) · [평가 요약](extended-evaluation-report.md) · [지도별 화면](demo.md) · [내구 및 성능 환경](physical-device-validation.md)
 
-확장 물리 단말의 콜드 스타트·프레임 지표와 동등한 기준선 재측정은 **BLOCKED**다. 에뮬레이터에서 두 벤치마크 대상의 시나리오 ID, 재생 시간, 1× 준비 상태를 확인했다.
+Galaxy S22 Ultra에서 기준선 콜드 스타트·15초 DEMO를 각각 7회 재측정했다. 확장 빌드는 콜드 스타트·15초 DEMO와 M10 45초 재생을 각각 7회 측정했다. M10의 실기기 성능을 추가 Perfetto 추적으로 조사했다. 같은 단말에서 오프라인 1× 내구 재검증에 성공했고, 비행기 모드와 Wi-Fi를 검증 전 상태로 복원했다. [실기기 실행 조건과 결과](physical-device-validation.md)
 
 
 ### TalkBack
 
-Android 16 API 36 에뮬레이터에서 TalkBack 16.0을 활성화하고 접근성 계측을 세 번 실행했다. 주행 상태의 접근성 포커스와 Overview·확대·Follow·Step·Play/Pause의 포커스 이벤트 및 클릭 후 상태를 확인했다. 같은 실행에서 접근성 음성 합성 트랙의 시작과 녹화에 음성 신호가 포함된 것을 확인했다. 에뮬레이터의 TalkBack 설정은 종료 후 복원했다.
+Android 16 API 36 에뮬레이터에서 TalkBack 16.0을 활성화하고 접근성 계측을 세 번 실행했다. 주행 상태의 접근성 포커스와 Overview·확대·Follow·Step·Play/Pause의 포커스 이벤트 및 클릭 후 상태를 확인했다. 같은 실행에서 접근성 음성 합성 트랙의 시작과 녹화에 음성 신호가 포함된 것을 확인했다. 에뮬레이터의 TalkBack 설정은 종료 후 복원했다. [TalkBack 계측 추가 커밋의 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45399768740)
 
 TalkBack을 활성화한 API 36 세로 환경에서 다음 계측 클래스로 재현할 수 있다.
 
