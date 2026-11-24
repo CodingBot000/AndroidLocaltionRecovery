@@ -1,0 +1,3687 @@
+{
+  "evaluations": [
+    {
+      "scenarioId": "S01",
+      "schemaVersion": 1,
+      "sha256": "42f55409d0a1424aee849f27b7d8a349118a7cafe2e6448d77c580af0855e030",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 8,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 8,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 8,
+        "denominator": 8
+      },
+      "matchCoverage": {
+        "numerator": 8,
+        "denominator": 8
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "missingMatches": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "rawErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 8,
+        "mean": 6.661338147750939E-16,
+        "median": 0.0,
+        "p95": 3.552713678800501E-15,
+        "maximum": 3.552713678800501E-15
+      },
+      "pairedRawErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 8,
+        "mean": 6.661338147750939E-16,
+        "median": 0.0,
+        "p95": 3.552713678800501E-15,
+        "maximum": 3.552713678800501E-15
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 36,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 36
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 36
+        },
+        "MAP_MATCHED": {
+          "numerator": 36,
+          "denominator": 36
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 36
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 36
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 8,
+        "ROUTE_CHANGED": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "ACCEPTED",
+            "count": 8
+          },
+          "actual": 8
+        },
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "REROUTE_RECOMMENDED",
+            "count": 0
+          },
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "scenarioId": "S02",
+      "schemaVersion": 1,
+      "sha256": "ea131301b32b72a0f0a28478a28d254645dca0b02bf23b73fd58c66e31d5e6da",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 9,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 8,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 1,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 8,
+        "denominator": 8
+      },
+      "matchCoverage": {
+        "numerator": 8,
+        "denominator": 9
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "missingMatches": {
+        "numerator": 1,
+        "denominator": 9
+      },
+      "rawErrorMeters": {
+        "count": 9,
+        "mean": 61.111111111111114,
+        "median": 0.0,
+        "p95": 550.0,
+        "maximum": 550.0
+      },
+      "acceptedErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 41,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 41
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 41
+        },
+        "MAP_MATCHED": {
+          "numerator": 41,
+          "denominator": 41
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 41
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 41
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 8,
+        "IMPLAUSIBLE_MOVE": 1,
+        "ROUTE_CHANGED": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 3000,
+            "reason": "IMPLAUSIBLE_MOVE",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 4000,
+            "reason": "ACCEPTED",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S03",
+      "schemaVersion": 1,
+      "sha256": "4caadfb94114faa6098851ab639c017b18ac9af762772ef7f442b75a8a629c3b",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 7,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 7
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 7,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 7,
+        "denominator": 7
+      },
+      "matchCoverage": {
+        "numerator": 7,
+        "denominator": 7
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 7
+      },
+      "missingMatches": {
+        "numerator": 0,
+        "denominator": 7
+      },
+      "rawErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 31,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 31
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 31
+        },
+        "MAP_MATCHED": {
+          "numerator": 31,
+          "denominator": 31
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 31
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 31
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 7,
+        "ROUTE_CHANGED": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "ACCEPTED",
+            "count": 7
+          },
+          "actual": 7
+        },
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "IMPLAUSIBLE_MOVE",
+            "count": 0
+          },
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "scenarioId": "S04",
+      "schemaVersion": 1,
+      "sha256": "deed37244e55263e34e7a6566c1c83bac3c29a88b99cff686eea8865e5a2926c",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 7,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 5
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 2
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 5,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 1,
+          "LOW_QUALITY": 1,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 5,
+        "denominator": 5
+      },
+      "matchCoverage": {
+        "numerator": 5,
+        "denominator": 7
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 7
+      },
+      "missingMatches": {
+        "numerator": 2,
+        "denominator": 7
+      },
+      "rawErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 31,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 31
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 31
+        },
+        "MAP_MATCHED": {
+          "numerator": 31,
+          "denominator": 31
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 31
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 31
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 5,
+        "LOW_QUALITY": 1,
+        "ACCURACY_EXCEEDED": 1,
+        "ROUTE_CHANGED": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 2000,
+            "reason": "LOW_QUALITY",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 3000,
+            "reason": "ACCURACY_EXCEEDED",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "REROUTE_RECOMMENDED",
+            "count": 0
+          },
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "scenarioId": "S05",
+      "schemaVersion": 1,
+      "sha256": "8719aea86c221ce6e0b8911f1f26dd43f95d6e3e4b3a8a32809c6b310a63b7f1",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 9,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 5
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 4
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 5,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 4,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 5,
+        "denominator": 5
+      },
+      "matchCoverage": {
+        "numerator": 5,
+        "denominator": 9
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "missingMatches": {
+        "numerator": 4,
+        "denominator": 9
+      },
+      "rawErrorMeters": {
+        "count": 9,
+        "mean": 0.1111111111111111,
+        "median": 0.0,
+        "p95": 1.0,
+        "maximum": 1.0
+      },
+      "acceptedErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 6,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 35,
+        "DEAD_RECKONED": 7,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 42
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 42
+        },
+        "MAP_MATCHED": {
+          "numerator": 35,
+          "denominator": 42
+        },
+        "DEAD_RECKONED": {
+          "numerator": 7,
+          "denominator": 42
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 42
+        }
+      },
+      "lossDelayMs": [
+        3000
+      ],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 1,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 5,
+        "DUPLICATE_ID": 1,
+        "MEASUREMENT_ORDER": 2,
+        "DELIVERY_DELAY": 1,
+        "SIGNAL_LOST": 1,
+        "DR_STARTED": 1,
+        "ROUTE_CHANGED": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 1500,
+            "reason": "DUPLICATE_ID",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 2000,
+            "reason": "MEASUREMENT_ORDER",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 3600,
+            "reason": "MEASUREMENT_ORDER",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 8000,
+            "reason": "DELIVERY_DELAY",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S06",
+      "schemaVersion": 1,
+      "sha256": "430275e99c9e8b82e78417714c465d2b1783215270ab23cec224450fb5abb05a",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 9,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 7,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 2
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 2,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 2,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 7,
+        "denominator": 7
+      },
+      "matchCoverage": {
+        "numerator": 7,
+        "denominator": 9
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "missingMatches": {
+        "numerator": 2,
+        "denominator": 9
+      },
+      "rawErrorMeters": {
+        "count": 9,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 20,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 41,
+        "DEAD_RECKONED": 20,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 61
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 61
+        },
+        "MAP_MATCHED": {
+          "numerator": 41,
+          "denominator": 61
+        },
+        "DEAD_RECKONED": {
+          "numerator": 20,
+          "denominator": 61
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 61
+        }
+      },
+      "lossDelayMs": [
+        3000
+      ],
+      "recoveryDelayMs": [
+        2000
+      ],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [
+        0.0
+      ],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 7,
+        "RECOVERY_PENDING": 2,
+        "RECOVERY_CONTRIBUTED": 2,
+        "SIGNAL_LOST": 1,
+        "SIGNAL_RECOVERED": 1,
+        "DR_STARTED": 1,
+        "DR_REALIGNED": 1,
+        "ROUTE_CHANGED": 2,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 5000,
+            "reason": "SIGNAL_LOST",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 5000,
+            "reason": "DR_STARTED",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 9000,
+            "reason": "SIGNAL_RECOVERED",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S06B",
+      "schemaVersion": 1,
+      "sha256": "8d64f51fc00678a7a6402399eabec61958ed0c2b1c87d5921f37b32fc468f10c",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 3,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 3
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 3,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 2,
+        "denominator": 2
+      },
+      "matchCoverage": {
+        "numerator": 2,
+        "denominator": 3
+      },
+      "ambiguousMatches": {
+        "numerator": 1,
+        "denominator": 3
+      },
+      "missingMatches": {
+        "numerator": 0,
+        "denominator": 3
+      },
+      "rawErrorMeters": {
+        "count": 3,
+        "mean": 6.0,
+        "median": 0.0,
+        "p95": 18.0,
+        "maximum": 18.0
+      },
+      "acceptedErrorMeters": {
+        "count": 3,
+        "mean": 6.0,
+        "median": 0.0,
+        "p95": 18.0,
+        "maximum": 18.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 3,
+        "mean": 6.0,
+        "median": 0.0,
+        "p95": 18.0,
+        "maximum": 18.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 3,
+        "mean": 6.0,
+        "median": 0.0,
+        "p95": 18.0,
+        "maximum": 18.0
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 15,
+        "MAP_MATCHED": 10,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 11
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 36
+        },
+        "OBSERVED": {
+          "numerator": 15,
+          "denominator": 36
+        },
+        "MAP_MATCHED": {
+          "numerator": 10,
+          "denominator": 36
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 36
+        },
+        "LAST_KNOWN": {
+          "numerator": 11,
+          "denominator": 36
+        }
+      },
+      "lossDelayMs": [
+        3000
+      ],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 1,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 3,
+        "SIGNAL_LOST": 1,
+        "AMBIGUOUS": 1,
+        "DR_NO_ANCHOR": 1,
+        "ROUTE_CHANGED": 2,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 2000,
+            "reason": "AMBIGUOUS",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 5000,
+            "reason": "SIGNAL_LOST",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "DR_STARTED",
+            "count": 0
+          },
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "scenarioId": "S07",
+      "schemaVersion": 1,
+      "sha256": "844cf1346b1d12ff4be5737517d8d6e4ac6996ebde663d7ce4db86865efa822d",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 8,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 6,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 2
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 2,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 2,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 6,
+        "denominator": 6
+      },
+      "matchCoverage": {
+        "numerator": 6,
+        "denominator": 8
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "missingMatches": {
+        "numerator": 2,
+        "denominator": 8
+      },
+      "rawErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 6,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 6,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 6,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 60,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 36,
+        "DEAD_RECKONED": 60,
+        "LAST_KNOWN": 35
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 131
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 131
+        },
+        "MAP_MATCHED": {
+          "numerator": 36,
+          "denominator": 131
+        },
+        "DEAD_RECKONED": {
+          "numerator": 60,
+          "denominator": 131
+        },
+        "LAST_KNOWN": {
+          "numerator": 35,
+          "denominator": 131
+        }
+      },
+      "lossDelayMs": [
+        3000
+      ],
+      "recoveryDelayMs": [
+        2000
+      ],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 6,
+        "RECOVERY_PENDING": 2,
+        "RECOVERY_CONTRIBUTED": 2,
+        "SIGNAL_LOST": 1,
+        "SIGNAL_RECOVERED": 1,
+        "DR_STARTED": 1,
+        "DR_LIMIT": 1,
+        "ROUTE_CHANGED": 2,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 5000,
+            "reason": "DR_STARTED",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 17000,
+            "reason": "DR_LIMIT",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 24000,
+            "reason": "SIGNAL_RECOVERED",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S08",
+      "schemaVersion": 1,
+      "sha256": "32b6ddd6cbf7f77139d19366bced25a11c1a9b4491b6507ef08fdc746c7b09c5",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 9,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 7,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 2
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 2,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 2,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 7,
+        "denominator": 7
+      },
+      "matchCoverage": {
+        "numerator": 7,
+        "denominator": 9
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "missingMatches": {
+        "numerator": 2,
+        "denominator": 9
+      },
+      "rawErrorMeters": {
+        "count": 9,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 7,
+        "mean": 1.0150610510858574E-15,
+        "median": 0.0,
+        "p95": 7.105427357601002E-15,
+        "maximum": 7.105427357601002E-15
+      },
+      "pairedRawErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 7,
+        "mean": 1.0150610510858574E-15,
+        "median": 0.0,
+        "p95": 7.105427357601002E-15,
+        "maximum": 7.105427357601002E-15
+      },
+      "drErrorMeters": {
+        "count": 17,
+        "mean": 23.764705882352942,
+        "median": 22.0,
+        "p95": 54.0,
+        "maximum": 54.0
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 41,
+        "DEAD_RECKONED": 17,
+        "LAST_KNOWN": 23
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 81
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 81
+        },
+        "MAP_MATCHED": {
+          "numerator": 41,
+          "denominator": 81
+        },
+        "DEAD_RECKONED": {
+          "numerator": 17,
+          "denominator": 81
+        },
+        "LAST_KNOWN": {
+          "numerator": 23,
+          "denominator": 81
+        }
+      },
+      "lossDelayMs": [
+        3000
+      ],
+      "recoveryDelayMs": [
+        2000
+      ],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 7,
+        "RECOVERY_PENDING": 2,
+        "RECOVERY_CONTRIBUTED": 2,
+        "SIGNAL_LOST": 1,
+        "SIGNAL_RECOVERED": 1,
+        "DR_STARTED": 1,
+        "DR_BRANCH": 1,
+        "ROUTE_CHANGED": 2,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 5000,
+            "reason": "DR_STARTED",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 13000,
+            "reason": "SIGNAL_RECOVERED",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S09",
+      "schemaVersion": 1,
+      "sha256": "4b9ee7ebf06c25880867f54da3498d38337c4612171e9f075fab1c0b9d2112a4",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 9,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 4,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 4
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 1,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 4,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 2,
+        "EXPIRED": 1,
+        "CLEARED": 1,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 4,
+        "denominator": 4
+      },
+      "matchCoverage": {
+        "numerator": 4,
+        "denominator": 9
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "missingMatches": {
+        "numerator": 5,
+        "denominator": 9
+      },
+      "rawErrorMeters": {
+        "count": 9,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 4,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 4,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 4,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 25,
+        "mean": 64.8,
+        "median": 64.8,
+        "p95": 91.2,
+        "maximum": 93.6
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 26,
+        "DEAD_RECKONED": 25,
+        "LAST_KNOWN": 25
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 76
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 76
+        },
+        "MAP_MATCHED": {
+          "numerator": 26,
+          "denominator": 76
+        },
+        "DEAD_RECKONED": {
+          "numerator": 25,
+          "denominator": 76
+        },
+        "LAST_KNOWN": {
+          "numerator": 25,
+          "denominator": 76
+        }
+      },
+      "lossDelayMs": [
+        3000
+      ],
+      "recoveryDelayMs": [
+        9000
+      ],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 4,
+        "LOW_QUALITY": 1,
+        "RECOVERY_PENDING": 4,
+        "RECOVERY_TIMEOUT": 1,
+        "RECOVERY_CLEARED": 1,
+        "RECOVERY_CONTRIBUTED": 2,
+        "SIGNAL_LOST": 1,
+        "SIGNAL_RECOVERED": 1,
+        "DR_STARTED": 1,
+        "DR_BRANCH": 1,
+        "ROUTE_CHANGED": 2,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 5000,
+            "reason": "RECOVERY_PENDING",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 7000,
+            "reason": "RECOVERY_TIMEOUT",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 10000,
+            "reason": "LOW_QUALITY",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 14000,
+            "reason": "SIGNAL_RECOVERED",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S09B",
+      "schemaVersion": 1,
+      "sha256": "decd1ebf206afb3e164f1f7fd77869fb8f64ab3090a220553cf1b4a9ea06d613",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 3,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 3
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 1,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 2
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 2,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 1,
+        "UNRESOLVED": 1
+      },
+      "matchAccuracy": {
+        "numerator": 1,
+        "denominator": 1
+      },
+      "matchCoverage": {
+        "numerator": 1,
+        "denominator": 3
+      },
+      "ambiguousMatches": {
+        "numerator": 1,
+        "denominator": 3
+      },
+      "missingMatches": {
+        "numerator": 1,
+        "denominator": 3
+      },
+      "rawErrorMeters": {
+        "count": 3,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 1,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 1,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 1,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 22,
+        "mean": 60.08264462809917,
+        "median": 66.0,
+        "p95": 96.0,
+        "maximum": 100.0
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 15,
+        "DEAD_RECKONED": 25,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 40
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 40
+        },
+        "MAP_MATCHED": {
+          "numerator": 15,
+          "denominator": 40
+        },
+        "DEAD_RECKONED": {
+          "numerator": 25,
+          "denominator": 40
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 40
+        }
+      },
+      "lossDelayMs": [
+        3000
+      ],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 1,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 1,
+        "RECOVERY_PENDING": 2,
+        "RECOVERY_GAP": 1,
+        "RECOVERY_UNRESOLVED": 1,
+        "SIGNAL_LOST": 1,
+        "DR_STARTED": 1,
+        "ROUTE_CHANGED": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 7500,
+            "reason": "RECOVERY_GAP",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 7500,
+            "reason": "RECOVERY_PENDING",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 7500,
+            "reason": "IMPLAUSIBLE_MOVE",
+            "count": 0
+          },
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "scenarioId": "S10",
+      "schemaVersion": 1,
+      "sha256": "67c1ef66861c048c5fda14477585be007cc345f2fcff92f304949b772144fec0",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 5,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 5
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 5,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "matchCoverage": {
+        "numerator": 0,
+        "denominator": 5
+      },
+      "ambiguousMatches": {
+        "numerator": 5,
+        "denominator": 5
+      },
+      "missingMatches": {
+        "numerator": 0,
+        "denominator": 5
+      },
+      "rawErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 5,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 21,
+        "MAP_MATCHED": 0,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 21
+        },
+        "OBSERVED": {
+          "numerator": 21,
+          "denominator": 21
+        },
+        "MAP_MATCHED": {
+          "numerator": 0,
+          "denominator": 21
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 21
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 21
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 5,
+        "AMBIGUOUS": 5,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "AMBIGUOUS",
+            "count": 5
+          },
+          "actual": 5
+        },
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "REROUTE_RECOMMENDED",
+            "count": 0
+          },
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "scenarioId": "S11",
+      "schemaVersion": 1,
+      "sha256": "76abc8780842b3cbd42e6099dbb4431454671a7f0542fcf5c1249eaf7c4a6a7c",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 8,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 8,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 7,
+        "denominator": 7
+      },
+      "matchCoverage": {
+        "numerator": 7,
+        "denominator": 8
+      },
+      "ambiguousMatches": {
+        "numerator": 1,
+        "denominator": 8
+      },
+      "missingMatches": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "rawErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 8,
+        "mean": 2.6645352591003757E-15,
+        "median": 0.0,
+        "p95": 1.4210854715202004E-14,
+        "maximum": 1.4210854715202004E-14
+      },
+      "pairedRawErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 8,
+        "mean": 2.6645352591003757E-15,
+        "median": 0.0,
+        "p95": 1.4210854715202004E-14,
+        "maximum": 1.4210854715202004E-14
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 5,
+        "MAP_MATCHED": 31,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 36
+        },
+        "OBSERVED": {
+          "numerator": 5,
+          "denominator": 36
+        },
+        "MAP_MATCHED": {
+          "numerator": 31,
+          "denominator": 36
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 36
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 36
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 1,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [
+        3000
+      ],
+      "reasonCounts": {
+        "ACCEPTED": 8,
+        "AMBIGUOUS": 1,
+        "REROUTE_RECOMMENDED": 1,
+        "ROUTE_CHANGED": 3,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "REROUTE_RECOMMENDED",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S12",
+      "schemaVersion": 1,
+      "sha256": "e3ad295871b1e1f91fdde80a75878f73d47a8703eeb4beffdadbd4e75444cbd1",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 9,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 8
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 8,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 1,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 8,
+        "denominator": 8
+      },
+      "matchCoverage": {
+        "numerator": 8,
+        "denominator": 9
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "missingMatches": {
+        "numerator": 1,
+        "denominator": 9
+      },
+      "rawErrorMeters": {
+        "count": 9,
+        "mean": 32.35604395235786,
+        "median": 0.0,
+        "p95": 291.20439557122074,
+        "maximum": 291.20439557122074
+      },
+      "acceptedErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 8,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 41,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 41
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 41
+        },
+        "MAP_MATCHED": {
+          "numerator": 41,
+          "denominator": 41
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 41
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 41
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 8,
+        "IMPLAUSIBLE_MOVE": 1,
+        "ROUTE_CHANGED": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 3000,
+            "reason": "IMPLAUSIBLE_MOVE",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "REROUTE_RECOMMENDED",
+            "count": 0
+          },
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "scenarioId": "S13",
+      "schemaVersion": 1,
+      "sha256": "1fae18cd724e600424bb2ca520d3f6640928e59f66e6a1dde3f2836c54224c1a",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 20,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 20
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 20,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 18,
+        "denominator": 18
+      },
+      "matchCoverage": {
+        "numerator": 18,
+        "denominator": 20
+      },
+      "ambiguousMatches": {
+        "numerator": 2,
+        "denominator": 20
+      },
+      "missingMatches": {
+        "numerator": 0,
+        "denominator": 20
+      },
+      "rawErrorMeters": {
+        "count": 20,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 20,
+        "mean": 1.4210854715202005E-15,
+        "median": 0.0,
+        "p95": 7.105427357601002E-15,
+        "maximum": 1.4210854715202004E-14
+      },
+      "pairedRawErrorMeters": {
+        "count": 20,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 20,
+        "mean": 1.4210854715202005E-15,
+        "median": 0.0,
+        "p95": 7.105427357601002E-15,
+        "maximum": 1.4210854715202004E-14
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 10,
+        "MAP_MATCHED": 86,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 96
+        },
+        "OBSERVED": {
+          "numerator": 10,
+          "denominator": 96
+        },
+        "MAP_MATCHED": {
+          "numerator": 86,
+          "denominator": 96
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 96
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 96
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 1,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [
+        3000
+      ],
+      "reasonCounts": {
+        "ACCEPTED": 20,
+        "AMBIGUOUS": 2,
+        "REROUTE_RECOMMENDED": 1,
+        "ROUTE_RETURNED": 1,
+        "ROUTE_CHANGED": 5,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "REROUTE_RECOMMENDED",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "ROUTE_RETURNED",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S14",
+      "schemaVersion": 1,
+      "sha256": "9bfc7615c557fb58b5a70c259a258f0677af2ea13e9bdf1c9f9369d16d07c2ce",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 1,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 1,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "matchCoverage": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 1
+      },
+      "missingMatches": {
+        "numerator": 1,
+        "denominator": 1
+      },
+      "rawErrorMeters": {
+        "count": 1,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "pairedRawErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 31,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 0,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 31,
+          "denominator": 31
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 31
+        },
+        "MAP_MATCHED": {
+          "numerator": 0,
+          "denominator": 31
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 31
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 31
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "LOW_QUALITY": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 0,
+            "reason": "LOW_QUALITY",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "ACCEPTED",
+            "count": 0
+          },
+          "actual": 0
+        },
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "DR_STARTED",
+            "count": 0
+          },
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "scenarioId": "S15",
+      "schemaVersion": 1,
+      "sha256": "32977874cec96e177f7dba36da85176f34fc4afc97c36a42a928346836dbfe4c",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 9,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 9,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 9,
+        "denominator": 9
+      },
+      "matchCoverage": {
+        "numerator": 9,
+        "denominator": 9
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "missingMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "rawErrorMeters": {
+        "count": 9,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 9,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 9,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 9,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 42,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 42
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 42
+        },
+        "MAP_MATCHED": {
+          "numerator": 42,
+          "denominator": 42
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 42
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 42
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 9,
+        "ROUTE_CHANGED": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": null,
+            "reason": "ACCEPTED",
+            "count": 9
+          },
+          "actual": 9
+        },
+        {
+          "expected": {
+            "timeMs": 8150,
+            "reason": "RUN_COMPLETED",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S16",
+      "schemaVersion": 1,
+      "sha256": "aa60d08b3e2e38f9a78330979b10d97282126016853047c0c382e82f9c7119fd",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 9,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 7,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 2
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 2,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 2,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 7,
+        "denominator": 7
+      },
+      "matchCoverage": {
+        "numerator": 7,
+        "denominator": 9
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "missingMatches": {
+        "numerator": 2,
+        "denominator": 9
+      },
+      "rawErrorMeters": {
+        "count": 9,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 41,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 20
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 61
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 61
+        },
+        "MAP_MATCHED": {
+          "numerator": 41,
+          "denominator": 61
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 61
+        },
+        "LAST_KNOWN": {
+          "numerator": 20,
+          "denominator": 61
+        }
+      },
+      "lossDelayMs": [
+        3000
+      ],
+      "recoveryDelayMs": [
+        2000
+      ],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 1,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [
+        4000
+      ],
+      "reasonCounts": {
+        "ACCEPTED": 7,
+        "RECOVERY_PENDING": 2,
+        "RECOVERY_CONTRIBUTED": 2,
+        "SIGNAL_LOST": 1,
+        "SIGNAL_RECOVERED": 1,
+        "DR_BRANCH": 1,
+        "REROUTE_RECOMMENDED": 1,
+        "ROUTE_CHANGED": 2,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 4000,
+            "reason": "SIGNAL_LOST",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 8000,
+            "reason": "SIGNAL_RECOVERED",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 10000,
+            "reason": "REROUTE_RECOMMENDED",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    },
+    {
+      "scenarioId": "S17",
+      "schemaVersion": 1,
+      "sha256": "2180b13b549ff9da21cf2872c919933ca46018cf0da09eef0027c9874ca53d8d",
+      "seed": null,
+      "settings": {
+        "goodAccuracy": 20.0,
+        "maximumAccuracy": 60.0,
+        "maximumDelayMs": 3000,
+        "maximumSpeed": 45.0,
+        "uncertaintyLimit": 30.0,
+        "signalLossMs": 3000,
+        "drMaximumMs": 15000,
+        "recoveryCount": 3,
+        "recoveryMeasuredGapMs": 2000,
+        "recoveryWaitMs": 2000,
+        "routeGapMs": 2000,
+        "routeCount": 3,
+        "tickMs": 200,
+        "searchRadius": 60.0,
+        "maximumMatchCost": 0.75,
+        "minimumMatchMargin": 0.08,
+        "minimumHeadingSpeed": 1.0,
+        "distanceWeight": 0.65,
+        "headingWeight": 0.2,
+        "continuityWeight": 0.1,
+        "planWeight": 0.05
+      },
+      "observations": 9,
+      "falseRejection": {
+        "numerator": 0,
+        "denominator": 7
+      },
+      "invalidAcceptance": {
+        "numerator": 0,
+        "denominator": 2
+      },
+      "lowQualityUse": {
+        "numerator": 0,
+        "denominator": 0
+      },
+      "decisions": {
+        "NORMAL": {
+          "ACCEPTED": 7,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "INVALID": {
+          "ACCEPTED": 0,
+          "REJECTED": 2,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        },
+        "LOW_QUALITY": {
+          "ACCEPTED": 0,
+          "REJECTED": 0,
+          "LOW_QUALITY": 0,
+          "RECOVERY_PENDING": 0
+        }
+      },
+      "pendingByLabel": {
+        "NORMAL": 0,
+        "INVALID": 0,
+        "LOW_QUALITY": 0
+      },
+      "recoveryOutcomes": {
+        "CONTRIBUTED": 0,
+        "EXPIRED": 0,
+        "CLEARED": 0,
+        "UNRESOLVED": 0
+      },
+      "matchAccuracy": {
+        "numerator": 7,
+        "denominator": 7
+      },
+      "matchCoverage": {
+        "numerator": 7,
+        "denominator": 9
+      },
+      "ambiguousMatches": {
+        "numerator": 0,
+        "denominator": 9
+      },
+      "missingMatches": {
+        "numerator": 2,
+        "denominator": 9
+      },
+      "rawErrorMeters": {
+        "count": 9,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "acceptedErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedRawErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "pairedAcceptedErrorMeters": {
+        "count": 7,
+        "mean": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "maximum": 0.0
+      },
+      "drErrorMeters": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "p95": null,
+        "maximum": null
+      },
+      "availability": {
+        "NONE": 0,
+        "OBSERVED": 0,
+        "MAP_MATCHED": 41,
+        "DEAD_RECKONED": 0,
+        "LAST_KNOWN": 0
+      },
+      "availabilityRatios": {
+        "NONE": {
+          "numerator": 0,
+          "denominator": 41
+        },
+        "OBSERVED": {
+          "numerator": 0,
+          "denominator": 41
+        },
+        "MAP_MATCHED": {
+          "numerator": 41,
+          "denominator": 41
+        },
+        "DEAD_RECKONED": {
+          "numerator": 0,
+          "denominator": 41
+        },
+        "LAST_KNOWN": {
+          "numerator": 0,
+          "denominator": 41
+        }
+      },
+      "lossDelayMs": [],
+      "recoveryDelayMs": [],
+      "incompleteRecoveries": 0,
+      "realignmentMeters": [],
+      "departureCount": 0,
+      "departureFalsePositives": 0,
+      "departureMisses": 0,
+      "departureDelayMs": [],
+      "reasonCounts": {
+        "ACCEPTED": 7,
+        "INVALID_ACCURACY": 1,
+        "FUTURE_MEASUREMENT": 1,
+        "ROUTE_CHANGED": 1,
+        "RUN_COMPLETED": 1
+      },
+      "checks": [
+        {
+          "expected": {
+            "timeMs": 2000,
+            "reason": "INVALID_ACCURACY",
+            "count": 1
+          },
+          "actual": 1
+        },
+        {
+          "expected": {
+            "timeMs": 2500,
+            "reason": "FUTURE_MEASUREMENT",
+            "count": 1
+          },
+          "actual": 1
+        }
+      ]
+    }
+  ],
+  "loadChecks": [
+    {
+      "file": "S17A.json",
+      "expected": "ROAD_GEOMETRY",
+      "actual": "ROAD_GEOMETRY"
+    },
+    {
+      "file": "S17B.json",
+      "expected": "REPLAY_TIME",
+      "actual": "REPLAY_TIME"
+    },
+    {
+      "file": "S17C.json",
+      "expected": "SCHEMA",
+      "actual": "SCHEMA"
+    }
+  ]
+}

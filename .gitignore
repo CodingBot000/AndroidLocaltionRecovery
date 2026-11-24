@@ -1,0 +1,29 @@
+.gradle/
+.kotlin/
+**/build/
+**/.cxx/
+**/.externalNativeBuild/
+/captures/
+*.apk
+*.aab
+*.apks
+
+# Local SDK configuration and signing credentials
+local.properties
+keystore.properties
+signing.properties
+*.jks
+*.keystore
+*.p12
+*.pfx
+.env
+.env.*
+!.env.example
+
+# IDE and OS files
+.idea/
+*.iml
+.DS_Store
+
+# Local Markdown documents
+/docs/ignore/**/*.md

@@ -1,0 +1,91 @@
+{
+    "context": {
+        "build": {
+            "brand": "samsung",
+            "device": "b0q",
+            "fingerprint": "samsung/b0qksx/b0q:16/BP2A.250605.031.A3/S908NKSS9GZH3:user/release-keys",
+            "id": "BP2A.250605.031.A3",
+            "model": "SM-S908N",
+            "type": "user",
+            "version": {
+                "codename": "REL",
+                "sdk": 36
+            }
+        },
+        "cpuCoreCount": 8,
+        "cpuLocked": false,
+        "cpuMaxFreqHz": 2995200000,
+        "memTotalBytes": 11749150720,
+        "sustainedPerformanceModeEnabled": false,
+        "artMainlineVersion": 361501120,
+        "osCodenameAbbreviated": "REL",
+        "compilationMode": "run-from-apk",
+        "payload": {}
+    },
+    "benchmarks": [
+        {
+            "name": "coldStartup",
+            "params": {},
+            "className": "lab.recovery.benchmark.RecoveryBenchmark",
+            "totalRunTimeNs": 260139191879,
+            "metrics": {
+                "timeToInitialDisplayMs": {
+                    "minimum": 383.533594,
+                    "maximum": 500.359219,
+                    "median": 422.651406,
+                    "coefficientOfVariation": 0.10941237255333074,
+                    "runs": [
+                        395.705364,
+                        383.533594,
+                        422.651406,
+                        500.359219,
+                        384.947969,
+                        450.935156,
+                        480.608593
+                    ]
+                }
+            },
+            "sampledMetrics": {},
+            "warmupIterations": 0,
+            "repeatIterations": 7,
+            "thermalThrottleSleepSeconds": 0,
+            "profilerOutputs": [
+                {
+                    "type": "PerfettoTrace",
+                    "label": "Trace Iteration 0",
+                    "filename": "RecoveryBenchmark_coldStartup_iter000_2026-11-24-10-24-10.perfetto-trace"
+                },
+                {
+                    "type": "PerfettoTrace",
+                    "label": "Trace Iteration 1",
+                    "filename": "RecoveryBenchmark_coldStartup_iter001_2026-11-24-10-24-46.perfetto-trace"
+                },
+                {
+                    "type": "PerfettoTrace",
+                    "label": "Trace Iteration 2",
+                    "filename": "RecoveryBenchmark_coldStartup_iter002_2026-11-24-10-25-23.perfetto-trace"
+                },
+                {
+                    "type": "PerfettoTrace",
+                    "label": "Trace Iteration 3",
+                    "filename": "RecoveryBenchmark_coldStartup_iter003_2026-11-24-10-25-59.perfetto-trace"
+                },
+                {
+                    "type": "PerfettoTrace",
+                    "label": "Trace Iteration 4",
+                    "filename": "RecoveryBenchmark_coldStartup_iter004_2026-11-24-10-26-35.perfetto-trace"
+                },
+                {
+                    "type": "PerfettoTrace",
+                    "label": "Trace Iteration 5",
+                    "filename": "RecoveryBenchmark_coldStartup_iter005_2026-11-24-10-27-11.perfetto-trace"
+                },
+                {
+                    "type": "PerfettoTrace",
+                    "label": "Trace Iteration 6",
+                    "filename": "RecoveryBenchmark_coldStartup_iter006_2026-11-24-10-27-48.perfetto-trace"
+                }
+            ]
+        }
+    ]
+}

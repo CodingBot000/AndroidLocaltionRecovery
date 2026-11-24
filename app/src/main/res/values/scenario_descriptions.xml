@@ -1,0 +1,22 @@
+<resources>
+    <string name="scenario_demo_description">Follow one drive through a GPS jump, signal loss, and recovery. The app rejects the jump, estimates the position during the outage, then counts a route alert when the vehicle takes a side road.</string>
+    <string name="scenario_s01_description">The vehicle follows the planned road through the curve on the right. The green position marker should follow the road, with no route departure alert.</string>
+    <string name="scenario_s02_description">At 3 seconds, the red GPS cross jumps far away. The green position marker should stay at the last reliable spot until a valid reading arrives.</string>
+    <string name="scenario_s03_description">The vehicle is stopped. GPS reports inconsistent or missing heading, but the accepted position should stay in the same place.</string>
+    <string name="scenario_s04_description">Two GPS readings report poor accuracy. The app should keep the last reliable position until accurate readings return.</string>
+    <string name="scenario_s05_description">GPS reports arrive twice, out of order, or too late. The app should reject those readings and preserve the last reliable position.</string>
+    <string name="scenario_s06_description">GPS briefly drops out on a straight road. Watch the amber diamond estimate the position until enough reliable GPS readings arrive.</string>
+    <string name="scenario_s07_description">GPS stays unavailable in the tunnel. The amber estimate should give way to the last reliable position at 17 seconds. Later, the app should pick up GPS again.</string>
+    <string name="scenario_s08_description">The vehicle slows and stops while GPS is out. Compare the blue square (vehicle position) with the amber diamond (estimate), which keeps moving until GPS recovers.</string>
+    <string name="scenario_s09_description">GPS returns with gaps and poor readings. The app should hold the last reliable position or show an estimate until three reliable readings arrive in a row.</string>
+    <string name="scenario_s10_description">GPS places the vehicle between two parallel roads on the left. The app should show the observed position and leave the road unconfirmed.</string>
+    <string name="scenario_s11_description">The vehicle takes the side road in the middle of the map. Look for one route departure alert in Run results.</string>
+    <string name="scenario_s12_description">The vehicle stays on the planned road, but one GPS reading jumps toward the side road. The app should reject it. Look for zero route departure alerts in Run results.</string>
+    <string name="scenario_s13_description">The vehicle takes the side road and later rejoins the planned road. The route status should return to on route after three reliable readings on the planned road.</string>
+    <string name="scenario_s14_description">The only GPS reading has poor accuracy. The blue square still shows the simulated vehicle, and the app should display No fix throughout.</string>
+    <string name="scenario_s15_description">Try Pause to freeze the clock, Step to advance to the next event, and Reset to return to the start. Playback speed should leave the final results unchanged.</string>
+    <string name="scenario_s16_description">The vehicle takes the side road while GPS is out. A route departure alert should appear in the results only after GPS recovers and confirms the new road.</string>
+    <string name="scenario_s17_description">One GPS reading has a negative accuracy and another claims it was measured in the future. Both should be rejected while the last reliable position stays visible.</string>
+    <string name="playback_speed">Playback speed</string>
+    <string name="map_tunnel">Tunnel</string>
+</resources>

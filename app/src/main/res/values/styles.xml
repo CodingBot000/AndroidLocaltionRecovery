@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name" translatable="false">Location Recovery Lab</string>
+    <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#101716</item>
+    </style>
+</resources>

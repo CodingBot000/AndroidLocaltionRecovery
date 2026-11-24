@@ -1,0 +1,22 @@
+<resources>
+    <string name="scenario_demo_description">한 번의 주행에서 GPS가 튀고 신호가 끊겼다가 돌아옵니다. 앱은 튄 좌표를 버리고 신호가 없는 동안 위치를 추정한 뒤, 차가 샛길로 들어가면 경로 이탈을 기록합니다.</string>
+    <string name="scenario_s01_description">차가 오른쪽 곡선을 지나 계획 경로를 따라갑니다. 초록색 위치 표시가 도로를 따라가며 경로 이탈 알림은 나오지 않습니다.</string>
+    <string name="scenario_s02_description">3초에 빨간색 GPS 표시가 멀리 튑니다. 초록색 위치 표시는 정상 GPS가 들어올 때까지 마지막으로 확인한 자리에 머뭅니다.</string>
+    <string name="scenario_s03_description">차가 정차해 있는데 GPS 방향이 바뀌거나 비어 있습니다. 방향값이 흔들려도 초록색 위치 표시는 같은 자리에 머뭅니다.</string>
+    <string name="scenario_s04_description">정확도가 낮은 GPS가 두 번 들어옵니다. 앱은 정확한 GPS가 다시 들어올 때까지 마지막으로 확인한 위치를 유지합니다.</string>
+    <string name="scenario_s05_description">같은 GPS 기록이 반복되거나 순서가 뒤바뀌거나 늦게 도착합니다. 앱은 이런 기록을 버리고 마지막으로 확인한 위치를 유지합니다.</string>
+    <string name="scenario_s06_description">직선 도로에서 GPS가 잠깐 끊깁니다. 정상 GPS가 충분히 들어올 때까지 주황색 마름모가 추정 위치를 보여줍니다.</string>
+    <string name="scenario_s07_description">터널에서 GPS가 오래 끊깁니다. 17초에 주황색 추정 표시가 사라지고 마지막으로 확인한 위치가 표시됩니다. 이후 GPS가 다시 잡힙니다.</string>
+    <string name="scenario_s08_description">GPS가 끊긴 동안 차가 속도를 줄여 멈춥니다. 파란색 네모는 실제 주행 위치를 보여주고, 주황색 추정 위치는 계속 움직여 두 표시가 멀어집니다.</string>
+    <string name="scenario_s09_description">GPS가 돌아온 뒤에도 신호가 다시 비거나 정확도가 떨어집니다. 정확한 GPS가 세 번 연속 들어오면 복구가 확정됩니다.</string>
+    <string name="scenario_s10_description">GPS가 왼쪽의 평행 도로 두 개 사이에 찍힙니다. 관측 위치는 보이지만 어느 도로를 달리는지는 확정하지 않습니다.</string>
+    <string name="scenario_s11_description">차가 지도 가운데 샛길로 들어가 계획 경로를 벗어납니다. 재생 결과(Run results)에서 경로 이탈 알림 수가 1인지 확인하세요.</string>
+    <string name="scenario_s12_description">차는 계획 경로에 그대로 있고 GPS 표시만 한 번 샛길 쪽으로 튑니다. 앱은 그 좌표를 버립니다. 재생 결과(Run results)에서 경로 이탈 알림 수는 0입니다.</string>
+    <string name="scenario_s13_description">차가 샛길로 들어갔다가 계획 경로에 다시 합류합니다. 계획 경로에서 정확한 위치를 세 번 연속 확인하면 경로 상태가 정상으로 돌아옵니다.</string>
+    <string name="scenario_s14_description">처음 들어온 GPS 한 건의 정확도가 낮습니다. 파란색 네모로 가상 차량은 보이지만, 앱이 확인한 위치는 끝까지 없습니다.</string>
+    <string name="scenario_s15_description">일시정지(Pause)로 시간을 멈추고 Step으로 한 단계씩 진행할 수 있습니다. 배속을 바꿔도 최종 결과는 같고 Reset을 누르면 처음으로 돌아갑니다.</string>
+    <string name="scenario_s16_description">GPS가 끊긴 동안 차가 샛길로 들어갑니다. GPS가 복구되고 샛길에서 정확한 위치가 확인된 뒤에 경로 이탈로 기록됩니다.</string>
+    <string name="scenario_s17_description">정확도가 음수인 GPS와 미래 시각으로 기록된 GPS가 들어옵니다. 앱은 두 기록을 모두 버리고 마지막으로 확인한 위치를 유지합니다.</string>
+    <string name="playback_speed">재생 배속</string>
+    <string name="map_tunnel">터널</string>
+</resources>
