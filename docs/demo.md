@@ -1,18 +1,34 @@
-# Android 데모
+# 데모 재현
 
-API 36 ARM64 에뮬레이터에서 기본 데모를 실행했다. 이 앱의 fixture는 내장 Android asset이며 네트워크가 없는 상태에서 실행할 수 있다.
+Debug APK를 설치한 뒤 기본 **DEMO_LONG**에서 재생을 누른다. 1×에서 3분, 5×에서 약 36초가 걸린다. 판정 경계를 정밀하게 확인하려면 일시정지하고 한 단계씩 실행한다.
 
-1. 앱을 열고 기본 **Jump, loss & recovery** 시나리오를 선택한다. 선택 목록 아래에서 상황과 확인할 결과를 읽을 수 있다. 지도 왼쪽 아래의 점선 범례로 터널 구간을 확인할 수 있다.
-2. 가로 슬라이더로 0.5×~5× 배속을 고르고 **Play**를 누른다. 3초에는 위치 점프가 거부되고 5초에는 신호 손실과 DR 시작을 확인할 수 있다.
-3. 7초의 저품질 관측은 위치를 갱신하지 않는다. 분기에 도달하면 추정이 중단되고 마지막 확인 위치가 표시된다.
-4. 12초에 신호가 복구되고, 14초에 실제 분기 이탈 권고가 한 번 나온다.
-5. 완료 후 **Run results**와 **Decision log**를 확인한다. **Step**은 다음 가상 시각의 관측과 Tick을 한 번에 처리한다.
+| 가상 시각 | 화면에서 확인할 내용 |
+|---:|---|
+| 0–30초 | 도심 구간 가감속·정차·회전 |
+| 32–49초 | 좌표 흔들림, 39초 위치 점프 거부, 저품질 관측 |
+| 55–80초 | 고속화도로 주행 |
+| 84–96초 | 신호 손실 및 DR, 96초 추정 한도 |
+| 106–109초 | 첫 불량 관측 거부, 연속 정상 관측으로 재획득 |
+| 131–157초 | 계획 외 분기에서 경로 이탈 권고 |
+| 157–180초 | 계획 경로 재합류·복귀 판정, 주행 종료 |
 
-![시작 화면](demo/ready.png)
-![재생 완료 및 평가 요약](demo/results.png)
+카메라 **전체 경로**는 계획 경로 전체를 맞춘다. 확대·축소 또는 지도 끌기는 수동 탐색으로 전환하고 **차량 추적**은 채택·추정 위치로 돌아온다. 지도 테마와 가상 실제 위치 표시는 재생 중에도 바꿀 수 있다. 판정과 요약은 **진단 보기** 및 주행 종료 후 **결과**에서 확인한다.
 
-같은 기본 데모를 JVM에서 실행할 수 있다.
+## API 36 에뮬레이터 캡처
 
-```bash
-./gradlew :core:simulation:run --args='fixtures/development/DEMO.json'
-```
+모든 지도는 아래 시나리오를 실제 앱에서 선택한 뒤 첫 예정 시각을 처리하고 Overview로 전환하여 촬영했다.
+
+| 지도 | 시나리오 | 캡처 |
+|---|---|---|
+| M01 도심 격자 | L01 | [전체 경로](demo/extended/M01.png) |
+| M02 고속화도로 | L02 | [전체 경로](demo/extended/M02.png) |
+| M03 터널 회랑 | L07 | [전체 경로](demo/extended/M03.png) |
+| M04 평행도로 | L10 | [전체 경로](demo/extended/M04.png) |
+| M05 입체 교차로 | L13 | [전체 경로](demo/extended/M05.png) |
+| M06 수변·교량 | L08 | [전체 경로](demo/extended/M06.png) |
+| M07 교외 생활도로 | L03 | [전체 경로](demo/extended/M07.png) |
+| M08 산지 곡선 | L09 | [전체 경로](demo/extended/M08.png) |
+| M09 복합 교통 회랑 | L15 | [전체 경로](demo/extended/M09.png) |
+| M10 복합 장거리 | DEMO_LONG | [전체 경로](demo/extended/M10.png) |
+
+DEMO_LONG 1×의 [87초 Follow·DR](demo/extended/long-follow-dr.png), [96초 Follow·마지막 확인 위치](demo/extended/long-follow-limit.png), [완료 결과 패널](demo/extended/long-results.png). 빠른 회귀 S07의 [DR 중단 화면](demo/extended/dr-limit.png)도 확인할 수 있다. 기존 [15초 DEMO 시작](demo/ready.png)과 [결과](demo/results.png)는 v1 화면 기록이다.

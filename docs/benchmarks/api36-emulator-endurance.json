@@ -1,0 +1,54 @@
+{
+  "scenario": "DEMO_LONG",
+  "androidApi": 36,
+  "architecture": "arm64",
+  "environment": "emulator",
+  "variant": "debug",
+  "airplaneMode": true,
+  "wifiEnabled": false,
+  "speed": 1.0,
+  "durationMs": 180000,
+  "elapsedMs": 180025,
+  "samples": [
+    {
+      "phase": "ready",
+      "virtualMs": 0,
+      "totalPssKiB": 111994,
+      "backlogMs": 0,
+      "diagnosticEvents": 0,
+      "trailSamples": 0
+    },
+    {
+      "phase": "estimated",
+      "virtualMs": 87000,
+      "totalPssKiB": 115862,
+      "backlogMs": 1,
+      "diagnosticEvents": 95,
+      "trailSamples": 98
+    },
+    {
+      "phase": "limit",
+      "virtualMs": 96000,
+      "totalPssKiB": 115398,
+      "backlogMs": 5,
+      "diagnosticEvents": 96,
+      "trailSamples": 142
+    },
+    {
+      "phase": "complete",
+      "virtualMs": 180000,
+      "totalPssKiB": 115686,
+      "backlogMs": 1,
+      "diagnosticEvents": 187,
+      "trailSamples": 214
+    },
+    {
+      "phase": "after-three-resets",
+      "virtualMs": 400,
+      "totalPssKiB": 113366,
+      "backlogMs": 0,
+      "diagnosticEvents": 2,
+      "trailSamples": 1
+    }
+  ]
+}

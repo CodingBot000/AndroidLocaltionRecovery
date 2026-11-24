@@ -1,26 +1,48 @@
 # 아키텍처
 
 ```mermaid
-flowchart LR
-    Fixture[Canonical fixture] --> Replay
-    Replay -->|Observation or Tick| Engine[Tracking engine]
-    Engine -->|Snapshot and decisions| Replay
-    Replay -->|Events| Evaluator
-    Fixture -->|Truth and labels| Evaluator
-    Fixture -->|Roads and truth for illustration| ViewModel
-    Evaluator -->|Run result| ViewModel
-    Replay -->|Run frame| ViewModel
-    View -->|UiIntent| ViewModel
-    ViewModel -->|UiState| View[Compose screen]
-    ViewModel -->|Replay control| Replay
+flowchart TD
+    A[":app · Activity / asset adapter"] --> F[":feature:lab · ViewModel / Compose"]
+    A --> S[":core:simulation · catalog / replay / evaluation"]
+    F --> U[":ui:map · Compose map / camera"]
+    F --> S
+    F --> L[":core:location · tracking engine"]
+    F --> M[":core:map · geometry / network / route"]
+    U --> M
+    S --> L
+    S --> M
+    L --> M
+    B[":benchmark · Macrobenchmark"] -. target APK .-> A
 ```
 
-- `:core:location`은 도로·관측 타입, 위치 검증, Map Matching, 추정, 신호·경로 상태를 순수 Kotlin/JVM으로 구현한다. 엔진은 한 시각의 입력만 받고 평가 정답에 대한 의존성이 없다.
-- `:core:simulation`은 공용 JSON 원본 검증, 가상 시계, 관측·Tick 정렬, 평가, JVM CLI를 제공한다. 재생 세션은 소유자 하나가 순서대로 진행하며 배속은 외부 대기 시간에만 영향을 준다.
-- `:app`의 ViewModel은 로더와 작업 Dispatcher를 주입받아 명령을 직렬화하고 읽기 전용 StateFlow를 발행한다. 파일 읽기는 IO Dispatcher, 엔진과 평가 계산은 작업 Dispatcher에서 실행한다. Compose는 현재 화면 상태에서 Canvas와 UI를 렌더링한다.
-- 세로 화면 재생성은 동일 ViewModel과 실행 ID를 유지한다. Reset·시나리오 변경·종료는 먼저 활성 ID를 무효화하고 관련 작업을 취소한다. 각 상태 반영은 현재 세션 ID를 확인한다. 로그는 500건, 위치 이력은 출처별 1,000개 표본으로 제한한다.
-- Android asset은 Gradle이 루트의 `fixtures/`에서 패키징한다. JVM은 같은 파일과 파서로 실행한다. 체크섬·스키마 버전·평가 설정은 평가 JSON에 남는다.
+`verifyModuleBoundaries`는 Gradle 구성에서 7개 모듈의 선언 의존성을 검사한다. Android 테스트의 도메인 타입과 Macrobenchmark의 대상 APK는 테스트 경계로 다룬다. 세 코어 모듈은 JVM에서 독립 실행된다.
 
-의존성은 `:app → :core:simulation → :core:location` 및 화면의 도메인 타입 사용을 위한 `:app → :core:location`이다.
+```mermaid
+flowchart LR
+    D[Fixture source] --> R[ScenarioRepository]
+    R --> C[ReplayController]
+    C --> S[ReplaySession]
+    S -->|Observation / Tick| E[TrackingEngine]
+    E -->|Snapshot / events| S
+    S -->|Full decisions and ticks| V[Evaluator]
+    R -->|Ground truth / expectations| V
+    V --> C
+    C -->|Bounded presentation state| F[LabViewModel]
+    F -->|Scene and display overlay| U[RoadMap]
+    F -->|User intents| C
+```
 
-`:benchmark`는 앱 외부에서 동작하는 Macrobenchmark 계측 모듈이다. 측정 대상 `:app`의 `benchmark` 변형은 Release 구성을 상속하고 별도 앱 ID로 설치된다. `profileable`과 ProfileInstaller는 이 변형에만 적용한다.
+## 재생과 취소
+
+- 앱은 asset 어댑터를 주입한다. JVM CLI에는 파일 어댑터를 주입한다. 두 환경에서 원본 JSON과 검증 로직을 공유한다.
+- `ReplaySession`이 가상 시각별 관측·Tick·종료를 결정적으로 처리한다. 모든 이벤트는 바로 평가기에 기록된다. `ReplayController`는 단일 명령 큐와 현재 실행 ID로 데이터 로딩, 엔진, 완료 결과를 조율한다. 무거운 단계에는 IO·작업 Dispatcher를 사용한다.
+- 재생 deadline은 단조 시계와 하나의 가상 시간 기준점에서 계산한다. Pause는 가상 진행량을 동결하고 배속 변경은 변경 시각까지 진행된 양을 반영한다. 지연 발생 시 최대 12개 가상 시각을 한 차례 처리한 뒤 다음 명령을 받을 수 있다. 256칸 입력 큐가 가득 차면 화면에 재시도 상태를 표시한다.
+- 화면 로그는 500건, 표시 이력은 출처별 1,000개다. 이력은 추정 시작·중단, 위치 거부·재정합, 출처 변경에서 끊긴다. 세션 전환은 이전 timer generation과 실행 ID를 무효화한다. 세로 Activity 재생성은 같은 ViewModel을 사용하고, 제거 시 컨트롤러 scope를 취소한다. 기존 백그라운드 동작에 따라 ViewModel 생존 동안 재생을 이어간다.
+
+## 지도
+
+`MapDefinition`은 방향성 네트워크와 UI 표현 데이터를 가진다. `RoutePlan`은 시나리오마다 연결하며 같은 지도에 서로 다른 계획을 붙일 수 있다. 엔진은 노드 ID와 허용 전이 및 시나리오 계획 경로를 사용한다. 건물·수변·라벨과 기대 판정은 엔진 입력에 포함되지 않는다.
+
+`ui:map`은 지형·도로·경로 Path를 활성 장면 한 개에 대해 월드 좌표로 준비한다. 차량 데이터가 갱신되면 카메라 행렬로 경로와 지형을 투영하고 동적 오버레이를 그린다. Follow는 채택·추정·마지막 확인 위치를 사용한다. Overview는 계획 경로 bounds에 맞추고 수동 pan·zoom은 Free 모드로 전환한다. 이 상태는 지도 Composable이 소유한다. 카메라 조작과 지도 색상 변경은 재생 명령을 보내지 않는다.
+
+`benchmark`는 Release 상속 변형의 별도 패키지 `lab.recovery.app.benchmark`를 대상으로 한다. 콜드 스타트, 명시적으로 선택한 15초 DEMO, M10의 첫 45초 프레임 계측을 구성한다.

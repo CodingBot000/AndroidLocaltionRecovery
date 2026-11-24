@@ -27,4 +27,21 @@ class RecoveryContinuityTest {
         assertFalse(recoveryRoadContinuous(graph, first, next, 16.99))
         assertFalse(recoveryRoadContinuous(graph, next, first, 1000.0))
     }
+
+    @Test fun coincidentUnconnectedLevelsAreAmbiguousWithoutMovementEvidence() {
+        val lowerStart = RoadNode("lower-start", Point2D(0.0, 0.0))
+        val lowerEnd = RoadNode("lower-end", Point2D(180.0, 0.0))
+        val upperStart = RoadNode("upper-start", lowerStart.point, 1)
+        val upperEnd = RoadNode("upper-end", lowerEnd.point, 1)
+        val edges = listOf(
+            RoadEdge(Road("lower", listOf(lowerStart.point, lowerEnd.point)), lowerStart.id, lowerEnd.id),
+            RoadEdge(Road("upper", listOf(upperStart.point, upperEnd.point)), upperStart.id, upperEnd.id),
+        )
+        val network = RoadNetwork(listOf(lowerStart, lowerEnd, upperStart, upperEnd), edges, emptyMap())
+        val graph = RoadGraph(network, RoutePlan(network, listOf("upper")))
+        val observation = LocationObservation(0, "gps", 0, 0, Point2D(65.0, 0.0), 4.0, 8.0, 90.0)
+        val matcher = MapMatcher(graph, TrackingSettings())
+        assertEquals(Reason.AMBIGUOUS, matcher.match(observation, previousRoad = null).reason)
+        assertEquals("upper", matcher.match(observation, previousRoad = "upper").confirmed?.roadId)
+    }
 }

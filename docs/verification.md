@@ -1,6 +1,6 @@
 # 검증 기록
 
-## 단계별 결과
+## P00–P08 당시 결과
 
 | 단계 | 상태 | 근거 |
 |---|---|---|
@@ -67,3 +67,35 @@ ARM64 API 36 에뮬레이터에서 비행기 모드를 켜고 Wi-Fi를 끈 뒤 �
 - 기존 v1 원본 23개의 SHA-256은 [legacy-fixtures.sha256](legacy-fixtures.sha256)에 기록했다.
 - [기존 원격 실행](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45382104156)은 SDK 설치 전 `sdkmanager: command not found`로 종료했다. Android SDK 설정 액션으로 도구를 구성하고 SDK 설치 명령의 성공을 확인하도록 수정했다.
 - 기존 Macrobenchmark는 15초 DEMO와 이전 UI의 물리 단말 기록이다. 확장 앱과 동일 조건으로 재측정하기 전 개선률을 산출하지 않는다.
+
+## P09–P16 확장 검증
+
+| 단계 | 상태 | 검증 결과 |
+|---|---|---|
+| P09 기준선·CI | PASS | 기준선의 로컬 빌드·평가·세로 계측과 SDK 설치 수정의 [원격 실행](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45390333255)을 확인했다. |
+| P10 지도 모델 | PASS | 모듈 경계, 명시적 노드·전이, 비연결 입체교차, 경로 길이·좌표 및 복구 연결 탐색을 검증했다. 재생 가능한 v1 20개의 스냅샷·판정·평가 SHA-256이 [기준선](legacy-replay.sha256)과 일치했다. |
+| P11 재생 분리 | PASS | Pause·Resume의 잔여 대기, 배속 변경, Step, backlog 무손실, 완료 직후 Reset, 이전 실행 결과 차단과 세로 ViewModel 보존을 확인했다. |
+| P12 지도와 카메라 | PASS | 좌표 변환·축척·제스처와 10개 지도의 실제 지도 표시, Follow·Overview·Free, 주간·야간·Truth 전환을 검증했다. |
+| P13 데이터·평가 | PASS | 장시간 앱 주행 18개와 별도 평가 10개에서 이벤트 기대값 146건, 최종 신호 상태 28건을 통과했다. 생성기 재실행 결과는 원본과 바이트 단위로 일치했다. |
+| P14 세로 UI | PASS | API 36 세로 계측 8/8, 작은 화면과 한국어·글꼴 130%에서 제어와 설명 계측 2/2를 추가로 실행했다. 10개 지도를 실제 촬영했다. |
+| P15 품질·내구 | PASS | 기존 20,000 관측 스트레스, 신규 장시간 반복·배속 비교, 결함 주입 2건, APK·Lint 및 오프라인 1× 180초 실행이 통과했다. 물리 단말 성능 측정은 별도로 기록한다. |
+| P16 최종 검수 | PASS | v1 원본 23개, APK 양쪽의 asset 62개, 세로·오프라인 Manifest, 평가 JSON과 실제 화면을 대조했다. |
+
+| 검사 | 실행·통과 |
+|---|---:|
+| core/map · core/location · core/simulation JVM | 35/35 |
+| feature/lab · ui/map Android 단위 | 4/4 |
+| API 36 일반 세로 계측 | 8/8 |
+| API 36 한국어·작은 세로 화면·130% 글꼴 재실행 | 2/2 |
+| API 36 오프라인 1× 내구 | PASS |
+| v1 S 계열 기대값 및 로드 오류 | 51/51 |
+| 기존 DEMO 기대값 | 4/4 |
+| v2 주행 기대 이벤트·최종 신호 상태 | 174/174 |
+
+`verifyModuleBoundaries`, Debug, 서명하지 않은 Release, 계측 APK와 Macrobenchmark APK 빌드가 성공했다. Debug Lint 오류는 0건이다. APK의 JSON 62개는 파일 내용까지 원본과 일치하며, 인터넷·위치·카메라·마이크 권한은 발견되지 않았다. API 36 에뮬레이터의 비행기 모드와 Wi-Fi 꺼짐 상태를 계측에서 확인했다.
+
+별도 복제본 두 곳에서 결함을 각각 주입했다. 좌표가 같으면 입체교차의 연결을 허용하는 변경에는 `RoadNetworkTest.levelsAndExplicitTurnsControlConnectivity`가 실패했다. Step에서 엔진 진행을 생략하는 변경에는 `ReplayControllerTest.aStepProcessesAllEventsAtTheNextScheduledTimestamp`가 실패했다. 정상 소스에서 두 테스트와 전체 단위 테스트를 다시 실행해 통과했다.
+
+[확장 코드 원격 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45393491037) · [평가 요약](extended-evaluation-report.md) · [지도별 화면](demo.md) · [내구 및 성능 환경](physical-device-validation.md)
+
+확장 물리 단말의 콜드 스타트·프레임 지표와 동등한 기준선 재측정은 **BLOCKED**다. 에뮬레이터에서 두 벤치마크 대상의 시나리오 ID, 재생 시간, 1× 준비 상태를 확인했다. TalkBack 실제 음성 동작은 **NOT_RUN**이다.

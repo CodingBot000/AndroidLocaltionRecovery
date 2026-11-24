@@ -44,3 +44,32 @@ ADB로 연결한 단말이 둘 이상이면 `ANDROID_SERIAL`에 실제 단말의
 ```
 
 Macrobenchmark 대상은 Release 설정을 상속한 별도 앱 ID이며, 로컬 디버그 키로 서명하고 디버깅은 끈다. `profileable`과 ProfileInstaller는 벤치마크 변형에만 있다. 이 모듈은 원격 CI 품질 게이트와 독립적으로 실행한다.
+
+## P15 확장 검증 환경
+
+확장 검증에는 Android 16(API 36) ARM64 에뮬레이터를 사용했다. 비행기 모드를 켜고 Wi-Fi를 끈 상태에서 Debug APK로 DEMO_LONG 180초를 1× 재생했다. 측정 항목은 Android 단조 시계의 실제 경과, 지정 시각의 backlog, 앱 프로세스 PSS, 버퍼 크기다. 아래 기록은 에뮬레이터 표본이다.
+
+```bash
+./gradlew :app:connectedDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=lab.recovery.app.LongReplayEnduranceTest
+adb logcat -d -s RecoveryEndurance:I '*:S'
+
+./gradlew :app:assembleBenchmark :benchmark:assembleBenchmark
+./gradlew :benchmark:connectedBenchmarkAndroidTest
+```
+
+확장 Macrobenchmark는 Release 상속 변형을 대상으로 콜드 스타트, 15초 기존 DEMO, M10의 첫 45초를 각 7회 측정하도록 구성했다. 확장 검증 시점에 연결된 물리 단말이 없어 해당 단말의 프레임·시작 속도와 기준선 동등 조건 재측정은 BLOCKED다. 위에 보존한 S22 Ultra 결과는 확장 전 빌드의 기록이다.
+
+### 1× 재생 표본
+
+실제 경과 180.025초로 180초 가상 주행을 완료했다. 완료 시 진단 187건과 위치 이력 214개를 보유했고, 반복 초기화 세 번 이후 로그·이력·평가가 새 실행 기준으로 쌓이는 것을 확인했다. PSS 변화는 이 실행의 표본이며 캐시·GC의 장기 거동은 별도 측정 대상이다.
+
+| 시점 | 가상 시간 | PSS KiB | 표본 backlog ms |
+|---|---:|---:|---:|
+| ready | 0 | 111,994 | 0 |
+| estimated | 87000 | 115,862 | 1 |
+| limit | 96000 | 115,398 | 5 |
+| complete | 180000 | 115,686 | 1 |
+| after-three-resets | 400 | 113,366 | 0 |
+
+[에뮬레이터 내구 측정 원본](benchmarks/api36-emulator-endurance.json)

@@ -1,57 +1,60 @@
 # Location Recovery Lab
 
-합성 GPS 관측의 이상치와 저품질 입력을 검증하고, 도로 매칭·신호 손실·제한적 Dead Reckoning·재획득·경로 이탈을 재생하는 오프라인 Android 실험 앱이다. 지도는 미터 단위 로컬 직교 좌표로 그린다.
+합성 도로에서 GPS 위치 점프, 신호 손실, 제한적 Dead Reckoning(DR), 재획득, 경로 이탈을 관찰하는 세로 전용 Android 실험 앱이다. 10개의 합성 지도와 18개의 장시간 주행을 제공하며, 앱 실행에는 인터넷과 위치 권한이 필요 없다.
 
-![API 36 에뮬레이터에서 실행한 재생 화면](docs/demo/ready.png)
+![오프라인 Android 에뮬레이터의 터널 추정 화면](docs/demo/extended/long-follow-dr.png)
 
-## 대표 시나리오
+## 대표 주행
 
-- **기본 데모**는 위치 점프, 신호 손실, DR, 재획득, 실제 경로 이탈이 한 번의 실행에서 나타난다.
-- **S07**은 긴 터널 구간에서 DR 한도 도달 후 마지막 확인 위치를 표시한다.
-- **S09·S10**은 불안정한 복구 후보와 평행 도로 매칭의 모호성을 보여준다.
-- **S11·S16**은 분기 이탈과 신호 손실 중 실제 이탈을 구분한다.
+기본 **DEMO_LONG**은 180초에 걸쳐 도심 회전과 위치 점프, 고속화도로 진입, 터널 신호 손실과 DR 중단, GPS 재획득, 실제 분기 이탈과 복귀를 보여준다. **L01–L17**은 각 장애를 90–120초 주행으로 살펴볼 수 있다. 기존 **DEMO**와 **S01–S17**은 선택 목록의 빠른 회귀 그룹에 있다.
 
-샘플 선택 목록 아래에 상황과 확인할 결과가 표시된다. Play/Pause, Step, Reset으로 재생하고, 가로 슬라이더로 0.5×~5× 배속을 0.5× 단위로 고른다. 앱은 세로 모드로 실행한다. 지도에서 가상 실제 위치 표시를 전환할 수 있다. [재현 절차와 화면](docs/demo.md)
+재생·일시정지, 한 단계씩 실행, 초기화와 0.5×–5× 배속을 지원한다. 지도에서 차량 추적과 전체 경로를 전환하거나 확대·이동할 수 있다. 주간·야간 지도, 합성 실제 위치 표시, 판정 로그와 평가 결과는 주행 화면에서 확인한다. [지도·시나리오 목록](docs/map-and-scenarios.md) · [데모와 실행 화면](docs/demo.md)
 
-## 실행과 검증
+## 빌드와 검증
 
-JDK 17과 Android SDK 36을 설치하고 Gradle이 SDK를 찾도록 `ANDROID_HOME`을 설정하거나 Android Studio의 SDK 설정을 사용한다. 최소 실행 API는 26이다. 첫 빌드는 의존성을 내려받을 수 있어야 한다.
+JDK 17, Android SDK 36 및 Android SDK command-line tools가 필요하다. 최소 실행 API는 26이다. SDK 위치는 `ANDROID_HOME` 또는 Android Studio로 설정한다.
 
 ```bash
 ./gradlew :app:assembleDebug
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 adb shell am start -n lab.recovery.app/.MainActivity
 
-./gradlew :core:location:test :core:simulation:test :app:testDebugUnitTest
-./gradlew :app:lintDebug :app:assembleRelease :app:assembleDebugAndroidTest
-./gradlew :app:connectedDebugAndroidTest
-./gradlew :core:simulation:run --args='fixtures/evaluation docs/evaluation-results.json docs/evaluation-report.md'
+./gradlew verifyModuleBoundaries :core:map:test :core:location:test :core:simulation:test \
+  :feature:lab:testDebugUnitTest :ui:map:testDebugUnitTest :app:testDebugUnitTest
+./gradlew :feature:lab:lintDebug :ui:map:lintDebug :app:lintDebug \
+  :app:assembleRelease :app:assembleDebugAndroidTest :benchmark:assembleBenchmark
+./gradlew :app:connectedDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=lab.recovery.app.RecoveryInstrumentedTest
+
+python3 -B tools/extended/generate.py
+./gradlew :core:simulation:run --args='fixtures/evaluation build/reports/legacy.json build/reports/legacy.md'
+./gradlew :core:simulation:run --args='fixtures/extended build/reports/extended.json build/reports/extended.md'
 ```
 
-Android asset과 JVM 실행기는 루트 `fixtures/`의 동일 원본을 사용한다. fixture 버전과 SHA-256, 시드(해당 시), 실제 평가 설정은 JSON 결과에서 확인한다. 독립 기대값은 평가용 JSON의 `expected`에 있다.
+오프라인 1× 내구 및 Macrobenchmark는 별도 대상이다. [계측 방법과 환경](docs/physical-device-validation.md)
 
 ## 구성
 
 ```mermaid
-flowchart LR
-    View[Compose and Canvas] -->|UiIntent| State[AndroidX ViewModel]
-    State -->|UiState| View
-    State --> Simulation[core:simulation]
-    Simulation --> Engine[core:location]
-    Fixture[Canonical fixtures] --> Simulation
+flowchart TD
+    A[":app"] --> F[":feature:lab"]
+    A --> S[":core:simulation"]
+    F --> U[":ui:map"]
+    F --> S
+    F --> L[":core:location"]
+    F --> M[":core:map"]
+    U --> M
+    S --> L
+    S --> M
+    L --> M
+    B[":benchmark"] -. APK .-> A
 ```
 
-`:app`은 두 JVM 모듈을 사용한다. `:core:simulation`은 `:core:location`을 호출하며, 평가용 Ground Truth와 정답 라벨은 평가 및 시각화에만 전달한다. [아키텍처](docs/architecture.md)
-
-Accuracy·수신 순서·지연·이동 가능성을 검사하고, 거리·방향·연결성·계획 경로로 후보 점수를 계산한다. DR은 정합 기준점에서 일정 속도를 가정하며 최대 15초 또는 명확한 경로가 끝나는 시점까지만 적용한다. 정상 복구는 연속 검증을 거친다. [알고리즘과 한계](docs/algorithm.md)
+Android와 JVM은 동일한 fixture와 파서를 사용한다. 엔진은 합성 관측·Tick·도로 연결·계획 경로를 사용하며, 기대값과 실제 가상 위치는 평가와 표시에서만 쓰인다. 정적 지도 형상은 월드 좌표로 캐시되고, 지도 카메라는 재생과 별도 상태로 동작한다. [아키텍처](docs/architecture.md) · [알고리즘](docs/algorithm.md)
 
 ## 결과
 
-| 검사 | 결과 확인 |
-|---|---|
-| JVM·Android 단위 테스트, Android 계측, Lint, 빌드 | 단위 24/24, 실제 단말 계측 6/6, Lint 오류 0건, APK 빌드 성공 · [검증 기록](docs/verification.md) |
-| S01~S17 및 하위 사례의 기대 판정과 정량 지표 | 기대 판정과 로딩 검사 51/51 · [평가 요약](docs/evaluation-report.md), [JSON 원본](docs/evaluation-results.json) |
-| APK 실행 및 데모 재현 | [데모 자료](docs/demo.md) |
-| 실제 단말 오프라인 계측·성능 | [실제 단말 검증](docs/physical-device-validation.md) |
+- [기존 S 계열 평가](docs/evaluation-report.md) · [장시간 및 독립 평가](docs/extended-evaluation-report.md)
+- [단위·계측·빌드·오프라인 검증](docs/verification.md) · [기기와 측정 환경](docs/physical-device-validation.md)
 
-측정값의 범위는 가상 주행과 합성 도로다. 이 실험으로 실제 GNSS나 상용 내비게이션 엔진의 성능을 검증하지 않는다.
+위치 오차와 복구 지연은 합성 직교 좌표에서 얻은 값이다. 실제 환경의 위치 정확도나 내비게이션 성능을 추정하는 데에는 별도의 실측이 필요하다.

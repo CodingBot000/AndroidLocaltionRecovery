@@ -1,6 +1,9 @@
 package lab.recovery.simulation
 
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -61,6 +64,28 @@ class ReplayControllerTest {
             scheduler.advanceTimeBy(1)
             scheduler.runCurrent()
             assertEquals(400L, controller.state.value.snapshot.nowMs)
+        }
+    }
+
+    @Test fun resetOnCompletionPreventsAnEarlierEvaluationFromBeingPublished() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        val loaded = repository.read("L01")
+        val tiny = loaded.copy(durationMs = 0L, observations = loaded.observations.take(1))
+        ReplayController(this, "L01", { tiny }, dispatcher, dispatcher).use { controller ->
+            testScheduler.runCurrent()
+            val firstRun = controller.state.value.runId
+            launch(start = CoroutineStart.UNDISPATCHED) {
+                controller.state.first { it.playback == Playback.COMPLETE && it.evaluation == null }
+                assertTrue(controller.send(ReplayIntent.Reset))
+            }
+            assertTrue(controller.send(ReplayIntent.Step))
+            testScheduler.advanceUntilIdle()
+            with(controller.state.value) {
+                assertEquals(Playback.READY, playback)
+                assertTrue(runId > firstRun)
+                assertNull(evaluation)
+                assertTrue(logs.isEmpty())
+            }
         }
     }
 
