@@ -1,5 +1,8 @@
 package lab.recovery.simulation
 
+import lab.recovery.map.Point2D
+import lab.recovery.map.Road
+import lab.recovery.map.RoadGraph
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest

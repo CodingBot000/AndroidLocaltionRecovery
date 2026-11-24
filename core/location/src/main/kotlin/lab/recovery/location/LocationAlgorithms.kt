@@ -1,5 +1,7 @@
 package lab.recovery.location
 
+import lab.recovery.map.Point2D
+import lab.recovery.map.RoadGraph
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -61,8 +63,13 @@ internal fun formatError(obs: LocationObservation): Reason? = when {
 
 internal fun withinMovement(previous: LocationObservation, next: LocationObservation, settings: TrackingSettings): Boolean {
     val seconds = (next.measuredAtMs - previous.measuredAtMs) / 1000.0
+    return seconds > 0 && previous.point.distance(next.point) <= movementLimit(previous, next, settings)
+}
+
+internal fun movementLimit(previous: LocationObservation, next: LocationObservation, settings: TrackingSettings): Double {
+    val seconds = (next.measuredAtMs - previous.measuredAtMs) / 1000.0
     val uncertainty = min(settings.uncertaintyLimit, previous.accuracyMeters + next.accuracyMeters)
-    return seconds > 0 && previous.point.distance(next.point) <= seconds * settings.maximumSpeed + uncertainty
+    return seconds * settings.maximumSpeed + uncertainty
 }
 
 internal data class Estimate(val position: Point2D? = null, val road: String? = null, val reason: Reason? = null)
@@ -82,4 +89,32 @@ internal fun estimate(anchor: DeadReckoningAnchor?, graph: RoadGraph, now: Long,
         offset -= road.length
     }
     return Estimate(reason = Reason.DR_ROUTE_END)
+}
+
+/** Distance-bounded forward traversal, with each outgoing edge expanded at its best known cost. */
+internal fun recoveryRoadContinuous(
+    graph: RoadGraph,
+    first: MatchCandidate,
+    next: MatchCandidate,
+    maximumDistance: Double,
+): Boolean {
+    if (first.roadId == next.roadId) return true
+    if (graph.legacy) return graph.connected(first.roadId, next.roadId)
+
+    data class Departure(val roadId: String, val distance: Double)
+    val departures = java.util.PriorityQueue(compareBy(Departure::distance))
+    val firstDistance = graph.byId.getValue(first.roadId).length - first.offset
+    departures += Departure(first.roadId, firstDistance)
+    val visited = mutableSetOf<String>()
+    while (departures.isNotEmpty()) {
+        val (roadId, distance) = departures.remove()
+        if (distance + next.offset > maximumDistance) break
+        if (!visited.add(roadId)) continue
+        for (road in graph.outgoing(roadId)) {
+            if (road.id == next.roadId) return true
+            val departure = distance + road.length
+            if (departure <= maximumDistance) departures += Departure(road.id, departure)
+        }
+    }
+    return false
 }

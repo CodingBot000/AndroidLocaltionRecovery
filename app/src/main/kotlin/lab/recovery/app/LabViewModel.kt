@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lab.recovery.location.DecisionEvent
-import lab.recovery.location.Point2D
+import lab.recovery.map.Point2D
 import lab.recovery.location.PositionSource
 import lab.recovery.location.TrackingSnapshot
 import lab.recovery.simulation.Evaluation

@@ -7,10 +7,10 @@ import com.google.gson.Strictness
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import lab.recovery.location.LocationObservation
-import lab.recovery.location.Point2D
+import lab.recovery.map.Point2D
 import lab.recovery.location.Reason
-import lab.recovery.location.Road
-import lab.recovery.location.RoadGraph
+import lab.recovery.map.Road
+import lab.recovery.map.RoadGraph
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.security.MessageDigest

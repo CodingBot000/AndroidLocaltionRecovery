@@ -1,5 +1,8 @@
 package lab.recovery.app
 
+import lab.recovery.map.Point2D
+import lab.recovery.map.Road
+import lab.recovery.map.RoadGraph
 import androidx.lifecycle.ViewModelStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

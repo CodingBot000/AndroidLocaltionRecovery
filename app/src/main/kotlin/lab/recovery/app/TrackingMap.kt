@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import lab.recovery.location.Point2D
+import lab.recovery.map.Point2D
 import lab.recovery.location.PositionSource
 import lab.recovery.simulation.Scenario
 

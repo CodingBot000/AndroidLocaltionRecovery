@@ -4,6 +4,7 @@ plugins {
 }
 kotlin.jvmToolchain(17)
 dependencies {
+    implementation(project(":core:map"))
     implementation(project(":core:location"))
     implementation(libs.gson)
     implementation(libs.coroutines.core)

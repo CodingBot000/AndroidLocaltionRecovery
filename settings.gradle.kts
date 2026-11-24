@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "LocationRecoveryLab"
-include(":app", ":core:location", ":core:simulation", ":benchmark")
+include(":app", ":core:map", ":core:location", ":core:simulation", ":benchmark")

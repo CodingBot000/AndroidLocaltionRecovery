@@ -1,5 +1,9 @@
 package lab.recovery.location
 
+import lab.recovery.map.Point2D
+import lab.recovery.map.Segment
+import lab.recovery.map.Road
+import lab.recovery.map.RoadGraph
 import org.junit.Assert.*
 import org.junit.Test
 

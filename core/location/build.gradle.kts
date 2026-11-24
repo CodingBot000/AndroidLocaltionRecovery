@@ -3,5 +3,6 @@ plugins {
 }
 kotlin.jvmToolchain(17)
 dependencies {
+    implementation(project(":core:map"))
     testImplementation(libs.junit)
 }

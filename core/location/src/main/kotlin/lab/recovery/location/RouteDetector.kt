@@ -1,5 +1,6 @@
 package lab.recovery.location
 
+import lab.recovery.map.RoadGraph
 internal class RouteDetector(private val graph: RoadGraph, private val settings: TrackingSettings) {
     var status = RouteStatus.UNKNOWN
         private set

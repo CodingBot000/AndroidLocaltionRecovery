@@ -33,6 +33,7 @@ android {
 }
 kotlin.jvmToolchain(17)
 dependencies {
+    implementation(project(":core:map"))
     implementation(project(":core:location"))
     implementation(project(":core:simulation"))
     implementation(platform(libs.compose.bom))

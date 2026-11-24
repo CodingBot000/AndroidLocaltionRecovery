@@ -1,5 +1,7 @@
 package lab.recovery.location
 
+import lab.recovery.map.Point2D
+import lab.recovery.map.RoadGraph
 class TrackingEngine(
     private val graph: RoadGraph,
     private val settings: TrackingSettings = TrackingSettings(),
@@ -90,10 +92,12 @@ class TrackingEngine(
             return
         }
 
-        val previousRoad = recovery.lastOrNull()?.match?.confirmed?.roadId
-        val newRoad = match.confirmed?.roadId
-        if (previousRoad != null && newRoad != null && previousRoad != newRoad &&
-            !graph.connected(previousRoad, newRoad)
+        val priorCandidate = recovery.lastOrNull()
+        val priorMatch = priorCandidate?.match?.confirmed
+        val newMatch = match.confirmed
+        if (priorCandidate != null && priorMatch != null && newMatch != null &&
+            !recoveryRoadContinuous(graph, priorMatch, newMatch,
+                movementLimit(priorCandidate.observation, observation, settings))
         ) {
             reject(observation, Reason.RECOVERY_ROAD_DISCONTINUITY, before, breaksRecovery = true)
             return
