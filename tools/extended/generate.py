@@ -4,7 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
-from driving import add_neighborhood, receiver, trajectory
+from driving import receiver, trajectory
+from terrain import compose_terrain
 from maps import MAPS
 
 # Map, duration, planned route, title, Korean title, and fault category.
@@ -188,8 +189,9 @@ def build_case(number, seed, held_out=False):
 def generate(output):
     for index, (map_id, data) in enumerate(MAPS.items(), 1):
         # Copy the lists so two invocations in a single process remain identical.
-        document = dict(data, mapId=map_id)
-        add_neighborhood(document, index)
+        document = dict(data, mapId=map_id, edges=[dict(edge) for edge in data["edges"]],
+                        labels=[dict(label) for label in data["labels"]])
+        compose_terrain(document, map_id, index)
         write(output / "maps" / f"{map_id}.json", document)
     entries = []
     for number, seed, held_out in [(i, 9100 + i, False) for i in range(1, 19)] + [

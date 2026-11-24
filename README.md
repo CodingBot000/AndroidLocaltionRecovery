@@ -2,13 +2,13 @@
 
 합성 도로에서 GPS 위치 점프, 신호 손실, 제한적 Dead Reckoning(DR), 재획득, 경로 이탈을 관찰하는 세로 전용 Android 실험 앱이다. 10개의 합성 지도와 18개의 장시간 주행을 제공하며, 앱 실행에는 인터넷과 위치 권한이 필요 없다.
 
-![오프라인 Android 에뮬레이터의 터널 추정 화면](docs/demo/extended/long-follow-dr.png)
+![오프라인 에뮬레이터에서 실행한 복합 회랑 지도](docs/demo/map-quality/after/M10-follow.png)
 
 ## 대표 주행
 
 기본 **DEMO_LONG**은 180초에 걸쳐 도심 회전과 위치 점프, 고속화도로 진입, 터널 신호 손실과 DR 중단, GPS 재획득, 실제 분기 이탈과 복귀를 보여준다. **L01–L17**은 각 장애를 90–120초 주행으로 살펴볼 수 있다. 기존 **DEMO**와 **S01–S17**은 선택 목록의 빠른 회귀 그룹에 있다.
 
-재생·일시정지, 한 단계씩 실행, 초기화와 0.5×–5× 배속을 지원한다. 지도에서 차량 추적과 전체 경로를 전환하거나 확대·이동할 수 있다. 주간·야간 지도, 합성 실제 위치 표시, 판정 로그와 평가 결과는 주행 화면에서 확인한다. [지도·시나리오 목록](docs/map-and-scenarios.md) · [데모와 실행 화면](docs/demo.md)
+재생·일시정지, 한 단계씩 실행, 초기화와 0.5×–5× 배속을 지원한다. 지도에서 차량 추적과 전체 경로를 전환하거나 확대·이동할 수 있다. 주간·야간 지도, 합성 실제 위치 표시, 판정 로그와 평가 결과는 주행 화면에서 확인한다. [지도·시나리오 목록](docs/map-and-scenarios.md) · [지도 디자인과 실행 화면](docs/map-visual-verification.md)
 
 ## 빌드와 검증
 
@@ -27,6 +27,7 @@ adb shell am start -n lab.recovery.app/.MainActivity
   -Pandroid.testInstrumentationRunnerArguments.class=lab.recovery.app.RecoveryInstrumentedTest
 
 python3 -B tools/extended/generate.py
+python3 -B tools/extended/check_terrain.py
 ./gradlew :core:simulation:run --args='fixtures/evaluation build/reports/legacy.json build/reports/legacy.md'
 ./gradlew :core:simulation:run --args='fixtures/extended build/reports/extended.json build/reports/extended.md'
 ```

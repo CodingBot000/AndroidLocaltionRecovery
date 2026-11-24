@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "84ae43d",
+  "scenario": "DEMO_LONG",
+  "mapVisualVersion": 2,
+  "androidApi": 36,
+  "architecture": "arm64",
+  "environment": "emulator",
+  "variant": "debug",
+  "airplaneMode": true,
+  "wifiEnabled": false,
+  "speed": 1.0,
+  "durationMs": 180000,
+  "elapsedMs": 180047,
+  "samples": [
+    {
+      "phase": "ready",
+      "virtualMs": 0,
+      "totalPssKiB": 116817,
+      "backlogMs": 0,
+      "diagnosticEvents": 0,
+      "trailSamples": 0
+    },
+    {
+      "phase": "estimated",
+      "virtualMs": 87000,
+      "totalPssKiB": 120177,
+      "backlogMs": 1,
+      "diagnosticEvents": 95,
+      "trailSamples": 98
+    },
+    {
+      "phase": "limit",
+      "virtualMs": 96000,
+      "totalPssKiB": 116985,
+      "backlogMs": 1,
+      "diagnosticEvents": 96,
+      "trailSamples": 142
+    },
+    {
+      "phase": "complete",
+      "virtualMs": 180000,
+      "totalPssKiB": 120524,
+      "backlogMs": 1,
+      "diagnosticEvents": 187,
+      "trailSamples": 214
+    },
+    {
+      "phase": "after-three-resets",
+      "virtualMs": 400,
+      "totalPssKiB": 113272,
+      "backlogMs": 0,
+      "diagnosticEvents": 2,
+      "trailSamples": 1
+    }
+  ]
+}

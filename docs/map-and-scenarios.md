@@ -24,11 +24,14 @@ L01–L17은 90–120초, DEMO_LONG은 180초다. 카탈로그 행에는 지도 
 
 ## 생성과 평가
 
-지도 배치·도로 연결은 `tools/extended/maps.py`에 있다. `driving.py`는 가감속·정차를 포함해 200ms 단위로 실제 궤적을 만든 뒤, 1초 단위 GPS에 결정적 잡음과 장애를 주입한다. 신호 손실은 발행 생략, 지연은 수신 시각 변경, 위치 점프는 좌표 변경으로 모델링한다. 경로 이탈은 주행 에지 자체를 바꾼다. `generate.py`의 기대 이벤트는 이 입력 설계에 맞춰 선언한다.
+도로망과 연결은 `tools/extended/maps.py`에 있고, 표현 개정 2의 필지·도로명·산책로는 `terrain.py`에서 조립한다. `driving.py`는 가감속·정차를 포함해 200ms 단위로 실제 궤적을 만든 뒤, 1초 단위 GPS에 결정적 잡음과 장애를 주입한다. 신호 손실은 발행 생략, 지연은 수신 시각 변경, 위치 점프는 좌표 변경으로 모델링한다. 경로 이탈은 주행 에지 자체를 바꾼다. `generate.py`의 기대 이벤트는 이 입력 설계에 맞춰 선언한다.
 
 ```bash
 python3 -B tools/extended/generate.py
+python3 -B tools/extended/check_terrain.py
 ./gradlew :core:simulation:run --args='fixtures/extended build/reports/extended.json build/reports/extended.md'
 ```
 
 [장시간 정량 평가](extended-evaluation-report.md) · [전체 JSON](extended-evaluation-results.json) · [실행 화면](demo.md)
+
+[지도 디자인과 공간 데이터 규칙](map-design.md)

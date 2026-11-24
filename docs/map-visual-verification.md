@@ -1,0 +1,45 @@
+# 지도 시각 검수
+
+기준선은 `84ae43d`이다. API 36 ARM64 에뮬레이터의 1080×2400 세로 화면에서 같은 시나리오와 가상 시각으로 캡처했다. 지도·HUD·재생 제어를 포함한 원본 PNG를 보존했다. 전체 화면과 지도 영역의 원래 픽셀 크기에서 Follow와 Overview를 함께 비교했다.
+
+## 전후 비교
+
+| 장면 | 기준선 | 개선 후 | 관찰 |
+|---|---|---|---|
+| M01 Follow, 11초 | [전](demo/map-quality/before/M01-follow.png) | [후](demo/map-quality/after/M01-follow.png) | 가로변 필지, L자 footprint, 도로의 교차와 위치 방향이 읽힌다. |
+| M01 Overview | [전](demo/map-quality/before/M01-overview.png) | [후](demo/map-quality/after/M01-overview.png) | 건물 점무늬를 생략하고 가로망, 블록, 남쪽 공원을 남겼다. |
+| M10 Follow, 29초 | [전](demo/map-quality/before/M10-follow.png) | [후](demo/map-quality/after/M10-follow.png) | 회전 구간에 산업·상업 필지와 연결 도로가 표시된다. |
+| M10 Overview | [전](demo/map-quality/before/M10-overview.png) | [후](demo/map-quality/after/M10-overview.png) | 전체 경로와 함께 녹지, 산업 구역, 하천 및 교량이 공간적 맥락을 형성한다. |
+| M10 터널 DR, 87초 | [전](demo/map-quality/before/M10-tunnel.png) | [후](demo/map-quality/after/M10-tunnel.png) | 터널 패턴·입구, 추정 마름모·점선, 마지막 확인점이 구분된다. |
+
+첫 캡처에서 짧은 Overview의 주변 생활도로까지 사라져 도심 격자가 읽히기 어려웠다. 가로 가시 범위 1,250m 미만인 Overview에서는 생활도로를 남겼다. M10은 기존 경로의 비율을 유지한 채 하천과 구역을 회랑 바깥까지 확장했다. 전체 지도 검수에서 M02 램프와 M09 분기 주변의 공간 구성, M07의 사각 녹지를 다시 설계하고 동일 시점에서 재캡처했다.
+
+## 지도별 검수
+
+| 지도 | Follow / Overview 원본 | 상태 | 관찰 |
+|---|---|---|---|
+| M01 | [Follow](demo/map-quality/after/M01-follow.png) · [Overview](demo/map-quality/after/M01-overview.png) | PASS | 격자 교차부가 이어지고 가로변 건물·안뜰·공원이 서로 다른 축척에서 읽힌다. |
+| M02 | [Follow](demo/map-quality/after/M02-follow.png) · [Overview](demo/map-quality/after/M02-overview.png) | PASS | 본선과 진출입 램프의 폭 차이, 램프 주변 산업 필지를 확인했다. |
+| M03 | [Follow](demo/map-quality/after/M03-follow.png) · [Overview](demo/map-quality/after/M03-overview.png) | PASS | 터널 대시와 이름, DR 추정 마커 및 지상 우회로를 확인했다. |
+| M04 | [Follow](demo/map-quality/after/M04-follow.png) · [Overview](demo/map-quality/after/M04-overview.png) | PASS | Follow에서 12m 간격 서비스도로가 계획 본선과 구별된다. |
+| M05 | [Follow](demo/map-quality/after/M05-follow.png) · [Overview](demo/map-quality/after/M05-overview.png) | PASS | 하부 도로 위로 고가의 케이싱이 이어지고 연결 램프는 측면에서 갈라진다. |
+| M06 | [Follow](demo/map-quality/after/M06-follow.png) · [Overview](demo/map-quality/after/M06-overview.png) | PASS | 두 교량이 양안을 가로지르고 야간에 수면·도로·경로 대비가 유지된다. |
+| M07 | [Follow](demo/map-quality/after/M07-follow.png) · [Overview](demo/map-quality/after/M07-overview.png) | PASS | 작은 필지가 굽은 생활도로와 T자 교차에 정렬된다. |
+| M08 | [Follow](demo/map-quality/after/M08-follow.png) · [Overview](demo/map-quality/after/M08-overview.png) | PASS | 곡선 경로와 능선 녹지 사이 간격, 낮은 밀도, 동쪽 터널이 구별된다. |
+| M09 | [Follow](demo/map-quality/after/M09-follow.png) · [Overview](demo/map-quality/after/M09-overview.png) | PASS | 분기의 양측 필지, 간선·보조도로 계층 및 재합류를 확인했다. |
+| M10 | [Follow](demo/map-quality/after/M10-follow.png) · [Overview](demo/map-quality/after/M10-overview.png) | PASS | 도심·터널·분기·수변이 이어지고 Overview에서 양 끝과 방향이 식별된다. |
+
+## 규격별 확인
+
+| 항목 | 결과 | 근거 |
+|---|---|---|
+| 공간 자연스러움·건물과 지형 | PASS | 가로 방향이 다른 상업·주거·산업 필지와 각 지형을 비교했다. 건물·수면·도로 완충은 생성 데이터 검사에서도 확인했다. |
+| 도로 맥락·등급·교차부 | PASS | M01의 같은 높이 교차, M05의 다른 높이 교차, M06 교량이 다른 형태로 읽힌다. |
+| LOD와 라벨 | PASS | 화면 가장자리와 조작부를 피했다. 작은 건물과 산책로는 Overview에서 숨고 지도 밀도에 따라 도로와 주요 라벨이 남는다. |
+| 차량·경로·GPS 상태 | PASS | 경로와 방향 화살표, 원시 십자, 가상 실제 위치 사각형, 추정 마름모, 정지된 마지막 확인점이 구분된다. |
+| 카메라·세로 레이아웃 | PASS | 단일 축척으로 경로를 맞추며 Follow에서 전방 공간을 확보한다. 원시 관측과 가상 실제 위치는 카메라 중심에 사용되지 않는다. |
+| 지도 다양성 및 주·야간 대비 | PASS | 10개 지도 모드와 녹지·도심·수변의 야간 색상을 각각 확인했다. |
+
+대표 장면 [M01 초기](demo/map-quality/after/M01-initial.png) · [M01 야간](demo/map-quality/after/M01-night.png) · [M10 초기](demo/map-quality/after/M10-initial.png) · [M10 야간](demo/map-quality/after/M10-night.png) · [M06 야간](demo/map-quality/after/M06-night.png)
+
+장애 장면 [위치 점프와 원시 관측](demo/map-quality/after/M10-jump.png) · [터널 추정](demo/map-quality/after/M10-tunnel.png) · [추정 한도](demo/map-quality/after/M10-limit.png) · [재획득](demo/map-quality/after/M10-recovery.png) · [실제 분기](demo/map-quality/after/M10-branch.png)

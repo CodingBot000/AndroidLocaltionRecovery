@@ -28,6 +28,7 @@ jobs:
           sha256sum --check docs/legacy-fixtures.sha256
           python3 -B tools/extended/generate.py --output "$RUNNER_TEMP/generated-fixtures"
           diff -r fixtures/extended "$RUNNER_TEMP/generated-fixtures"
+          python3 -B tools/extended/check_terrain.py
       - name: Build and validate
         run: >-
           ./gradlew verifyModuleBoundaries :core:map:test :core:location:test :core:simulation:test

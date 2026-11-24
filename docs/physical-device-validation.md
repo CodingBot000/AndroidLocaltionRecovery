@@ -114,3 +114,18 @@ PSS는 재생 완료와 반복 초기화 이후에도 시작 시점보다 높았
 ### M10 렌더링 추적
 
 별도의 M10 45초 재생 1회에서 Perfetto Trace Processor로 `measureBlock` 구간을 조회했다. 앱 화면의 프레임 타임라인 행 273개 중 43개에는 `App Deadline Missed` 분류가 포함됐다. 앱 UI 스레드와 RenderThread의 스케줄링 실행 시간 합계는 각각 6.63초와 3.30초였다. RenderThread의 `DrawFrame` 구간 최대는 40.82ms였다. 이 추적은 UI 및 렌더링 스레드 수준을 보여주며 지도 그리기의 개별 함수 비용은 계측 범위에 포함되지 않았다. [Perfetto Trace Processor](https://perfetto.dev/docs/reference/trace-processor-cli)
+
+
+## Q06 지도 품질 개정의 내구 검증
+
+API 36 ARM64 세로 에뮬레이터에서 비행기 모드, Wi-Fi 꺼짐 상태로 `DEMO_LONG`을 1×로 재생했다. 가상 180초가 실제 180.047초에 끝났다. 완료 시 진단 187건·위치 이력 214개였고, 초기화 세 번 뒤 새 실행의 버퍼만 채워졌다.
+
+| 시점 | 가상 시간 ms | PSS KiB | 표본 backlog ms |
+|---|---:|---:|---:|
+| ready | 0 | 116,817 | 0 |
+| estimated | 87,000 | 120,177 | 1 |
+| limit | 96,000 | 116,985 | 1 |
+| complete | 180,000 | 120,524 | 1 |
+| after-three-resets | 400 | 113,272 | 0 |
+
+Q06에서 ADB로 연결된 실행 환경은 에뮬레이터였다. 이번 개정의 물리 단말 프레임·콜드 스타트 재측정은 **BLOCKED**다. P16 실기기 수치는 해당 앱 빌드의 과거 기록이다. [Q06 에뮬레이터 내구 원본](benchmarks/api36-emulator-map-quality-endurance.json)

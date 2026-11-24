@@ -19,29 +19,6 @@ def inside(x, y, polygon):
     return inside_polygon
 
 
-def add_neighborhood(map_data, seed):
-    from maps import rect
-    random = Random(seed)
-    roads = [segment for edge in map_data["edges"] for segment in zip(edge["points"], edge["points"][1:])]
-    points = [row["point"] for row in map_data["nodes"]]
-    dense = seed in {1, 4, 5, 9, 10}
-    polygons = map_data["polygons"]
-    spacing = 57 if dense else 106
-    buildings = []
-    for x in range(min(p[0] for p in points) - 100, max(p[0] for p in points) + 135, spacing):
-        for y in range(min(p[1] for p in points) - 115, max(p[1] for p in points) + 115, spacing):
-            if len(buildings) >= 370:
-                break
-            distance = min(distance_to_segment((x, y), a, b) for a, b in roads)
-            if not 27 < distance < (185 if dense else 115) or random.random() < (0.15 if dense else 0.63):
-                continue
-            if any(inside(x, y, land["points"]) for land in polygons):
-                continue
-            width, height = random.randint(12, 27), random.randint(12, 25)
-            buildings.append(dict(type="BUILDING", points=rect(x - width // 2, y - height // 2, width, height)))
-    map_data["polygons"] = polygons + buildings
-
-
 def trajectory(map_data, plan, duration, *, edge_times=None, stops=(), seed):
     by_id = {road["id"]: road["points"] for road in map_data["edges"]}
     polylines = [by_id[road] for road in plan]

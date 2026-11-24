@@ -1,6 +1,7 @@
 package lab.recovery.feature
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import lab.recovery.location.PositionSource
 import lab.recovery.location.SignalState
@@ -72,7 +74,7 @@ fun RecoveryLab(model: LabViewModel) {
         Surface(Modifier.fillMaxSize(), color = Background) {
             BoxWithConstraints(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
                 contentAlignment = Alignment.TopCenter) {
-                LabScreen(state, model::send, (maxHeight * 0.51f).coerceAtLeast(230.dp))
+                LabScreen(state, model::send, (maxHeight * 0.55f).coerceAtLeast(230.dp))
             }
         }
     }
@@ -88,6 +90,7 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
     val runId by remember(state) { derivedStateOf { state.value.runId } }
     var expandedLogs by remember(runId) { mutableStateOf(false) }
     var diagnostics by rememberSaveable { mutableStateOf(false) }
+    var expandedDescription by remember(selection.id) { mutableStateOf(false) }
     val logCount by remember(state) { derivedStateOf { state.value.logs.size } }
     var night by rememberSaveable { mutableStateOf(false) }
     val language = LocalConfiguration.current.locales[0].language
@@ -110,8 +113,13 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
                 Text(
                     text = selection.catalog?.description?.forLanguage(language)
                         ?: selection.description.takeIf { it != 0 }?.let { stringResource(it) }.orEmpty(),
-                    modifier = Modifier.fillMaxWidth().padding(start = 4.dp, top = 3.dp, end = 4.dp)
+                    modifier = Modifier.fillMaxWidth().clickable(
+                        onClickLabel = stringResource(if (expandedDescription) R.string.collapse_description else R.string.expand_description),
+                    ) { expandedDescription = !expandedDescription }
+                        .padding(start = 4.dp, top = 3.dp, end = 4.dp)
                         .testTag("scenario-description").semantics { liveRegion = LiveRegionMode.Polite },
+                    maxLines = if (expandedDescription) Int.MAX_VALUE else 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = Muted, style = MaterialTheme.typography.bodySmall,
                 )
             }

@@ -2,7 +2,7 @@ package lab.recovery.map
 
 enum class RoadClass { LOCAL, COLLECTOR, ARTERIAL, EXPRESSWAY, RAMP }
 enum class RoadStructure { SURFACE, TUNNEL, BRIDGE, ELEVATED }
-enum class LandUse { BLOCK, BUILDING, PARK, WATER }
+enum class LandUse { BLOCK, RESIDENTIAL, COMMERCIAL, INDUSTRIAL, BUILDING, PARK, WATER }
 
 data class RoadVisual(
     val edgeId: String,
@@ -10,13 +10,21 @@ data class RoadVisual(
     val structure: RoadStructure,
     val level: Int = 0,
     val physicalId: String = edgeId,
+    val name: String? = null,
 )
-data class LandPolygon(val type: LandUse, val points: List<Point2D>)
+data class LandPolygon(
+    val type: LandUse,
+    val points: List<Point2D>,
+    val id: String? = null,
+    val parcelId: String? = null,
+)
 data class MapLabel(val text: String, val position: Point2D)
 data class MapVisualData(
     val roads: List<RoadVisual> = emptyList(),
     val polygons: List<LandPolygon> = emptyList(),
     val labels: List<MapLabel> = emptyList(),
+    val walkways: List<List<Point2D>> = emptyList(),
+    val version: Int = 1,
 )
 data class MapDefinition(
     val id: String,

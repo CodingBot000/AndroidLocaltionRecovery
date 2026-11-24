@@ -14,6 +14,9 @@ internal data class Bounds(val minX: Double, val minY: Double, val maxX: Double,
 
     fun clamp(center: Point2D) = Point2D(center.x.coerceIn(minX, maxX), center.y.coerceIn(minY, maxY))
 
+    fun intersects(other: Bounds): Boolean =
+        maxX >= other.minX && minX <= other.maxX && maxY >= other.minY && minY <= other.maxY
+
     companion object {
         fun from(points: List<Point2D>) =
             Bounds(points.minOf { it.x }, points.minOf { it.y }, points.maxOf { it.x }, points.maxOf { it.y })
@@ -23,6 +26,16 @@ internal data class Bounds(val minX: Double, val minY: Double, val maxX: Double,
 internal data class Projection(val center: Point2D, val scale: Double, val width: Double, val height: Double) {
     fun screen(point: Point2D) = Point2D(width / 2 + (point.x - center.x) * scale, height / 2 - (point.y - center.y) * scale)
     fun world(point: Point2D) = Point2D(center.x + (point.x - width / 2) / scale, center.y - (point.y - height / 2) / scale)
+
+    val visibleMeters get() = width / scale
+
+    fun visibleBounds(padding: Double): Bounds {
+        val lower = world(Point2D(-padding, height + padding))
+        val upper = world(Point2D(width + padding, -padding))
+        return Bounds(lower.x, lower.y, upper.x, upper.y)
+    }
+
+    fun followOffset(): Projection = copy(center = center.copy(y = center.y + height * 0.11 / scale))
 
     fun manipulated(anchor: Point2D, pan: Point2D, zoom: Double, minScale: Double, maxScale: Double): Projection {
         val nextScale = (scale * zoom).coerceIn(minScale, maxScale)

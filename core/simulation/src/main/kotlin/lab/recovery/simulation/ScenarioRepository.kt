@@ -116,7 +116,7 @@ private fun parseMap(root: JsonObject, id: String, checksum: String, profile: Fi
         val road = Road(edge, points.map(JsonElement::point), structure == RoadStructure.TUNNEL)
         edges += RoadEdge(road, row["start"].string().identifier(), row["end"].string().identifier())
         RoadVisual(edge, RoadClass.valueOf(row["roadClass"].string()), structure, row.level(),
-            row["physicalId"]?.string()?.identifier() ?: edge)
+            row["physicalId"]?.string()?.identifier() ?: edge, row["name"]?.string()?.label())
     }
     val transitions = root.getAsJsonObject("transitions").entrySet().associate { (edge, destinations) ->
         require(destinations.asJsonArray.size() <= 16)
@@ -135,15 +135,35 @@ private fun parseMap(root: JsonObject, id: String, checksum: String, profile: Fi
         require(points.size() >= 3 && vertices <= 4096)
         val coordinates = points.map(JsonElement::point)
         require(coordinates.distinct().size == coordinates.size)
-        LandPolygon(LandUse.valueOf(row["type"].string()), coordinates)
+        val id = row["id"]?.string()?.identifier()
+        val parcel = row["parcelId"]?.string()?.identifier()
+        LandPolygon(LandUse.valueOf(row["type"].string()), coordinates, id, parcel)
     }
     val labels = labelRows.map {
         val row = it.asJsonObject
-        MapLabel(row["text"].string().also { text -> require(text.length in 1..80) }, row["point"].point())
+        MapLabel(row["text"].string().label(), row["point"].point())
     }
-    return MapDefinition(id, 2, network, MapVisualData(visuals, polygons, labels), checksum)
+    val version = (root["visualVersion"]?.integer() ?: 1L).also { require(it in 1..2) }.toInt()
+    val parcelIds = polygons.mapNotNull(LandPolygon::id)
+    require(parcelIds.size == parcelIds.toSet().size)
+    require(polygons.all { polygon ->
+        if (polygon.type == LandUse.BUILDING) {
+            polygon.parcelId in parcelIds || (version == 1 && polygon.parcelId == null)
+        } else polygon.parcelId == null
+    })
+    val paths = root.getAsJsonArray("walkways")?.map { element ->
+        val points = element.asJsonArray
+        vertices += points.size()
+        require(points.size() in 2..64 && vertices <= 4096)
+        points.map(JsonElement::point).also { route ->
+            require(route.zipWithNext().all { (a, b) -> a != b })
+        }
+    }.orEmpty()
+    require(paths.size <= 64)
+    return MapDefinition(id, 2, network, MapVisualData(visuals, polygons, labels, paths, version), checksum)
 }
 
+private fun String.label() = also { require(isNotBlank() && length <= 80) }
 private fun JsonObject.level() = (get("level")?.integer() ?: 0L).also { require(it in -8..8) }.toInt()
 private fun String.identifier() = also { require(length in 1..32 && all { char -> char.isLetterOrDigit() || char == '_' }) }
 private fun JsonElement.boolean(): Boolean {

@@ -113,3 +113,21 @@ TalkBack을 활성화한 API 36 세로 환경에서 다음 계측 클래스로 �
 ./gradlew :app:connectedDebugAndroidTest \
   -Pandroid.testInstrumentationRunnerArguments.class=lab.recovery.app.TalkBackInstrumentedTest
 ```
+
+## Q00–Q06 지도 품질 검증
+
+| 단계 | 결과 | 근거 |
+|---|---|---|
+| Q00 | PASS | 기준선 `84ae43d`의 CI 통과 결과와 기준선 평가를 확인했다. 동일 API 36 화면에서 M01·M10 변경 전 원본을 보존했다. |
+| Q01 | PASS | 정규 지도 10개, 필지 81개와 건물 392개를 생성했다. 다각형 유효성, 도로 완충, 건물·산책로·수면 제약과 도로망 해시가 일치했다. |
+| Q02 | PASS | 도로 계층·입체교차 순서, 라벨 배치·충돌, 카메라·LOD JVM 검사와 Android 화면을 확인했다. |
+| Q03 | PASS | M01·M10 Follow와 Overview의 첫 캡처를 확인하고 주변 도로·회랑 지형 및 표현을 수정한 뒤 다시 촬영했다. |
+| Q04 | PASS | 모든 지도에서 Follow·Overview를 직접 검수했다. 장시간 앱 주행 18개와 독립 평가 10개의 JSON은 지도 파일 해시 외 모든 필드가 기준선과 일치했다. |
+| Q05 | PASS | 코어 JVM 35건과 Android 단위 7건, 세로·오프라인 계측 9건, 한국어·작은 화면·글꼴 확대 2건, TalkBack 조작 1건을 통과했다. |
+| Q06 | PASS / BLOCKED | 공개 가능한 앱 원본 캡처와 에뮬레이터 오프라인 1×, 확정 위치·DR·복구 및 반복 초기화 기록을 남겼다. 물리 단말 성능 재측정은 ADB 연결 부재로 차단됐다. |
+
+기존 fixture 23개 SHA-256이 모두 일치했다. 재생 가능한 v1 20개의 스냅샷·이벤트·평가 해시 비교와 기존 20,000관측 스트레스 테스트가 통과했다. 장시간 주행의 기대 이벤트 및 최종 상태 174건이 통과했고, 기존 장시간 시나리오와 독립 평가의 입력 원본도 바이트 단위로 유지됐다.
+
+생성 재현성, 모듈 경계, Debug Lint, Debug·서명하지 않은 Release·계측·벤치마크 APK 빌드를 검증했다. 두 앱 APK에서 위치·카메라·마이크·인터넷 권한과 세로 Activity 설정을 검사했고 포함된 JSON 62개를 fixture 원본과 바이트 단위로 대조했다. Q06 원격 CI는 **NOT_RUN**으로 남겼다. 기존 워크플로에 추가한 지형 검사를 포함한 빌드·평가 작업은 로컬에서 실행했다.
+
+[지도 전후 검수](map-visual-verification.md) · [개정 지도 설계](map-design.md) · [내구와 성능 환경](physical-device-validation.md)
