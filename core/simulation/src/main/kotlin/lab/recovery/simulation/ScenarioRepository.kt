@@ -13,6 +13,7 @@ import lab.recovery.map.Point2D
 import lab.recovery.map.OsmProvenance
 import lab.recovery.map.Road
 import lab.recovery.map.RoadClass
+import lab.recovery.map.RoadGraph
 import lab.recovery.map.RoadEdge
 import lab.recovery.map.RoadNetwork
 import lab.recovery.map.RoadNode
@@ -63,16 +64,32 @@ class ScenarioRepository(private val source: FixtureSource) {
     fun readChallenge(id: String): Scenario =
         readDataset(id, "osm/challenge", challengeCatalog, FixtureProfile.OSM, mapDirectory = "osm")
 
+    fun readOsmMap(id: String): MapDefinition = fixtureSchema {
+        require(id in osmCatalog.maps)
+        loadMap("osm/maps/$id.json", id, FixtureProfile.OSM).map
+    }
+
+    /** Exposes only the chosen plan to live callers, without reading observations or ground truth into the engine. */
+    fun readOsmPlan(id: String, map: MapDefinition): RoadGraph = fixtureSchema {
+        val entry = osmCatalog.entries.single { it.id == id && !it.evaluation && it.mapId == map.id }
+        val root = fixtureObject(fixtureBytes(source.open("osm/scenarios/${entry.id}.json"), FixtureProfile.OSM.byteLimit))
+        require(root["scenarioId"].string() == id && root["schemaVersion"].integer() == map.version.toLong())
+        fixtureGraph(root, map)
+    }
+
+    private fun loadMap(path: String, id: String, profile: FixtureProfile): LoadedMap =
+        lastMap?.takeIf { it.path == path } ?: run {
+            val bytes = fixtureBytes(source.open(path), profile.byteLimit)
+            LoadedMap(path, parseMap(fixtureObject(bytes), id, sha256(bytes), profile), bytes.size)
+                .also { lastMap = it }
+        }
+
     private fun readDataset(
         id: String, directory: String, catalog: ScenarioCatalog, profile: FixtureProfile, mapDirectory: String = directory,
     ): Scenario = fixtureSchema {
         val entry = catalog.entries.singleOrNull { it.id == id } ?: error("Unknown scenario $id")
         val path = "$mapDirectory/maps/${entry.mapId}.json"
-        val loaded = lastMap?.takeIf { it.path == path } ?: run {
-            val bytes = fixtureBytes(source.open(path), profile.byteLimit)
-            LoadedMap(path, parseMap(fixtureObject(bytes), entry.mapId, sha256(bytes), profile), bytes.size)
-                .also { lastMap = it }
-        }
+        val loaded = loadMap(path, entry.mapId, profile)
         val group = if (entry.evaluation) "evaluation" else if (directory == "osm/challenge") "development" else "scenarios"
         val scenario = FixtureReader.read(source.open("$directory/$group/$id.json"), profile, loaded.map, profile.byteLimit - loaded.byteCount)
         require(scenario.id == id && scenario.durationMs == entry.durationMs && scenario.title == entry.title.english)

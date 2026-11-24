@@ -150,7 +150,7 @@ internal fun DrawScope.drawMapLabels(
 ) {
     val screen = Rect(6.dp.toPx(), 6.dp.toPx(), size.width - 6.dp.toPx(), size.height - 6.dp.toPx())
     if (screen.width <= 0 || screen.height <= 0) return
-    val blocked = chrome + listOfNotNull(overlay.vehicle?.point, overlay.lastKnown, overlay.raw, overlay.truth, data.start, data.end)
+    val blocked = chrome + listOfNotNull(overlay.vehicle?.point, overlay.lastKnown, overlay.raw, overlay.truth, data.route?.points?.first(), data.route?.points?.last())
         .map { point ->
             val at = projection.offset(point)
             val r = 17.dp.toPx()

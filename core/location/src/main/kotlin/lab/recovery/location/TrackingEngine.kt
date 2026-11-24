@@ -6,12 +6,15 @@ class TrackingEngine(
     private val graph: RoadGraph,
     private val settings: TrackingSettings = TrackingSettings(),
     private val runId: Long = 1,
+    // Live assigns a strictly increasing sequence and derives each ID from it.
+    private val monotonicObservationIds: Boolean = false,
 ) {
     private data class Candidate(val observation: LocationObservation, val match: MatchResult)
 
     private val matcher = MapMatcher(graph, settings)
     private val routeDetector = RouteDetector(graph, settings)
-    private val ids = mutableSetOf<String>()
+    private val ids = if (monotonicObservationIds) null else mutableSetOf<String>()
+    private var lastSequence: Int? = null
     private val recovery = mutableListOf<Candidate>()
     private val events = mutableListOf<DecisionEvent>()
     private var accepted: Candidate? = null
@@ -56,7 +59,7 @@ class TrackingEngine(
         }
         val timeError = when {
             observation.measuredAtMs > now -> Reason.FUTURE_MEASUREMENT
-            !ids.add(observation.id) -> Reason.DUPLICATE_ID
+            repeatedId(observation) -> Reason.DUPLICATE_ID
             watermark?.let { observation.measuredAtMs <= it } == true -> Reason.MEASUREMENT_ORDER
             else -> null
         }
@@ -111,6 +114,13 @@ class TrackingEngine(
             recovery += candidate
             decision(Reason.RECOVERY_PENDING, observation, ObservationDecision.RECOVERY_PENDING, before, match)
         }
+    }
+
+    private fun repeatedId(observation: LocationObservation): Boolean {
+        ids?.let { return !it.add(observation.id) }
+        if (lastSequence?.let { observation.sequence <= it } == true) return true
+        lastSequence = observation.sequence
+        return false
     }
 
     private fun checkRecoveryGap(observation: LocationObservation) {

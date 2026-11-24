@@ -113,16 +113,16 @@ internal class MapWorld(
 }
 
 internal class MapGeometry(val scene: MapScene, val world: MapWorld) {
-    private val planned = scene.route.edgeIds.map(world::physicalId).toSet()
+    private val planned = scene.route?.edgeIds.orEmpty().map(world::physicalId).toSet()
     fun isPlanned(road: MapRoad): Boolean = road.visual.physicalId in planned
     fun path(path: WorldPath, detail: Detail): Path = if (world.optimized) path.shape(detail) else path.shape
 
-    val route = WorldPath(scene.route.roads.flatMap { it.points })
-    val routeTunnels = scene.route.roads.filter { it.tunnel }.map { WorldPath(it.points) }
-    val arrows = listOf(0.18, 0.38, 0.60, 0.80).map { scene.route.at(it * scene.route.length) }
-    val start = route.points.first()
-    val end = route.points.last()
-    val cameraBounds = if (scene.worldBounds != null) world.cameraBounds else {
+    val route = scene.route?.let { WorldPath(it.roads.flatMap { road -> road.points }) }
+    val routeTunnels = scene.route?.roads.orEmpty().filter { it.tunnel }.map { WorldPath(it.points) }
+    val arrows = scene.route?.let { plan -> listOf(0.18, 0.38, 0.60, 0.80).map { plan.at(it * plan.length) } }.orEmpty()
+    val overviewBounds = route?.bounds ?: world.cameraBounds
+    val focus = route?.points?.first() ?: world.cameraBounds.center
+    val cameraBounds = if (scene.worldBounds != null || route == null) world.cameraBounds else {
         val routeBounds = route.bounds
         val mapBounds = world.cameraBounds
         Bounds(minOf(mapBounds.minX, routeBounds.minX - 95), minOf(mapBounds.minY, routeBounds.minY - 95),

@@ -125,20 +125,24 @@ internal fun DrawScope.drawMap(
                 }
             }
         }
-        drawPath(data.route.shape, style.routeHalo, style = stroke(routeWidth + 3.5f))
-        drawPath(data.route.shape, style.route, style = stroke(routeWidth))
+        data.route?.let {
+            drawPath(it.shape, style.routeHalo, style = stroke(routeWidth + 3.5f))
+            drawPath(it.shape, style.route, style = stroke(routeWidth))
+        }
         for (road in data.routeTunnels) if (road.bounds.intersects(visible)) {
             drawPath(road.shape, style.routeHalo.copy(alpha = .88f), style = stroke(1.4f, tunnelDash))
         }
     }
-    val start = projection.offset(data.start)
-    val end = projection.offset(data.end)
-    drawCircle(style.routeHalo, 6.dp.toPx(), start)
-    drawCircle(style.route, 3.dp.toPx(), start)
-    val r = 4.dp.toPx()
-    val halo = r + 1.6.dp.toPx()
-    drawRoundRect(style.routeHalo, end - Offset(halo, halo), Size(halo * 2, halo * 2))
-    drawRect(style.route, end - Offset(r, r), Size(r * 2, r * 2))
+    data.route?.let {
+        val start = projection.offset(it.points.first())
+        val end = projection.offset(it.points.last())
+        drawCircle(style.routeHalo, 6.dp.toPx(), start)
+        drawCircle(style.route, 3.dp.toPx(), start)
+        val r = 4.dp.toPx()
+        val halo = r + 1.6.dp.toPx()
+        drawRoundRect(style.routeHalo, end - Offset(halo, halo), Size(halo * 2, halo * 2))
+        drawRect(style.route, end - Offset(r, r), Size(r * 2, r * 2))
+    }
 
     for (arrow in data.arrows) {
         val point = projection.offset(arrow.point)
