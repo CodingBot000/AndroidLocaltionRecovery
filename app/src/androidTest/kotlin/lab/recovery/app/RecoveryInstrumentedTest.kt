@@ -1,5 +1,7 @@
 package lab.recovery.app
 
+import lab.recovery.feature.*
+
 import android.content.pm.ActivityInfo
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -48,7 +50,7 @@ class RecoveryInstrumentedTest {
         rule.onNodeWithTag("tracking-map").assertIsDisplayed()
         rule.onNodeWithTag("tunnel-legend")
             .assertIsDisplayed()
-            .assertTextEquals(rule.activity.getString(R.string.map_tunnel))
+            .assertTextEquals(rule.activity.getString(lab.recovery.feature.R.string.map_tunnel))
         setSpeed(model, 5f)
         rule.onNodeWithTag("play-pause").performClick()
         rule.waitUntil(15_000) { model.state.value.evaluation != null }
@@ -70,17 +72,17 @@ class RecoveryInstrumentedTest {
         ready(model, "DEMO")
         rule.onNodeWithTag("scenario-description")
             .assertIsDisplayed()
-            .assertTextEquals(rule.activity.getString(R.string.scenario_demo_description))
+            .assertTextEquals(rule.activity.getString(lab.recovery.feature.R.string.scenario_demo_description))
         select("S11")
         ready(model, "S11")
         rule.onNodeWithTag("scenario-description")
             .assertIsDisplayed()
-            .assertTextEquals(rule.activity.getString(R.string.scenario_s11_description))
+            .assertTextEquals(rule.activity.getString(lab.recovery.feature.R.string.scenario_s11_description))
         select("S12")
         ready(model, "S12")
         rule.onNodeWithTag("scenario-description")
             .assertIsDisplayed()
-            .assertTextEquals(rule.activity.getString(R.string.scenario_s12_description))
+            .assertTextEquals(rule.activity.getString(lab.recovery.feature.R.string.scenario_s12_description))
         assertEquals(0L, model.state.value.snapshot.nowMs)
     }
 

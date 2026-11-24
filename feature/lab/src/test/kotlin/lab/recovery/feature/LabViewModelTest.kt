@@ -1,4 +1,4 @@
-package lab.recovery.app
+package lab.recovery.feature
 
 import lab.recovery.map.Point2D
 import lab.recovery.map.Road
@@ -72,13 +72,16 @@ class LabViewModelTest {
         Dispatchers.setMain(dispatcher)
         val store = ViewModelStore()
         try {
-            val vm = LabViewModel({ scenario(it.id, 1100) }, dispatcher, dispatcher, wait = {})
+            val vm = LabViewModel({ scenario(it.id, 1100) }, dispatcher, dispatcher, clock = object : lab.recovery.simulation.ReplayClock {
+                override fun nowMs() = testScheduler.currentTime
+                override suspend fun await(delayMs: Long) = Unit
+            })
             store.put("lab", vm)
             testScheduler.runCurrent()
             vm.send(UiIntent.PlayPause)
             testScheduler.advanceUntilIdle()
             assertEquals(500, vm.state.value.logs.size)
-            assertEquals(1000, vm.state.value.trails[PositionSource.MAP_MATCHED]?.size)
+            assertEquals(1000, vm.state.value.trails.filter { it.source == PositionSource.MAP_MATCHED }.sumOf { it.points.size })
             assertEquals(1100, vm.state.value.evaluation?.observations)
         } finally {
             store.clear()

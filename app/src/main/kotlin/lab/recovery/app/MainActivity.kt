@@ -1,5 +1,7 @@
 package lab.recovery.app
 
+import lab.recovery.feature.*
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle

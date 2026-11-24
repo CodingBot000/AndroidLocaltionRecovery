@@ -19,4 +19,16 @@
     <string name="scenario_s17_description">정확도가 음수인 GPS와 미래 시각으로 기록된 GPS가 들어옵니다. 앱은 두 기록을 모두 버리고 마지막으로 확인한 위치를 유지합니다.</string>
     <string name="playback_speed">재생 배속</string>
     <string name="map_tunnel">터널</string>
+    <string name="synthetic_map">합성 도로 지도</string>
+    <string name="camera_follow">차량 추적</string>
+    <string name="camera_overview">전체 경로</string>
+    <string name="camera_free">수동 탐색</string>
+    <string name="camera_zoom_in">확대</string>
+    <string name="camera_zoom_out">축소</string>
+    <string name="legend_truth">□ 가상 실제 위치</string>
+    <string name="legend_truth_off">□ 가상 실제 위치 숨김</string>
+    <string name="legend_raw">× 원시 GPS</string>
+    <string name="legend_fix">● 채택</string>
+    <string name="legend_dr">◇ 추정</string>
+    <string name="legend_last">○ 마지막</string>
 </resources>

@@ -7,6 +7,7 @@ import com.google.gson.Strictness
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import lab.recovery.location.LocationObservation
+import lab.recovery.map.MapDefinition
 import lab.recovery.map.Point2D
 import lab.recovery.location.Reason
 import lab.recovery.map.Road
@@ -38,6 +39,7 @@ data class Scenario(
     val expected: List<Expectation>,
     val expectedRecoveryAtMs: List<Long> = emptyList(),
     val seed: Long? = null,
+    val map: MapDefinition? = null,
 ) {
     fun truthAt(timeMs: Long): TruthPoint? {
         val index = groundTruth.binarySearchBy(timeMs, selector = TruthPoint::timeMs)

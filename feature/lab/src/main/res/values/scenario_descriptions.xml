@@ -19,4 +19,16 @@
     <string name="scenario_s17_description">One GPS reading has a negative accuracy and another claims it was measured in the future. Both should be rejected while the last reliable position stays visible.</string>
     <string name="playback_speed">Playback speed</string>
     <string name="map_tunnel">Tunnel</string>
+    <string name="synthetic_map">Synthetic road map</string>
+    <string name="camera_follow">Follow</string>
+    <string name="camera_overview">Overview</string>
+    <string name="camera_free">Free view</string>
+    <string name="camera_zoom_in">Zoom in</string>
+    <string name="camera_zoom_out">Zoom out</string>
+    <string name="legend_truth">□ Truth</string>
+    <string name="legend_truth_off">□ Truth off</string>
+    <string name="legend_raw">× GPS</string>
+    <string name="legend_fix">● Fix</string>
+    <string name="legend_dr">◇ DR</string>
+    <string name="legend_last">○ Last</string>
 </resources>

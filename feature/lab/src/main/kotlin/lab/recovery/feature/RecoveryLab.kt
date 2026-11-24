@@ -1,4 +1,4 @@
-package lab.recovery.app
+package lab.recovery.feature
 
 import lab.recovery.map.Road
 import androidx.compose.foundation.background
