@@ -15,7 +15,7 @@ flowchart TD
     B[":benchmark · Macrobenchmark"] -. target APK .-> A
 ```
 
-`verifyModuleBoundaries`는 Gradle 구성에서 7개 모듈의 선언 의존성을 검사한다. Android 테스트의 도메인 타입과 Macrobenchmark의 대상 APK는 테스트 경계로 다룬다. 세 코어 모듈은 JVM에서 독립 실행된다.
+`verifyModuleBoundaries`는 Gradle 구성에서 기존 7개 모듈과 Live·HTTP 실험을 포함한 총 9개 모듈의 선언 의존성을 검사한다. Android 테스트의 도메인 타입과 Macrobenchmark의 대상 APK는 테스트 경계로 다룬다. 세 코어 모듈은 JVM에서 독립 실행된다.
 
 ```mermaid
 flowchart LR
@@ -70,3 +70,28 @@ flowchart LR
 정적 지도, 위치·이력, 라벨 Canvas를 분리한다. 뷰포트가 같다거나 확대 수준이 유지되는 동안 라벨 이름·글꼴 측정과 우선순위 순서는 캐시한다. 카메라 이동 시 월드 후보 범위를 재사용하고 투영은 현재 카메라로 수행한다. 위치와 조작 영역에 따른 충돌은 현재 값으로 검사한다.
 
 `core:map`의 월드 셀 검색은 지도 표시와 위치 검색이 공유한다. 위치 엔진은 원본 도로의 Bounds만 인덱스에 등록한다. UI Path, 라벨 또는 표현용 단순화가 위치 매칭 계층으로 들어가지 않는다. [성능 전후 측정](refactor-performance.md)
+
+## 플랫폼 신뢰성 모듈
+
+```mermaid
+flowchart LR
+    App[":app"] --> Replay[":feature:lab"]
+    Replay --> Sim[":core:simulation"]
+    Replay --> MapUI[":ui:map"]
+    Live[":live"] --> Sim
+    Live --> MapUI
+    Live --> Engine[":core:location"]
+    Sim --> Engine
+    Sim --> Map[":core:map"]
+    Engine --> Map
+    MapUI --> Map
+    RouteLab[":route-lab"] --> Engine
+    RouteLab --> Map
+    RouteLab -. test fixtures only .-> Sim
+    RouteLab --> HTTP[OkHttp loopback]
+    HTTP -. test only .-> Mock[MockWebServer]
+```
+
+기존 앱과 벤치마크 package·APK 작업을 유지한다. `:live`는 `LocationManager → 서비스 대기열 → Live 바인딩 → TrackingEngine` 순서로 처리하며 UI는 불변 상태를 관찰한다. 계획 없이 지도를 표시하는 경우 경로 그래픽과 판정을 생략한다. `:route-lab`의 합성 엔진 및 HTTP 코드는 두 APK의 클래스패스에 포함되지 않는다. `:core`와 `:ui:map`은 Android 위치 서비스 및 HTTP 구현에 의존하지 않는다.
+
+[Live 위치 정책](live-location.md) · [HTTP 상태와 장애 검증](network-reliability.md) · [APK 검사와 수용 게이트](verification.md)
