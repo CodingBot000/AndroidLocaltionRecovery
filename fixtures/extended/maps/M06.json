@@ -1,0 +1,53 @@
+{
+  "schemaVersion":2,
+  "name":"Two Bridges",
+  "nameKo":"두 교량 수변",
+  "nodes":[
+    {"id":"a","point":[0,0],"level":0},
+    {"id":"b","point":[400,40],"level":0},
+    {"id":"c","point":[850,40],"level":0},
+    {"id":"d","point":[1120,295],"level":0},
+    {"id":"e","point":[0,500],"level":0},
+    {"id":"f","point":[400,500],"level":0},
+    {"id":"g","point":[850,500],"level":0},
+    {"id":"h","point":[1220,560],"level":0}
+  ],
+  "edges":[
+    {"id":"A","start":"a","end":"b","points":[[0,0],[400,40]],"roadClass":"COLLECTOR","structure":"SURFACE","level":0},
+    {"id":"B","start":"b","end":"c","points":[[400,40],[850,40]],"roadClass":"ARTERIAL","structure":"BRIDGE","level":1},
+    {"id":"C","start":"c","end":"d","points":[[850,40],[1120,295]],"roadClass":"COLLECTOR","structure":"SURFACE","level":0},
+    {"id":"E","start":"e","end":"f","points":[[0,500],[400,500]],"roadClass":"COLLECTOR","structure":"SURFACE","level":0},
+    {"id":"F","start":"f","end":"g","points":[[400,500],[850,500]],"roadClass":"ARTERIAL","structure":"BRIDGE","level":1},
+    {"id":"G","start":"g","end":"h","points":[[850,500],[1220,560]],"roadClass":"COLLECTOR","structure":"SURFACE","level":0},
+    {"id":"H","start":"a","end":"e","points":[[0,0],[0,500]],"roadClass":"LOCAL","structure":"SURFACE","level":0},
+    {"id":"I","start":"d","end":"g","points":[[1120,295],[850,500]],"roadClass":"LOCAL","structure":"SURFACE","level":0}
+  ],
+  "transitions":{"A":["B"],"B":["C"],"C":["I"],"E":["F"],"F":["G"],"G":[],"H":["E"],"I":["G"]},
+  "polygons":[
+    {"type":"PARK","points":[[60,145],[335,145],[335,370],[60,370]]},
+    {"type":"PARK","points":[[930,50],[1130,50],[1130,170],[930,170]]},
+    {"type":"WATER","points":[[450,-290],[725,-290],[825,730],[500,730]]},
+    {"type":"BUILDING","points":[[-107,-18],[-93,-18],[-93,1],[-107,1]]},
+    {"type":"BUILDING","points":[[-106,91],[-93,91],[-93,103],[-106,103]]},
+    {"type":"BUILDING","points":[[-111,407],[-88,407],[-88,424],[-111,424]]},
+    {"type":"BUILDING","points":[[-110,512],[-90,512],[-90,531],[-110,531]]},
+    {"type":"BUILDING","points":[[100,87],[125,87],[125,107],[100,107]]},
+    {"type":"BUILDING","points":[[208,-20],[228,-20],[228,2],[208,2]]},
+    {"type":"BUILDING","points":[[211,85],[225,85],[225,110],[211,110]]},
+    {"type":"BUILDING","points":[[313,-21],[336,-21],[336,3],[313,3]]},
+    {"type":"BUILDING","points":[[421,-20],[439,-20],[439,3],[421,3]]},
+    {"type":"BUILDING","points":[[420,91],[441,91],[441,104],[420,104]]},
+    {"type":"BUILDING","points":[[421,403],[439,403],[439,428],[421,428]]},
+    {"type":"BUILDING","points":[[951,303],[969,303],[969,316],[951,316]]},
+    {"type":"BUILDING","points":[[1054,194],[1078,194],[1078,213],[1054,213]]},
+    {"type":"BUILDING","points":[[1166,196],[1178,196],[1178,211],[1166,211]]},
+    {"type":"BUILDING","points":[[1166,298],[1178,298],[1178,320],[1166,320]]},
+    {"type":"BUILDING","points":[[1162,619],[1183,619],[1183,636],[1162,636]]}
+  ],
+  "labels":[
+    {"text":"Two Bridges","point":[12,30]},
+    {"text":"Bridge","point":[633.0,60.0]},
+    {"text":"Bridge","point":[633.0,520.0]}
+  ],
+  "mapId":"M06"
+}

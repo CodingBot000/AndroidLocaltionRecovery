@@ -4,6 +4,7 @@ import lab.recovery.location.DecisionEvent
 import lab.recovery.location.ObservationDecision
 import lab.recovery.location.PositionSource
 import lab.recovery.location.Reason
+import lab.recovery.location.SignalState
 import lab.recovery.location.RecoveryOutcome
 import lab.recovery.location.TrackingSettings
 import lab.recovery.location.TrackingSnapshot
@@ -53,7 +54,21 @@ data class Evaluation(
     val departureDelayMs: List<Long>,
     val reasonCounts: Map<Reason, Int>,
     val checks: List<RegressionCheck>,
+    val extended: ExtendedEvaluation? = null,
 )
+
+data class ExtendedEvaluation(
+    val mapId: String,
+    val mapSchema: Int,
+    val mapChecksum: String,
+    val routeSchema: Int,
+    val routeChecksum: String,
+    val expectedFinalSignal: SignalState?,
+    val finalSignal: SignalState?,
+    val unexpectedRecoveries: Int,
+) {
+    val passed get() = expectedFinalSignal == null || expectedFinalSignal == finalSignal
+}
 
 class Evaluator(private val scenario: Scenario, private val settings: TrackingSettings = TrackingSettings()) {
     private val firstDecisions = linkedMapOf<Int, DecisionEvent>()
@@ -67,6 +82,11 @@ class Evaluator(private val scenario: Scenario, private val settings: TrackingSe
     private val fallbackRecovery = mutableListOf<Long>()
     private val realignment = mutableListOf<Double>()
     private val departures = mutableListOf<Long>()
+    private var finalSignal: SignalState? = null
+
+    fun recordCompletion(snapshot: TrackingSnapshot) {
+        finalSignal = snapshot.signal
+    }
 
     fun recordTick(snapshot: TrackingSnapshot) {
         availability[snapshot.source] = availability.getValue(snapshot.source) + 1
@@ -169,6 +189,11 @@ class Evaluator(private val scenario: Scenario, private val settings: TrackingSe
             departures.size, falseDepartures, expectedIntervals.size - usedIntervals.size, departureDelays,
             counts.filterValues { it > 0 }, scenario.expected.mapIndexed { index, expectation ->
                 RegressionCheck(expectation, assertions[index])
+            },
+            scenario.map?.let {
+                ExtendedEvaluation(it.id, it.version, checkNotNull(it.checksum), checkNotNull(scenario.routeVersion),
+                    sha256(scenario.roads.plannedRoute.joinToString("\n").encodeToByteArray()),
+                    scenario.expectedFinalSignal, finalSignal, recovered.size - recoveryDelays.size)
             },
         )
     }

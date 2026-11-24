@@ -1,0 +1,44 @@
+{
+  "schemaVersion":2,
+  "name":"Contour Pass",
+  "nameKo":"능선 굽잇길",
+  "nodes":[
+    {"id":"a","point":[0,0],"level":0},
+    {"id":"b","point":[260,220],"level":0},
+    {"id":"c","point":[620,410],"level":0},
+    {"id":"d","point":[1100,540],"level":0},
+    {"id":"e","point":[690,765],"level":0},
+    {"id":"f","point":[930,910],"level":0}
+  ],
+  "edges":[
+    {"id":"A","start":"a","end":"b","points":[[0,0],[100,10],[155,70],[135,128],[205,200],[260,220]],"roadClass":"COLLECTOR","structure":"SURFACE","level":0},
+    {"id":"B","start":"b","end":"c","points":[[260,220],[355,259],[405,328],[486,365],[620,410]],"roadClass":"COLLECTOR","structure":"SURFACE","level":0},
+    {"id":"T","start":"c","end":"d","points":[[620,410],[810,470],[980,498],[1100,540]],"roadClass":"ARTERIAL","structure":"TUNNEL","level":-1},
+    {"id":"N","start":"c","end":"e","points":[[620,410],[610,560],[650,620],[690,765]],"roadClass":"LOCAL","structure":"SURFACE","level":0},
+    {"id":"O","start":"e","end":"f","points":[[690,765],[930,910]],"roadClass":"LOCAL","structure":"SURFACE","level":0}
+  ],
+  "transitions":{"A":["B"],"B":["T","N"],"T":[],"N":["O"],"O":[]},
+  "polygons":[
+    {"type":"PARK","points":[[-80,130],[185,300],[315,590],[135,675],[-120,480]]},
+    {"type":"PARK","points":[[390,565],[560,640],[600,920],[440,875]]},
+    {"type":"PARK","points":[[730,150],[1040,200],[1190,420],[990,415],[800,350]]},
+    {"type":"BUILDING","points":[[-2,90],[14,90],[14,105],[-2,105]]},
+    {"type":"BUILDING","points":[[105,90],[119,90],[119,104],[105,104]]},
+    {"type":"BUILDING","points":[[209,-18],[227,-18],[227,0],[209,0]]},
+    {"type":"BUILDING","points":[[205,88],[231,88],[231,107],[205,107]]},
+    {"type":"BUILDING","points":[[423,194],[437,194],[437,213],[423,213]]},
+    {"type":"BUILDING","points":[[524,510],[548,510],[548,533],[524,533]]},
+    {"type":"BUILDING","points":[[635,512],[649,512],[649,530],[635,530]]},
+    {"type":"BUILDING","points":[[737,408],[759,408],[759,423],[737,423]]},
+    {"type":"BUILDING","points":[[735,510],[762,510],[762,532],[735,532]]},
+    {"type":"BUILDING","points":[[741,829],[755,829],[755,849],[741,849]]},
+    {"type":"BUILDING","points":[[841,404],[868,404],[868,427],[841,427]]},
+    {"type":"BUILDING","points":[[841,722],[867,722],[867,745],[841,745]]},
+    {"type":"BUILDING","points":[[948,938],[973,938],[973,952],[948,952]]}
+  ],
+  "labels":[
+    {"text":"Contour Pass","point":[12,30]},
+    {"text":"Tunnel","point":[868.0,495.0]}
+  ],
+  "mapId":"M08"
+}

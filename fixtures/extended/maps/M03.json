@@ -1,0 +1,49 @@
+{
+  "schemaVersion":2,
+  "name":"Basin Tunnel",
+  "nameKo":"분지 터널",
+  "nodes":[
+    {"id":"a","point":[0,0],"level":0},
+    {"id":"b","point":[510,45],"level":0},
+    {"id":"c","point":[1450,45],"level":0},
+    {"id":"d","point":[1850,335],"level":0},
+    {"id":"e","point":[350,-280],"level":0},
+    {"id":"f","point":[1170,-360],"level":0},
+    {"id":"g","point":[1650,-250],"level":0}
+  ],
+  "edges":[
+    {"id":"A","start":"a","end":"b","points":[[0,0],[210,0],[420,20],[510,45]],"roadClass":"ARTERIAL","structure":"SURFACE","level":0},
+    {"id":"T","start":"b","end":"c","points":[[510,45],[850,45],[1150,45],[1450,45]],"roadClass":"ARTERIAL","structure":"TUNNEL","level":-1},
+    {"id":"C","start":"c","end":"d","points":[[1450,45],[1620,65],[1750,152],[1850,335]],"roadClass":"COLLECTOR","structure":"SURFACE","level":0},
+    {"id":"S","start":"a","end":"e","points":[[0,0],[350,-280]],"roadClass":"LOCAL","structure":"SURFACE","level":0},
+    {"id":"V","start":"e","end":"f","points":[[350,-280],[1170,-360]],"roadClass":"COLLECTOR","structure":"SURFACE","level":0},
+    {"id":"W","start":"f","end":"g","points":[[1170,-360],[1650,-250]],"roadClass":"LOCAL","structure":"SURFACE","level":0}
+  ],
+  "transitions":{"A":["T"],"T":["C"],"C":[],"S":["V"],"V":["W"],"W":[]},
+  "polygons":[
+    {"type":"PARK","points":[[470,-180],[1490,-165],[1540,225],[1200,460],[650,430]]},
+    {"type":"BUILDING","points":[[208,-273],[228,-273],[228,-253],[208,-253]]},
+    {"type":"BUILDING","points":[[205,45],[232,45],[232,65],[205,65]]},
+    {"type":"BUILDING","points":[[311,-378],[338,-378],[338,-360],[311,-360]]},
+    {"type":"BUILDING","points":[[316,-164],[332,-164],[332,-149],[316,-149]]},
+    {"type":"BUILDING","points":[[312,-62],[336,-62],[336,-39],[312,-39]]},
+    {"type":"BUILDING","points":[[422,-381],[439,-381],[439,-357],[422,-357]]},
+    {"type":"BUILDING","points":[[424,-59],[437,-59],[437,-43],[424,-43]]},
+    {"type":"BUILDING","points":[[420,46],[440,46],[440,65],[420,65]]},
+    {"type":"BUILDING","points":[[524,-274],[548,-274],[548,-251],[524,-251]]},
+    {"type":"BUILDING","points":[[629,-270],[655,-270],[655,-256],[629,-256]]},
+    {"type":"BUILDING","points":[[842,-381],[867,-381],[867,-357],[842,-357]]},
+    {"type":"BUILDING","points":[[1166,-275],[1178,-275],[1178,-250],[1166,-250]]},
+    {"type":"BUILDING","points":[[1267,-273],[1289,-273],[1289,-253],[1267,-253]]},
+    {"type":"BUILDING","points":[[1375,-274],[1393,-274],[1393,-252],[1375,-252]]},
+    {"type":"BUILDING","points":[[1583,-375],[1610,-375],[1610,-362],[1583,-362]]},
+    {"type":"BUILDING","points":[[1590,153],[1602,153],[1602,169],[1590,169]]},
+    {"type":"BUILDING","points":[[1690,256],[1714,256],[1714,279],[1690,279]]},
+    {"type":"BUILDING","points":[[1798,363],[1818,363],[1818,383],[1798,383]]}
+  ],
+  "labels":[
+    {"text":"Basin Tunnel","point":[12,30]},
+    {"text":"Tunnel","point":[988.0,65.0]}
+  ],
+  "mapId":"M03"
+}

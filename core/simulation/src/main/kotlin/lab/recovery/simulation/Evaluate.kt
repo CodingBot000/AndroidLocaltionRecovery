@@ -17,11 +17,25 @@ data class EvaluationRun(val evaluations: List<Evaluation>, val loadChecks: List
 
 fun main(args: Array<String>) = runBlocking {
     val directory = File(args.getOrElse(0) { "fixtures/evaluation" })
+    val extended = File(directory, "catalog.json").isFile
     val files = if (directory.isFile) listOf(directory) else directory.listFiles { file -> file.extension == "json" }?.sorted()
     require(!files.isNullOrEmpty()) { "No fixture JSON files in $directory" }
     val evaluations = mutableListOf<Evaluation>()
     val loadChecks = mutableListOf<FixtureFailure>()
-    for (file in files) {
+    if (extended) {
+        val root = checkNotNull(directory.absoluteFile.parentFile)
+        val repository = ScenarioRepository { File(root, it).inputStream() }
+        val catalog = repository.catalog
+        val ids = catalog.entries.map(CatalogEntry::id).toSet()
+        val userIds = (1..17).map { "L" + it.toString().padStart(2, '0') }.toSet() + "DEMO_LONG"
+        require(ids.containsAll(userIds))
+        val userEntries = catalog.entries.filterNot(CatalogEntry::evaluation)
+        val independent = catalog.entries.filter(CatalogEntry::evaluation)
+        require(userEntries.map(CatalogEntry::id).containsAll(userIds))
+        require(catalog.maps.size >= 10 && userEntries.map(CatalogEntry::mapId).toSet() == catalog.maps.keys)
+        require(independent.map(CatalogEntry::mapId).toSet() == catalog.maps.keys)
+        catalog.entries.forEach { evaluations += playToEnd(ReplaySession(repository.read(it.id))) }
+    } else for (file in files) {
         val expectedError = malformed[file.nameWithoutExtension]
         try {
             val scenario = FixtureReader.read(file.inputStream())
@@ -32,12 +46,15 @@ fun main(args: Array<String>) = runBlocking {
         }
     }
     val result = EvaluationRun(evaluations, loadChecks)
-    val json = GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(result)
+    val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
+    val tree = gson.toJsonTree(result).asJsonObject
+    if (!extended) tree.getAsJsonArray("evaluations").forEach { it.asJsonObject.remove("extended") }
+    val json = gson.toJson(tree)
     val markdown = createReport(result)
     if (args.size >= 2) File(args[1]).apply { parentFile?.mkdirs(); writeText(json + "\n") }
     if (args.size >= 3) File(args[2]).apply { parentFile?.mkdirs(); writeText(markdown) }
     print(markdown)
-    if (loadChecks.any { it.expected != it.actual } || evaluations.any { eval -> eval.checks.any { !it.passed } }) {
+    if (loadChecks.any { it.expected != it.actual } || evaluations.any { eval -> eval.checks.any { !it.passed } || eval.extended?.passed == false }) {
         exitProcess(1)
     }
 }
@@ -57,6 +74,14 @@ private fun createReport(result: EvaluationRun): String = buildString {
             "${e.checks.count { it.passed }}/${e.checks.size} |")
     }
     appendLine()
+    val extended = result.evaluations.filter { it.extended != null }
+    if (extended.isNotEmpty()) {
+        appendLine("L 및 DEMO_LONG은 앱 주행이며 E는 별도 시드·장애 시각의 평가 사례다.")
+        appendLine()
+        extended.filter { it.extended?.passed == false }.forEach {
+            appendLine("- ${it.scenarioId} FAIL final signal ${it.extended?.finalSignal}, expected ${it.extended?.expectedFinalSignal}")
+        }
+    }
     result.loadChecks.forEach { check ->
         appendLine("- ${check.file} 로딩 검사: ${check.actual ?: "unexpectedly runnable"} (${if (check.actual == check.expected) "PASS" else "FAIL"})")
     }

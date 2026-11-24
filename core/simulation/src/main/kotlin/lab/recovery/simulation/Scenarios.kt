@@ -10,6 +10,8 @@ import lab.recovery.location.LocationObservation
 import lab.recovery.map.MapDefinition
 import lab.recovery.map.Point2D
 import lab.recovery.location.Reason
+import lab.recovery.location.SignalState
+import lab.recovery.map.RoutePlan
 import lab.recovery.map.Road
 import lab.recovery.map.RoadGraph
 import java.io.ByteArrayOutputStream
@@ -40,6 +42,8 @@ data class Scenario(
     val expectedRecoveryAtMs: List<Long> = emptyList(),
     val seed: Long? = null,
     val map: MapDefinition? = null,
+    val routeVersion: Int? = null,
+    val expectedFinalSignal: SignalState? = null,
 ) {
     fun truthAt(timeMs: Long): TruthPoint? {
         val index = groundTruth.binarySearchBy(timeMs, selector = TruthPoint::timeMs)
@@ -53,56 +57,25 @@ data class Scenario(
 }
 
 object FixtureReader {
-    fun read(input: InputStream, profile: FixtureProfile = FixtureProfile.STANDARD): Scenario {
-        val bytes = input.use { source ->
-            val output = ByteArrayOutputStream()
-            val buffer = ByteArray(8192)
-            while (true) {
-                val count = source.read(buffer)
-                if (count < 0) break
-                if (output.size() + count > profile.byteLimit) {
-                    throw InvalidFixture(FixtureError.SIZE_LIMIT, "${profile.byteLimit} bytes")
-                }
-                output.write(buffer, 0, count)
-            }
-            output.toByteArray()
-        }
-        try {
-            val root = JsonReader(bytes.inputStream().reader(Charsets.UTF_8)).use { reader ->
-                reader.strictness = Strictness.STRICT
-                val value = JsonParser.parseReader(reader).asJsonObject
-                require(reader.peek() == JsonToken.END_DOCUMENT)
-                value
-            }
-            return parse(root, sha256(bytes), profile)
-        } catch (error: InvalidFixture) {
-            throw error
-        } catch (error: Exception) {
-            throw InvalidFixture(FixtureError.SCHEMA, error.message ?: "Malformed JSON or required field")
-        }
+    fun read(input: InputStream, profile: FixtureProfile = FixtureProfile.STANDARD): Scenario =
+        read(input, profile, null, profile.byteLimit)
+
+    internal fun read(input: InputStream, profile: FixtureProfile, map: MapDefinition?, byteLimit: Int): Scenario {
+        val bytes = fixtureBytes(input, byteLimit)
+        return fixtureSchema { parse(fixtureObject(bytes), sha256(bytes), profile, map) }
     }
 
-    private fun parse(root: JsonObject, checksum: String, profile: FixtureProfile): Scenario {
+    private fun parse(root: JsonObject, checksum: String, profile: FixtureProfile, map: MapDefinition?): Scenario {
         val schemaVersion = root["schemaVersion"].integer()
-        require(schemaVersion == 1L)
+        require(schemaVersion == if (map == null) 1L else 2L)
         val version = schemaVersion.toInt()
         val duration = root["duration"].integer()
         if (duration !in 0..profile.durationLimit) throw InvalidFixture(FixtureError.DURATION_LIMIT, "${profile.durationLimit} ms")
-        val roadRows = root.getAsJsonArray("roads")
-        val segmentCount = roadRows.sumOf { (it.asJsonObject.getAsJsonArray("points").size() - 1).coerceAtLeast(0) }
-        if (segmentCount > profile.segmentLimit) throw InvalidFixture(FixtureError.ROAD_LIMIT, "${profile.segmentLimit} segments")
-        val graph = try {
-            val roads = roadRows.map { row ->
-                val road = row.asJsonObject
-                val points = road.getAsJsonArray("points").map { point ->
-                    require(point.asJsonArray.size() == 2)
-                    Point2D(point.asJsonArray[0].number(), point.asJsonArray[1].number())
-                }
-                Road(road["id"].string(), points, road["tunnel"]?.asBoolean ?: false)
-            }
-            RoadGraph(roads, root.getAsJsonArray("plannedRoute").map(JsonElement::string))
-        } catch (_: IllegalArgumentException) {
-            throw InvalidFixture(FixtureError.ROAD_GEOMETRY, "Non-finite or repeated points, IDs or disconnected route")
+        val graph = if (map == null) legacyGraph(root, profile) else {
+            require(root["mapId"].string() == map.id)
+            require(root["routeVersion"].integer() == 1L)
+            val route = RoutePlan(map.network, root.getAsJsonArray("plannedRoute").map(JsonElement::string))
+            RoadGraph(map.network, route)
         }
         val observations = root.getAsJsonArray("observations")
         if (observations.size() > profile.observationLimit) throw InvalidFixture(FixtureError.EVENT_LIMIT, "${profile.observationLimit} observations")
@@ -130,23 +103,83 @@ object FixtureReader {
         }
         val recoveryTimes = root.getAsJsonArray("expectedRecoveryAtMs")?.map(JsonElement::integer).orEmpty()
         require(recoveryTimes.zipWithNext().all { (first, next) -> first < next } && recoveryTimes.all { it in 0..duration })
+        if (map != null) {
+            require(truth.firstOrNull()?.timeMs == 0L && truth.last().timeMs == duration)
+            require(truth.size <= profile.durationLimit / 200 + 1)
+            require(truth.all { it.roadId != null })
+            val actual = RoutePlan(map.network, root.getAsJsonArray("actualRoute").map(JsonElement::string))
+            require(truth.mapNotNull(TruthPoint::roadId).fold(mutableListOf<String>()) { ids, road ->
+                if (ids.lastOrNull() != road) ids.add(road)
+                ids
+            } == actual.edgeIds)
+            require(expected.isNotEmpty() && expected.all { it.timeMs == null || it.timeMs in 0..duration })
+            require(expected.distinctBy { it.timeMs to it.reason }.size == expected.size)
+        }
         return Scenario(root["scenarioId"].string().also { require(it.isNotBlank()) }, root["title"].string(),
-            version, checksum, duration, graph, inputs, truth, labels, expected, recoveryTimes, root["seed"]?.integer())
+            version, checksum, duration, graph, inputs, truth, labels, expected, recoveryTimes, root["seed"]?.integer(),
+            map, map?.let { 1 }, root["expectedFinalSignal"]?.string()?.let(SignalState::valueOf))
     }
 
-    private fun sha256(bytes: ByteArray): String =
-        MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
+    private fun legacyGraph(root: JsonObject, profile: FixtureProfile): RoadGraph {
+        val roadRows = root.getAsJsonArray("roads")
+        val segmentCount = roadRows.sumOf { (it.asJsonObject.getAsJsonArray("points").size() - 1).coerceAtLeast(0) }
+        if (segmentCount > profile.segmentLimit) throw InvalidFixture(FixtureError.ROAD_LIMIT, "${profile.segmentLimit} segments")
+        return try {
+            val roads = roadRows.map { row ->
+                val road = row.asJsonObject
+                val points = road.getAsJsonArray("points").map { point ->
+                    require(point.asJsonArray.size() == 2)
+                    Point2D(point.asJsonArray[0].number(), point.asJsonArray[1].number())
+                }
+                Road(road["id"].string(), points, road["tunnel"]?.asBoolean ?: false)
+            }
+            RoadGraph(roads, root.getAsJsonArray("plannedRoute").map(JsonElement::string))
+        } catch (_: IllegalArgumentException) {
+            throw InvalidFixture(FixtureError.ROAD_GEOMETRY, "Non-finite or repeated points, IDs or disconnected route")
+        }
+    }
 }
 
-private fun JsonElement.string(): String {
+internal fun fixtureBytes(input: InputStream, byteLimit: Int): ByteArray = input.use { source ->
+    val output = ByteArrayOutputStream()
+    val buffer = ByteArray(8192)
+    while (true) {
+        val count = source.read(buffer)
+        if (count < 0) break
+        if (output.size() + count > byteLimit) throw InvalidFixture(FixtureError.SIZE_LIMIT, "$byteLimit bytes")
+        output.write(buffer, 0, count)
+    }
+    output.toByteArray()
+}
+
+internal fun fixtureObject(bytes: ByteArray): JsonObject =
+    JsonReader(bytes.inputStream().reader(Charsets.UTF_8)).use { reader ->
+        reader.strictness = Strictness.STRICT
+        val value = JsonParser.parseReader(reader).asJsonObject
+        require(reader.peek() == JsonToken.END_DOCUMENT)
+        value
+    }
+
+internal inline fun <T> fixtureSchema(parse: () -> T): T = try {
+    parse()
+} catch (error: InvalidFixture) {
+    throw error
+} catch (error: Exception) {
+    throw InvalidFixture(FixtureError.SCHEMA, error.message ?: "Malformed JSON or required field")
+}
+
+internal fun sha256(bytes: ByteArray): String =
+    MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
+
+internal fun JsonElement.string(): String {
     require(isJsonPrimitive && asJsonPrimitive.isString)
     return asString
 }
-private fun JsonElement.number(): Double {
+internal fun JsonElement.number(): Double {
     require(isJsonPrimitive && asJsonPrimitive.isNumber)
     return asDouble
 }
-private fun JsonElement.integer(): Long {
+internal fun JsonElement.integer(): Long {
     require(isJsonPrimitive && asJsonPrimitive.isNumber)
     return asBigDecimal.longValueExact()
 }

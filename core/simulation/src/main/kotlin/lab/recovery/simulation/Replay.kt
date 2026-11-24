@@ -45,7 +45,9 @@ class ReplaySession(
             nextTick = minOf(time + settings.tickMs, scenario.durationMs)
         }
         if (time == scenario.durationMs) {
-            updates += engine.complete()
+            val completion = engine.complete()
+            evaluator.recordCompletion(completion.snapshot)
+            updates += completion
             complete = true
         }
         timeMs = time

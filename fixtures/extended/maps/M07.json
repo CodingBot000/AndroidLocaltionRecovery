@@ -1,0 +1,36 @@
+{
+  "schemaVersion":2,
+  "name":"Garden Roads",
+  "nameKo":"정원 생활도로",
+  "nodes":[
+    {"id":"a","point":[0,0],"level":0},
+    {"id":"b","point":[245,125],"level":0},
+    {"id":"c","point":[450,0],"level":0},
+    {"id":"d","point":[670,160],"level":0},
+    {"id":"e","point":[245,410],"level":0},
+    {"id":"f","point":[680,-200],"level":0},
+    {"id":"g","point":[940,-210],"level":0}
+  ],
+  "edges":[
+    {"id":"A","start":"a","end":"b","points":[[0,0],[70,10],[155,70],[245,125]],"roadClass":"LOCAL","structure":"SURFACE","level":0},
+    {"id":"B","start":"b","end":"c","points":[[245,125],[335,105],[385,35],[450,0]],"roadClass":"LOCAL","structure":"SURFACE","level":0},
+    {"id":"C","start":"c","end":"d","points":[[450,0],[535,30],[600,102],[670,160]],"roadClass":"COLLECTOR","structure":"SURFACE","level":0},
+    {"id":"N","start":"b","end":"e","points":[[245,125],[268,250],[245,410]],"roadClass":"LOCAL","structure":"SURFACE","level":0},
+    {"id":"F","start":"c","end":"f","points":[[450,0],[680,-200]],"roadClass":"LOCAL","structure":"SURFACE","level":0},
+    {"id":"G","start":"f","end":"g","points":[[680,-200],[940,-210]],"roadClass":"LOCAL","structure":"SURFACE","level":0}
+  ],
+  "transitions":{"A":["B","N"],"B":["C","F"],"C":[],"N":[],"F":["G"],"G":[]},
+  "polygons":[
+    {"type":"PARK","points":[[20,150],[185,150],[185,390],[20,390]]},
+    {"type":"PARK","points":[[460,145],[600,145],[600,340],[460,340]]},
+    {"type":"BUILDING","points":[[-1,87],[13,87],[13,112],[-1,112]]},
+    {"type":"BUILDING","points":[[317,410],[332,410],[332,425],[317,425]]},
+    {"type":"BUILDING","points":[[424,-123],[437,-123],[437,-102],[424,-102]]},
+    {"type":"BUILDING","points":[[635,195],[650,195],[650,216],[635,216]]},
+    {"type":"BUILDING","points":[[848,-123],[861,-123],[861,-102],[848,-102]]}
+  ],
+  "labels":[
+    {"text":"Garden Roads","point":[12,30]}
+  ],
+  "mapId":"M07"
+}
