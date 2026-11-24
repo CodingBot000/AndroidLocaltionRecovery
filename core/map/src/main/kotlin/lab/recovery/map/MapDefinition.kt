@@ -17,6 +17,7 @@ data class LandPolygon(
     val points: List<Point2D>,
     val id: String? = null,
     val parcelId: String? = null,
+    val holes: List<List<Point2D>> = emptyList(),
 )
 data class MapLabel(val text: String, val position: Point2D)
 data class MapVisualData(
@@ -26,10 +27,23 @@ data class MapVisualData(
     val walkways: List<List<Point2D>> = emptyList(),
     val version: Int = 1,
 )
+data class OsmProvenance(
+    val attribution: String,
+    val license: String,
+    val licenseUrl: String,
+    val sourceUrl: String,
+    val snapshot: String,
+    val sourceChecksum: String,
+    val projection: String,
+    val origin: Point2D,
+    val bounds: List<Double>,
+)
+
 data class MapDefinition(
     val id: String,
     val version: Int,
     val network: RoadNetwork,
     val visual: MapVisualData = MapVisualData(),
     val checksum: String? = null,
+    val osm: OsmProvenance? = null,
 )

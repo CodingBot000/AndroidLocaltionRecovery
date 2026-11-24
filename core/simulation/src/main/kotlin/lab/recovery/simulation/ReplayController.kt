@@ -154,7 +154,7 @@ class ReplayController(
         } else {
             cursor = withContext(worker) { ReplaySession(scenario, runId = result.id) }
             if (activeId == result.id) {
-                mutableState.value = state.value.copy(playback = Playback.READY, scenario = scenario)
+                mutableState.value = state.value.copy(selected = scenario.id, playback = Playback.READY, scenario = scenario)
             }
         }
     }

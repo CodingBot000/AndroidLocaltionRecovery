@@ -30,6 +30,7 @@ data class ScenarioChoice(
     @param:StringRes val description: Int,
     val path: String = "evaluation/$id.json",
     val catalog: CatalogEntry? = null,
+    val osm: Boolean = false,
 )
 val scenarioChoices = listOf(
     ScenarioChoice("DEMO", "Jump, loss & recovery", R.string.scenario_demo_description, "development/DEMO.json"),
@@ -86,11 +87,24 @@ class LabViewModel(
     initial: ScenarioChoice = scenarioChoices.first(),
     catalogChoices: (() -> List<ScenarioChoice>)? = null,
 ) : ViewModel() {
-    constructor(repository: ScenarioRepository, legacyBenchmark: Boolean = false) : this(
-        load = { if (it.path.isEmpty()) repository.read(it.id) else repository.readLegacy(it.path) },
-        initial = if (legacyBenchmark) scenarioChoices.first() else ScenarioChoice("DEMO_LONG", "DEMO_LONG", 0, ""),
+    constructor(repository: ScenarioRepository, benchmarkScenario: String? = null) : this(
+        load = { choice ->
+            when {
+                choice.path.isNotEmpty() -> repository.readLegacy(choice.path)
+                choice.id == "OSM_DEFAULT" -> repository.readOsm(repository.osmCatalog.defaultId)
+                choice.id.startsWith("O") -> repository.readOsm(choice.id)
+                else -> repository.read(choice.id)
+            }
+        },
+        initial = when (benchmarkScenario) {
+            "DEMO" -> scenarioChoices.first()
+            "DEMO_LONG" -> ScenarioChoice("DEMO_LONG", "DEMO_LONG", 0, "")
+            else -> ScenarioChoice("OSM_DEFAULT", "OpenStreetMap", 0, "", osm = true)
+        },
         catalogChoices = {
-            repository.catalog.entries.filterNot(CatalogEntry::evaluation).map {
+            repository.osmCatalog.entries.filterNot(CatalogEntry::evaluation).map {
+                ScenarioChoice(it.id, it.title.english, 0, "", it, osm = true)
+            } + repository.catalog.entries.filterNot(CatalogEntry::evaluation).map {
                 ScenarioChoice(it.id, it.title.english, 0, "", it)
             }
         },

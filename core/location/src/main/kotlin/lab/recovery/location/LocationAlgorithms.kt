@@ -21,7 +21,8 @@ class MapMatcher(private val graph: RoadGraph, private val settings: TrackingSet
             (if (useHeading) settings.headingWeight else 0.0) +
             (if (previousRoad != null) settings.continuityWeight else 0.0)
         val ordering = compareBy(MatchCandidate::cost, MatchCandidate::roadId, MatchCandidate::segment)
-        val bestByRoad = graph.roads.mapNotNull { road ->
+        val candidates = graph.roads.mapNotNull { road ->
+            if (!road.withinBounds(observation.point, settings.searchRadius)) return@mapNotNull null
             val continuity = when {
                 previousRoad == null || previousRoad == road.id -> 0.0
                 graph.connected(previousRoad, road.id) -> 0.5
@@ -40,6 +41,10 @@ class MapMatcher(private val graph: RoadGraph, private val settings: TrackingSet
                 MatchCandidate(road.id, segment.index, projected, cost, road.offset(segment, projected))
             }.minWithOrNull(ordering)
         }.sortedWith(ordering)
+        // Keep the better direction of a physical centerline. Distinct carriageways retain their own keys.
+        val bestByRoad = if (graph.segmented) candidates.distinctBy {
+            graph.byId.getValue(it.roadId).physicalId ?: it.roadId
+        } else candidates
         val best = bestByRoad.firstOrNull()
         val runnerUp = bestByRoad.getOrNull(1)
         return when {

@@ -22,7 +22,23 @@ data class Segment(val index: Int, val start: Point2D, val end: Point2D) {
     }
 }
 
-data class Road(val id: String, val points: List<Point2D>, val tunnel: Boolean = false) {
+data class Road(
+    val id: String,
+    val points: List<Point2D>,
+    val tunnel: Boolean = false,
+    val physicalId: String? = null,
+) {
+    init { require(points.size >= 2) }
+
+    private val minX = points.minOf { it.x }
+    private val minY = points.minOf { it.y }
+    private val maxX = points.maxOf { it.x }
+    private val maxY = points.maxOf { it.y }
+
+    fun withinBounds(point: Point2D, radius: Double): Boolean =
+        point.x >= minX - radius && point.x <= maxX + radius &&
+            point.y >= minY - radius && point.y <= maxY + radius
+
     val segments = points.zipWithNext().mapIndexed { index, (from, to) -> Segment(index, from, to) }
     private val starts = segments.runningFold(0.0) { sum, segment -> sum + segment.length }
     val length = starts.last()

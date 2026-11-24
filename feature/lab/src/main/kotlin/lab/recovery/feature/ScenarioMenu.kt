@@ -26,13 +26,20 @@ internal fun ScenarioMenu(selected: ScenarioChoice, entries: List<ScenarioChoice
     var open by remember { mutableStateOf(false) }
     Box(Modifier.fillMaxWidth()) {
         OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().testTag("scenario-menu")) {
-            Text("${selected.id} · ${selected.catalog?.title?.forLanguage(language) ?: selected.title}",
+            Text(if (selected.id == "OSM_DEFAULT") selected.title else
+                "${selected.id} · ${selected.catalog?.title?.forLanguage(language) ?: selected.title}",
                 modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             Text("▾", color = Muted)
         }
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
-            entries.groupBy { it.path.isEmpty() }.forEach { (extended, group) ->
-                Text(stringResource(if (extended) R.string.extended_drives else R.string.quick_cases),
+            entries.groupBy { choice ->
+                when {
+                    choice.osm -> R.string.osm_drives
+                    choice.path.isEmpty() -> R.string.extended_drives
+                    else -> R.string.quick_cases
+                }
+            }.forEach { (label, group) ->
+                Text(stringResource(label),
                     color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(12.dp))
                 group.forEach { choice ->
                 DropdownMenuItem(

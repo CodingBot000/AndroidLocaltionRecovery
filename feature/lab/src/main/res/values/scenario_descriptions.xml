@@ -60,4 +60,8 @@
     <string name="hud_candidates">%1$d candidates</string>
     <string name="expand_description">Show full description</string>
     <string name="collapse_description">Collapse description</string>
+    <string name="osm_drives">OpenStreetMap drives</string>
+    <string name="osm_map">OpenStreetMap road map</string>
+    <string name="osm_data_source">Map data source</string>
+    <string name="osm_close">Close</string>
 </resources>

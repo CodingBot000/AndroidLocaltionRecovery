@@ -1,20 +1,34 @@
 package lab.recovery.uimap
 
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathFillType
 import lab.recovery.map.LandUse
 import lab.recovery.map.Point2D
 import lab.recovery.map.RoadClass
 import lab.recovery.map.RoadStructure
 import lab.recovery.map.RoadVisual
 
-internal data class WorldPath(val points: List<Point2D>, val closed: Boolean = false) {
+internal data class WorldPath(
+    val points: List<Point2D>,
+    val closed: Boolean = false,
+    val holes: List<List<Point2D>> = emptyList(),
+) {
     val bounds = Bounds.from(points)
-    val shape = Path().apply {
-        points.forEachIndexed { index, point ->
-            if (index == 0) moveTo(point.x.toFloat(), -point.y.toFloat())
-            else lineTo(point.x.toFloat(), -point.y.toFloat())
+    val shape by lazy(LazyThreadSafetyMode.NONE) {
+        Path().apply {
+            fun contour(ring: List<Point2D>) {
+                ring.forEachIndexed { index, point ->
+                    if (index == 0) moveTo(point.x.toFloat(), -point.y.toFloat())
+                    else lineTo(point.x.toFloat(), -point.y.toFloat())
+                }
+                if (closed) close()
+            }
+            contour(points)
+            if (holes.isNotEmpty()) {
+                fillType = PathFillType.EvenOdd
+                holes.forEach(::contour)
+            }
         }
-        if (closed) close()
     }
 }
 
@@ -33,7 +47,7 @@ internal class MapGeometry(scene: MapScene) {
         .sortedWith(compareBy({ it.visual.level }, { roadOrder(it.visual.roadClass) }))
         .groupBy { it.visual.level }.values.toList()
 
-    val land = scene.visual.polygons.map { MapLand(WorldPath(it.points, closed = true), it.type) }
+    val land = scene.visual.polygons.map { MapLand(WorldPath(it.points, closed = true, holes = it.holes), it.type) }
         .sortedBy { landOrder(it.type) }
     val walks = scene.visual.walkways.map { WorldPath(it) }
     val route = WorldPath(scene.route.roads.flatMap { it.points })
@@ -42,8 +56,10 @@ internal class MapGeometry(scene: MapScene) {
     val labels = scene.visual.labels
     val start = route.points.first()
     val end = route.points.last()
-    val cameraBounds = Bounds.from(scene.network.edges.values.flatMap { it.road.points } + route.points)
-        .let { Bounds(it.minX - 95, it.minY - 95, it.maxX + 95, it.maxY + 95) }
+    val cameraBounds = scene.worldBounds?.let { Bounds(it[0], it[1], it[2], it[3]) }
+        ?: Bounds.from(scene.network.edges.values.flatMap { it.road.points } + route.points)
+            .let { Bounds(it.minX - 95, it.minY - 95, it.maxX + 95, it.maxY + 95) }
+    val followMeters = if (scene.worldBounds == null) 365.0 else 480.0
 }
 
 internal fun roadOrder(type: RoadClass) = when (type) {

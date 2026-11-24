@@ -4,9 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -17,6 +22,7 @@ import lab.recovery.location.PositionSource
 import lab.recovery.location.Reason
 import lab.recovery.map.MapVisualData
 import lab.recovery.uimap.MapMarker
+import lab.recovery.uimap.MapCredits
 import lab.recovery.uimap.MapOverlay
 import lab.recovery.uimap.MapScene
 import lab.recovery.uimap.MapStrings
@@ -27,8 +33,10 @@ import lab.recovery.uimap.RoadMap
 @Composable
 internal fun TrackingMap(state: UiState, modifier: Modifier, dark: Boolean = false) {
     val scenario = state.scenario
+    val source = scenario?.map?.osm
+    var sourceOpen by remember(scenario) { mutableStateOf(false) }
     val scene = remember(scenario) {
-        scenario?.let { MapScene(it.roads.network, it.roads.route, it.map?.visual ?: MapVisualData()) }
+        scenario?.let { MapScene(it.roads.network, it.roads.route, it.map?.visual ?: MapVisualData(), source?.bounds) }
     }
     val snapshot = state.snapshot
     val raw = snapshot.lastObservation?.takeIf {
@@ -56,10 +64,25 @@ internal fun TrackingMap(state: UiState, modifier: Modifier, dark: Boolean = fal
         truth = if (state.showTruth) scenario?.truthAt(snapshot.nowMs)?.position else null,
         trails = trails,
     )
-    val strings = MapStrings(stringResource(R.string.synthetic_map), stringResource(R.string.camera_follow),
+    val strings = MapStrings(stringResource(if (source == null) R.string.synthetic_map else R.string.osm_map), stringResource(R.string.camera_follow),
         stringResource(R.string.camera_overview), stringResource(R.string.camera_free),
         stringResource(R.string.camera_zoom_in), stringResource(R.string.camera_zoom_out), stringResource(R.string.map_tunnel))
-    key(state.runId) { RoadMap(scene, overlay, dark, strings, modifier) }
+    key(state.runId) {
+        RoadMap(scene, overlay, dark, strings, modifier, source?.let { MapCredits(it.attribution) { sourceOpen = true } })
+    }
+    if (sourceOpen && source != null) {
+        AlertDialog(onDismissRequest = { sourceOpen = false },
+            title = { Text(stringResource(R.string.osm_data_source)) },
+            text = { SelectionContainer {
+                Text(listOf(source.attribution, source.license, source.licenseUrl, source.snapshot, source.sourceUrl)
+                    .joinToString("\n"), modifier = Modifier.testTag("osm-source-details"))
+            } },
+            confirmButton = {
+                TextButton(onClick = { sourceOpen = false }, modifier = Modifier.testTag("osm-source-close")) {
+                    Text(stringResource(R.string.osm_close))
+                }
+            })
+    }
 }
 
 @Composable

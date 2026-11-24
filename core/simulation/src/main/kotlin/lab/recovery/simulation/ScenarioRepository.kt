@@ -8,6 +8,7 @@ import lab.recovery.map.MapDefinition
 import lab.recovery.map.MapLabel
 import lab.recovery.map.MapVisualData
 import lab.recovery.map.Point2D
+import lab.recovery.map.OsmProvenance
 import lab.recovery.map.Road
 import lab.recovery.map.RoadClass
 import lab.recovery.map.RoadEdge
@@ -42,27 +43,31 @@ data class ScenarioCatalog(val maps: Map<String, LocalizedText>, val entries: Li
 }
 
 class ScenarioRepository(private val source: FixtureSource) {
-    val catalog: ScenarioCatalog by lazy { readCatalog() }
+    val catalog: ScenarioCatalog by lazy { readCatalog("extended", 2L) }
+    val osmCatalog: ScenarioCatalog by lazy { readCatalog("osm", 3L) }
 
     fun readLegacy(path: String): Scenario {
         require(path == "development/DEMO.json" || legacyPath.matches(path))
         return FixtureReader.read(source.open(path))
     }
 
-    fun read(id: String): Scenario = fixtureSchema {
+    fun read(id: String): Scenario = readDataset(id, "extended", catalog, FixtureProfile.STANDARD)
+
+    fun readOsm(id: String): Scenario = readDataset(id, "osm", osmCatalog, FixtureProfile.OSM)
+
+    private fun readDataset(id: String, directory: String, catalog: ScenarioCatalog, profile: FixtureProfile): Scenario = fixtureSchema {
         val entry = catalog.entries.singleOrNull { it.id == id } ?: error("Unknown scenario $id")
-        val profile = FixtureProfile.STANDARD
-        val mapBytes = fixtureBytes(source.open("extended/maps/${entry.mapId}.json"), profile.byteLimit)
+        val mapBytes = fixtureBytes(source.open("$directory/maps/${entry.mapId}.json"), profile.byteLimit)
         val map = parseMap(fixtureObject(mapBytes), entry.mapId, sha256(mapBytes), profile)
         val group = if (entry.evaluation) "evaluation" else "scenarios"
-        val scenario = FixtureReader.read(source.open("extended/$group/$id.json"), profile, map, profile.byteLimit - mapBytes.size)
+        val scenario = FixtureReader.read(source.open("$directory/$group/$id.json"), profile, map, profile.byteLimit - mapBytes.size)
         require(scenario.id == id && scenario.durationMs == entry.durationMs && scenario.title == entry.title.english)
         scenario
     }
 
-    private fun readCatalog(): ScenarioCatalog = fixtureSchema {
-        val root = fixtureObject(fixtureBytes(source.open("extended/catalog.json"), 256 * 1024))
-        require(root["schemaVersion"].integer() == 2L)
+    private fun readCatalog(directory: String, schema: Long): ScenarioCatalog = fixtureSchema {
+        val root = fixtureObject(fixtureBytes(source.open("$directory/catalog.json"), 256 * 1024))
+        require(root["schemaVersion"].integer() == schema)
         val mapRows = root.getAsJsonArray("maps")
         require(mapRows.size() in 1..64)
         val maps = mapRows.associate { row ->
@@ -95,10 +100,13 @@ class ScenarioRepository(private val source: FixtureSource) {
 }
 
 private fun parseMap(root: JsonObject, id: String, checksum: String, profile: FixtureProfile): MapDefinition {
-    require(root["schemaVersion"].integer() == 2L && root["mapId"].string() == id)
+    val osm = if (profile == FixtureProfile.OSM) osmProvenance(root) else null
+    val schema = if (osm == null) 2 else 3
+    require(root["schemaVersion"].integer() == schema.toLong() && root["mapId"].string() == id)
     val nodeRows = root.getAsJsonArray("nodes")
     val edgeRows = root.getAsJsonArray("edges")
-    require(nodeRows.size() in 2..512 && edgeRows.size() in 1..512)
+    val graphLimit = if (osm == null) 512 else 12000
+    require(nodeRows.size() in 2..graphLimit && edgeRows.size() in 1..graphLimit)
     val nodes = nodeRows.map {
         val row = it.asJsonObject
         RoadNode(row["id"].string().identifier(), row["point"].point(), row.level())
@@ -113,10 +121,12 @@ private fun parseMap(root: JsonObject, id: String, checksum: String, profile: Fi
         if (segments > profile.segmentLimit) throw InvalidFixture(FixtureError.ROAD_LIMIT, "$segments segments")
         require(points.size() >= 2)
         val structure = RoadStructure.valueOf(row["structure"].string())
-        val road = Road(edge, points.map(JsonElement::point), structure == RoadStructure.TUNNEL)
+        val physicalId = row["physicalId"]?.string()?.identifier() ?: edge
+        val road = Road(edge, points.map(JsonElement::point), structure == RoadStructure.TUNNEL,
+            physicalId.takeIf { osm != null })
         edges += RoadEdge(road, row["start"].string().identifier(), row["end"].string().identifier())
         RoadVisual(edge, RoadClass.valueOf(row["roadClass"].string()), structure, row.level(),
-            row["physicalId"]?.string()?.identifier() ?: edge, row["name"]?.string()?.label())
+            physicalId, row["name"]?.string()?.label())
     }
     val transitions = root.getAsJsonObject("transitions").entrySet().associate { (edge, destinations) ->
         require(destinations.asJsonArray.size() <= 16)
@@ -126,18 +136,22 @@ private fun parseMap(root: JsonObject, id: String, checksum: String, profile: Fi
     val network = RoadNetwork(nodes, edges, transitions)
     val polygonRows = root.getAsJsonArray("polygons")
     val labelRows = root.getAsJsonArray("labels")
-    require(polygonRows.size() <= 512 && labelRows.size() <= 64)
+    val vertexLimit = if (osm == null) 4096 else 260000
+    require(polygonRows.size() <= (if (osm == null) 512 else 30000) && labelRows.size() <= 64)
     var vertices = 0
+    fun ring(points: com.google.gson.JsonArray, minimum: Int): List<Point2D> {
+        vertices += points.size()
+        require(points.size() >= minimum && vertices <= vertexLimit)
+        return points.map(JsonElement::point).also { require(it.distinct().size == it.size) }
+    }
     val polygons = polygonRows.map {
         val row = it.asJsonObject
-        val points = row.getAsJsonArray("points")
-        vertices += points.size()
-        require(points.size() >= 3 && vertices <= 4096)
-        val coordinates = points.map(JsonElement::point)
-        require(coordinates.distinct().size == coordinates.size)
+        val coordinates = ring(row.getAsJsonArray("points"), 3)
+        val holes = row.getAsJsonArray("holes")?.map { ring(it.asJsonArray, 3) }.orEmpty()
+        require(osm != null || holes.isEmpty())
         val id = row["id"]?.string()?.identifier()
         val parcel = row["parcelId"]?.string()?.identifier()
-        LandPolygon(LandUse.valueOf(row["type"].string()), coordinates, id, parcel)
+        LandPolygon(LandUse.valueOf(row["type"].string()), coordinates, id, parcel, holes)
     }
     val labels = labelRows.map {
         val row = it.asJsonObject
@@ -148,19 +162,35 @@ private fun parseMap(root: JsonObject, id: String, checksum: String, profile: Fi
     require(parcelIds.size == parcelIds.toSet().size)
     require(polygons.all { polygon ->
         if (polygon.type == LandUse.BUILDING) {
-            polygon.parcelId in parcelIds || (version == 1 && polygon.parcelId == null)
+            polygon.parcelId in parcelIds || ((version == 1 || osm != null) && polygon.parcelId == null)
         } else polygon.parcelId == null
     })
     val paths = root.getAsJsonArray("walkways")?.map { element ->
         val points = element.asJsonArray
         vertices += points.size()
-        require(points.size() in 2..64 && vertices <= 4096)
+        require(points.size() in 2..(if (osm == null) 64 else 20000) && vertices <= vertexLimit)
         points.map(JsonElement::point).also { route ->
             require(route.zipWithNext().all { (a, b) -> a != b })
         }
     }.orEmpty()
-    require(paths.size <= 64)
-    return MapDefinition(id, 2, network, MapVisualData(visuals, polygons, labels, paths, version), checksum)
+    require(paths.size <= (if (osm == null) 64 else 15000))
+    return MapDefinition(id, schema, network, MapVisualData(visuals, polygons, labels, paths, version), checksum, osm)
+}
+
+private fun osmProvenance(root: JsonObject): OsmProvenance {
+    val data = root.getAsJsonObject("source")
+    val projection = root.getAsJsonObject("projection")
+    require(data["dataset"].string() == "OSM")
+    val origin = projection.getAsJsonArray("origin").map(JsonElement::number)
+    val bounds = projection.getAsJsonArray("bounds").map(JsonElement::number)
+    require(origin.size == 2 && origin.all(Double::isFinite))
+    require(bounds.size == 4 && bounds.all(Double::isFinite) && bounds[0] < bounds[2] && bounds[1] < bounds[3])
+    val attribution = data["attribution"].string().also { require(it == "© OpenStreetMap contributors") }
+    return OsmProvenance(attribution, data["license"].string().also { require(it == "ODbL-1.0") },
+        data["licenseUrl"].string().also { require(it.startsWith("https://")) },
+        data["url"].string().also { require(it.startsWith("https://")) },
+        data["snapshot"].string(), data["sha256"].string().also { require(it.matches(Regex("[0-9a-f]{64}"))) },
+        projection["crs"].string(), Point2D(origin[0], origin[1]), bounds)
 }
 
 private fun String.label() = also { require(isNotBlank() && length <= 80) }

@@ -28,7 +28,13 @@ class LongReplayEnduranceTest {
 
     @Test fun fullLengthAtOneTimesOfflineAndReset() {
         val model = ViewModelProvider(rule.activity)[LabViewModel::class.java]
-        rule.waitUntil(10_000) { model.state.value.playback == Playback.READY }
+        rule.waitUntil(15_000) {
+            model.state.value.playback == Playback.READY && model.state.value.choices.any { it.id == "DEMO_LONG" }
+        }
+        model.send(UiIntent.Select(model.state.value.choices.first { it.id == "DEMO_LONG" }))
+        rule.waitUntil(10_000) {
+            model.state.value.playback == Playback.READY && model.state.value.scenario?.id == "DEMO_LONG"
+        }
         val duration = checkNotNull(model.state.value.scenario).durationMs
         assertEquals("DEMO_LONG", model.state.value.selected.id)
         assertEquals(1f, model.state.value.speed, 0f)

@@ -23,6 +23,7 @@ enum class FixtureError { SIZE_LIMIT, SCHEMA, EVENT_LIMIT, ROAD_LIMIT, DURATION_
 enum class FixtureProfile(val byteLimit: Int, val observationLimit: Int, val segmentLimit: Int, val durationLimit: Long) {
     STANDARD(4 * 1024 * 1024, 5_000, 512, 15 * 60_000),
     STRESS(64 * 1024 * 1024, 100_000, 512, 120 * 60_000),
+    OSM(12 * 1024 * 1024, 5_000, 40_000, 15 * 60_000),
 }
 class InvalidFixture(val error: FixtureError, detail: String) : IllegalArgumentException("${error.name}: $detail")
 
@@ -67,7 +68,7 @@ object FixtureReader {
 
     private fun parse(root: JsonObject, checksum: String, profile: FixtureProfile, map: MapDefinition?): Scenario {
         val schemaVersion = root["schemaVersion"].integer()
-        require(schemaVersion == if (map == null) 1L else 2L)
+        require(schemaVersion == (map?.version ?: 1).toLong())
         val version = schemaVersion.toInt()
         val duration = root["duration"].integer()
         if (duration !in 0..profile.durationLimit) throw InvalidFixture(FixtureError.DURATION_LIMIT, "${profile.durationLimit} ms")
@@ -75,7 +76,8 @@ object FixtureReader {
             require(root["mapId"].string() == map.id)
             require(root["routeVersion"].integer() == 1L)
             val route = RoutePlan(map.network, root.getAsJsonArray("plannedRoute").map(JsonElement::string))
-            RoadGraph(map.network, route)
+            if (map.osm != null) require(root["mapChecksum"].string() == map.checksum)
+            RoadGraph(map.network, route, segmented = map.osm != null)
         }
         val observations = root.getAsJsonArray("observations")
         if (observations.size() > profile.observationLimit) throw InvalidFixture(FixtureError.EVENT_LIMIT, "${profile.observationLimit} observations")
@@ -108,10 +110,18 @@ object FixtureReader {
             require(truth.size <= profile.durationLimit / 200 + 1)
             require(truth.all { it.roadId != null })
             val actual = RoutePlan(map.network, root.getAsJsonArray("actualRoute").map(JsonElement::string))
-            require(truth.mapNotNull(TruthPoint::roadId).fold(mutableListOf<String>()) { ids, road ->
+            val observedRoads = truth.mapNotNull(TruthPoint::roadId).fold(mutableListOf<String>()) { ids, road ->
                 if (ids.lastOrNull() != road) ids.add(road)
                 ids
-            } == actual.edgeIds)
+            }
+            if (map.osm == null) require(observedRoads == actual.edgeIds)
+            else {
+                // Very short OSM segments can fall entirely between two 200 ms ground-truth samples.
+                val plannedIndexes = actual.edgeIds.withIndex().associate { it.value to it.index }
+                val indexes = observedRoads.map { plannedIndexes.getValue(it) }
+                require(indexes.first() == 0 && indexes.last() == actual.edgeIds.lastIndex &&
+                    indexes.zipWithNext().all { (a,b) -> a < b })
+            }
             require(expected.isNotEmpty() && expected.all { it.timeMs == null || it.timeMs in 0..duration })
             require(expected.distinctBy { it.timeMs to it.reason }.size == expected.size)
         }

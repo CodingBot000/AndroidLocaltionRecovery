@@ -29,6 +29,7 @@ jobs:
           python3 -B tools/extended/generate.py --output "$RUNNER_TEMP/generated-fixtures"
           diff -r fixtures/extended "$RUNNER_TEMP/generated-fixtures"
           python3 -B tools/extended/check_terrain.py
+          python3 -B tools/osm/verify.py
       - name: Build and validate
         run: >-
           ./gradlew verifyModuleBoundaries :core:map:test :core:location:test :core:simulation:test
@@ -43,6 +44,8 @@ jobs:
         run: ./gradlew :core:simulation:run --args='fixtures/development build/reports/legacy-demo.json build/reports/legacy-demo.md'
       - name: Run extended evaluation
         run: ./gradlew :core:simulation:run --args='fixtures/extended build/reports/extended.json build/reports/extended.md'
+      - name: Run offline OSM evaluation
+        run: ./gradlew :core:simulation:run --args='fixtures/osm build/reports/osm-evaluation.json build/reports/osm-evaluation.md'
       - name: Preserve verification reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -56,3 +59,4 @@ jobs:
             build/reports/evaluation.*
             build/reports/legacy-demo.*
             build/reports/extended.*
+            build/reports/osm-evaluation.*

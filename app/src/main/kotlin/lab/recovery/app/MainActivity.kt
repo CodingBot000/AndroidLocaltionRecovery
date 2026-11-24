@@ -21,11 +21,11 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
         )
         val appAssets = applicationContext.assets
-        val legacyBenchmark = packageName == "lab.recovery.app.benchmark" &&
-            intent.getStringExtra("benchmarkScenario") == "DEMO"
+        val benchmarkScenario = intent.getStringExtra("benchmarkScenario")
+            .takeIf { packageName == "lab.recovery.app.benchmark" }
         val factory = viewModelFactory {
             initializer {
-                LabViewModel(ScenarioRepository { appAssets.open(it) }, legacyBenchmark)
+                LabViewModel(ScenarioRepository { appAssets.open(it) }, benchmarkScenario)
             }
         }
         val model = ViewModelProvider(this, factory)[LabViewModel::class.java]

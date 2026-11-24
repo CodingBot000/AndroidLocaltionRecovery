@@ -38,6 +38,12 @@ class RecoveryInstrumentedTest {
     private fun ready(model: LabViewModel, scenario: String) = rule.waitUntil(10_000) {
         model.state.value.playback == Playback.READY && model.state.value.scenario?.id == scenario
     }
+    private fun readySyntheticDemo(model: LabViewModel) {
+        ready(model, "ODEMO_LONG")
+        select("DEMO_LONG")
+        ready(model, "DEMO_LONG")
+    }
+
     private fun scroll(tag: String) {
         rule.onNodeWithTag("lab-screen").performScrollToNode(hasTestTag(tag))
     }
@@ -59,7 +65,7 @@ class RecoveryInstrumentedTest {
 
     @Test fun legacyDemoCompletesAndMatchesIndependentJvmReplay() {
         val model = model()
-        ready(model, "DEMO_LONG")
+        readySyntheticDemo(model)
         select("DEMO")
         ready(model, "DEMO")
         scroll("tracking-map")
@@ -85,7 +91,7 @@ class RecoveryInstrumentedTest {
 
     @Test fun scenarioDescriptionChangesBeforePlayback() {
         val model = model()
-        ready(model, "DEMO_LONG")
+        readySyntheticDemo(model)
         select("DEMO")
         ready(model, "DEMO")
         rule.onNodeWithTag("scenario-description")
@@ -106,7 +112,7 @@ class RecoveryInstrumentedTest {
 
     @Test fun speedSliderSupportsHalfStepsAndHorizontalDrag() {
         val model = model()
-        ready(model, "DEMO_LONG")
+        readySyntheticDemo(model)
         select("DEMO")
         ready(model, "DEMO")
         setSpeed(model, 1.5f)
@@ -124,7 +130,7 @@ class RecoveryInstrumentedTest {
 
     @Test fun tenMapsRenderAndCameraControlsPreserveSession() {
         val model = model()
-        ready(model, "DEMO_LONG")
+        readySyntheticDemo(model)
         val representatives = listOf("L01", "L02", "L07", "L10", "L13", "L08", "L03", "L09", "L15", "DEMO_LONG")
         representatives.forEachIndexed { index, id ->
             select(id)
@@ -167,7 +173,7 @@ class RecoveryInstrumentedTest {
 
     @Test fun longDemoCompletesAndMatchesItsJvmEvaluation() {
         val model = model()
-        ready(model, "DEMO_LONG")
+        readySyntheticDemo(model)
         val scenario = model.state.value.scenario!!
         val expected = runBlocking {
             val repository = ScenarioRepository { rule.activity.assets.open(it) }
@@ -206,7 +212,7 @@ class RecoveryInstrumentedTest {
 
     @Test fun jumpPreservesTheLastAcceptedFix() {
         val model = model()
-        ready(model, "DEMO_LONG")
+        readySyntheticDemo(model)
         select("DEMO")
         ready(model, "DEMO")
         select("S02")
@@ -224,7 +230,7 @@ class RecoveryInstrumentedTest {
 
     @Test fun longOutageShowsDrThenLastKnownAndRecovers() {
         val model = model()
-        ready(model, "DEMO_LONG")
+        readySyntheticDemo(model)
         select("DEMO")
         ready(model, "DEMO")
         select("S07")
@@ -243,7 +249,7 @@ class RecoveryInstrumentedTest {
 
     @Test fun portraitRecreationKeepsSessionAndRapidResetDropsTheOldRun() {
         val model = model()
-        ready(model, "DEMO_LONG")
+        readySyntheticDemo(model)
         select("DEMO")
         ready(model, "DEMO")
         assertEquals(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, rule.activity.requestedOrientation)

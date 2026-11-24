@@ -163,7 +163,7 @@ class TrackingEngine(
             }
         }
         val previousStatus = routeDetector.status
-        val routeEvent = routeDetector.observe(confirmed?.roadId, observation.measuredAtMs)
+        val routeEvent = routeDetector.observe(confirmed?.roadId, observation.measuredAtMs, confirmed)
         if (routeEvent != null) event(routeEvent, observation)
         else if (previousStatus != routeDetector.status) event(Reason.ROUTE_CHANGED, observation)
     }

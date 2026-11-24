@@ -30,6 +30,8 @@ class RecoveryBenchmark {
 
     @Test fun longMapReplay() = replay("DEMO_LONG", "03:00.0", end = "00:4[5-9]\\.[0-9]", map = "M10", timeout = 60_000)
 
+    @Test fun osmReplay() = replay("ODEMO_LONG", "03:00.0", end = "00:4[5-9]\\.[0-9]", map = "O10", timeout = 60_000)
+
     private fun replay(scenario: String, duration: String, end: String, map: String?, timeout: Long) = benchmark.measureRepeated(
         packageName = TARGET_PACKAGE,
         metrics = listOf(FrameTimingMetric()),

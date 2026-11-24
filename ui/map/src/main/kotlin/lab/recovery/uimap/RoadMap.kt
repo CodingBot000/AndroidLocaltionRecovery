@@ -49,6 +49,7 @@ fun RoadMap(
     dark: Boolean,
     strings: MapStrings,
     modifier: Modifier = Modifier,
+    credits: MapCredits? = null,
 ) {
     val geometry = remember(scene) { scene?.let(::MapGeometry) }
     var mode by remember(scene) { mutableStateOf(CameraMode.FOLLOW) }
@@ -57,6 +58,7 @@ fun RoadMap(
     var controlsBounds by remember { mutableStateOf(Rect.Zero) }
     var modeBounds by remember { mutableStateOf(Rect.Zero) }
     var tunnelBounds by remember { mutableStateOf(Rect.Zero) }
+    var creditBounds by remember { mutableStateOf(Rect.Zero) }
     val style = if (dark) MapStyle.Night else MapStyle.Day
     val latest by rememberUpdatedState(overlay)
     val padding = with(LocalDensity.current) { 19.dp.toPx().toDouble() }
@@ -68,7 +70,7 @@ fun RoadMap(
         val overview = Projection(routeBounds.center, fitted, width, height)
         return when (mode) {
             CameraMode.FOLLOW -> Projection(latest.vehicle?.point?.let(data.cameraBounds::clamp) ?: data.start,
-                maxOf(fitted, width / 365.0, .01), width, height).followOffset()
+                maxOf(fitted, width / data.followMeters, .01), width, height).followOffset()
             CameraMode.OVERVIEW -> overview
             CameraMode.FREE -> free?.copy(width = width, height = height) ?: overview
         }
@@ -91,8 +93,9 @@ fun RoadMap(
     val paint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }
     val shape = RoundedCornerShape(14.dp)
     val border = style.muted.copy(alpha = .32f)
-    val hasTunnel = remember(geometry) {
-        geometry?.roadLayers?.any { layer -> layer.any { it.visual.structure == RoadStructure.TUNNEL } } == true
+    val hasTunnel = remember(geometry, credits != null) {
+        if (credits != null) geometry?.routeTunnels?.isNotEmpty() == true
+        else geometry?.roadLayers?.any { layer -> layer.any { it.visual.structure == RoadStructure.TUNNEL } } == true
     }
     Box(modifier.clip(shape).background(style.background).border(1.dp, border, shape)
         .testTag("tracking-map").semantics { contentDescription = strings.map }
@@ -109,10 +112,19 @@ fun RoadMap(
             val detail = mapDetail(mode, camera.visibleMeters)
             drawMap(data, camera, style, detail)
             drawOverlay(latest, camera, style)
-            val occupied = listOf(modeBounds, controlsBounds) + if (hasTunnel) listOf(tunnelBounds) else emptyList()
+            val occupied = listOf(modeBounds, controlsBounds, creditBounds) + if (hasTunnel) listOf(tunnelBounds) else emptyList()
             drawMapLabels(data, camera, detail, style, latest, occupied, paint)
         }
         if (geometry != null) {
+            credits?.let {
+                Surface(onClick = it.onClick, modifier = Modifier.align(Alignment.TopEnd).padding(6.dp)
+                    .onGloballyPositioned { creditBounds = it.boundsInParent() }.testTag("osm-attribution"),
+                    shape = RoundedCornerShape(7.dp), color = style.chrome, contentColor = style.chromeText,
+                    border = BorderStroke(1.dp, border)) {
+                    Text(it.text, modifier = Modifier.padding(horizontal = 6.dp, vertical = 7.dp),
+                        style = MaterialTheme.typography.labelSmall)
+                }
+            }
             Surface(modifier = Modifier.align(Alignment.TopStart).padding(8.dp)
                 .onGloballyPositioned { modeBounds = it.boundsInParent() },
                 shape = RoundedCornerShape(8.dp), color = style.chrome, contentColor = style.chromeText,

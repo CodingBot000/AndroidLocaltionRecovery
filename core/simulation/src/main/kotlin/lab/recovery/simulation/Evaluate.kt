@@ -18,6 +18,7 @@ data class EvaluationRun(val evaluations: List<Evaluation>, val loadChecks: List
 fun main(args: Array<String>) = runBlocking {
     val directory = File(args.getOrElse(0) { "fixtures/evaluation" })
     val extended = File(directory, "catalog.json").isFile
+    val osm = extended && directory.name == "osm"
     val files = if (directory.isFile) listOf(directory) else directory.listFiles { file -> file.extension == "json" }?.sorted()
     require(!files.isNullOrEmpty()) { "No fixture JSON files in $directory" }
     val evaluations = mutableListOf<Evaluation>()
@@ -25,16 +26,19 @@ fun main(args: Array<String>) = runBlocking {
     if (extended) {
         val root = checkNotNull(directory.absoluteFile.parentFile)
         val repository = ScenarioRepository { File(root, it).inputStream() }
-        val catalog = repository.catalog
+        val catalog = if (osm) repository.osmCatalog else repository.catalog
         val ids = catalog.entries.map(CatalogEntry::id).toSet()
-        val userIds = (1..17).map { "L" + it.toString().padStart(2, '0') }.toSet() + "DEMO_LONG"
+        val prefix = if (osm) "O" else ""
+        val userIds = (1..17).map { prefix + "L" + it.toString().padStart(2, '0') }.toSet() + (prefix + "DEMO_LONG")
         require(ids.containsAll(userIds))
         val userEntries = catalog.entries.filterNot(CatalogEntry::evaluation)
         val independent = catalog.entries.filter(CatalogEntry::evaluation)
         require(userEntries.map(CatalogEntry::id).containsAll(userIds))
         require(catalog.maps.size >= 10 && userEntries.map(CatalogEntry::mapId).toSet() == catalog.maps.keys)
         require(independent.map(CatalogEntry::mapId).toSet() == catalog.maps.keys)
-        catalog.entries.forEach { evaluations += playToEnd(ReplaySession(repository.read(it.id))) }
+        catalog.entries.forEach {
+            evaluations += playToEnd(ReplaySession(if (osm) repository.readOsm(it.id) else repository.read(it.id)))
+        }
     } else for (file in files) {
         val expectedError = malformed[file.nameWithoutExtension]
         try {
@@ -76,7 +80,11 @@ private fun createReport(result: EvaluationRun): String = buildString {
     appendLine()
     val extended = result.evaluations.filter { it.extended != null }
     if (extended.isNotEmpty()) {
-        appendLine("L 및 DEMO_LONG은 앱 주행이며 E는 별도 시드·장애 시각의 평가 사례다.")
+        if (extended.first().schemaVersion == 3) {
+            appendLine("OL 및 ODEMO_LONG은 OSM 도로 위의 앱 가상 주행이며 OE는 별도의 평가 사례다.")
+        } else {
+            appendLine("L 및 DEMO_LONG은 앱 주행이며 E는 별도 시드·장애 시각의 평가 사례다.")
+        }
         appendLine()
         extended.filter { it.extended?.passed == false }.forEach {
             appendLine("- ${it.scenarioId} FAIL final signal ${it.extended?.finalSignal}, expected ${it.extended?.expectedFinalSignal}")
@@ -92,7 +100,7 @@ private fun createReport(result: EvaluationRun): String = buildString {
     }
     appendLine()
     appendLine("분포의 중간값은 중앙 표본의 평균으로, p95는 nearest-rank 방식으로 계산한다. 원시·채택·DR은 표본 범위가 다르며 같은 관측의 비교는 JSON의 paired 항목을 사용한다.")
-    appendLine("가상 입력과 합성 도로에서만 측정했으며 실제 GNSS 정확도나 단말 처리량을 뜻하지 않는다. JSON 원본은 fixture 체크섬, 엔진 설정, 표본 수와 분포, 복구·이탈 지표를 포함한다.")
+    appendLine("가상 입력을 재생하여 측정했으며 실제 GNSS 정확도나 단말 처리량을 뜻하지 않는다. JSON 원본은 fixture 체크섬, 엔진 설정, 표본 수와 분포, 복구·이탈 지표를 포함한다.")
 }
 
 private fun Double?.format(): String = this?.let { String.format(Locale.ROOT, "%.2f", it) } ?: "N/A"

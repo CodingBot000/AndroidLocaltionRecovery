@@ -84,7 +84,12 @@ class RoutePlan(val network: RoadNetwork, edgeIds: List<String>, allowRepeatedEd
 }
 
 /** Engine-facing view of a network paired with one plan. */
-class RoadGraph(val network: RoadNetwork, val route: RoutePlan, val legacy: Boolean = false) {
+class RoadGraph(
+    val network: RoadNetwork,
+    val route: RoutePlan,
+    val legacy: Boolean = false,
+    val segmented: Boolean = false,
+) {
     private constructor(network: RoadNetwork, plannedRoute: List<String>) :
         this(network, RoutePlan(network, plannedRoute, allowRepeatedEdges = true), legacy = true)
 

@@ -131,3 +131,14 @@ TalkBack을 활성화한 API 36 세로 환경에서 다음 계측 클래스로 �
 생성 재현성, 모듈 경계, Debug Lint, Debug·서명하지 않은 Release·계측·벤치마크 APK 빌드를 검증했다. 두 앱 APK에서 위치·카메라·마이크·인터넷 권한과 세로 Activity 설정을 검사했고 포함된 JSON 62개를 fixture 원본과 바이트 단위로 대조했다. Q06 원격 CI는 **NOT_RUN**으로 남겼다. 기존 워크플로에 추가한 지형 검사를 포함한 빌드·평가 작업은 로컬에서 실행했다.
 
 [지도 전후 검수](map-visual-verification.md) · [개정 지도 설계](map-design.md) · [내구와 성능 환경](physical-device-validation.md)
+
+## O01–O07 OSM 전환 확인
+
+기준선 `646b3c9`에서 OSM v3을 추가했다. 사용자 요청에 따라 오프라인 데이터 검사, JVM 평가·이전 평가 대조, Android 대표 계측에 검증을 집중했다.
+
+- **데이터 검사** 가공 지도 10개와 사례 28개를 manifest, SHA-256, 실제 공유 노드·유효 전이와 대조했다. 기존 v1 원본 23개 체크섬은 모두 일치했다.
+- **JVM 평가** 앱 주행 18개와 독립 평가 10개에서 기대 이벤트와 최종 신호 상태가 모두 통과했다. 기존 빠른 회귀와 합성 장시간 평가 JSON은 이전 저장 결과와 바이트 단위로 일치했다.
+- **Android 확인** API 36에서 오프라인 스모크 계측 1건이 통과했다. 기본 OSM 데모 로드, 출처 정보, 10개 지도 전환·Step, Follow/Overview, 주·야간과 카메라 독립성을 함께 확인했다. [실제 화면](osm-visual-verification.md)
+- **빌드 검증** 7개 모듈 경계, Debug·서명되지 않은 Release·계측·벤치마크 APK를 확인했다. 두 앱 APK에서 지도·시나리오 JSON 102개가 로컬 원본과 일치했고 세로 설정과 오프라인 권한 검사를 통과했다.
+
+전체 계측 재실행, 새 빌드의 실기기 Macrobenchmark·1× 내구, 원격 CI는 이번 검증에서 미실행이다. CI 구성에는 체크인된 OSM 자료의 검사·평가를 추가했다. [OSM 평가 원본](osm-evaluation-results.json) · [OSM 데이터 파이프라인](osm-data-pipeline.md)
