@@ -64,7 +64,7 @@ internal val Coral = Color(0xFFFF9F91)
 internal val Sky = Color(0xFF9ACAF0)
 
 @Composable
-fun RecoveryLab(model: LabViewModel, optimizedMap: Boolean = true) {
+fun RecoveryLab(model: LabViewModel, optimizedMap: Boolean = true, onMapReady: (Long) -> Unit = {}) {
     val state = model.state.collectAsStateWithLifecycle()
     MaterialTheme(colorScheme = darkColorScheme(
         primary = Mint, onPrimary = Color(0xFF0B3023), surface = Panel, onSurface = Ink,
@@ -74,7 +74,7 @@ fun RecoveryLab(model: LabViewModel, optimizedMap: Boolean = true) {
         Surface(Modifier.fillMaxSize(), color = Background) {
             BoxWithConstraints(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
                 contentAlignment = Alignment.TopCenter) {
-                LabScreen(state, model::send, (maxHeight * 0.55f).coerceAtLeast(230.dp), optimizedMap)
+                LabScreen(state, model::send, (maxHeight * 0.55f).coerceAtLeast(230.dp), optimizedMap, onMapReady)
             }
         }
     }
@@ -82,7 +82,7 @@ fun RecoveryLab(model: LabViewModel, optimizedMap: Boolean = true) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHeight: Dp, optimizedMap: Boolean) {
+private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHeight: Dp, optimizedMap: Boolean, onMapReady: (Long) -> Unit) {
     val selection by remember(state) { derivedStateOf { state.value.selected } }
     val entries by remember(state) { derivedStateOf { state.value.choices } }
     val error by remember(state) { derivedStateOf { state.value.error } }
@@ -129,7 +129,7 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
                 val current = state.value
                 DriveHud(current)
                 Spacer(Modifier.height(5.dp))
-                TrackingMap(current, Modifier.fillMaxWidth().height(mapHeight), night, optimizedMap)
+                TrackingMap(current, Modifier.fillMaxWidth().height(mapHeight), night, optimizedMap, onMapReady)
                 MapLegend(current.showTruth, { onIntent(UiIntent.ToggleTruth) })
             }
         }

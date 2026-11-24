@@ -20,7 +20,47 @@ import kotlin.math.hypot
 
 internal fun Projection.offset(point: Point2D): Offset = screen(point).let { Offset(it.x.toFloat(), it.y.toFloat()) }
 
-internal fun DrawScope.drawMap(data: MapGeometry, projection: Projection, style: MapStyle, detail: Detail) {
+internal class MapStrokeCache {
+    private var pixelsPerMeter = 0f
+    private var density = 0f
+    private val strokes = mutableMapOf<Pair<Float, PathEffect?>, Stroke>()
+    private val dashes = mutableMapOf<Pair<Float, Float>, PathEffect>()
+
+    fun update(scale: Float, density: Float) {
+        if (scale == pixelsPerMeter && density == this.density) return
+        pixelsPerMeter = scale
+        this.density = density
+        strokes.clear()
+        dashes.clear()
+    }
+
+    fun stroke(dp: Float, effect: PathEffect? = null): Stroke = strokes.getOrPut(dp to effect) {
+        Stroke(dp * density / pixelsPerMeter, cap = StrokeCap.Round, join = StrokeJoin.Round, pathEffect = effect)
+    }
+
+    fun dash(on: Float, off: Float): PathEffect = dashes.getOrPut(on to off) {
+        PathEffect.dashPathEffect(floatArrayOf(on * density / pixelsPerMeter, off * density / pixelsPerMeter))
+    }
+}
+
+internal class OverlayPathCache {
+    private var trails: List<MapTrail>? = null
+    private var paths = emptyList<Pair<MapTrail, WorldPath>>()
+
+    fun pathsFor(current: List<MapTrail>): List<Pair<MapTrail, WorldPath>> {
+        if (trails === current) return paths
+        val previous = paths
+        paths = current.filter { it.points.size >= 2 }.mapIndexed { i, trail ->
+            previous.getOrNull(i)?.takeIf { it.first == trail } ?: (trail to WorldPath(trail.points))
+        }
+        trails = current
+        return paths
+    }
+}
+
+internal fun DrawScope.drawMap(
+    data: MapGeometry, projection: Projection, style: MapStyle, detail: Detail, cached: MapStrokeCache,
+) {
     val scale = projection.scale.toFloat()
     val origin = projection.offset(Point2D(0.0, 0.0))
     val visible = projection.visibleBounds(19.dp.toPx().toDouble())
@@ -29,9 +69,9 @@ internal fun DrawScope.drawMap(data: MapGeometry, projection: Projection, style:
         Detail.MID -> .78f
         Detail.OVERVIEW -> .48f
     }
-    fun stroke(dp: Float, effect: PathEffect? = null) =
-        Stroke(dp.dp.toPx() / scale, cap = StrokeCap.Round, join = StrokeJoin.Round, pathEffect = effect)
-    fun dash(a: Float, b: Float) = PathEffect.dashPathEffect(floatArrayOf(a.dp.toPx() / scale, b.dp.toPx() / scale))
+    cached.update(scale, density)
+    fun stroke(dp: Float, effect: PathEffect? = null) = cached.stroke(dp, effect)
+    fun dash(a: Float, b: Float) = cached.dash(a, b)
     val walkwayDash = if (detail == Detail.OVERVIEW) null else dash(1.3f, 4f)
     val tunnelDash = dash(5f, 4f)
     val highwayDash = if (detail == Detail.DETAIL) dash(5f, 6f) else null
@@ -44,7 +84,7 @@ internal fun DrawScope.drawMap(data: MapGeometry, projection: Projection, style:
         translate(origin.x, origin.y)
         scale(scale, scale, Offset.Zero)
     }) {
-        for ((geometry, type) in data.visibleLand(visible)) {
+        for ((geometry, type) in data.world.visibleLand(visible)) {
             if (type == LandUse.BUILDING && detail != Detail.DETAIL) continue
             val paint = style.land(type)
             val shape = data.path(geometry, detail)
@@ -52,43 +92,43 @@ internal fun DrawScope.drawMap(data: MapGeometry, projection: Projection, style:
             paint.edge?.let { drawPath(shape, it, style = stroke(if (type == LandUse.BUILDING) .55f else 1.1f)) }
         }
         if (walkwayDash != null) {
-            for (walk in data.visibleWalks(visible)) {
+            for (walk in data.world.visibleWalks(visible)) {
                 drawPath(data.path(walk, detail), style.muted.copy(alpha = .5f), style = stroke(1.3f, walkwayDash))
             }
         }
         val railDash = dash(5f, 3f)
-        for (rail in data.visibleRails(visible)) {
+        for (rail in data.world.visibleRails(visible)) {
             val path = data.path(rail, detail)
             drawPath(path, style.labelHalo, style = stroke(if (detail == Detail.OVERVIEW) 2f else 3f))
             drawPath(path, style.muted.copy(alpha = .85f), style = stroke(1.4f, railDash))
         }
-        for (layer in data.visibleRoads(visible)) {
+        for (layer in data.world.visibleRoads(visible)) {
             val roads = layer.filter { road ->
-                roadVisible(road.visual.roadClass, road.visual.structure, detail, road.planned, projection.visibleMeters)
+                roadVisible(road.visual.roadClass, road.visual.structure, detail, data.isPlanned(road), projection.visibleMeters)
             }
             for (road in roads) {
                 val (geometry, visual) = road
                 val paint = style.road(visual.roadClass, visual.structure)
                 val edgeWidth = if (visual.structure == RoadStructure.BRIDGE || visual.structure == RoadStructure.ELEVATED) 2f else 0f
-                drawPath(if (road.planned) geometry.shape else data.path(geometry, detail), paint.casing, style = stroke((paint.casingDp + edgeWidth) * roadFactor))
+                drawPath(if (data.isPlanned(road)) geometry.shape else data.path(geometry, detail), paint.casing, style = stroke((paint.casingDp + edgeWidth) * roadFactor))
             }
             for (road in roads) {
                 val (geometry, visual) = road
                 val paint = style.road(visual.roadClass, visual.structure)
-                val shape = if (road.planned) geometry.shape else data.path(geometry, detail)
+                val shape = if (data.isPlanned(road)) geometry.shape else data.path(geometry, detail)
                 drawPath(shape, paint.fill, style = stroke(paint.fillDp * roadFactor))
                 when {
                     visual.structure == RoadStructure.TUNNEL ->
                         drawPath(shape, style.tunnel.casing, style = stroke(1.2f, tunnelDash))
                     visual.roadClass == RoadClass.EXPRESSWAY && highwayDash != null ->
-                        drawPath(if (road.planned) geometry.shape else data.path(geometry, detail), paint.casing.copy(alpha = .65f), style = stroke(1f, highwayDash))
+                        drawPath(if (data.isPlanned(road)) geometry.shape else data.path(geometry, detail), paint.casing.copy(alpha = .65f), style = stroke(1f, highwayDash))
                 }
             }
         }
         drawPath(data.route.shape, style.routeHalo, style = stroke(routeWidth + 3.5f))
         drawPath(data.route.shape, style.route, style = stroke(routeWidth))
-        for (road in data.routeTunnels) if (road.geometry.bounds.intersects(visible)) {
-            drawPath(road.geometry.shape, style.routeHalo.copy(alpha = .88f), style = stroke(1.4f, tunnelDash))
+        for (road in data.routeTunnels) if (road.bounds.intersects(visible)) {
+            drawPath(road.shape, style.routeHalo.copy(alpha = .88f), style = stroke(1.4f, tunnelDash))
         }
     }
     val start = projection.offset(data.start)
@@ -110,7 +150,7 @@ internal fun DrawScope.drawMap(data: MapGeometry, projection: Projection, style:
         }
     }
     if (detail == Detail.DETAIL) for (road in data.routeTunnels) {
-        val points = road.geometry.points
+        val points = road.points
         drawPortal(projection.offset(points.first()), projection.offset(points[1]), style)
         drawPortal(projection.offset(points.last()), projection.offset(points[points.lastIndex - 1]), style)
     }
@@ -123,19 +163,26 @@ private fun DrawScope.drawPortal(at: Offset, toward: Offset, style: MapStyle) {
     drawLine(style.tunnel.casing, at - cross, at + cross, 2.dp.toPx(), StrokeCap.Round)
 }
 
-internal fun DrawScope.drawOverlay(overlay: MapOverlay, projection: Projection, style: MapStyle) {
-    val dash = PathEffect.dashPathEffect(floatArrayOf(7.dp.toPx(), 5.dp.toPx()))
-    overlay.trails.forEach { trail ->
-        if (trail.points.size < 2) return@forEach
-        val path = Path().apply {
-            trail.points.forEachIndexed { index, point ->
-                val at = projection.offset(point)
-                if (index == 0) moveTo(at.x, at.y) else lineTo(at.x, at.y)
+internal fun DrawScope.drawOverlay(
+    overlay: MapOverlay, projection: Projection, style: MapStyle,
+    paths: OverlayPathCache, strokes: MapStrokeCache,
+) {
+    if (overlay.trails.isNotEmpty()) {
+        val scale = projection.scale.toFloat()
+        val origin = projection.offset(Point2D(0.0, 0.0))
+        val visible = projection.visibleBounds(4.dp.toPx().toDouble())
+        strokes.update(scale, density)
+        val dash = strokes.dash(7f, 5f)
+        withTransform({
+            translate(origin.x, origin.y)
+            scale(scale, scale, Offset.Zero)
+        }) {
+            for ((trail, path) in paths.pathsFor(overlay.trails)) {
+                if (!path.bounds.intersects(visible)) continue
+                drawPath(path.shape, if (trail.estimated) style.estimate else style.driven,
+                    style = strokes.stroke(if (trail.estimated) 3.2f else 2.8f, if (trail.estimated) dash else null))
             }
         }
-        drawPath(path, if (trail.estimated) style.estimate else style.driven, style =
-            Stroke(if (trail.estimated) 3.2.dp.toPx() else 2.8.dp.toPx(), cap = StrokeCap.Round,
-                join = StrokeJoin.Round, pathEffect = if (trail.estimated) dash else null))
     }
     val raw = overlay.raw?.let(projection::offset)
     val rawMarker = raw?.let { at ->

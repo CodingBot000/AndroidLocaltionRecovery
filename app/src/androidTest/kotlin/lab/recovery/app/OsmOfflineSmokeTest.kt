@@ -6,6 +6,7 @@ import android.os.ParcelFileDescriptor
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
@@ -36,7 +37,7 @@ class OsmOfflineSmokeTest {
         val model = ViewModelProvider(rule.activity)[LabViewModel::class.java]
         rule.waitUntil(20_000) {
             model.state.value.scenario?.id == "ODEMO_LONG" &&
-                model.state.value.choices.any { it.id == "OL01" }
+                model.state.value.choices.any { it.id == "OL01" } && mapReady()
         }
         rule.onNodeWithTag("osm-attribution").assertIsDisplayed().performClick()
         rule.onNodeWithTag("osm-source-details").assertIsDisplayed()
@@ -52,7 +53,7 @@ class OsmOfflineSmokeTest {
             val choice = model.state.value.choices.single { it.id == id }
             model.send(UiIntent.Select(choice))
             rule.waitUntil(20_000) {
-                model.state.value.playback == Playback.READY && model.state.value.scenario?.id == id
+                model.state.value.playback == Playback.READY && model.state.value.scenario?.id == id && mapReady()
             }
             val scenario = checkNotNull(model.state.value.scenario)
             assertEquals(map, scenario.map?.id)
@@ -90,6 +91,8 @@ class OsmOfflineSmokeTest {
             assertEquals(snapshot, model.state.value.snapshot)
         }
     }
+
+    private fun mapReady() = rule.onAllNodesWithTag("camera-mode").fetchSemanticsNodes(false).isNotEmpty()
 
     private fun capture(name: String) {
         rule.waitForIdle()

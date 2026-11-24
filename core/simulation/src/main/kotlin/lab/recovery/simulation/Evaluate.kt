@@ -19,25 +19,33 @@ fun main(args: Array<String>) = runBlocking {
     val directory = File(args.getOrElse(0) { "fixtures/evaluation" })
     val extended = File(directory, "catalog.json").isFile
     val osm = extended && directory.name == "osm"
+    val challenge = extended && directory.name == "challenge" && directory.parentFile?.name == "osm"
     val files = if (directory.isFile) listOf(directory) else directory.listFiles { file -> file.extension == "json" }?.sorted()
     require(!files.isNullOrEmpty()) { "No fixture JSON files in $directory" }
     val evaluations = mutableListOf<Evaluation>()
     val loadChecks = mutableListOf<FixtureFailure>()
     if (extended) {
-        val root = checkNotNull(directory.absoluteFile.parentFile)
+        val root = if (challenge) directory.absoluteFile.parentFile.parentFile
+            else checkNotNull(directory.absoluteFile.parentFile)
         val repository = ScenarioRepository { File(root, it).inputStream() }
-        val catalog = if (osm) repository.osmCatalog else repository.catalog
-        val ids = catalog.entries.map(CatalogEntry::id).toSet()
-        val prefix = if (osm) "O" else ""
-        val userIds = (1..17).map { prefix + "L" + it.toString().padStart(2, '0') }.toSet() + (prefix + "DEMO_LONG")
-        require(ids.containsAll(userIds))
-        val userEntries = catalog.entries.filterNot(CatalogEntry::evaluation)
-        val independent = catalog.entries.filter(CatalogEntry::evaluation)
-        require(userEntries.map(CatalogEntry::id).containsAll(userIds))
-        require(catalog.maps.size >= 10 && userEntries.map(CatalogEntry::mapId).toSet() == catalog.maps.keys)
-        require(independent.map(CatalogEntry::mapId).toSet() == catalog.maps.keys)
-        catalog.entries.forEach {
-            evaluations += playToEnd(ReplaySession(if (osm) repository.readOsm(it.id) else repository.read(it.id)))
+        if (challenge) {
+            val cases = repository.challengeCatalog.entries.filter(CatalogEntry::evaluation)
+            require(cases.size >= 8) { "Challenge must include at least eight holdout cases" }
+            cases.forEach { evaluations += playToEnd(ReplaySession(repository.readChallenge(it.id))) }
+        } else {
+            val catalog = if (osm) repository.osmCatalog else repository.catalog
+            val ids = catalog.entries.map(CatalogEntry::id).toSet()
+            val prefix = if (osm) "O" else ""
+            val userIds = (1..17).map { prefix + "L" + it.toString().padStart(2, '0') }.toSet() + (prefix + "DEMO_LONG")
+            require(ids.containsAll(userIds))
+            val userEntries = catalog.entries.filterNot(CatalogEntry::evaluation)
+            val independent = catalog.entries.filter(CatalogEntry::evaluation)
+            require(userEntries.map(CatalogEntry::id).containsAll(userIds))
+            require(catalog.maps.size >= 10 && userEntries.map(CatalogEntry::mapId).toSet() == catalog.maps.keys)
+            require(independent.map(CatalogEntry::mapId).toSet() == catalog.maps.keys)
+            catalog.entries.forEach {
+                evaluations += playToEnd(ReplaySession(if (osm) repository.readOsm(it.id) else repository.read(it.id)))
+            }
         }
     } else for (file in files) {
         val expectedError = malformed[file.nameWithoutExtension]
@@ -54,7 +62,7 @@ fun main(args: Array<String>) = runBlocking {
     val tree = gson.toJsonTree(result).asJsonObject
     if (!extended) tree.getAsJsonArray("evaluations").forEach { it.asJsonObject.remove("extended") }
     val json = gson.toJson(tree)
-    val markdown = createReport(result)
+    val markdown = createReport(result, challenge)
     if (args.size >= 2) File(args[1]).apply { parentFile?.mkdirs(); writeText(json + "\n") }
     if (args.size >= 3) File(args[2]).apply { parentFile?.mkdirs(); writeText(markdown) }
     print(markdown)
@@ -63,7 +71,7 @@ fun main(args: Array<String>) = runBlocking {
     }
 }
 
-private fun createReport(result: EvaluationRun): String = buildString {
+private fun createReport(result: EvaluationRun, challenge: Boolean): String = buildString {
     appendLine("# 가상 위치 평가 결과")
     appendLine()
     appendLine("가상 관측의 JVM 재생 결과다. 비율은 건수/표본 수로 표시한다. N/A는 분모 또는 표본이 없음을 뜻한다.")
@@ -80,7 +88,13 @@ private fun createReport(result: EvaluationRun): String = buildString {
     appendLine()
     val extended = result.evaluations.filter { it.extended != null }
     if (extended.isNotEmpty()) {
-        if (extended.first().schemaVersion == 3) {
+        if (challenge) {
+            appendLine("CE는 별도 시드와 장애 패턴을 사용한 OSM 고난도 독립 평가다.")
+            appendLine()
+            appendLine("| 사례 | 매칭 보류(모호성) | 이탈 오탐 | 이탈 미탐 | 복구 미완료 |")
+            appendLine("|---|---:|---:|---:|---:|")
+            for (case in extended) appendLine("| ${case.scenarioId} | ${case.ambiguousMatches.display()} | ${case.departureFalsePositives} | ${case.departureMisses} | ${case.incompleteRecoveries} |")
+        } else if (extended.first().schemaVersion == 3) {
             appendLine("OL 및 ODEMO_LONG은 OSM 도로 위의 앱 가상 주행이며 OE는 별도의 평가 사례다.")
         } else {
             appendLine("L 및 DEMO_LONG은 앱 주행이며 E는 별도 시드·장애 시각의 평가 사례다.")

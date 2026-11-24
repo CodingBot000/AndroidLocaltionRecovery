@@ -1,6 +1,5 @@
 package lab.recovery.uimap
 
-import android.graphics.Paint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -17,6 +16,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +24,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +44,14 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import lab.recovery.map.Point2D
 import lab.recovery.map.RoadStructure
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
+
+private class PreparedMapSlot {
+    var key: Any? = null
+    var world: MapWorld? = null
+}
 
 @Composable
 fun RoadMap(
@@ -51,10 +62,38 @@ fun RoadMap(
     modifier: Modifier = Modifier,
     credits: MapCredits? = null,
     optimized: Boolean = true,
+    runId: Long = 0,
+    onMapReady: (Long) -> Unit = {},
 ) {
-    val geometry = remember(scene, optimized) { scene?.let { MapGeometry(it, optimized) } }
-    var mode by remember(scene) { mutableStateOf(CameraMode.FOLLOW) }
-    var free by remember(scene) { mutableStateOf<Projection?>(null) }
+    val slot = remember(optimized) { PreparedMapSlot() }
+    val prepared by produceState<MapGeometry?>(null, scene, runId, optimized) {
+        val target = scene
+        if (target == null) {
+            value = null
+            return@produceState
+        }
+        val key = target.dataKey ?: target.network
+        val existing = slot.world.takeIf { slot.key == key }
+        val geometry = withContext(Dispatchers.Default) {
+            val world = existing ?: MapWorld(target, optimized) { ensureActive() }
+            ensureActive()
+            MapGeometry(target, world)
+        }
+        ensureActive()
+        slot.key = key
+        slot.world = geometry.world
+        value = geometry
+    }
+    val geometry = prepared?.takeIf { it.scene === scene }
+    val mapReady by rememberUpdatedState(onMapReady)
+    LaunchedEffect(geometry, runId) {
+        if (geometry != null) {
+            withFrameNanos { }
+            mapReady(runId)
+        }
+    }
+    var mode by remember(scene, runId) { mutableStateOf(CameraMode.FOLLOW) }
+    var free by remember(scene, runId) { mutableStateOf<Projection?>(null) }
     var viewport by remember { mutableStateOf(IntSize.Zero) }
     var controlsBounds by remember { mutableStateOf(Rect.Zero) }
     var modeBounds by remember { mutableStateOf(Rect.Zero) }
@@ -92,12 +131,16 @@ fun RoadMap(
         CameraMode.OVERVIEW -> strings.overview
         CameraMode.FREE -> strings.free
     }
-    val paint = remember { Paint(Paint.ANTI_ALIAS_FLAG) }
+    val density = LocalDensity.current
+    val labelCache = remember(geometry, density) { MapLabelCache(density) }
+    val strokes = remember { MapStrokeCache() }
+    val trailPaths = remember(runId) { OverlayPathCache() }
+    val trailStrokes = remember { MapStrokeCache() }
     val shape = RoundedCornerShape(14.dp)
     val border = style.muted.copy(alpha = .32f)
     val hasTunnel = remember(geometry, credits != null) {
         if (credits != null) geometry?.routeTunnels?.isNotEmpty() == true
-        else geometry?.roadLayers?.any { layer -> layer.any { it.visual.structure == RoadStructure.TUNNEL } } == true
+        else geometry?.world?.roadLayers?.any { layer -> layer.any { it.visual.structure == RoadStructure.TUNNEL } } == true
     }
     Box(modifier.clip(shape).background(style.background).border(1.dp, border, shape)
         .testTag("tracking-map").semantics { contentDescription = strings.map }
@@ -112,20 +155,28 @@ fun RoadMap(
             if (viewport.width < 1 || viewport.height < 1) return@Canvas
             val camera = projection(data)
             val detail = mapDetail(mode, camera.visibleMeters)
-            drawMap(data, camera, style, detail)
+            drawMap(data, camera, style, detail, strokes)
             if (!optimized) {
-                drawOverlay(latest, camera, style)
+                drawOverlay(latest, camera, style, trailPaths, trailStrokes)
                 val occupied = listOf(modeBounds, controlsBounds, creditBounds, tunnelBounds)
-                drawMapLabels(data, camera, detail, style, latest, occupied, paint)
+                drawMapLabels(data, camera, detail, style, latest, occupied, labelCache)
             }
         }
         if (optimized) Canvas(Modifier.matchParentSize()) {
             val data = geometry ?: return@Canvas
             if (viewport.width < 1 || viewport.height < 1) return@Canvas
             val camera = projection(data)
-            drawOverlay(latest, camera, style)
+            drawOverlay(latest, camera, style, trailPaths, trailStrokes)
+        }
+        if (optimized) Canvas(Modifier.matchParentSize()) {
+            val data = geometry ?: return@Canvas
+            if (viewport.width < 1 || viewport.height < 1) return@Canvas
+            val camera = projection(data)
             val occupied = listOf(modeBounds, controlsBounds, creditBounds, tunnelBounds)
-            drawMapLabels(data, camera, mapDetail(mode, camera.visibleMeters), style, latest, occupied, paint)
+            drawMapLabels(data, camera, mapDetail(mode, camera.visibleMeters), style, latest, occupied, labelCache)
+        }
+        if (scene != null && geometry == null) {
+            CircularProgressIndicator(Modifier.align(Alignment.Center).size(24.dp).testTag("map-preparing"))
         }
         if (geometry != null) {
             credits?.let {

@@ -30,14 +30,12 @@ data class Road(
 ) {
     init { require(points.size >= 2) }
 
-    private val minX = points.minOf { it.x }
-    private val minY = points.minOf { it.y }
-    private val maxX = points.maxOf { it.x }
-    private val maxY = points.maxOf { it.y }
+    val bounds = WorldBounds(points.minOf(Point2D::x), points.minOf(Point2D::y),
+        points.maxOf(Point2D::x), points.maxOf(Point2D::y))
 
     fun withinBounds(point: Point2D, radius: Double): Boolean =
-        point.x >= minX - radius && point.x <= maxX + radius &&
-            point.y >= minY - radius && point.y <= maxY + radius
+        point.x >= bounds.minX - radius && point.x <= bounds.maxX + radius &&
+            point.y >= bounds.minY - radius && point.y <= bounds.maxY + radius
 
     val segments = points.zipWithNext().mapIndexed { index, (from, to) -> Segment(index, from, to) }
     private val starts = segments.runningFold(0.0) { sum, segment -> sum + segment.length }

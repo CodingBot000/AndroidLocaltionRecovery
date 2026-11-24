@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -31,12 +30,15 @@ import lab.recovery.uimap.MarkerKind
 import lab.recovery.uimap.RoadMap
 
 @Composable
-internal fun TrackingMap(state: UiState, modifier: Modifier, dark: Boolean = false, optimized: Boolean = true) {
+internal fun TrackingMap(
+    state: UiState, modifier: Modifier, dark: Boolean, optimized: Boolean,
+    onMapReady: (Long) -> Unit,
+) {
     val scenario = state.scenario
     val source = scenario?.map?.osm
     var sourceOpen by remember(scenario) { mutableStateOf(false) }
     val scene = remember(scenario) {
-        scenario?.let { MapScene(it.roads.network, it.roads.route, it.map?.visual ?: MapVisualData(), source?.bounds) }
+        scenario?.let { MapScene(it.roads.network, it.roads.route, it.map?.visual ?: MapVisualData(), source?.bounds, it.map?.checksum) }
     }
     val snapshot = state.snapshot
     val raw = snapshot.lastObservation?.takeIf {
@@ -67,9 +69,8 @@ internal fun TrackingMap(state: UiState, modifier: Modifier, dark: Boolean = fal
     val strings = MapStrings(stringResource(if (source == null) R.string.synthetic_map else R.string.osm_map), stringResource(R.string.camera_follow),
         stringResource(R.string.camera_overview), stringResource(R.string.camera_free),
         stringResource(R.string.camera_zoom_in), stringResource(R.string.camera_zoom_out), stringResource(R.string.map_tunnel))
-    key(state.runId) {
-        RoadMap(scene, overlay, dark, strings, modifier, source?.let { MapCredits(it.attribution) { sourceOpen = true } }, optimized)
-    }
+    RoadMap(scene, overlay, dark, strings, modifier,
+        source?.let { MapCredits(it.attribution) { sourceOpen = true } }, optimized, state.runId, onMapReady)
     if (sourceOpen && source != null) {
         AlertDialog(onDismissRequest = { sourceOpen = false },
             title = { Text(stringResource(R.string.osm_data_source)) },

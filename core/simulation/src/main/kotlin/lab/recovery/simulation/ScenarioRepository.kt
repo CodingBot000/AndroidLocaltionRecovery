@@ -45,8 +45,11 @@ data class ScenarioCatalog(val maps: Map<String, LocalizedText>, val entries: Li
 }
 
 class ScenarioRepository(private val source: FixtureSource) {
+    private data class LoadedMap(val path: String, val map: MapDefinition, val byteCount: Int)
+    @Volatile private var lastMap: LoadedMap? = null
     val catalog: ScenarioCatalog by lazy { readCatalog("extended", 2L) }
     val osmCatalog: ScenarioCatalog by lazy { readCatalog("osm", 3L) }
+    val challengeCatalog: ScenarioCatalog by lazy { readCatalog("osm/challenge", 3L) }
 
     fun readLegacy(path: String): Scenario {
         require(path == "development/DEMO.json" || legacyPath.matches(path))
@@ -57,12 +60,21 @@ class ScenarioRepository(private val source: FixtureSource) {
 
     fun readOsm(id: String): Scenario = readDataset(id, "osm", osmCatalog, FixtureProfile.OSM)
 
-    private fun readDataset(id: String, directory: String, catalog: ScenarioCatalog, profile: FixtureProfile): Scenario = fixtureSchema {
+    fun readChallenge(id: String): Scenario =
+        readDataset(id, "osm/challenge", challengeCatalog, FixtureProfile.OSM, mapDirectory = "osm")
+
+    private fun readDataset(
+        id: String, directory: String, catalog: ScenarioCatalog, profile: FixtureProfile, mapDirectory: String = directory,
+    ): Scenario = fixtureSchema {
         val entry = catalog.entries.singleOrNull { it.id == id } ?: error("Unknown scenario $id")
-        val mapBytes = fixtureBytes(source.open("$directory/maps/${entry.mapId}.json"), profile.byteLimit)
-        val map = parseMap(fixtureObject(mapBytes), entry.mapId, sha256(mapBytes), profile)
-        val group = if (entry.evaluation) "evaluation" else "scenarios"
-        val scenario = FixtureReader.read(source.open("$directory/$group/$id.json"), profile, map, profile.byteLimit - mapBytes.size)
+        val path = "$mapDirectory/maps/${entry.mapId}.json"
+        val loaded = lastMap?.takeIf { it.path == path } ?: run {
+            val bytes = fixtureBytes(source.open(path), profile.byteLimit)
+            LoadedMap(path, parseMap(fixtureObject(bytes), entry.mapId, sha256(bytes), profile), bytes.size)
+                .also { lastMap = it }
+        }
+        val group = if (entry.evaluation) "evaluation" else if (directory == "osm/challenge") "development" else "scenarios"
+        val scenario = FixtureReader.read(source.open("$directory/$group/$id.json"), profile, loaded.map, profile.byteLimit - loaded.byteCount)
         require(scenario.id == id && scenario.durationMs == entry.durationMs && scenario.title == entry.title.english)
         scenario
     }
@@ -89,7 +101,8 @@ class ScenarioRepository(private val source: FixtureSource) {
         require(entries.distinctBy { it.id }.size == entries.size)
         require(entries.all {
             identifier.matches(it.id) && it.mapId in maps && (!it.representative || !it.evaluation) &&
-                it.durationMs in if (it.representative) 150_000L..180_000L else 90_000L..120_000L
+                it.durationMs in if (directory == "osm/challenge") 90_000L..180_000L
+                    else if (it.representative) 150_000L..180_000L else 90_000L..120_000L
         })
         require(entries.count { it.representative } == 1)
         ScenarioCatalog(maps, entries)

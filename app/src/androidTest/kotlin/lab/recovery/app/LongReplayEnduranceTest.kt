@@ -6,6 +6,7 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
@@ -33,7 +34,8 @@ class LongReplayEnduranceTest {
         }
         model.send(UiIntent.Select(model.state.value.choices.first { it.id == "DEMO_LONG" }))
         rule.waitUntil(10_000) {
-            model.state.value.playback == Playback.READY && model.state.value.scenario?.id == "DEMO_LONG"
+            model.state.value.playback == Playback.READY && model.state.value.scenario?.id == "DEMO_LONG" &&
+                rule.onAllNodesWithTag("camera-mode").fetchSemanticsNodes(false).isNotEmpty()
         }
         val duration = checkNotNull(model.state.value.scenario).durationMs
         assertEquals("DEMO_LONG", model.state.value.selected.id)
@@ -99,6 +101,9 @@ class LongReplayEnduranceTest {
         }
         note("after-three-resets")
         rule.onNodeWithTag("lab-screen").performScrollToNode(hasTestTag("overview"))
+        rule.waitUntil(5_000) {
+            rule.onAllNodesWithTag("camera-mode").fetchSemanticsNodes(false).isNotEmpty()
+        }
         rule.onNodeWithTag("overview").performClick()
     }
 }

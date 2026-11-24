@@ -97,7 +97,8 @@ class TrackingEngine(
         val newMatch = match.confirmed
         if (priorCandidate != null && priorMatch != null && newMatch != null &&
             !recoveryRoadContinuous(graph, priorMatch, newMatch,
-                movementLimit(priorCandidate.observation, observation, settings))
+                movementLimit(priorCandidate.observation, observation, settings),
+                movementUncertainty(priorCandidate.observation, observation, settings))
         ) {
             reject(observation, Reason.RECOVERY_ROAD_DISCONTINUITY, before, breaksRecovery = true)
             return

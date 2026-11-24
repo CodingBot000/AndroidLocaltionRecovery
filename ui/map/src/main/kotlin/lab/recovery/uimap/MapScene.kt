@@ -10,6 +10,7 @@ data class MapScene(
     val route: RoutePlan,
     val visual: MapVisualData,
     val worldBounds: List<Double>? = null,
+    val dataKey: String? = null,
 )
 
 data class MapCredits(val text: String, val onClick: () -> Unit)

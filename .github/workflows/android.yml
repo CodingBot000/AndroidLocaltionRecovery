@@ -46,6 +46,8 @@ jobs:
         run: ./gradlew :core:simulation:run --args='fixtures/extended build/reports/extended.json build/reports/extended.md'
       - name: Run offline OSM evaluation
         run: ./gradlew :core:simulation:run --args='fixtures/osm build/reports/osm-evaluation.json build/reports/osm-evaluation.md'
+      - name: Run OSM challenge holdout
+        run: ./gradlew :core:simulation:run --args='fixtures/osm/challenge build/reports/osm-challenge.json build/reports/osm-challenge.md'
       - name: Preserve verification reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -60,3 +62,4 @@ jobs:
             build/reports/legacy-demo.*
             build/reports/extended.*
             build/reports/osm-evaluation.*
+            build/reports/osm-challenge.*

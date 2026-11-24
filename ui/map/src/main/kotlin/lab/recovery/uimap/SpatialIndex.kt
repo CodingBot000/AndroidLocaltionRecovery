@@ -1,52 +1,16 @@
 package lab.recovery.uimap
 
 import lab.recovery.map.Point2D
-import kotlin.math.floor
+import lab.recovery.map.SpatialGrid
+import lab.recovery.map.WorldBounds
 
-/** Fixed world-space cells preserve source drawing order. Very large shapes use a small side list. */
-internal class SpatialIndex<T>(
-    private val items: List<T>,
-    private val bounds: (T) -> Bounds,
-) {
-    private val cells = mutableMapOf<Long, MutableList<Int>>()
-    private val wide = mutableListOf<Int>()
+internal class SpatialIndex<T>(items: List<T>, checkpoint: () -> Unit = {}, bounds: (T) -> Bounds) {
+    private val world = SpatialGrid(items, 192.0, { bounds(it).worldBounds() }, checkpoint)
 
-    init {
-        items.forEachIndexed { index, item ->
-            val (left, bottom, right, top) = range(bounds(item))
-            if ((right - left + 1L) * (top - bottom + 1L) > 32) wide += index
-            else for (x in left..right) for (y in bottom..top) {
-                cells.getOrPut(key(x, y)) { mutableListOf() }.add(index)
-            }
-        }
-    }
-
-    fun visible(area: Bounds): List<T> {
-        if (items.isEmpty()) return emptyList()
-        val (left, bottom, right, top) = range(area)
-        if ((right - left + 1L) * (top - bottom + 1L) > cells.size * 2L + 64) {
-            return items.filter { bounds(it).intersects(area) }
-        }
-        val indices = java.util.BitSet(items.size)
-        for (index in wide) indices.set(index)
-        for (x in left..right) for (y in bottom..top) {
-            cells[key(x, y)]?.forEach { indices.set(it) }
-        }
-        return buildList {
-            var index = indices.nextSetBit(0)
-            while (index >= 0) {
-                val item = items[index]
-                if (bounds(item).intersects(area)) add(item)
-                index = indices.nextSetBit(index + 1)
-            }
-        }
-    }
-
-    private data class Cells(val left: Int, val bottom: Int, val right: Int, val top: Int)
-    private fun range(box: Bounds) = Cells(cell(box.minX), cell(box.minY), cell(box.maxX), cell(box.maxY))
-    private fun cell(meters: Double) = floor(meters / 192).toInt()
-    private fun key(x: Int, y: Int) = (x.toLong() shl 32) or (y.toLong() and 0xffffffff)
+    fun visible(area: Bounds): List<T> = world.query(area.worldBounds())
 }
+
+private fun Bounds.worldBounds() = WorldBounds(minX, minY, maxX, maxY)
 
 internal fun Point2D.bounds() = Bounds(x, y, x, y)
 

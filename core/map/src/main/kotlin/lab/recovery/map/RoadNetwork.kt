@@ -17,6 +17,7 @@ class RoadNetwork(
 ) {
     val nodes = nodes.associateBy(RoadNode::id)
     val edges = edges.associateBy(RoadEdge::id)
+    val roadGrid by lazy { SpatialGrid(this.edges.values.map(RoadEdge::road), 120.0, Road::bounds) }
     private val transitions = transitions.mapValues { (_, next) -> next.toList() }
 
     init {

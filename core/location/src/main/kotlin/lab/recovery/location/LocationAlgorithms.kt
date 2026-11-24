@@ -2,6 +2,7 @@ package lab.recovery.location
 
 import lab.recovery.map.Point2D
 import lab.recovery.map.RoadGraph
+import lab.recovery.map.WorldBounds
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -13,16 +14,34 @@ fun angleDifference(first: Double, second: Double): Double {
     return min(difference, 360 - difference)
 }
 
-class MapMatcher(private val graph: RoadGraph, private val settings: TrackingSettings) {
+class MapMatcher(
+    private val graph: RoadGraph,
+    private val settings: TrackingSettings,
+    useSpatialIndex: Boolean = true,
+) {
+    private val index = if (useSpatialIndex) graph.network.roadGrid else null
+    private val ordering = compareBy(MatchCandidate::cost, MatchCandidate::roadId, MatchCandidate::segment)
+
+    fun candidateRoads(point: Point2D): List<String> = searchRoads(point).map { it.id }
+
+    private fun searchRoads(point: Point2D): List<lab.recovery.map.Road> {
+        val radius = settings.searchRadius
+        if (!point.finite) return emptyList()
+        val roads = if (index == null) graph.roads else {
+            // Expand the grid query conservatively, then apply the original exact bounds predicate.
+            val safe = radius + 4 * Math.ulp(maxOf(abs(point.x), abs(point.y), radius))
+            index.query(WorldBounds(point.x - safe, point.y - safe, point.x + safe, point.y + safe))
+        }
+        return roads.filter { it.withinBounds(point, radius) }
+    }
+
     fun match(observation: LocationObservation, previousRoad: String?): MatchResult {
         val useHeading = observation.headingDegrees != null &&
             observation.speedMps?.let { it in settings.minimumHeadingSpeed..settings.maximumSpeed } == true
         val normalization = settings.distanceWeight + settings.planWeight +
             (if (useHeading) settings.headingWeight else 0.0) +
             (if (previousRoad != null) settings.continuityWeight else 0.0)
-        val ordering = compareBy(MatchCandidate::cost, MatchCandidate::roadId, MatchCandidate::segment)
-        val candidates = graph.roads.mapNotNull { road ->
-            if (!road.withinBounds(observation.point, settings.searchRadius)) return@mapNotNull null
+        val candidates = searchRoads(observation.point).mapNotNull { road ->
             val continuity = when {
                 previousRoad == null || previousRoad == road.id -> 0.0
                 graph.connected(previousRoad, road.id) -> 0.5
@@ -71,10 +90,12 @@ internal fun withinMovement(previous: LocationObservation, next: LocationObserva
     return seconds > 0 && previous.point.distance(next.point) <= movementLimit(previous, next, settings)
 }
 
+internal fun movementUncertainty(previous: LocationObservation, next: LocationObservation, settings: TrackingSettings): Double =
+    min(settings.uncertaintyLimit, previous.accuracyMeters + next.accuracyMeters)
+
 internal fun movementLimit(previous: LocationObservation, next: LocationObservation, settings: TrackingSettings): Double {
     val seconds = (next.measuredAtMs - previous.measuredAtMs) / 1000.0
-    val uncertainty = min(settings.uncertaintyLimit, previous.accuracyMeters + next.accuracyMeters)
-    return seconds * settings.maximumSpeed + uncertainty
+    return seconds * settings.maximumSpeed + movementUncertainty(previous, next, settings)
 }
 
 internal data class Estimate(val position: Point2D? = null, val road: String? = null, val reason: Reason? = null)
@@ -102,8 +123,13 @@ internal fun recoveryRoadContinuous(
     first: MatchCandidate,
     next: MatchCandidate,
     maximumDistance: Double,
+    backwardTolerance: Double = 0.0,
 ): Boolean {
-    if (first.roadId == next.roadId) return true
+    if (first.roadId == next.roadId) {
+        if (graph.legacy) return true
+        // Offset follows the directed polyline. Only measurement error can explain a small reversal.
+        return next.offset - first.offset in -backwardTolerance..maximumDistance
+    }
     if (graph.legacy) return graph.connected(first.roadId, next.roadId)
 
     data class Departure(val roadId: String, val distance: Double)

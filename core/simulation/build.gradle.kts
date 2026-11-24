@@ -16,6 +16,9 @@ application {
 }
 tasks.withType<Test>().configureEach {
     systemProperty("fixtureRoot", rootProject.file("fixtures").absolutePath)
+    providers.gradleProperty("matchingProfile").orNull?.let {
+        systemProperty("matchingProfile", rootProject.file(it).absolutePath)
+    }
 }
 tasks.named<JavaExec>("run") {
     workingDir = rootProject.projectDir

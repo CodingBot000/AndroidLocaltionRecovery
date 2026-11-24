@@ -6,6 +6,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -42,7 +43,8 @@ class MapQualityCaptureTest {
             rule.onNodeWithTag("scenario-menu").performClick()
             rule.onNodeWithTag("scenario-${scene.scenario}").performScrollTo().performClick()
             rule.waitUntil(10_000) {
-                model.state.value.playback == Playback.READY && model.state.value.scenario?.id == scene.scenario
+                model.state.value.playback == Playback.READY && model.state.value.scenario?.id == scene.scenario &&
+                    rule.onAllNodesWithTag("camera-mode").fetchSemanticsNodes(false).isNotEmpty()
             }
             val detailed = scene.map in setOf("M01", "M10")
             if (detailed) capture("${scene.map}-initial")
