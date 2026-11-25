@@ -79,3 +79,8 @@ API 30 이상에서 Live 화면은 자체 앱 종료 사유·시간·importance�
 공식 Android 동작을 2026-11-25에 확인했다. [ANR 진단](https://developer.android.com/topic/performance/anrs/diagnose-and-fix-anrs) · [ApplicationExitInfo](https://developer.android.com/reference/android/app/ApplicationExitInfo)
 
 [수용 게이트와 성능 원본](verification.md)
+
+
+## API 31 실기기 GPS 무수신 재검증
+
+과거 120초의 callback 0건을 기준선에서 재시험했다. 현재 실내에서 Live와 직접 GPS 요청 모두 fresh 위치를 받아 과거 실패의 원인은 미확정으로 남겼다. Android GNSS 상태와 위치 listener를 순서대로 대조했고, 운영 GPS 정책은 그대로 사용했다. [실기기 RCA](real-device-final-validation.md#rd1-기존-gps-무수신-재검증)

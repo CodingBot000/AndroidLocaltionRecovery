@@ -14,6 +14,10 @@
 
 [최신 검증](verification.md#api-26-48mib-o10-수정-재검증) · [플랫폼 성능](verification.md#성능-비교와-자원)
 
+## SM-G975N / Android 12 재검증
+
+최신 main `d0b3822`에서 기존 실제 GPS 테스트, 직접 GPS 대조, O01·O10 FGS와 현재 GPS listener 시작·정지 20회를 통과했다. 아래 이전 실기기 표의 120초 무수신 상태는 해당 실행의 이력이다. SM-G975N 측정 조건과 최신 OSM 성능·메모리 결과는 별도 보고서에서 확인한다. [실기기 최종 검증](real-device-final-validation.md)
+
 ## 이전 실기기 측정 이력
 
 아래 S22 Ultra 수치는 이전 합성 지도 빌드에 대한 기록이며 최신 OSM 버전 성능을 대표하지 않는다.

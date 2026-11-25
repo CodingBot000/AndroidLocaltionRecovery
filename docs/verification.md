@@ -4,7 +4,7 @@
 
 ## 최신 구현 검증 요약
 
-구현 기준 [main `d9cd5da`](https://github.com/CodingBot000/AndroidLocaltionRecovery/tree/d9cd5da5972898c2b1c372de91977647fa41cacc) · [CI 45571046077](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45571046077) (2026-11-25, build-and-test 및 live-api36 성공).
+구현 기준 [main `d0b3822`](https://github.com/CodingBot000/AndroidLocaltionRecovery/tree/d0b3822bebe65187d20401a1b8cdf6e49d6205c6) · [CI 45595529668](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45595529668) (2026-11-25, build-and-test 및 live-api36 성공).
 
 | 검사 | 결과 | 범위 |
 |---|---|---|
@@ -14,10 +14,10 @@
 | Live 계측 | PASS | API 26·31·33·34·36 에뮬레이터, 원격 API 36 |
 | 저메모리 회귀 | PASS | API 26·48MiB O10 기동 및 반복 |
 | 실기기 Live 서비스 | PASS | API 31 시작·종료 |
-| 실기기 실제 GPS | FAIL | 120초 내 callback 0건 |
-| 최신 OSM 실기기 Macrobenchmark·배터리 | 미완료 | 과거 실기기 및 최신 에뮬레이터 기록 별도 보존 |
+| 실기기 실제 GPS | PASS · 현재 실내 조건 | 기준선 앱에서 GPS fresh 수신. 과거 120초 무수신 원인은 INCONCLUSIVE |
+| 최신 OSM 실기기 Macrobenchmark·배터리 | Macrobenchmark PASS · 전력 A/B NOT_RUN | [실기기 최종 검증](real-device-final-validation.md) |
 
-CI 통과와 실기기 GPS 실패는 별개의 결과다.
+에뮬레이터 CI와 실기기 GPS·성능의 판정 범위는 각 실행 기록에서 확인할 수 있다.
 
 ## 주요 기록 바로가기
 
@@ -311,3 +311,8 @@ adb -d shell am instrument -w -r -e class lab.recovery.live.LiveRealDeviceSmokeT
 - API 34에서 Live 3개와 비행기 모드 기본 앱 10개, API 26·48MiB에서 기본 앱 2개와 Live 2개가 통과했다. API 26에서 mock provider 테스트 1개를 건너뛰었다.
 - API 33 Live 3개와 위치·알림 권한 계측, JVM 70개·Lint·APK 검증, 평가 84개와 로드 오류 3개를 통과했다.
 - 기준선 실패·복원 대조, 원격 실험 및 미실행 항목은 RCA에 기록했다. [Compose 계측 RCA](compose-slot-table-rca.md)
+
+
+### SM-G975N 실기기 기준선 재검증
+
+초기 기준 `d0b3822`의 원본 GPS 테스트와 독립 GPS probe, 현재 FGS와 GPS listener 20회 시작·해제 및 별도 화면 OFF 구간을 계측했다. 또한 오프라인 기존 계측 3개와 같은 프로세스의 O10 1× 재생·Reset 10회가 통과했다. 30분 재생, Perfetto 및 열·메모리 관측은 실기기 보고서에 기록했다. [실기기 최종 검증](real-device-final-validation.md)
