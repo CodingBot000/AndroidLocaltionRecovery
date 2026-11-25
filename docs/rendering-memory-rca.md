@@ -2,14 +2,29 @@
 
 **PARTIAL** · SM-G975N에서 기준선과 후보의 렌더링 및 30분 재생을 검증했다. 두 점 도로 후보는 전환 프레임 CPU와 재생 후 유휴 PSS를 개선했으나 기동 및 주행 성능의 수용 기준을 충족하지 못해 기각했다. [익명화 집계](benchmarks/sm-g975n-render-memory-optimization.json)
 
+## 핵심 판단
+
+| 성능 지표 | 기준 A | 후보 B | 판정 |
+|---|---:|---:|---|
+| 전환 Frame CPU P95 | 92.5ms | 62.0ms | 감소 |
+| 전환 Frame Overrun P95 | 79.2ms | 73.5ms | 개선 목표 20% 미달 |
+| 주행 Frame Overrun P95 | 68.5ms | 85.0ms | 회귀 |
+| 콜드 TTFD 중앙값 | 1,388.2ms | 1,808.9ms | 회귀 |
+| 유휴 120초 전체 PSS | 389,423KiB | 363,655KiB | 개선 목표 15% 미달 |
+| 유휴 120초 네이티브 힙 PSS | 109,902KiB | 102,223KiB | 개선 목표 20% 미달 |
+
+**후보 기각:** 기존 제품 렌더러는 유지한다. 렌더링은 같은 실기기에서 시나리오별 9회, 메모리 내구는 빌드별 180초 × 10회(독립 내구 실행 1회)씩 순차 측정했다. 측정 순서에 따른 환경 편향이 남으며 앱 CPU·프레임 차이의 인과와 반복 PSS 증가 기전은 미확정이다.
+
+[실험 패치](benchmarks/two-point-road-strokes.patch) · [렌더링 지표 설명](rendering-memory-interview-notes.md) · [통합 검증](verification.md)
+
 ## 기준과 실험 환경
 
-- 기준 A는 `a067a970bbe0e69797fb8eb319e78ae22bd01f94`다. 원격 `main`과 PR #4의 두 CI 작업을 확인했다. 기존 사용자 작업 트리에서 별도 브랜치와 기준선 worktree를 만들었다. [기준 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45641629312)
+- 기준 A는 `a067a970bbe0e69797fb8eb319e78ae22bd01f94`다. 원격 `main`과 PR #4의 두 CI 작업을 확인했다. 기준선과 후보를 격리 worktree에서 관리했다. [기준 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45641629312)
 - SM-G975N, Exynos 9820, Android 12 API 31, ARM64, 1080×2280 화면 오버라이드, density 420, 약 60Hz에서 USB를 연결했다. A의 각 세트 시작과 종료 시 thermal status는 0이었다. 배터리 온도는 25.7–30.1°C였고, 애니메이션 스케일과 화면 설정은 유지했다. 열 상태 0에서도 클럭과 백그라운드 부하는 달라질 수 있다.
 - 렌더링은 JDK 17, SDK 36, Compose BOM 2025.08.00(UI 1.9.0), Kotlin 2.2.21, AndroidX Benchmark 1.5.0으로 빌드했다. 대상 APK는 Release 상속 `benchmark` 변형으로 `profileable`이며 benchmark 모드는 `CompilationMode.None()`이다. 준비 신호, O10→O07→O10 및 O10 1× 주행·Zoom out·Overview·Follow는 기존 `RefactorMapBenchmark`를 실행했다. A의 제품 소스와 원본 workload에 별도 어댑터가 필요하지 않았다.
 - 과거 기준 H는 `653e311`에 Benchmark 패키지에서만 동작하는 `MainActivity.onNewIntent` 시나리오 선택 어댑터를 추가한 빌드다. 이전 실기기 보고서의 원본 trace, frame sample 및 메모리 로그를 로컬에서 확인했다. 당시 경로에 남아 있는 APK 상당수는 기록된 SHA-256과 달라 과거 측정에는 당시의 원본 자료를 사용했다. 현재 A의 APK 6개는 로컬 보고 경로에 별도로 복사하고 해시를 확인했다. [과거 실기기 보고서](real-device-final-validation.md)
 - 이전 H와 최신 A의 Follow 복귀 동작에는 차이가 있다. `83a5e7f` 이후에는 사용자가 선택한 축척을 복원하므로, 같은 버튼을 눌러도 6초 이후 지도 범위가 달라질 수 있다. 후보는 A의 카메라 계약에 맞춰 평가한다.
-- 이번 시험 동안 사용자 승인에 따라 30분 오프라인 계측에서만 비행기 모드 ON, Wi‑Fi OFF로 전환한다. 시험 전 설정을 저장하고 성공·실패 시 복원한다. 충전 및 온도는 조건 기록에 사용한다. 배터리 A/B는 **NOT_RUN**이다.
+- 30분 오프라인 계측에서만 비행기 모드 ON, Wi-Fi OFF로 전환했다. 시험 전 설정을 저장하고 성공·실패 시 복원한다. 충전 및 온도는 조건 기록에 사용한다. 배터리 A/B는 **NOT_RUN**이다.
 
 ## 실기기 렌더링 기준선
 
@@ -45,7 +60,7 @@ AndroidX 지표에 포함된 원시 표본과 FrameTimeline의 앱 surface token
 
 ## 후보의 변경 범위와 화면 검증
 
-후보는 최적화된 하드웨어 렌더러에서 서로 다른 두 점만 가진 도로의 외곽선과 채움을 Canvas 선분으로 기록한다. 기존 도로 순서, 폭, 색상, 둥근 선 끝, 카메라, 경로와 라벨을 유지한다. 두 점이 같은 경우, 여러 점을 가진 도로, 터널·고속도로 점선과 API 26 소프트웨어 fallback은 기존 Path 경로를 통과한다. 최신 코드에서 주행의 RenderThread 실행 비중이 크고 입력 O10의 18,490개 edge 중 10,938개가 두 점으로 구성되어 이 변수를 골랐다. 그 차이가 렌더링과 메모리에 주는 효과는 각각의 실기기 A/B에서 검증한다.
+후보는 최적화된 하드웨어 렌더러에서 서로 다른 두 점만 가진 도로의 외곽선과 채움을 Canvas 선분으로 기록한다. 기존 도로 순서, 폭, 색상, 둥근 선 끝, 카메라, 경로와 라벨을 유지한다. 두 점이 같은 경우, 여러 점을 가진 도로, 터널·고속도로의 점선 오버레이와 API 26 소프트웨어 fallback은 기존 Path 경로를 통과한다. 최신 코드에서 주행의 RenderThread 실행 비중이 크고 입력 O10의 18,490개 edge 중 10,938개가 두 점으로 구성되어 이 변수를 골랐다. 그 차이가 렌더링과 메모리에 주는 효과는 각각의 실기기 A/B에서 검증한다.
 
 API 36 ARM64 에뮬레이터에서 기준선과 후보의 Release 상속 APK를 따로 설치했다. O01, O07, O10에서 동일한 일시정지 재생 시각·카메라 상태를 확인하고 Follow, 확대/축소, Overview, 야간 지도 12개 영역을 비교했다. 10개 영역은 RGB가 일치했다. O10 Follow에서 3픽셀, 축소한 O10에서 1픽셀이 달랐다. 변경된 4픽셀은 모두 기준 이미지의 색상 경계에 있었고, 균일한 내부 영역 변화는 0픽셀이었다. 앱과 Live에 패키징된 fixture도 모두 바이트 단위로 일치했다.
 
@@ -128,8 +143,10 @@ API 33에서 지도가 준비된 뒤 heapprofd를 붙여 `libc.malloc`을 64KiB 
 후보 APK를 다시 만들 때는 기준 SHA에서 격리 worktree를 만들고 실험 패치를 적용한다.
 
 ```bash
+DOC_ROOT="$PWD" # 보고서와 집계 스크립트가 있는 저장소 루트
 git worktree add --detach ../render-memory-trial a067a97
-git -C ../render-memory-trial apply "$PWD/docs/benchmarks/two-point-road-strokes.patch"
+git -C ../render-memory-trial apply "$DOC_ROOT/docs/benchmarks/two-point-road-strokes.patch"
+cd ../render-memory-trial
 ```
 
 ```bash
@@ -146,8 +163,8 @@ adb -d shell am instrument -w -r -e physicalEndurance true \
 실기기 한 대에서 `install -r`로 해당 APK 쌍을 설치한다. 원본 benchmark JSON과 trace는 실행 직후 세트별 디렉터리로 복사하고, 같은 세트의 `switchO10ToO07Ms` 세 값은 `switch-ready-ms.json`에 배열로 저장한다. AndroidJUnitRunner 결과, `measureBlock`, expected/actual FrameTimeline 및 환경을 확인한 세트에 집계 도구를 사용한다. 메모리 로그는 계측 직전부터 `adb -d logcat -v epoch -T 1 -s PhysicalOsmEndurance:I`로 수집한다.
 
 ```bash
-python3 -B tools/summarize_render_benchmark.py <set-1> <set-2> <set-3> --output benchmark.json
-python3 -B tools/summarize_render_endurance.py <private-logcat> --output endurance.json
+python3 -B "$DOC_ROOT/tools/summarize_render_benchmark.py" /path/to/set-1 /path/to/set-2 /path/to/set-3 --output benchmark.json
+python3 -B "$DOC_ROOT/tools/summarize_render_endurance.py" /path/to/private-logcat --output endurance.json
 ```
 
 재사용한 Perfetto Trace Processor는 v59.1, RPC API 14다. 링크된 Android와 Perfetto 문서를 2026-11-26 KST에 확인했다. Android 12의 Java heap graph는 Java 참조와 dominator에 사용하고, 네이티브 할당은 별도 heapprofd의 샘플링 결과에서 본다. [Compose 단계와 상태 읽기](https://developer.android.com/develop/ui/compose/performance/phases) · [Canvas 렌더링 지연](https://developer.android.com/topic/performance/issues/render) · [ART heap graph](https://perfetto.dev/docs/data-sources/java-heap-profiler) · [heapprofd](https://perfetto.dev/docs/data-sources/native-heap-profiler)

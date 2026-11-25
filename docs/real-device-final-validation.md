@@ -1,8 +1,8 @@
-# SM-G975N 실기기 최종 검증
+# SM-G975N 실기기 검증 (2026-11-25)
 
 2026-11-25 KST에 Android 12(API 31) 테스트 단말에서 재검증했다. 운영 소스 기준은 main `d0b3822`이며, 비교 성능 기준은 `653e311`에 기존 벤치마크용 지도 선택 어댑터를 적용한 APK다. 실기기 진단과 장시간 시나리오는 opt-in androidTest에 배치했다. [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45595529668)
 
-**종합 상태: PARTIAL.** 현재 실내 GPS 경로, 실기기 성능과 장시간 합성 재생의 측정을 완료했다. 과거 GPS 무수신 원인은 미확정이며 전력 A/B는 사용자 요청으로 생략했다.
+**종합 상태: PARTIAL.** 당시 실내 GPS 경로, 실기기 성능과 장시간 합성 재생의 측정을 완료했다. 과거 GPS 무수신 원인은 미확정이며 전력 A/B는 미실행이다. 이 문서는 해당 날짜의 검증 결과를 보존한다. [후속 2026-11-26 렌더링·메모리 A/B](rendering-memory-rca.md) · [실기기 검증 범위](physical-device-validation.md)
 
 | 게이트 | 결과 | 범위 |
 |---|---|---|
@@ -11,7 +11,7 @@
 | RD2 실기기 Live | INCONCLUSIVE | fresh GPS, 현재 listener·FGS 해제, 20회 시작·종료와 Activity 재생성·잠금 해제 후 동일 세션 복귀를 검증했다. 화면 OFF의 GPS 콜백 수는 실행별로 달랐다. |
 | RD3 실기기 성능 | PASS | 동일 SM-G975N의 기준선·최신에서 시나리오별 유효 표본 각 9회와 원본 trace를 확보했다. |
 | RD4 반복 및 내구 | PASS | 오프라인 기존 계측과 O10 실시간 30분, 메모리 및 Live listener 해제를 관측했다. |
-| RD5 전력 | NOT_RUN | 사용자 요청으로 방전 A/B를 생략했다. |
+| RD5 전력 | NOT_RUN | 방전 A/B를 실행하지 않았다. |
 | RD6 회귀·문서 | PASS | 로컬 회귀와 계측 코드 CI를 완료했다. 최종 문서 커밋의 CI는 PR 검증에 연결한다. |
 
 ## RD0 환경
@@ -91,7 +91,7 @@ Live의 30분 추가 화면 OFF 추적은 NOT_RUN이다. 위 Live 수명 항목�
 
 ## RD5 전력
 
-사용자가 이번 전력 A/B 실행을 생략했다. 상태는 **NOT_RUN**이다. 실행한 시험은 USB 충전 상태로 수행했으므로 비교 가능한 방전 샘플과 앱 전력 추정치는 없다. [Android Batterystats 측정 조건](https://developer.android.com/topic/performance/power/setup-battery-historian)
+이번 전력 A/B는 실행하지 않았다. 상태는 **NOT_RUN**이다. 실행한 시험은 USB 충전 상태로 수행했으므로 비교 가능한 방전 샘플과 앱 전력 추정치는 없다. [Android Batterystats 측정 조건](https://developer.android.com/topic/performance/power/setup-battery-historian)
 
 ## RD6 회귀와 증거
 

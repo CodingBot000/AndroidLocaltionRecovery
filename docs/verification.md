@@ -4,27 +4,29 @@
 
 ## 최신 구현 검증 요약
 
-구현 기준 [main `d0b3822`](https://github.com/CodingBot000/AndroidLocaltionRecovery/tree/d0b3822bebe65187d20401a1b8cdf6e49d6205c6) · [CI 45595529668](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45595529668) (2026-11-25, build-and-test 및 live-api36 성공).
+검증 근거 기준: 2026-11-26. 제품 코드의 검증된 main [`73f728f`](https://github.com/CodingBot000/AndroidLocaltionRecovery/tree/73f728fe093579b1c74b9a3d29f502c9844fb95f) · [main CI 45677049357](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45677049357) 성공. [최신 Actions](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions)
 
-| 검사 | 결과 | 범위 |
+| 검사 | 확인한 결과 | 상세 근거 |
 |---|---|---|
-| 단위 테스트 | PASS · 70개 | JVM·Android |
-| 위치 평가 | PASS · 84개 및 로딩 오류 3개 | 합성·장시간·OSM·고난도 |
-| 빌드·Lint·APK | PASS | 권한·asset·HTTP 및 Debug 하네스 격리 |
-| Live 계측 | PASS | API 26·31·33·34·36 에뮬레이터, 원격 API 36 |
-| 저메모리 회귀 | PASS | API 26·48MiB O10 기동 및 반복 |
-| 실기기 Live 서비스 | PASS | API 31 시작·종료 |
-| 실기기 실제 GPS | PASS · 현재 실내 조건 | 기준선 앱에서 GPS fresh 수신. 과거 120초 무수신 원인은 INCONCLUSIVE |
-| 최신 OSM 실기기 Macrobenchmark·배터리 | Macrobenchmark PASS · 전력 A/B NOT_RUN | [실기기 최종 검증](real-device-final-validation.md) |
+| 단위 테스트 | JVM·Android 70개 통과 | [워크플로](../.github/workflows/android.yml) |
+| 위치 평가 | 합성·장시간·OSM·고난도 84개와 로딩 오류 3개 통과 | [기본 합성](evaluation-report.md) · [장시간](extended-evaluation-report.md) · [OSM](osm-evaluation-report.md) · [독립 평가](osm-challenge-report.md) |
+| 빌드·Lint·APK | 권한·asset·HTTP 및 Debug 하네스 격리 검사 통과 | [CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45677049357) |
+| Live 계측 | API 26·31·33·34·36 에뮬레이터; 원격 API 36 | [Live](live-location.md) · [CI 장애 RCA](compose-slot-table-rca.md) |
+| 저메모리 회귀 | API 26·48MiB O10 기동 및 전환·재생·Live 반복 통과 | [저메모리 상세](#api-26-48mib-o10-수정-재검증) |
+| 실기기 Live | API 31 실내 fresh GPS 수신, FGS·listener 해제 20회 | [실기기 GPS](real-device-final-validation.md) |
+| 실기기 성능·내구 | 기준선 및 후보 시나리오별 9회, O10 180초 × 10회씩; 후보 기각 | [후속 실기기 A/B](rendering-memory-rca.md) |
 
-에뮬레이터 CI와 실기기 GPS·성능의 판정 범위는 각 실행 기록에서 확인할 수 있다.
+CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않는다. 과거 GPS 무수신 원인과 반복 PSS 증가 기전은 미확정이다. 측정 환경별 한계와 실패·재실행은 상세 보고서에 보존한다.
 
-## 주요 기록 바로가기
+## 검증 근거 바로가기
 
-- [P17–P24 성능 리팩터링](#p17p24-성능-리팩터링-검증)
-- [P25–P32 플랫폼 신뢰성](#p25p32-android-플랫폼-신뢰성)
-- [최신 성능 비교](#성능-비교와-자원)
-- [저메모리 및 실기기 재검증](#api-26-48mib-o10-수정-재검증)
+| 읽는 목적 | 문서 |
+|---|---|
+| 실제 앱 실행 및 재현 | [README 실행 방법](../README.md#quick-start) · [데모](demo.md) |
+| 의존성·데이터 계약 | [아키텍처](architecture.md) · [OSM 데이터](osm-data-pipeline.md) |
+| 성능·메모리 | [리팩터링 성능](refactor-performance.md) · [실기기 A/B](rendering-memory-rca.md) |
+| OS별 호환성·장애 재현 | [장애 분석](stability-investigation.md) · [Compose 계측 RCA](compose-slot-table-rca.md) |
+| 네트워크 | [HTTP 장애 매트릭스](network-reliability.md) |
 
 ## 단계별 검증 이력
 
@@ -212,7 +214,7 @@ Android 계측 10건은 API 36 에뮬레이터에서 통과했다. 세로 회귀
 | P28 | PASS | 로컬 O05 요청·응답, 허용 전이·끝점·경로 버전 검사, 엔진 epoch 교체. |
 | P29 | PASS | JVM 17개와 APK 검사에서 N01–N15 검증. 실제 HTTP 지연과 늦은 fake 응답 모두 확인. |
 | P30 | PASS | A01–A06 계측과 결함 주입을 수행했다. API 26·48MiB의 O10 기동 OOM과 Live 반복 중 OS 메모리 종료를 재현하고 수정했다. |
-| P31 | PASS | 정적 검사와 회귀, 성능 검증을 실행했다. 동일한 48MiB 환경에서 기본 앱 O10 기동·재생과 Live 반복을 재검증했다. [최신 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2/checks) |
+| P31 | PASS | 정적 검사와 회귀, 성능 검증을 실행했다. 동일한 48MiB 환경에서 기본 앱 O10 기동·재생과 Live 반복을 재검증했다. [당시 PR #2 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2/checks) |
 | P32 | PASS | 검증 문서, 원본 측정 집계, Git 커밋과 검토용 PR을 남겼다. [PR #2](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2) |
 
 ### 수용 게이트
@@ -226,7 +228,7 @@ Android 계측 10건은 API 36 에뮬레이터에서 통과했다. 세로 회귀
 | G4 장애 분석 | PASS | A01–A06 증거와 API 26·48MiB O10 OOM·OS 메모리 종료의 원인, 수정 및 재검증을 기록했다. |
 | G5 개인정보·릴리스 | PASS | 원래 APK에 Live·HTTP 코드와 위치·인터넷 권한이 없다. Live Release에 HTTP 및 Debug fault가 없다. 지도와 계획 필드, 백업·cleartext 설정을 검사했다. |
 | G6 통합 성능 | PASS | API 36 재생 지표와 Live·HTTP 자원 측정을 기록했다. API 26·48MiB의 O10 및 Live 반복과 네이티브 메모리 표본을 재검증했다. |
-| G7 CI·문서 | PASS | Gradle 모듈·APK 격리와 대표 에뮬레이터 작업을 구성했다. 최신 커밋별 결과와 계측 로그는 PR에 연결된다. [최신 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2/checks) |
+| G7 CI·문서 | PASS | Gradle 모듈·APK 격리와 대표 에뮬레이터 작업을 구성했다. 최신 커밋별 결과와 계측 로그는 PR에 연결된다. [당시 PR #2 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2/checks) |
 
 ### 실행한 검사
 
@@ -282,7 +284,7 @@ JVM의 HTTP 정상 이탈 테스트는 25ms, 헤더/바디 timeout을 포함한 
 | API 26·48MiB | Live 지도 준비와 FGS·listener 시작/해제 20회(O01·O10 각각 10회), Home·화면 OFF·재생성 계측 | PASS |
 | API 31 실기기 | 기본 앱 O10 기동·렌더링 및 합성 재생·지도 전환 20회 | PASS |
 | API 31 실기기 | Live O10 시작, FGS 확인, Stop 후 해제 | PASS |
-| API 31 실기기 | 현재 세션의 실제 GPS 수신 | FAIL · 120초 재계측에서 콜백 0건. 좌표·기기 식별자를 기록하지 않았다. |
+| API 31 실기기 | 당시 세션의 실제 GPS 수신 | 당시 FAIL · 120초 재계측에서 콜백 0건. 이후 [실기기 재검증](real-device-final-validation.md)에서 fresh GPS를 수신했다. 과거 실패 원인은 미확정이다. |
 
 JVM 테스트 70건, Lint, APK 원본과 격리 검사 및 평가 84건·로드 오류 3건이 통과했다. legacy·extended·OSM·challenge 평가 JSON은 저장된 결과와 바이트 단위로 일치했다.
 
