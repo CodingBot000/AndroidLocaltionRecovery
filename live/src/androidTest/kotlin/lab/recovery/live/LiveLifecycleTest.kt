@@ -7,6 +7,8 @@ import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -166,8 +168,12 @@ class LiveLifecycleTest {
     }
 
     private fun start() {
-        rule.waitUntil(12_000) { rule.activity.hasWindowFocus() }
-        rule.onNodeWithTag("live-start").performClick()
+        val start = hasTestTag("live-start") and isEnabled()
+        rule.waitUntil(12_000) {
+            rule.activity.hasWindowFocus() &&
+                rule.onAllNodes(start).fetchSemanticsNodes(atLeastOneRootRequired = false).isNotEmpty()
+        }
+        rule.onNode(start).performClick()
     }
 
     private fun choose(map: String, route: String? = null) {
