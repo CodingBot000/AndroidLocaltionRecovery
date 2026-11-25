@@ -42,6 +42,10 @@ flowchart LR
 | GitHub API 36 계측에서 Start 직후 `ACTIVE`인데 시스템 위치 등록이 아직 보이지 않았다. | 서비스가 Android listener 등록 전에 `ACTIVE`를 게시했다. 등록 호출 뒤에 상태를 게시하고, 계측은 시스템의 등록·해제가 실제로 보일 때까지 제한된 시간 동안 확인한다. | 최신 CI에서 같은 20회 계측을 확인할 수 있다. [첫 실패 기록](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45475626852) |
 | 실험 클라이언트에서 503과 `Retry-After: 0`가 만나면 OkHttp가 호출 중 follow-up을 수행할 수 있었다. | 각 전송 시도에서 one-shot 요청 바디를 사용하고 재시도 횟수와 기한을 coordinator가 관리한다. | N04 실제 요청 2건·coordinator 시도 2회·경로 반영 1회. |
 
+## Live Compose 계측 종료 크래시
+
+API 36 x86_64에서 워커가 View를 갱신한 최초 예외와 Activity 종료에서 뒤따른 SlotTable 예외를 분리했다. 기존 Live 테스트 입력과 전체 앱 수명 계약을 유지하면서 계측 프레임의 디스패처와 UI 준비 확인을 수정했다. [Compose 계측 RCA](compose-slot-table-rca.md)
+
 ## A01–A06 증거
 
 | ID | 실제 관측 |

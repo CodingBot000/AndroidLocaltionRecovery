@@ -6,12 +6,16 @@ import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -19,7 +23,9 @@ import org.junit.Rule
 import org.junit.Test
 
 class LiveLifecycleTest {
-    @get:Rule val rule = createAndroidComposeRule<LiveActivity>()
+    // Queue composition work for the test clock instead of resuming it on the map worker.
+    @OptIn(ExperimentalTestApi::class)
+    @get:Rule val rule = createAndroidComposeRule<LiveActivity>(effectContext = StandardTestDispatcher())
     private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     private var mockProvider = false
 
@@ -148,8 +154,12 @@ class LiveLifecycleTest {
     }
 
     private fun start() {
-        rule.waitUntil(12_000) { rule.activity.hasWindowFocus() }
-        rule.onNodeWithTag("live-start").performClick()
+        val start = hasTestTag("live-start") and isEnabled()
+        rule.waitUntil(12_000) {
+            rule.activity.hasWindowFocus() &&
+                rule.onAllNodes(start).fetchSemanticsNodes(atLeastOneRootRequired = false).isNotEmpty()
+        }
+        rule.onNode(start).performClick()
     }
 
     private fun choose(map: String, route: String? = null) {
