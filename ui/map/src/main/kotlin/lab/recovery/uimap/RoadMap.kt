@@ -1,5 +1,7 @@
 package lab.recovery.uimap
 
+import android.os.Build
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -137,6 +139,14 @@ fun RoadMap(
     }
     val density = LocalDensity.current
     val labelCache = remember(geometry, density) { MapLabelCache(density) }
+    val softwareMap = remember(geometry) {
+        // Android 8's hardware renderer can exhaust system memory recording large map frames.
+        if (geometry != null && Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1 &&
+            Runtime.getRuntime().maxMemory() <= 48 * 1024 * 1024L
+        ) {
+            SoftwareMapLayer()
+        } else null
+    }
     val strokes = remember { MapStrokeCache() }
     val trailPaths = remember(runId) { OverlayPathCache() }
     val trailStrokes = remember { MapStrokeCache() }
@@ -159,7 +169,8 @@ fun RoadMap(
             if (viewport.width < 1 || viewport.height < 1) return@Canvas
             val camera = projection(data)
             val detail = mapDetail(mode, camera.visibleMeters)
-            drawMap(data, camera, style, detail, strokes)
+            if (softwareMap == null) drawMap(data, camera, style, detail, strokes)
+            else softwareMap.draw(this, data, camera, style, detail, strokes)
             if (!optimized) {
                 drawOverlay(latest, camera, style, trailPaths, trailStrokes)
                 val occupied = listOf(modeBounds, controlsBounds, creditBounds, tunnelBounds)

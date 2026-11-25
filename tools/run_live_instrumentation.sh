@@ -29,6 +29,10 @@ else
   output="$(mktemp)"
   trap 'rm -f "$output"; restore' EXIT
 fi
-"$adb" shell am instrument -w -r -e class lab.recovery.live.LiveLifecycleTest \
+heap_args=()
+if [[ -n "${LIVE_EXPECTED_HEAP_MIB:-}" ]]; then
+  heap_args=(-e expectedHeapMiB "$LIVE_EXPECTED_HEAP_MIB")
+fi
+"$adb" shell am instrument -w -r -e class lab.recovery.live.LiveLifecycleTest "${heap_args[@]}" \
   lab.recovery.live.test/androidx.test.runner.AndroidJUnitRunner | tee "$output"
 grep -q '^OK (' "$output"

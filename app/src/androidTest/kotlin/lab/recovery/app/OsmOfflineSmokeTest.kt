@@ -27,7 +27,11 @@ class OsmOfflineSmokeTest {
 
     @Test fun defaultAndOfflineVectorMapsRenderWithAttribution() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
-        val capture = InstrumentationRegistry.getArguments().getString("captureOsmMaps") == "true"
+        val arguments = InstrumentationRegistry.getArguments()
+        arguments.getString("expectedHeapMiB")?.toLong()?.let {
+            assertEquals("ART heap limit in bytes", it * 1024 * 1024, Runtime.getRuntime().maxMemory())
+        }
+        val capture = arguments.getString("captureOsmMaps") == "true"
         if (capture) {
             fun setting(name: String) = ParcelFileDescriptor.AutoCloseInputStream(instrumentation.uiAutomation
                 .executeShellCommand("settings get global $name")).bufferedReader().use { it.readText().trim() }

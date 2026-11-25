@@ -1294,5 +1294,66 @@
     "controls": 60,
     "maps": 10,
     "maxAbsoluteErrorMeters": 4.304260355911005e-05
+  },
+  "api26O10Followup": {
+    "dateKst": "2026-11-25",
+    "baselineSha": "68a2998d6bea141ad99f5a4a459444052b4df300",
+    "api": 26,
+    "abi": "arm64-v8a",
+    "emulatorRamMiB": 1536,
+    "runtimeMaxHeapBytes": 50331648,
+    "coldStartupOriginal": "ART_OUT_OF_MEMORY",
+    "streamingOnlyLive": {
+      "result": "KERNEL_LOW_MEMORY_KILL",
+      "nativeHeapPssSamplesKiB": [
+        5762,
+        196644,
+        303188,
+        299196,
+        305120,
+        306324,
+        310500,
+        292300,
+        304784,
+        304732,
+        336244,
+        11323,
+        11015
+      ]
+    },
+    "corrected": {
+      "offlineColdStartup": "PASS",
+      "offlineReplayAndMapChangeCycles": 20,
+      "offlineActivityRecreationCycles": 4,
+      "liveStartStopAndMapReadyCycles": {
+        "O01": 10,
+        "O10": 10
+      },
+      "liveForegroundLifecycle": "PASS",
+      "nativeHeapPssSamplesKiB": [
+        5575,
+        12688,
+        12926,
+        13007,
+        15834,
+        14190,
+        14182,
+        14166,
+        14134,
+        14458,
+        10633,
+        10617
+      ]
+    },
+    "physicalApi31": {
+      "offlineSmokeAndReplayStress": "PASS",
+      "liveStartStop": "PASS",
+      "liveFreshGps": "NO_CALLBACKS_BY_DEADLINE",
+      "gpsProbeTimeoutSeconds": [
+        75,
+        120
+      ],
+      "callbacksDuringSecondProbe": 0
+    }
   }
 }

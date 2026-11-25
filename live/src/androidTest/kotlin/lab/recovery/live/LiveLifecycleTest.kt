@@ -7,6 +7,7 @@ import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
@@ -24,6 +25,9 @@ class LiveLifecycleTest {
 
     @Before fun setup() {
         assertTrue("Use a disposable emulator", Build.HARDWARE in setOf("ranchu", "goldfish"))
+        InstrumentationRegistry.getArguments().getString("expectedHeapMiB")?.toLong()?.let {
+            assertEquals("ART heap limit in bytes", it * 1024 * 1024, Runtime.getRuntime().maxMemory())
+        }
         assertEquals(PackageManager.PERMISSION_GRANTED, rule.activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION))
         if (Build.VERSION.SDK_INT >= 30) {
             shell("appops set com.android.shell android:mock_location allow")
@@ -101,6 +105,9 @@ class LiveLifecycleTest {
             startTimes += SystemClock.elapsedRealtime() - before
             assertForeground(true)
             assertListener(true)
+            rule.waitUntil(15_000) {
+                rule.onAllNodesWithTag("camera-mode").fetchSemanticsNodes().isNotEmpty()
+            }
             if (mockProvider) {
                 inject(if (cycle < 10) "37.5275,126.922" else "37.544,127.054")
                 rule.waitUntil(10_000) { LiveSessions.updates.value.latestFixProcessingNs != null }
