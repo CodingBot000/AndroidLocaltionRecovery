@@ -8,7 +8,7 @@
 |---|---|---|
 | RD0 환경 | PASS | 지정 SM-G975N, 운영 기준 SHA, 앱·벤치마크 APK 및 측정 조건 확인. |
 | RD1 기존 GPS 무수신 | INCONCLUSIVE | 기존 앱과 직접 probe에서 현재 fresh GPS를 받았다. 과거 콜백 0건의 원인은 확정하지 못했다. |
-| RD2 실기기 Live | INCONCLUSIVE | fresh GPS, 현재 listener·FGS 해제, 20회 시작·종료와 Activity 재생성은 검증했다. 화면 OFF 두 구간의 수신 결과는 달랐다. |
+| RD2 실기기 Live | INCONCLUSIVE | fresh GPS, 현재 listener·FGS 해제, 20회 시작·종료와 Activity 재생성·잠금 해제 후 동일 세션 복귀를 검증했다. 화면 OFF의 GPS 콜백 수는 실행별로 달랐다. |
 | RD3 실기기 성능 | PASS | 동일 SM-G975N의 기준선·최신에서 시나리오별 유효 표본 각 9회와 원본 trace를 확보했다. |
 | RD4 반복 및 내구 | PASS | 오프라인 기존 계측과 O10 실시간 30분, 메모리 및 Live listener 해제를 관측했다. |
 | RD5 전력 | NOT_RUN | 사용자 요청으로 방전 A/B를 생략했다. |
@@ -43,7 +43,7 @@ SM-G975N, Exynos 9820, Android 12 API 31, 1080×2280 화면 오버라이드와 d
 | L1 Start/Stop | 기존 smoke test와 별도 대조에서 실제 fresh 위치 수신, FGS·현재 GPS listener 해제 및 reading 비움을 확인했다. |
 | L2 반복 | O01 10회, O10 10회에서 현재 listener·FGS를 등록하고 해제했다. 각 회 token이 새로 생성됐다. 해당 짧은 구간에서 fresh fix를 기다리지 않았고 콜백은 0건이었다. |
 | L3 Activity 재생성 | 같은 세션으로 Activity를 3회 재생성하며 FGS 및 GPS listener 관측 조건을 유지했다. |
-| L4 Home / 화면 OFF | 첫 실행은 304.037초 동안 같은 token과 현재 listener·FGS를 유지했고 GPS 콜백 162건을 받았다. 후속 실행은 303.927초 동안 같은 자원을 유지했으며 콜백은 0건이었다. 첫 실행의 UI Stop은 보안 잠금에서 막혔고 후속 실행의 90초 수동 잠금 해제 대기도 만료됐다. 잠금 뒤 UI 복귀 및 Stop은 BLOCKED이며, 독립적인 20회 UI Stop 결과는 위 L2에 기록했다. |
+| L4 Home / 화면 OFF | 첫 실행은 304.037초 동안 같은 token과 현재 listener·FGS를 유지했고 GPS 콜백 162건을 받았다. 두 번째의 303.927초 동안 콜백은 0건이었다. 두 실행 모두 보안 잠금 뒤 UI Stop까지 완료하지 못했다. 세 번째는 화면 OFF 304.201초와 콜백 0건을 기록했다. 사용자가 잠금을 해제한 뒤 동일 token 복귀와 UI Stop→IDLE·리스너·FGS 해제를 1,588ms에 확인했다. 화면 OFF 수신 횟수의 편차 원인은 미확정이다. |
 | L5 지도와 경로 | O10 영역 밖 원시 진단을 확인했다. 실제 영역 안 Map Matching과 DR은 NOT_RUN이다. |
 | L6 권한과 provider | 실제 정밀 권한과 GPS 사용을 확인했다. 실기기의 권한 철회·대략적 선택·위치 스위치 변경은 NOT_RUN이며 알림 런타임 권한 테스트는 API 31에서 SKIP이다. |
 | L7 중단 복구 | 실제 단말에서 시스템 Stop·force-stop은 NOT_RUN이다. |
@@ -99,7 +99,7 @@ Live의 30분 추가 화면 OFF 추적은 NOT_RUN이다. 위 Live 수명 항목�
 - 실기기 opt-in 테스트는 기존 에뮬레이터 CI의 테스트 선택에 추가되지 않는다. APK 검사에서 Live의 HTTP 및 Release fault 코드 부재와 기존 오프라인 권한을 확인했다.
 - 계측 코드 `54664af`의 build-and-test 및 live-api36이 통과했다. [계측 코드 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45624177389)
 - 원본 자료는 로컬의 Git 제외 `build/reports/real-device/d0b3822-api31/`을 사용한다. 공개 요약에는 검사별 기준 SHA와 허용된 수치만 포함한다. 실제 좌표, 기기 식별자, 위치 서비스 원문, Perfetto 원본은 커밋 대상에서 제외했다.
-- 네트워크 설정 복원을 확인했다(비행기 모드 OFF, Wi‑Fi ON). 테스트에 부여한 정밀·대략적 위치 권한을 원래 거부 상태로 돌렸고 Live FGS가 남지 않았다. 마지막 단말 화면에는 보안 잠금 상태가 유지됐다.
+- 네트워크 설정 복원을 확인했다(비행기 모드 OFF, Wi‑Fi ON). 테스트에 부여한 정밀·대략적 위치 권한을 원래 거부 상태로 돌렸고 Live FGS가 남지 않았다. 마지막 잠금 해제는 사용자가 직접 수행했으며 검증 종료 후 Live 동작이 남지 않았다.
 
 ### 재현 명령
 

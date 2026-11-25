@@ -208,6 +208,19 @@
       "sameTokenAfterUnlock": false,
       "uiReturnStatus": "BLOCKED_BY_SECURE_KEYGUARD"
     },
+    "secureReturnRetry": {
+      "elapsedMs": [
+        304201
+      ],
+      "callbacks": [
+        0
+      ],
+      "stopMs": [
+        1588
+      ],
+      "sameTokenAfterUnlock": true,
+      "uiReturnStatus": "PASS"
+    },
     "memorySamples": [
       {
         "memCycle": 1,

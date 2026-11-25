@@ -315,4 +315,4 @@ adb -d shell am instrument -w -r -e class lab.recovery.live.LiveRealDeviceSmokeT
 
 ### SM-G975N 실기기 기준선 재검증
 
-초기 기준 `d0b3822`의 원본 GPS 테스트와 독립 GPS probe, 현재 FGS와 GPS listener 20회 시작·해제 및 별도 화면 OFF 구간을 계측했다. 또한 오프라인 기존 계측 3개와 같은 프로세스의 O10 1× 재생·Reset 10회가 통과했다. 30분 재생, Perfetto 및 열·메모리 관측은 실기기 보고서에 기록했다. [실기기 최종 검증](real-device-final-validation.md)
+초기 기준 `d0b3822`의 원본 GPS 테스트와 독립 GPS probe, 현재 FGS와 GPS listener 20회 시작·해제, 화면 OFF 구간 및 잠금 해제 뒤 동일 세션으로 복귀해 자원을 해제하는 경로를 확인했다. 또한 오프라인 기존 계측 3개와 같은 프로세스의 O10 1× 재생·Reset 10회가 통과했다. 30분 재생, Perfetto 및 열·메모리 관측은 실기기 보고서에 기록했다. [실기기 최종 검증](real-device-final-validation.md)
