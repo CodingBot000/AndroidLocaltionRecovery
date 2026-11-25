@@ -28,6 +28,7 @@ import org.junit.Test
 class PhysicalLocationDiagnosticsTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val device = UiDevice.getInstance(instrumentation)
+    private val resources = PhysicalLiveResources(instrumentation.targetContext, device)
 
     @Test fun observesLiveAndDirectGpsSequentially() {
         requirePhysicalOptIn()
@@ -35,25 +36,21 @@ class PhysicalLocationDiagnosticsTest {
             selectMap("O10")
             val live = GnssObservation()
             observe(scenario, live) {
-                start()
-                await { LiveSessions.updates.value.phase == SessionPhase.ACTIVE && foreground() && registered() }
-                try {
+                liveSession {
                     observeFor(live) { LiveSessions.updates.value.reading?.fix?.let(::freshGps) == true }
                     val state = LiveSessions.updates.value
                     Log.i(TAG, "live callbacks=${state.received} processed=${state.processed} dropped=${state.dropped} " +
                         "reading=${state.reading?.status} issue=${state.issue} ${live.summary()}")
-                } finally {
-                    stop()
                 }
             }
 
             val probe = GnssObservation()
             observe(scenario, probe, direct = true) {
-                await { registered() }
+                await { resources.registered() }
                 observeFor(probe) { probe.freshCallbacks > 0 }
                 Log.i(TAG, "direct callbackCount=${probe.callbacks} fresh=${probe.freshCallbacks} ${probe.summary()}")
             }
-            await { !registered() && !foreground() }
+            await { !resources.registered() && !resources.foreground() }
         }
     }
 
@@ -64,19 +61,17 @@ class PhysicalLocationDiagnosticsTest {
             repeat(20) { cycle ->
                 if (cycle == 0) selectMap("O01")
                 if (cycle == 10) selectMap("O10")
-                val times = start()
                 val measure = cycle in setOf(0, 4, 9, 14, 19)
-                try {
+                val stopMs = liveSession { times ->
                     val state = LiveSessions.updates.value
                     assertTrue("Session token must advance", state.token > previousToken)
                     previousToken = state.token
                     Log.i(TAG, "cycle=${cycle + 1} map=${state.mapId} foregroundMs=${times.first} " +
                         "activeMs=${times.second} callbacks=${state.received} dropped=${state.dropped}")
                     if (measure) noteMemory(cycle + 1, "active")
-                } finally {
-                    Log.i(TAG, "cycle=${cycle + 1} stopMs=${stop()}")
-                    if (measure) noteMemory(cycle + 1, "stopped")
                 }
+                Log.i(TAG, "cycle=${cycle + 1} stopMs=$stopMs")
+                if (measure) noteMemory(cycle + 1, "stopped")
             }
         }
     }
@@ -85,39 +80,44 @@ class PhysicalLocationDiagnosticsTest {
         requirePhysicalOptIn()
         ActivityScenario.launch(LiveActivity::class.java).use { scenario ->
             selectMap("O10")
-            start()
-            val active = LiveSessions.updates.value
-            try {
-                repeat(3) {
-                    scenario.recreate()
-                    await { LiveSessions.updates.value.phase == SessionPhase.ACTIVE && foreground() && registered() }
+            var screenOffRequested = false
+            withPhysicalTestCleanup(cleanup = {
+                if (testFailed && screenOffRequested) attempt("wake screen after failure") { device.wakeUp() }
+            }) {
+                val stopMs = liveSession {
+                    val active = LiveSessions.updates.value
+                    repeat(3) {
+                        scenario.recreate()
+                        await { LiveSessions.updates.value.phase == SessionPhase.ACTIVE && resources.foreground() && resources.registered() }
+                        assertEquals(active.token, LiveSessions.updates.value.token)
+                    }
+                    device.pressHome()
+                    await { device.currentPackageName != instrumentation.targetContext.packageName }
+                    screenOffRequested = true
+                    device.sleep()
+                    await { !device.isScreenOn }
+                    val sleepStarted = SystemClock.elapsedRealtime()
+                    val before = LiveSessions.updates.value.received
+                    while (SystemClock.elapsedRealtime() - sleepStarted < 300_000) {
+                        assertTrue("Screen turned on during the observation", !device.isScreenOn)
+                        assertTrue("Foreground registration was lost", resources.foreground() && resources.registered())
+                        assertEquals(active.token, LiveSessions.updates.value.token)
+                        SystemClock.sleep(15_000)
+                    }
+                    val state = LiveSessions.updates.value
+                    Log.i(TAG, "screenOffMs=${SystemClock.elapsedRealtime() - sleepStarted} callbacks=${state.received - before}")
+
+                    device.wakeUp()
+                    val keyguard = instrumentation.targetContext.getSystemService(KeyguardManager::class.java)
+                    if (!keyguard.isDeviceSecure) device.executeShellCommand("wm dismiss-keyguard")
+                    if (keyguard.isKeyguardLocked) {
+                        Log.i(TAG, "unlockRequired=true")
+                        await(90_000) { !keyguard.isKeyguardLocked }
+                    }
+                    device.executeShellCommand("am start -n lab.recovery.live/.LiveActivity -f 0x20000000")
                     assertEquals(active.token, LiveSessions.updates.value.token)
                 }
-                device.pressHome()
-                await { device.currentPackageName != instrumentation.targetContext.packageName }
-                device.sleep()
-                await { !device.isScreenOn }
-                val sleepStarted = SystemClock.elapsedRealtime()
-                val before = LiveSessions.updates.value.received
-                while (SystemClock.elapsedRealtime() - sleepStarted < 300_000) {
-                    assertTrue("Screen turned on during the observation", !device.isScreenOn)
-                    assertTrue("Foreground registration was lost", foreground() && registered())
-                    assertEquals(active.token, LiveSessions.updates.value.token)
-                    SystemClock.sleep(15_000)
-                }
-                val state = LiveSessions.updates.value
-                Log.i(TAG, "screenOffMs=${SystemClock.elapsedRealtime() - sleepStarted} callbacks=${state.received - before}")
-            } finally {
-                device.wakeUp()
-                val keyguard = instrumentation.targetContext.getSystemService(KeyguardManager::class.java)
-                if (!keyguard.isDeviceSecure) device.executeShellCommand("wm dismiss-keyguard")
-                if (keyguard.isKeyguardLocked) {
-                    Log.i(TAG, "unlockRequired=true")
-                    await(90_000) { !keyguard.isKeyguardLocked }
-                }
-                device.executeShellCommand("am start -n lab.recovery.live/.LiveActivity -f 0x20000000")
-                assertEquals(active.token, LiveSessions.updates.value.token)
-                Log.i(TAG, "sameTokenAfterUnlock=true stopMs=${stop()}")
+                Log.i(TAG, "sameTokenAfterUnlock=true stopMs=$stopMs")
             }
         }
     }
@@ -152,42 +152,22 @@ class PhysicalLocationDiagnosticsTest {
     private fun start(): Pair<Long, Long> {
         val before = SystemClock.elapsedRealtime()
         click("live-start")
-        await { foreground() }
+        await { resources.foreground() }
         val promoted = SystemClock.elapsedRealtime() - before
-        await { LiveSessions.updates.value.phase == SessionPhase.ACTIVE && registered() }
+        await { LiveSessions.updates.value.phase == SessionPhase.ACTIVE && resources.registered() }
         return promoted to (SystemClock.elapsedRealtime() - before)
     }
 
     private fun stop(): Long {
         val before = SystemClock.elapsedRealtime()
         click("live-stop")
-        await { LiveSessions.updates.value.phase == SessionPhase.IDLE && !foreground() && !registered() }
+        await { LiveSessions.updates.value.phase == SessionPhase.IDLE && !resources.foreground() && !resources.registered() }
         assertNull(LiveSessions.updates.value.reading)
         return SystemClock.elapsedRealtime() - before
     }
 
-    private fun foreground(): Boolean =
-        device.executeShellCommand("dumpsys activity services lab.recovery.live").contains("isForeground=true")
-
-    private fun registered(): Boolean {
-        // The Samsung dump also repeats requests beneath dated history groups.
-        // Read only the current GPS provider's immediate listener rows and never write the dump.
-        val rows = device.executeShellCommand("dumpsys location").lines()
-        val provider = rows.indexOfFirst { it.trim() == "gps provider:" }
-        check(provider >= 0) { "GPS provider section missing" }
-        fun indentation(line: String) = line.length - line.trimStart().length
-        val section = rows.drop(provider + 1).takeWhile {
-            it.isBlank() || indentation(it) > indentation(rows[provider])
-        }
-        val listeners = section.indexOfFirst { it.trim() == "listeners:" }
-        if (listeners < 0) return false
-        return section.drop(listeners + 1)
-            .takeWhile { it.isBlank() || indentation(it) > indentation(section[listeners]) }
-            .any {
-                it.contains("lab.recovery.live") &&
-                    (it.contains("Request[") || it.contains("Request{")) && !it.trimStart().startsWith("[")
-            }
-    }
+    private fun liveSession(verify: (Pair<Long, Long>) -> Unit): Long =
+        runPhysicalLiveSession(resources, ::start, verify, ::stop)
 
     @SuppressLint("MissingPermission")
     private fun observe(
@@ -195,25 +175,27 @@ class PhysicalLocationDiagnosticsTest {
     ) {
         val manager = instrumentation.targetContext.getSystemService(LocationManager::class.java)
         val listener = LocationListener { position -> observer.onLocation(position) }
-        var statusRegistered = false
-        var listenerRegistered = false
-        try {
+        var keepScreenRequested = false
+        var statusAttempted = false
+        var updatesAttempted = false
+        withPhysicalTestCleanup(cleanup = {
+            if (updatesAttempted) attempt("remove direct GPS listener") { manager.removeUpdates(listener) }
+            if (statusAttempted) attempt("unregister GNSS observer") { manager.unregisterGnssStatusCallback(observer) }
+            if (keepScreenRequested) attempt("clear keep-screen-on flag") {
+                scenario.onActivity { it.window.clearFlags(FLAG_KEEP_SCREEN_ON) }
+            }
+        }) {
             scenario.onActivity { activity ->
+                keepScreenRequested = true
                 activity.window.addFlags(FLAG_KEEP_SCREEN_ON)
-                statusRegistered = manager.registerGnssStatusCallback(activity.mainExecutor, observer)
-                assertTrue("GNSS status registration failed", statusRegistered)
+                statusAttempted = true
+                assertTrue("GNSS status registration failed", manager.registerGnssStatusCallback(activity.mainExecutor, observer))
                 if (direct) {
+                    updatesAttempted = true
                     manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1_000L, 0f, listener, Looper.getMainLooper())
-                    listenerRegistered = true
                 }
             }
             block()
-        } finally {
-            scenario.onActivity { activity ->
-                if (listenerRegistered) manager.removeUpdates(listener)
-                if (statusRegistered) manager.unregisterGnssStatusCallback(observer)
-                activity.window.clearFlags(FLAG_KEEP_SCREEN_ON)
-            }
         }
     }
 
