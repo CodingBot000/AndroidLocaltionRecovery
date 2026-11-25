@@ -5250,7 +5250,7 @@
   "candidate": {
     "id": "B",
     "variant": "Two-point road strokes on optimized hardware Canvas",
-    "decision": "pending",
+    "decision": "rejected",
     "sourceSha": "e9e406d3c4a7d1964981ab182f57bc865b04dfaf",
     "apkSha256": {
       "live-debug.apk": "46e8f570d0ca57c85822cbcc6f345d2390603e71299a71564b4a46be087dfa88",
@@ -9365,8 +9365,1397 @@
         ]
       }
     },
+    "memory": {
+      "schemaVersion": 1,
+      "source": "Debug.getMemoryInfo / Runtime / Debug.getNativeHeapAllocatedSize",
+      "phaseSamples": [
+        {
+          "cycle": 1,
+          "phase": "ready",
+          "totalPssKiB": 199807,
+          "javaPssKiB": 51802,
+          "nativePssKiB": 32782,
+          "javaUsedKiB": 52776,
+          "nativeAllocatedKiB": 23669,
+          "graphicsKiB": 22699,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 0.0
+        },
+        {
+          "cycle": 1,
+          "phase": "playing",
+          "totalPssKiB": 278172,
+          "javaPssKiB": 60115,
+          "nativePssKiB": 54771,
+          "javaUsedKiB": 61034,
+          "nativeAllocatedKiB": 41638,
+          "graphicsKiB": 70107,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "offsetSeconds": 45.167
+        },
+        {
+          "cycle": 1,
+          "phase": "playing",
+          "totalPssKiB": 352848,
+          "javaPssKiB": 60593,
+          "nativePssKiB": 72303,
+          "javaUsedKiB": 61554,
+          "nativeAllocatedKiB": 59264,
+          "graphicsKiB": 126295,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "offsetSeconds": 90.276
+        },
+        {
+          "cycle": 1,
+          "phase": "playing",
+          "totalPssKiB": 387367,
+          "javaPssKiB": 60969,
+          "nativePssKiB": 83923,
+          "javaUsedKiB": 61922,
+          "nativeAllocatedKiB": 52297,
+          "graphicsKiB": 148355,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "offsetSeconds": 135.362
+        },
+        {
+          "cycle": 1,
+          "phase": "completed",
+          "totalPssKiB": 373368,
+          "javaPssKiB": 39094,
+          "nativePssKiB": 89272,
+          "javaUsedKiB": 39969,
+          "nativeAllocatedKiB": 51575,
+          "graphicsKiB": 150595,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "offsetSeconds": 180.205
+        },
+        {
+          "cycle": 1,
+          "phase": "reset",
+          "totalPssKiB": 382132,
+          "javaPssKiB": 41782,
+          "nativePssKiB": 91020,
+          "javaUsedKiB": 42905,
+          "nativeAllocatedKiB": 51300,
+          "graphicsKiB": 150595,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 180.411
+        },
+        {
+          "cycle": 2,
+          "phase": "ready",
+          "totalPssKiB": 379660,
+          "javaPssKiB": 42006,
+          "nativePssKiB": 91732,
+          "javaUsedKiB": 43049,
+          "nativeAllocatedKiB": 55982,
+          "graphicsKiB": 151427,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 180.502
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 387099,
+          "javaPssKiB": 45382,
+          "nativePssKiB": 89944,
+          "javaUsedKiB": 46391,
+          "nativeAllocatedKiB": 47881,
+          "graphicsKiB": 157023,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "offsetSeconds": 225.659
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 390696,
+          "javaPssKiB": 46691,
+          "nativePssKiB": 92617,
+          "javaUsedKiB": 47602,
+          "nativeAllocatedKiB": 42021,
+          "graphicsKiB": 157023,
+          "virtualMs": 90000,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "offsetSeconds": 270.694
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 394572,
+          "javaPssKiB": 46911,
+          "nativePssKiB": 95881,
+          "javaUsedKiB": 47887,
+          "nativeAllocatedKiB": 34807,
+          "graphicsKiB": 157023,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "offsetSeconds": 315.75
+        },
+        {
+          "cycle": 2,
+          "phase": "completed",
+          "totalPssKiB": 394924,
+          "javaPssKiB": 48579,
+          "nativePssKiB": 94437,
+          "javaUsedKiB": 49464,
+          "nativeAllocatedKiB": 24657,
+          "graphicsKiB": 157023,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "offsetSeconds": 360.704
+        },
+        {
+          "cycle": 2,
+          "phase": "reset",
+          "totalPssKiB": 397604,
+          "javaPssKiB": 51235,
+          "nativePssKiB": 94437,
+          "javaUsedKiB": 52544,
+          "nativeAllocatedKiB": 31554,
+          "graphicsKiB": 157023,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 360.934
+        },
+        {
+          "cycle": 3,
+          "phase": "ready",
+          "totalPssKiB": 403144,
+          "javaPssKiB": 51623,
+          "nativePssKiB": 98041,
+          "javaUsedKiB": 52544,
+          "nativeAllocatedKiB": 25156,
+          "graphicsKiB": 158559,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 361.04
+        },
+        {
+          "cycle": 3,
+          "phase": "playing",
+          "totalPssKiB": 400400,
+          "javaPssKiB": 54487,
+          "nativePssKiB": 94105,
+          "javaUsedKiB": 55383,
+          "nativeAllocatedKiB": 20256,
+          "graphicsKiB": 157023,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "offsetSeconds": 406.202
+        },
+        {
+          "cycle": 3,
+          "phase": "playing",
+          "totalPssKiB": 404448,
+          "javaPssKiB": 56531,
+          "nativePssKiB": 95769,
+          "javaUsedKiB": 57421,
+          "nativeAllocatedKiB": 14898,
+          "graphicsKiB": 157023,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "offsetSeconds": 451.253
+        },
+        {
+          "cycle": 3,
+          "phase": "playing",
+          "totalPssKiB": 410336,
+          "javaPssKiB": 58531,
+          "nativePssKiB": 99617,
+          "javaUsedKiB": 59480,
+          "nativeAllocatedKiB": 7555,
+          "graphicsKiB": 157023,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "offsetSeconds": 496.326
+        },
+        {
+          "cycle": 3,
+          "phase": "completed",
+          "totalPssKiB": 411400,
+          "javaPssKiB": 61979,
+          "nativePssKiB": 97177,
+          "javaUsedKiB": 62878,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157023,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 541.286
+        },
+        {
+          "cycle": 3,
+          "phase": "reset",
+          "totalPssKiB": 397816,
+          "javaPssKiB": 43931,
+          "nativePssKiB": 100581,
+          "javaUsedKiB": 44802,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 158047,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 541.631
+        },
+        {
+          "cycle": 4,
+          "phase": "ready",
+          "totalPssKiB": 398372,
+          "javaPssKiB": 43935,
+          "nativePssKiB": 101133,
+          "javaUsedKiB": 44802,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 158047,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 541.745
+        },
+        {
+          "cycle": 4,
+          "phase": "playing",
+          "totalPssKiB": 392808,
+          "javaPssKiB": 45531,
+          "nativePssKiB": 95129,
+          "javaUsedKiB": 46469,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157023,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 586.901
+        },
+        {
+          "cycle": 4,
+          "phase": "playing",
+          "totalPssKiB": 396516,
+          "javaPssKiB": 45999,
+          "nativePssKiB": 98209,
+          "javaUsedKiB": 46923,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157023,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 631.963
+        },
+        {
+          "cycle": 4,
+          "phase": "playing",
+          "totalPssKiB": 400357,
+          "javaPssKiB": 46419,
+          "nativePssKiB": 101809,
+          "javaUsedKiB": 47398,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157023,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 677.045
+        },
+        {
+          "cycle": 4,
+          "phase": "completed",
+          "totalPssKiB": 400201,
+          "javaPssKiB": 48295,
+          "nativePssKiB": 99501,
+          "javaUsedKiB": 49182,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157023,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 722.033
+        },
+        {
+          "cycle": 4,
+          "phase": "reset",
+          "totalPssKiB": 402885,
+          "javaPssKiB": 50971,
+          "nativePssKiB": 99501,
+          "javaUsedKiB": 52262,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157023,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 722.267
+        },
+        {
+          "cycle": 5,
+          "phase": "ready",
+          "totalPssKiB": 408413,
+          "javaPssKiB": 51343,
+          "nativePssKiB": 103557,
+          "javaUsedKiB": 52262,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 158111,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 722.364
+        },
+        {
+          "cycle": 5,
+          "phase": "playing",
+          "totalPssKiB": 403549,
+          "javaPssKiB": 53855,
+          "nativePssKiB": 97157,
+          "javaUsedKiB": 54763,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 767.543
+        },
+        {
+          "cycle": 5,
+          "phase": "playing",
+          "totalPssKiB": 407370,
+          "javaPssKiB": 54347,
+          "nativePssKiB": 100437,
+          "javaUsedKiB": 55326,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 812.623
+        },
+        {
+          "cycle": 5,
+          "phase": "playing",
+          "totalPssKiB": 410426,
+          "javaPssKiB": 54875,
+          "nativePssKiB": 102921,
+          "javaUsedKiB": 55831,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 135200,
+          "backlogMs": 3,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 857.724
+        },
+        {
+          "cycle": 5,
+          "phase": "completed",
+          "totalPssKiB": 409822,
+          "javaPssKiB": 56859,
+          "nativePssKiB": 100281,
+          "javaUsedKiB": 57726,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 902.656
+        },
+        {
+          "cycle": 5,
+          "phase": "reset",
+          "totalPssKiB": 412518,
+          "javaPssKiB": 59523,
+          "nativePssKiB": 100301,
+          "javaUsedKiB": 60758,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 902.883
+        },
+        {
+          "cycle": 6,
+          "phase": "ready",
+          "totalPssKiB": 417494,
+          "javaPssKiB": 59847,
+          "nativePssKiB": 103925,
+          "javaUsedKiB": 60758,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 158111,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 902.997
+        },
+        {
+          "cycle": 6,
+          "phase": "playing",
+          "totalPssKiB": 414382,
+          "javaPssKiB": 62979,
+          "nativePssKiB": 98669,
+          "javaUsedKiB": 63938,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 45200,
+          "backlogMs": 3,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 948.244
+        },
+        {
+          "cycle": 6,
+          "phase": "playing",
+          "totalPssKiB": 414458,
+          "javaPssKiB": 61331,
+          "nativePssKiB": 100585,
+          "javaUsedKiB": 62318,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 993.288
+        },
+        {
+          "cycle": 6,
+          "phase": "playing",
+          "totalPssKiB": 416062,
+          "javaPssKiB": 59819,
+          "nativePssKiB": 103573,
+          "javaUsedKiB": 60786,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1038.304
+        },
+        {
+          "cycle": 6,
+          "phase": "completed",
+          "totalPssKiB": 413906,
+          "javaPssKiB": 59291,
+          "nativePssKiB": 102069,
+          "javaUsedKiB": 60221,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1083.276
+        },
+        {
+          "cycle": 6,
+          "phase": "reset",
+          "totalPssKiB": 416586,
+          "javaPssKiB": 61967,
+          "nativePssKiB": 102069,
+          "javaUsedKiB": 63237,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1083.515
+        },
+        {
+          "cycle": 7,
+          "phase": "ready",
+          "totalPssKiB": 421730,
+          "javaPssKiB": 62283,
+          "nativePssKiB": 105873,
+          "javaUsedKiB": 63237,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 158111,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1083.644
+        },
+        {
+          "cycle": 7,
+          "phase": "playing",
+          "totalPssKiB": 415965,
+          "javaPssKiB": 62883,
+          "nativePssKiB": 100389,
+          "javaUsedKiB": 63927,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1128.808
+        },
+        {
+          "cycle": 7,
+          "phase": "playing",
+          "totalPssKiB": 416813,
+          "javaPssKiB": 61471,
+          "nativePssKiB": 102793,
+          "javaUsedKiB": 62454,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1173.896
+        },
+        {
+          "cycle": 7,
+          "phase": "playing",
+          "totalPssKiB": 418873,
+          "javaPssKiB": 59951,
+          "nativePssKiB": 106249,
+          "javaUsedKiB": 60922,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1218.993
+        },
+        {
+          "cycle": 7,
+          "phase": "completed",
+          "totalPssKiB": 416109,
+          "javaPssKiB": 59839,
+          "nativePssKiB": 103593,
+          "javaUsedKiB": 60738,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 180000,
+          "backlogMs": 3,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1263.978
+        },
+        {
+          "cycle": 7,
+          "phase": "reset",
+          "totalPssKiB": 418805,
+          "javaPssKiB": 62531,
+          "nativePssKiB": 103593,
+          "javaUsedKiB": 63770,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157087,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1264.238
+        },
+        {
+          "cycle": 8,
+          "phase": "ready",
+          "totalPssKiB": 423845,
+          "javaPssKiB": 62827,
+          "nativePssKiB": 107313,
+          "javaUsedKiB": 63770,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 158111,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1264.376
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 394221,
+          "javaPssKiB": 39391,
+          "nativePssKiB": 102205,
+          "javaUsedKiB": 40404,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157411,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1309.569
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 419813,
+          "javaPssKiB": 62361,
+          "nativePssKiB": 104746,
+          "javaUsedKiB": 63268,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157411,
+          "virtualMs": 90200,
+          "backlogMs": 0,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1354.585
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 422020,
+          "javaPssKiB": 60874,
+          "nativePssKiB": 108393,
+          "javaUsedKiB": 61850,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157411,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1399.627
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 419740,
+          "javaPssKiB": 60778,
+          "nativePssKiB": 106201,
+          "javaUsedKiB": 61684,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157411,
+          "virtualMs": 180000,
+          "backlogMs": 3,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1444.707
+        },
+        {
+          "cycle": 8,
+          "phase": "completed",
+          "totalPssKiB": 419744,
+          "javaPssKiB": 60782,
+          "nativePssKiB": 106201,
+          "javaUsedKiB": 61684,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 157411,
+          "virtualMs": 180000,
+          "backlogMs": 3,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1444.875
+        },
+        {
+          "cycle": 8,
+          "phase": "reset",
+          "totalPssKiB": 413568,
+          "javaPssKiB": 63570,
+          "nativePssKiB": 106201,
+          "javaUsedKiB": 64732,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 147903,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1445.227
+        },
+        {
+          "cycle": 9,
+          "phase": "ready",
+          "totalPssKiB": 424140,
+          "javaPssKiB": 63886,
+          "nativePssKiB": 109737,
+          "javaUsedKiB": 40026,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 153811,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1445.308
+        },
+        {
+          "cycle": 9,
+          "phase": "playing",
+          "totalPssKiB": 415240,
+          "javaPssKiB": 62934,
+          "nativePssKiB": 104057,
+          "javaUsedKiB": 63946,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 153043,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1490.507
+        },
+        {
+          "cycle": 9,
+          "phase": "playing",
+          "totalPssKiB": 419127,
+          "javaPssKiB": 61830,
+          "nativePssKiB": 106657,
+          "javaUsedKiB": 62821,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155271,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1535.604
+        },
+        {
+          "cycle": 9,
+          "phase": "playing",
+          "totalPssKiB": 421207,
+          "javaPssKiB": 60514,
+          "nativePssKiB": 110049,
+          "javaUsedKiB": 61482,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155271,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1580.586
+        },
+        {
+          "cycle": 9,
+          "phase": "completed",
+          "totalPssKiB": 418539,
+          "javaPssKiB": 60638,
+          "nativePssKiB": 107253,
+          "javaUsedKiB": 61542,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155271,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1625.578
+        },
+        {
+          "cycle": 9,
+          "phase": "reset",
+          "totalPssKiB": 421419,
+          "javaPssKiB": 63318,
+          "nativePssKiB": 107277,
+          "javaUsedKiB": 42028,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155271,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1625.818
+        },
+        {
+          "cycle": 10,
+          "phase": "ready",
+          "totalPssKiB": 403867,
+          "javaPssKiB": 41182,
+          "nativePssKiB": 110993,
+          "javaUsedKiB": 42060,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 156295,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1625.933
+        },
+        {
+          "cycle": 10,
+          "phase": "playing",
+          "totalPssKiB": 398716,
+          "javaPssKiB": 40690,
+          "nativePssKiB": 107525,
+          "javaUsedKiB": 41616,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155271,
+          "virtualMs": 45200,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1671.165
+        },
+        {
+          "cycle": 10,
+          "phase": "playing",
+          "totalPssKiB": 398279,
+          "javaPssKiB": 39394,
+          "nativePssKiB": 108245,
+          "javaUsedKiB": 40378,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155271,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1716.202
+        },
+        {
+          "cycle": 10,
+          "phase": "playing",
+          "totalPssKiB": 424079,
+          "javaPssKiB": 62058,
+          "nativePssKiB": 111385,
+          "javaUsedKiB": 63034,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155271,
+          "virtualMs": 135200,
+          "backlogMs": 4,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1761.29
+        },
+        {
+          "cycle": 10,
+          "phase": "completed",
+          "totalPssKiB": 421384,
+          "javaPssKiB": 61974,
+          "nativePssKiB": 108765,
+          "javaUsedKiB": 62885,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155271,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1806.155
+        },
+        {
+          "cycle": 10,
+          "phase": "reset",
+          "totalPssKiB": 401284,
+          "javaPssKiB": 41850,
+          "nativePssKiB": 108765,
+          "javaUsedKiB": 43084,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155271,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1806.404
+        },
+        {
+          "cycle": 10,
+          "phase": "idle60s",
+          "totalPssKiB": 372395,
+          "javaPssKiB": 42227,
+          "nativePssKiB": 110975,
+          "javaUsedKiB": 43116,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 123159,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1866.573
+        },
+        {
+          "cycle": 10,
+          "phase": "idle120s",
+          "totalPssKiB": 363655,
+          "javaPssKiB": 42235,
+          "nativePssKiB": 102223,
+          "javaUsedKiB": 43116,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 123159,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1926.742
+        }
+      ],
+      "sampleCount": 63,
+      "peakTotalPssKiB": 424140,
+      "lastResetToIdle120sPssRecoveryKiB": 37629,
+      "completedCycles2To10": {
+        "totalPssKiB": {
+          "n": 9,
+          "min": 394924,
+          "median": 413906,
+          "max": 421384,
+          "lastThreeRange": [
+            418539,
+            421384
+          ],
+          "theilSenSlopeKiBPerCycle": 2882.0
+        },
+        "javaPssKiB": {
+          "n": 9,
+          "min": 48295,
+          "median": 59839,
+          "max": 61979,
+          "lastThreeRange": [
+            60638,
+            61974
+          ],
+          "theilSenSlopeKiBPerCycle": 983.875
+        },
+        "nativePssKiB": {
+          "n": 9,
+          "min": 94437,
+          "median": 102069,
+          "max": 108765,
+          "lastThreeRange": [
+            106201,
+            108765
+          ],
+          "theilSenSlopeKiBPerCycle": 1710.4
+        },
+        "javaUsedKiB": {
+          "n": 9,
+          "min": 49182,
+          "median": 60738,
+          "max": 62885,
+          "lastThreeRange": [
+            61542,
+            62885
+          ],
+          "theilSenSlopeKiBPerCycle": 992.9
+        },
+        "nativeAllocatedKiB": {
+          "n": 1,
+          "min": 24657,
+          "median": 24657,
+          "max": 24657,
+          "lastThreeRange": [
+            24657,
+            24657
+          ],
+          "theilSenSlopeKiBPerCycle": null
+        },
+        "graphicsKiB": {
+          "n": 9,
+          "min": 155271,
+          "median": 157023,
+          "max": 157411,
+          "lastThreeRange": [
+            155271,
+            157411
+          ],
+          "theilSenSlopeKiBPerCycle": 0.0
+        }
+      },
+      "status": "PASS",
+      "buildType": "debug",
+      "cycles": 10,
+      "cycleDurationSeconds": 180,
+      "measurementRepeats": 1,
+      "speed": 1,
+      "sameProcessVerified": true,
+      "networkDuringRun": {
+        "airplaneMode": true,
+        "wifi": false
+      },
+      "networkRestored": true,
+      "offlineStress": {
+        "status": "PASS"
+      },
+      "sampleLogSha256": "b0ae04b02dd325a68d887965946d88bdd373dd25c5758e2dcf510da4e86b27c5",
+      "instrumentationSha256": "ecdbf9df19632ae90880e8f922a84e34ef474fb68fa52c75e67fc04181c520ad",
+      "environmentSha256": "56ad1550532c74b9fad4cb0d0a779a72e297943d3d747af366397bed908bfccb"
+    },
     "live": {
-      "status": "NOT_RUN"
+      "status": "PASS",
+      "verifiedSessionsReleased": 20,
+      "buildType": "debug",
+      "runs": [
+        {
+          "cycle": 1,
+          "map": "O01",
+          "foregroundMs": 798,
+          "activeMs": 1408,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 739
+        },
+        {
+          "cycle": 2,
+          "map": "O01",
+          "foregroundMs": 1280,
+          "activeMs": 1560,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 1932
+        },
+        {
+          "cycle": 3,
+          "map": "O01",
+          "foregroundMs": 712,
+          "activeMs": 1097,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 1023
+        },
+        {
+          "cycle": 4,
+          "map": "O01",
+          "foregroundMs": 781,
+          "activeMs": 1088,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 914
+        },
+        {
+          "cycle": 5,
+          "map": "O01",
+          "foregroundMs": 806,
+          "activeMs": 1124,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 930
+        },
+        {
+          "cycle": 6,
+          "map": "O01",
+          "foregroundMs": 681,
+          "activeMs": 983,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 926
+        },
+        {
+          "cycle": 7,
+          "map": "O01",
+          "foregroundMs": 783,
+          "activeMs": 1073,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 938
+        },
+        {
+          "cycle": 8,
+          "map": "O01",
+          "foregroundMs": 797,
+          "activeMs": 1106,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 1007
+        },
+        {
+          "cycle": 9,
+          "map": "O01",
+          "foregroundMs": 788,
+          "activeMs": 1113,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 935
+        },
+        {
+          "cycle": 10,
+          "map": "O01",
+          "foregroundMs": 724,
+          "activeMs": 1118,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 892
+        },
+        {
+          "cycle": 11,
+          "map": "O10",
+          "foregroundMs": 770,
+          "activeMs": 2301,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 920
+        },
+        {
+          "cycle": 12,
+          "map": "O10",
+          "foregroundMs": 598,
+          "activeMs": 2148,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 759
+        },
+        {
+          "cycle": 13,
+          "map": "O10",
+          "foregroundMs": 854,
+          "activeMs": 2135,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 919
+        },
+        {
+          "cycle": 14,
+          "map": "O10",
+          "foregroundMs": 767,
+          "activeMs": 2072,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 823
+        },
+        {
+          "cycle": 15,
+          "map": "O10",
+          "foregroundMs": 821,
+          "activeMs": 2167,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 769
+        },
+        {
+          "cycle": 16,
+          "map": "O10",
+          "foregroundMs": 587,
+          "activeMs": 1885,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 964
+        },
+        {
+          "cycle": 17,
+          "map": "O10",
+          "foregroundMs": 682,
+          "activeMs": 1998,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 815
+        },
+        {
+          "cycle": 18,
+          "map": "O10",
+          "foregroundMs": 773,
+          "activeMs": 2178,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 809
+        },
+        {
+          "cycle": 19,
+          "map": "O10",
+          "foregroundMs": 816,
+          "activeMs": 2127,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 810
+        },
+        {
+          "cycle": 20,
+          "map": "O10",
+          "foregroundMs": 685,
+          "activeMs": 2212,
+          "callbacks": 0,
+          "dropped": 0,
+          "stopMs": 740
+        }
+      ],
+      "medianByMap": {
+        "O01": {
+          "cycles": 10,
+          "foregroundMsMedian": 785.5,
+          "activeMsMedian": 1109.5,
+          "stopMsMedian": 932.5
+        },
+        "O10": {
+          "cycles": 10,
+          "foregroundMsMedian": 768.5,
+          "activeMsMedian": 2141.5,
+          "stopMsMedian": 812.5
+        }
+      },
+      "phaseSamples": [
+        {
+          "cycle": 1,
+          "map": "O01",
+          "phase": "active",
+          "totalPssKiB": 138285,
+          "javaPssKiB": 11849,
+          "nativePssKiB": 17720,
+          "javaUsedKiB": 13771,
+          "nativeAllocatedKiB": 15680
+        },
+        {
+          "cycle": 1,
+          "map": "O01",
+          "phase": "stopped",
+          "totalPssKiB": 180622,
+          "javaPssKiB": 14945,
+          "nativePssKiB": 27679,
+          "javaUsedKiB": 16038,
+          "nativeAllocatedKiB": 26417
+        },
+        {
+          "cycle": 5,
+          "map": "O01",
+          "phase": "active",
+          "totalPssKiB": 183899,
+          "javaPssKiB": 16829,
+          "nativePssKiB": 38338,
+          "javaUsedKiB": 17793,
+          "nativeAllocatedKiB": 34078
+        },
+        {
+          "cycle": 5,
+          "map": "O01",
+          "phase": "stopped",
+          "totalPssKiB": 196397,
+          "javaPssKiB": 18169,
+          "nativePssKiB": 42520,
+          "javaUsedKiB": 19275,
+          "nativeAllocatedKiB": 23982
+        },
+        {
+          "cycle": 10,
+          "map": "O01",
+          "phase": "active",
+          "totalPssKiB": 196816,
+          "javaPssKiB": 18833,
+          "nativePssKiB": 38649,
+          "javaUsedKiB": 19806,
+          "nativeAllocatedKiB": 25368
+        },
+        {
+          "cycle": 10,
+          "map": "O01",
+          "phase": "stopped",
+          "totalPssKiB": 195348,
+          "javaPssKiB": 20165,
+          "nativePssKiB": 38685,
+          "javaUsedKiB": 21271,
+          "nativeAllocatedKiB": 23696
+        },
+        {
+          "cycle": 15,
+          "map": "O10",
+          "phase": "active",
+          "totalPssKiB": 237815,
+          "javaPssKiB": 66551,
+          "nativePssKiB": 46377,
+          "javaUsedKiB": 40900,
+          "nativeAllocatedKiB": 24427
+        },
+        {
+          "cycle": 15,
+          "map": "O10",
+          "phase": "stopped",
+          "totalPssKiB": 284029,
+          "javaPssKiB": 43611,
+          "nativePssKiB": 86741,
+          "javaUsedKiB": 44720,
+          "nativeAllocatedKiB": 27695
+        },
+        {
+          "cycle": 20,
+          "map": "O10",
+          "phase": "active",
+          "totalPssKiB": 220202,
+          "javaPssKiB": 53027,
+          "nativePssKiB": 46909,
+          "javaUsedKiB": 56193,
+          "nativeAllocatedKiB": 18691
+        },
+        {
+          "cycle": 20,
+          "map": "O10",
+          "phase": "stopped",
+          "totalPssKiB": 295738,
+          "javaPssKiB": 56615,
+          "nativePssKiB": 88365,
+          "javaUsedKiB": 57818,
+          "nativeAllocatedKiB": 21436
+        }
+      ],
+      "sampleLogSha256": "08ec0a797b6f03cb7f2bf27b3a15d9e68c30802cdb3a336ee61e123677989dc8",
+      "locationPermissionsRestored": true
     },
     "functionalChecks": {
       "jvmTests": 70,
@@ -9408,9 +10797,17 @@
     "api33": "PASS_BASELINE_BASIC",
     "api34": "PASS_BASELINE_BASIC",
     "api36Arm64Live": "PASS_BASELINE_5X3_AND_CLEANUP_7",
-    "batteryAb": "NOT_RUN_DEFERRED"
+    "batteryAb": "NOT_RUN_DEFERRED",
+    "physicalRenderingA": "PASS_9_PER_SCENARIO_REUSED",
+    "physicalRenderingB": "PASS_9_PER_SCENARIO",
+    "physicalO10EnduranceA": "PASS_10",
+    "physicalO10EnduranceB": "PASS_10",
+    "physicalMapRecreationBoth": "PASS_20_TRANSITIONS_EACH",
+    "physicalLiveBoth": "PASS_20_SESSIONS_EACH",
+    "productionRenderer": "BASELINE_RETAINED",
+    "candidateAdoption": "REJECTED_STARTUP_AND_DRIVING_REGRESSIONS"
   },
-  "status": "IN_PROGRESS",
+  "status": "PARTIAL",
   "emulatorMemoryDiagnostics": {
     "environment": "API 33 ARM64 emulator",
     "art": {
@@ -9967,6 +11364,308 @@
           "value": 257461
         }
       ]
+    },
+    "warmNative": {
+      "A": {
+        "status": "PASS",
+        "samplingIntervalBytes": 65536,
+        "profilingSnapshots": [
+          {
+            "offsetSeconds": 0.0,
+            "records": 4,
+            "estimatedOutstandingSampleBytes": 0
+          },
+          {
+            "offsetSeconds": 32.304,
+            "records": 642,
+            "estimatedOutstandingSampleBytes": 2994176
+          },
+          {
+            "offsetSeconds": 62.316,
+            "records": 935,
+            "estimatedOutstandingSampleBytes": 6860800
+          },
+          {
+            "offsetSeconds": 92.32,
+            "records": 817,
+            "estimatedOutstandingSampleBytes": 10596352
+          },
+          {
+            "offsetSeconds": 122.064,
+            "records": 771,
+            "estimatedOutstandingSampleBytes": 16198028
+          },
+          {
+            "offsetSeconds": 152.296,
+            "records": 677,
+            "estimatedOutstandingSampleBytes": 16363520
+          },
+          {
+            "offsetSeconds": 182.296,
+            "records": 710,
+            "estimatedOutstandingSampleBytes": 16363520
+          },
+          {
+            "offsetSeconds": 201.46,
+            "records": 591,
+            "estimatedOutstandingSampleBytes": 19116032
+          },
+          {
+            "offsetSeconds": 225.9,
+            "records": 169,
+            "estimatedOutstandingSampleBytes": 19116032
+          },
+          {
+            "offsetSeconds": 262.708,
+            "records": 38,
+            "estimatedOutstandingSampleBytes": 18591744
+          }
+        ],
+        "traceStats": [
+          {
+            "name": "heapprofd_client_spinlock_blocked",
+            "value": 265000
+          },
+          {
+            "name": "heapprofd_unwind_samples",
+            "value": 397735
+          },
+          {
+            "name": "heapprofd_unwind_time_us",
+            "value": 11471249
+          }
+        ],
+        "allocatorCallStacks": [
+          {
+            "scope": "Includes libhwui.so",
+            "callsites": 800,
+            "sampled_net_bytes": 18198528
+          },
+          {
+            "scope": "Other call stacks",
+            "callsites": 263,
+            "sampled_net_bytes": 393216
+          }
+        ],
+        "startedAt": "O10 initial map ready before replay"
+      },
+      "line": {
+        "status": "PASS",
+        "samplingIntervalBytes": 65536,
+        "profilingSnapshots": [
+          {
+            "offsetSeconds": 0.0,
+            "records": 673,
+            "estimatedOutstandingSampleBytes": 2129920
+          },
+          {
+            "offsetSeconds": 30.0,
+            "records": 959,
+            "estimatedOutstandingSampleBytes": 7569408
+          },
+          {
+            "offsetSeconds": 59.968,
+            "records": 849,
+            "estimatedOutstandingSampleBytes": 10190848
+          },
+          {
+            "offsetSeconds": 90.0,
+            "records": 906,
+            "estimatedOutstandingSampleBytes": 11108352
+          },
+          {
+            "offsetSeconds": 120.0,
+            "records": 796,
+            "estimatedOutstandingSampleBytes": 16089088
+          },
+          {
+            "offsetSeconds": 150.0,
+            "records": 716,
+            "estimatedOutstandingSampleBytes": 15958016
+          },
+          {
+            "offsetSeconds": 169.056,
+            "records": 610,
+            "estimatedOutstandingSampleBytes": 18448384
+          },
+          {
+            "offsetSeconds": 193.404,
+            "records": 257,
+            "estimatedOutstandingSampleBytes": 18382848
+          },
+          {
+            "offsetSeconds": 233.408,
+            "records": 27,
+            "estimatedOutstandingSampleBytes": 17547264
+          }
+        ],
+        "traceStats": [
+          {
+            "name": "heapprofd_client_spinlock_blocked",
+            "value": 219000
+          },
+          {
+            "name": "heapprofd_unwind_samples",
+            "value": 437500
+          },
+          {
+            "name": "heapprofd_unwind_time_us",
+            "value": 9376719
+          }
+        ],
+        "allocatorCallStacks": [
+          {
+            "scope": "Includes libhwui.so",
+            "callsites": 843,
+            "sampled_net_bytes": 17350656
+          },
+          {
+            "scope": "Other call stacks",
+            "callsites": 290,
+            "sampled_net_bytes": 196608
+          }
+        ],
+        "startedAt": "O10 initial map ready before replay"
+      }
+    },
+    "matchedResetNativeSnapshots": {
+      "A": {
+        "samples": [
+          {
+            "offsetSecondsFromReady": 2.728,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 0
+          },
+          {
+            "offsetSecondsFromReady": 35.032,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 2994176
+          },
+          {
+            "offsetSecondsFromReady": 65.044,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 6860800
+          },
+          {
+            "offsetSecondsFromReady": 95.048,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 10596352
+          },
+          {
+            "offsetSecondsFromReady": 124.792,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 16198028
+          },
+          {
+            "offsetSecondsFromReady": 155.024,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 16363520
+          },
+          {
+            "offsetSecondsFromReady": 185.024,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 16363520
+          },
+          {
+            "offsetSecondsFromReady": 204.188,
+            "phase": "completed",
+            "estimatedOutstandingBytes": 19116032
+          },
+          {
+            "offsetSecondsFromReady": 228.628,
+            "phase": "reset",
+            "estimatedOutstandingBytes": 19116032
+          },
+          {
+            "offsetSecondsFromReady": 265.436,
+            "phase": "closed",
+            "estimatedOutstandingBytes": 18591744
+          }
+        ],
+        "firstResetSample": {
+          "offsetSecondsFromReady": 228.628,
+          "phase": "reset",
+          "estimatedOutstandingBytes": 19116032,
+          "allocatorCallStacks": [
+            {
+              "scope": "Includes libhwui.so",
+              "callsites": 799,
+              "sampled_net_bytes": 18722816
+            },
+            {
+              "scope": "Other call stacks",
+              "callsites": 253,
+              "sampled_net_bytes": 393216
+            }
+          ]
+        }
+      },
+      "line": {
+        "samples": [
+          {
+            "offsetSecondsFromReady": 35.614,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 2129920
+          },
+          {
+            "offsetSecondsFromReady": 65.614,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 7569408
+          },
+          {
+            "offsetSecondsFromReady": 95.582,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 10190848
+          },
+          {
+            "offsetSecondsFromReady": 125.614,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 11108352
+          },
+          {
+            "offsetSecondsFromReady": 155.614,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 16089088
+          },
+          {
+            "offsetSecondsFromReady": 185.614,
+            "phase": "ready",
+            "estimatedOutstandingBytes": 15958016
+          },
+          {
+            "offsetSecondsFromReady": 204.67,
+            "phase": "completed",
+            "estimatedOutstandingBytes": 18448384
+          },
+          {
+            "offsetSecondsFromReady": 229.018,
+            "phase": "reset",
+            "estimatedOutstandingBytes": 18382848
+          },
+          {
+            "offsetSecondsFromReady": 269.022,
+            "phase": "closed",
+            "estimatedOutstandingBytes": 17547264
+          }
+        ],
+        "firstResetSample": {
+          "offsetSecondsFromReady": 229.018,
+          "phase": "reset",
+          "estimatedOutstandingBytes": 18382848,
+          "allocatorCallStacks": [
+            {
+              "scope": "Includes libhwui.so",
+              "callsites": 843,
+              "sampled_net_bytes": 18120704
+            },
+            {
+              "scope": "Other call stacks",
+              "callsites": 285,
+              "sampled_net_bytes": 262144
+            }
+          ]
+        }
+      }
     }
   }
 }
