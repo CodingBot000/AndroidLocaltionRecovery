@@ -30,6 +30,7 @@ python3 -B tools/extended/generate.py
 python3 -B tools/extended/check_terrain.py
 python3 -B tools/osm/verify.py
 ./gradlew :core:simulation:run --args='fixtures/osm build/reports/osm-evaluation.json build/reports/osm-evaluation.md'
+./gradlew :core:simulation:run --args='fixtures/osm/challenge build/reports/osm-challenge.json build/reports/osm-challenge.md'
 ./gradlew :core:simulation:run --args='fixtures/evaluation build/reports/legacy.json build/reports/legacy.md'
 ./gradlew :core:simulation:run --args='fixtures/extended build/reports/extended.json build/reports/extended.md'
 ```
@@ -62,3 +63,15 @@ Android와 JVM은 동일한 fixture와 파서를 사용한다. 엔진은 가상 
 - [단위·계측·빌드·오프라인 검증](docs/verification.md) · [기기와 측정 환경](docs/physical-device-validation.md)
 
 위치 오차와 복구 지연은 실제 지도 형상 위에서 가상 관측을 재생해 얻은 값이다. 실제 환경의 위치 정확도나 내비게이션 성능을 추정하는 데에는 별도의 실측이 필요하다.
+
+[성능 리팩터링 전후 측정](docs/refactor-performance.md) · [고난도 독립 평가](docs/osm-challenge-report.md)
+
+## Android 플랫폼 신뢰성 실험
+
+- [Live 위치](docs/live-location.md)에서 별도 APK 설치, 전경 위치 세션, OSM 좌표 및 권한 흐름을 확인할 수 있습니다.
+- [Loopback 경로 요청](docs/network-reliability.md)은 JVM에서 합성 경로 이탈, 재시도, 취소, 응답 검증을 실행합니다.
+- [장애 조사](docs/stability-investigation.md)와 [통합 검증](docs/verification.md)에 에뮬레이터 증거와 제한을 기록했습니다.
+
+```bash
+./gradlew :live:assembleDebug :live:testDebugUnitTest :route-lab:test verifyModuleBoundaries
+```

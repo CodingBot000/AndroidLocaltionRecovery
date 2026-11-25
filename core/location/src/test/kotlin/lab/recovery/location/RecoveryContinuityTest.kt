@@ -44,4 +44,21 @@ class RecoveryContinuityTest {
         assertEquals(Reason.AMBIGUOUS, matcher.match(observation, previousRoad = null).reason)
         assertEquals("upper", matcher.match(observation, previousRoad = "upper").confirmed?.roadId)
     }
+    @Test fun sameEdgeDoesNotAcceptAnImpossibleArcDistanceOrReverseMovement() {
+        val start = Point2D(0.0, 0.0)
+        val end = Point2D(0.0, 4.0)
+        val road = Road("bend", listOf(start, Point2D(100.0, 0.0), Point2D(100.0, 4.0), end))
+        val edge = RoadEdge(road, "a", "b")
+        val network = RoadNetwork(listOf(RoadNode("a", start), RoadNode("b", end)), listOf(edge), emptyMap())
+        val graph = RoadGraph(network, RoutePlan(network, listOf(edge.id)), segmented = true)
+        fun at(offset: Double) = MatchCandidate(edge.id, 0, road.at(offset), 0.0, offset)
+
+        assertEquals(4.0, start.distance(end), .0001)
+        assertFalse(recoveryRoadContinuous(graph, at(0.0), at(204.0), 50.0))
+        assertFalse(recoveryRoadContinuous(graph, at(160.0), at(70.0), 100.0))
+        assertTrue(recoveryRoadContinuous(graph, at(100.0), at(102.0), 50.0))
+        assertTrue(recoveryRoadContinuous(graph, at(102.0), at(99.0), 50.0, backwardTolerance = 4.0))
+        assertFalse(recoveryRoadContinuous(graph, at(102.0), at(97.0), 50.0, backwardTolerance = 4.0))
+    }
+
 }

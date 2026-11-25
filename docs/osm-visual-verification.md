@@ -19,3 +19,9 @@ API 36 ARM64 에뮬레이터를 비행기 모드와 Wi-Fi 꺼짐 상태로 두�
 [여의도 야간](demo/osm/O01-night.png) · [성수동 야간](demo/osm/O10-night.png)
 
 운중동 후보의 첫 탐색 기준은 건물 수가 적은 외곽 주행에 기울었다. 동일 지역의 데이터에서 건물이 모인 주거 구간을 선택해 저속·정차·재출발 사례를 재구성했다. 수영강 시나리오는 실제 교량 위에서 감속과 GPS 손실이 겹치도록 조정했다. [국내 데이터와 재현 방법](osm-data-pipeline.md)
+
+## 성능 리팩터링 후 재검수
+
+동일 API 36 세로 화면에서 10개 지도의 Follow·Mid·Overview를 다시 검수했다. 도로·한글 라벨·시설·귀속 위치가 유지되고 회복 중 진단 마커도 표시된다. [Follow 10개](demo/refactor/follow-review.jpg) · [Mid 10개](demo/refactor/mid-review.jpg) · [Overview 10개](demo/refactor/overview-review.jpg)
+
+[O07 Follow 원본](demo/refactor/O07-follow.png) · [O10 Mid 원본](demo/refactor/O10-mid.png)

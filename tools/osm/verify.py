@@ -90,5 +90,25 @@ def verify():
     assert railway_total > 0
 
 
+def verify_challenge():
+    variants = load("challenge/catalog.json")["entries"]
+    assert len(variants) == 16 and len({r["kind"] for r in variants}) == 8
+    by_kind = {}
+    for entry in variants:
+        folder = "evaluation" if entry["evaluation"] else "development"
+        path = ROOT / "challenge" / folder / f"{entry['id']}.json"
+        assert checksum(path) == entry["fileSha256"], path
+        challenge = json.loads(path.read_text(encoding="utf-8"))
+        base = load(f"scenarios/{entry['baseScenario']}.json")
+        assert all(challenge[key] == base[key] for key in
+                   ("mapChecksum", "mapId", "duration", "actualRoute", "plannedRoute", "groundTruth")), path
+        assert challenge["observations"] != base["observations"]
+        by_kind.setdefault(entry["kind"], {})[entry["evaluation"]] = challenge
+    for variants in by_kind.values():
+        assert variants[True]["seed"] != variants[False]["seed"]
+        assert variants[True]["observations"] != variants[False]["observations"]
+
+
 if __name__ == "__main__":
     verify()
+    verify_challenge()

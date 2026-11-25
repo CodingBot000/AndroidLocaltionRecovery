@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.performClick
@@ -36,7 +37,8 @@ class RecoveryInstrumentedTest {
 
     private fun model() = ViewModelProvider(rule.activity)[LabViewModel::class.java]
     private fun ready(model: LabViewModel, scenario: String) = rule.waitUntil(10_000) {
-        model.state.value.playback == Playback.READY && model.state.value.scenario?.id == scenario
+        model.state.value.playback == Playback.READY && model.state.value.scenario?.id == scenario &&
+            rule.onAllNodesWithTag("camera-mode").fetchSemanticsNodes(false).isNotEmpty()
     }
     private fun readySyntheticDemo(model: LabViewModel) {
         ready(model, "ODEMO_LONG")

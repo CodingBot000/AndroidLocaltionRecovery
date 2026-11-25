@@ -7,9 +7,10 @@ import lab.recovery.map.RoutePlan
 
 data class MapScene(
     val network: RoadNetwork,
-    val route: RoutePlan,
+    val route: RoutePlan?,
     val visual: MapVisualData,
     val worldBounds: List<Double>? = null,
+    val dataKey: String? = null,
 )
 
 data class MapCredits(val text: String, val onClick: () -> Unit)

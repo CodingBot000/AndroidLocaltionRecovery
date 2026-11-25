@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import lab.recovery.map.RoadClass
@@ -42,13 +43,15 @@ internal fun arrangeLabels(
     viewport: Rect,
     obstacles: List<Rect>,
     limit: Int,
+    presorted: Boolean = false,
 ): List<LabelCandidate> {
     val occupied = obstacles.toMutableList()
     val seen = mutableSetOf<String>()
     val result = mutableListOf<LabelCandidate>()
     val center = viewport.center
-    for (candidate in labels.sortedWith(compareBy<LabelCandidate> { it.rank }
-        .thenBy { (it.anchor - center).getDistanceSquared() })) {
+    val ordered = if (presorted) labels else labels.sortedWith(compareBy<LabelCandidate> { it.rank }
+        .thenBy { (it.anchor - center).getDistanceSquared() })
+    for (candidate in ordered) {
         val bounds = candidate.bounds
         if (bounds.left < viewport.left || bounds.top < viewport.top ||
             bounds.right > viewport.right || bounds.bottom > viewport.bottom) continue
@@ -86,6 +89,56 @@ internal fun clipLabelSegment(a: Offset, b: Offset, bounds: Rect): Pair<Offset, 
     return a + delta * start to a + delta * end
 }
 
+internal class MapLabelCache(private val density: Density) {
+    val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val metrics = android.util.LruCache<Pair<String, Boolean>, Pair<Float, Float>>(256)
+
+    data class Nearby(val roads: List<MapRoad>, val pois: List<lab.recovery.map.MapPoi>)
+    private var world: MapWorld? = null
+    private var covered: Bounds? = null
+    private var nearby: Nearby? = null
+    private var camera: Projection? = null
+    private var scene: MapGeometry? = null
+    private var detail: Detail? = null
+    private var projected = emptyList<LabelCandidate>()
+
+    fun textStyle(important: Boolean) = with(density) {
+        paint.typeface = if (important) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+        paint.textSize = (if (important) 11.sp else 10.sp).toPx()
+    }
+
+    fun measure(text: String, important: Boolean): Pair<Float, Float> {
+        val key = text to important
+        return metrics.get(key) ?: with(density) {
+            textStyle(important)
+            ((paint.measureText(text) + 10.dp.toPx()) to (paint.textSize + 6.dp.toPx())).also { metrics.put(key, it) }
+        }
+    }
+
+    fun nearby(map: MapWorld, projection: Projection): Nearby {
+        val visible = projection.visibleBounds(0.0)
+        val previous = covered
+        if (world === map && previous != null &&
+            previous.minX <= visible.minX && previous.minY <= visible.minY &&
+            previous.maxX >= visible.maxX && previous.maxY >= visible.maxY) return checkNotNull(nearby)
+        val padding = with(density) { 48.dp.toPx().toDouble() }
+        val area = projection.visibleBounds(padding)
+        world = map
+        covered = area
+        return Nearby(map.visibleNamedRoads(area), map.visiblePois(area)).also { nearby = it }
+    }
+
+    fun candidates(map: MapGeometry, projection: Projection, lod: Detail, calculate: () -> List<LabelCandidate>): List<LabelCandidate> {
+        if (scene !== map || camera != projection || detail != lod) {
+            projected = calculate()
+            scene = map
+            camera = projection
+            detail = lod
+        }
+        return projected
+    }
+}
+
 internal fun DrawScope.drawMapLabels(
     data: MapGeometry,
     projection: Projection,
@@ -93,68 +146,23 @@ internal fun DrawScope.drawMapLabels(
     style: MapStyle,
     overlay: MapOverlay,
     chrome: List<Rect>,
-    paint: Paint,
+    cache: MapLabelCache,
 ) {
     val screen = Rect(6.dp.toPx(), 6.dp.toPx(), size.width - 6.dp.toPx(), size.height - 6.dp.toPx())
     if (screen.width <= 0 || screen.height <= 0) return
-    val blocked = chrome + listOfNotNull(overlay.vehicle?.point, overlay.lastKnown, overlay.raw, overlay.truth, data.start, data.end)
+    val blocked = chrome + listOfNotNull(overlay.vehicle?.point, overlay.lastKnown, overlay.raw, overlay.truth, data.route?.points?.first(), data.route?.points?.last())
         .map { point ->
             val at = projection.offset(point)
             val r = 17.dp.toPx()
             Rect(at.x-r, at.y-r, at.x+r, at.y+r)
         }
-    val candidates = mutableListOf<LabelCandidate>()
-    fun measure(text: String, important: Boolean): Pair<Float, Float> {
-        paint.typeface = if (important) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
-        paint.textSize = (if (important) 11.sp else 10.sp).toPx()
-        return (paint.measureText(text) + 10.dp.toPx()) to (paint.textSize + 6.dp.toPx())
+    val candidates = cache.candidates(data, projection, detail) {
+        projectCandidates(data, projection, detail, screen, cache)
     }
-    val worldBounds = projection.visibleBounds(0.0)
-    for (poi in data.visiblePois(worldBounds)) {
-        val strong = poi.type in setOf(PoiType.STATION, PoiType.SCHOOL, PoiType.PARK)
-        if (detail == Detail.OVERVIEW && poi.type != PoiType.STATION) continue
-        if (detail == Detail.MID && !strong) continue
-        val name = poi.name.orEmpty()
-        val (width, height) = measure(name, false)
-        val point = projection.offset(poi.position)
-        val rank = when (poi.type) {
-            PoiType.STATION -> 1
-            PoiType.SCHOOL, PoiType.PARK -> 3
-            PoiType.SPORT -> 5
-            PoiType.PARKING, PoiType.FUEL -> 6
-        }
-        val rowWidth = if (name.isEmpty()) 20.dp.toPx() else width + 18.dp.toPx()
-        val rowAnchor = if (name.isEmpty()) point else point + Offset(rowWidth / 2 - 10.dp.toPx(), 0f)
-        candidates += LabelCandidate(name, rowAnchor, 0f, rowWidth, maxOf(height, 20.dp.toPx()), rank, false, poi.type)
-    }
-    for (label in data.labels) {
-        val (width, height) = measure(label.text, important = true)
-        candidates += LabelCandidate(label.text, projection.offset(label.position), 0f, width, height, 2, true)
-    }
-    for (layer in data.visibleRoads(worldBounds)) for (road in layer) {
-        val visual = road.visual
-        val text = visual.name ?: continue
-        val important = visual.structure != RoadStructure.SURFACE
-        if (detail == Detail.OVERVIEW && !important && visual.roadClass != RoadClass.EXPRESSWAY) continue
-        if (detail == Detail.MID && !important && visual.roadClass == RoadClass.LOCAL) continue
-        val (width, height) = measure(text, important)
-        val priority = if (important) 0 else if (visual.roadClass == RoadClass.EXPRESSWAY) 1 else if (road.planned) 3 else 4
-        for ((a, b) in road.geometry.points.zipWithNext()) {
-            val (start, end) = clipLabelSegment(projection.offset(a), projection.offset(b), screen) ?: continue
-            val delta = end - start
-            if (delta.getDistance() < width) continue
-            val middle = start + delta * .5f
-            val angle = uprightAngle(delta)
-            val radians = Math.toRadians(angle.toDouble())
-            val clearance = (if (detail == Detail.DETAIL) 16.dp else 9.dp).toPx()
-            val normal = Offset(sin(radians).toFloat(), -cos(radians).toFloat()) * clearance
-            candidates += LabelCandidate(text, middle + normal, angle, width, height, priority, important)
-            candidates += LabelCandidate(text, middle - normal, angle, width, height, priority, important)
-        }
-    }
+    val paint = cache.paint
     val limit = when (detail) { Detail.DETAIL -> 11; Detail.MID -> 7; Detail.OVERVIEW -> 4 }
-    for (candidate in arrangeLabels(candidates, screen, blocked, limit)) {
-        measure(candidate.text, candidate.important)
+    for (candidate in arrangeLabels(candidates, screen, blocked, limit, presorted = true)) {
+        cache.textStyle(candidate.important)
         paint.textAlign = Paint.Align.CENTER
         val baseline = -(paint.ascent() + paint.descent()) / 2
         drawIntoCanvas { wrapper ->
@@ -187,7 +195,7 @@ internal fun DrawScope.drawMapLabels(
                 paint.typeface = Typeface.DEFAULT_BOLD
                 paint.color = style.text.toArgb()
                 canvas.drawText(icon, iconX, -(paint.ascent() + paint.descent()) / 2, paint)
-                measure(candidate.text, candidate.important)
+                cache.textStyle(candidate.important)
                 textX = 9.dp.toPx()
             }
             paint.style = Paint.Style.STROKE
@@ -201,4 +209,60 @@ internal fun DrawScope.drawMapLabels(
             canvas.restoreToCount(saved)
         }
     }
+}
+
+
+private fun DrawScope.projectCandidates(
+    data: MapGeometry,
+    projection: Projection,
+    detail: Detail,
+    screen: Rect,
+    cache: MapLabelCache,
+): List<LabelCandidate> {
+    val candidates = mutableListOf<LabelCandidate>()
+    val nearby = cache.nearby(data.world, projection)
+    for (poi in nearby.pois) {
+        val strong = poi.type in setOf(PoiType.STATION, PoiType.SCHOOL, PoiType.PARK)
+        if (detail == Detail.OVERVIEW && poi.type != PoiType.STATION) continue
+        if (detail == Detail.MID && !strong) continue
+        val name = poi.name.orEmpty()
+        val (width, height) = cache.measure(name, false)
+        val point = projection.offset(poi.position)
+        val rank = when (poi.type) {
+            PoiType.STATION -> 1
+            PoiType.SCHOOL, PoiType.PARK -> 3
+            PoiType.SPORT -> 5
+            PoiType.PARKING, PoiType.FUEL -> 6
+        }
+        val rowWidth = if (name.isEmpty()) 20.dp.toPx() else width + 18.dp.toPx()
+        val rowAnchor = if (name.isEmpty()) point else point + Offset(rowWidth / 2 - 10.dp.toPx(), 0f)
+        candidates += LabelCandidate(name, rowAnchor, 0f, rowWidth, maxOf(height, 20.dp.toPx()), rank, false, poi.type)
+    }
+    for (label in data.world.labels) {
+        val (width, height) = cache.measure(label.text, important = true)
+        candidates += LabelCandidate(label.text, projection.offset(label.position), 0f, width, height, 2, true)
+    }
+    for (road in nearby.roads) {
+        val visual = road.visual
+        val text = visual.name ?: continue
+        val important = visual.structure != RoadStructure.SURFACE
+        if (detail == Detail.OVERVIEW && !important && visual.roadClass != RoadClass.EXPRESSWAY) continue
+        if (detail == Detail.MID && !important && visual.roadClass == RoadClass.LOCAL) continue
+        val (width, height) = cache.measure(text, important)
+        val priority = if (important) 0 else if (visual.roadClass == RoadClass.EXPRESSWAY) 1 else if (data.isPlanned(road)) 3 else 4
+        for ((a, b) in road.geometry.points.zipWithNext()) {
+            val (start, end) = clipLabelSegment(projection.offset(a), projection.offset(b), screen) ?: continue
+            val delta = end - start
+            if (delta.getDistance() < width) continue
+            val middle = start + delta * .5f
+            val angle = uprightAngle(delta)
+            val radians = Math.toRadians(angle.toDouble())
+            val clearance = (if (detail == Detail.DETAIL) 16.dp else 9.dp).toPx()
+            val normal = Offset(sin(radians).toFloat(), -cos(radians).toFloat()) * clearance
+            candidates += LabelCandidate(text, middle + normal, angle, width, height, priority, important)
+            candidates += LabelCandidate(text, middle - normal, angle, width, height, priority, important)
+        }
+    }
+    return candidates.sortedWith(compareBy<LabelCandidate> { it.rank }
+        .thenBy { (it.anchor - screen.center).getDistanceSquared() })
 }
