@@ -301,3 +301,13 @@ LIVE_EXPECTED_HEAP_MIB=48 tools/run_live_instrumentation.sh
 adb -d shell am instrument -w -r -e class lab.recovery.live.LiveRealDeviceSmokeTest \
   -e realLocation true lab.recovery.live.test/androidx.test.runner.AndroidJUnitRunner
 ```
+
+
+### Compose Live 계측 종료 크래시
+
+실패 SHA `3b951c0`의 원격 타임라인에서 테스트 프레임이 워커에서 View 변경을 적용한 최초 오류를 확인했다. Activity 종료의 SlotTable 예외가 뒤따랐다. 수정 `ee6fb21`은 원본 Live 계측에 `StandardTestDispatcher`를 지정하고 활성 Start 버튼이 렌더링될 때까지 기다린다. 기존 테스트 수, 타임아웃, 지도와 FGS 계약을 유지한다.
+
+- API 36 ARM64에서 Live 원본 3개를 5회 실행해 모두 통과했고 앱 크래시는 0건이었다.
+- API 34에서 Live 3개와 비행기 모드 기본 앱 10개, API 26·48MiB에서 기본 앱 2개와 Live 2개가 통과했다. API 26에서 mock provider 테스트 1개를 건너뛰었다.
+- API 33 Live 3개와 위치·알림 권한 계측, JVM 70개·Lint·APK 검증, 평가 84개와 로드 오류 3개를 통과했다.
+- 기준선 실패·복원 대조, 원격 실험 및 미실행 항목은 RCA에 기록했다. [Compose 계측 RCA](compose-slot-table-rca.md)
