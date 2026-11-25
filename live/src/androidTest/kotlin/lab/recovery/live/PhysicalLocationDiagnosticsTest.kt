@@ -2,6 +2,7 @@ package lab.recovery.live
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.KeyguardManager
 import android.content.pm.PackageManager
 import android.location.GnssStatus
 import android.location.Location
@@ -104,10 +105,15 @@ class PhysicalLocationDiagnosticsTest {
                 Log.i(TAG, "screenOffMs=${SystemClock.elapsedRealtime() - sleepStarted} callbacks=${state.received - before}")
             } finally {
                 device.wakeUp()
-                device.executeShellCommand("wm dismiss-keyguard")
+                val keyguard = instrumentation.targetContext.getSystemService(KeyguardManager::class.java)
+                if (!keyguard.isDeviceSecure) device.executeShellCommand("wm dismiss-keyguard")
+                if (keyguard.isKeyguardLocked) {
+                    Log.i(TAG, "unlockRequired=true")
+                    await(90_000) { !keyguard.isKeyguardLocked }
+                }
                 device.executeShellCommand("am start -n lab.recovery.live/.LiveActivity -f 0x20000000")
                 assertEquals(active.token, LiveSessions.updates.value.token)
-                stop()
+                Log.i(TAG, "sameTokenAfterUnlock=true stopMs=${stop()}")
             }
         }
     }
