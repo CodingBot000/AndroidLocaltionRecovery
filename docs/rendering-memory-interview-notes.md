@@ -1,4 +1,8 @@
-# Android 지도 렌더링·메모리 면접 노트
+# Android 지도 렌더링·메모리 분석 지표
+
+[실기기 RCA](rendering-memory-rca.md) · [렌더링 설계](korea-map-design.md) · [전체 문서 안내](index.md)
+
+실제 측정과 기술적 판단을 이해하기 위한 용어와 실험 설계 참고 자료다.
 
 ## 렌더링
 
@@ -18,8 +22,8 @@
 
 ## 실험 설계
 
-같은 단말, APK 빌드 유형, 컴파일 모드, fixture, 사용자 조작으로 기준선과 후보를 교차 측정한다. 라벨을 잠시 제외하는 격리 실험은 라벨의 기여도를 살피는 용도다. 채택 후보에는 같은 라벨과 카메라를 유지하며 초기 기동, 느린 프레임, 30분 메모리 경향과 저사양 렌더링을 함께 확인한다. 과거 비교의 Follow 복귀 축척과 최신 코드의 축척 보존 동작은 차이가 있어, 이번 A/B의 기준은 현재 `main`으로 고정한다.
+기준선과 후보의 단말, APK 빌드 유형, 컴파일 모드, fixture, 사용자 조작을 맞춘다. 이번 실험은 순차 측정했으므로 환경·순서 편향이 남는다. 교차 측정은 이후 실험에서 편향을 줄이는 방법이다. 라벨을 잠시 제외하는 격리 실험은 라벨의 기여도를 살피는 용도다. 채택 후보에는 같은 라벨과 카메라를 유지하며 초기 기동, 느린 프레임, 30분 메모리 경향과 저사양 렌더링을 함께 확인한다. 과거 비교의 Follow 복귀 축척과 최신 코드의 축척 보존 동작은 차이가 있어, 이번 A/B의 기준은 현재 `main`으로 고정한다.
 
-이번 후보는 전환 CPU P95와 유휴 PSS를 줄였다. 같은 후보의 콜드 TTFD와 주행 Overrun P95는 늘었고, 재생 완료 PSS 중앙값도 높아졌다. 채택 여부를 설명할 때는 같은 실기기의 이 네 관측과 에뮬레이터에서 확인한 Path 수명 범위를 함께 말할 수 있다. [실기기 A/B](rendering-memory-rca.md)
+이번 후보는 전환 CPU P95와 유휴 PSS를 줄였다. 같은 후보의 콜드 TTFD와 주행 Overrun P95는 늘었고, 재생 완료 PSS 중앙값도 높아졌다. 이 네 관측을 함께 해석해 기존 렌더러를 유지했다. 에뮬레이터에서 확인한 Path 수명은 실기기 PSS 증가 기전의 직접적인 증거가 아니다. [실기기 A/B](rendering-memory-rca.md)
 
 [Compose 성능 단계](https://developer.android.com/develop/ui/compose/performance/phases) · [Macrobenchmark 지표](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-metrics) · [FrameTimeline](https://perfetto.dev/docs/data-sources/frametimeline) · [네이티브 할당 프로파일](https://perfetto.dev/docs/data-sources/native-heap-profiler)

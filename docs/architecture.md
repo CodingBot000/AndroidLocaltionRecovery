@@ -2,6 +2,17 @@
 
 [README](../README.md) · [위치 알고리즘](algorithm.md) · [지도 렌더링](korea-map-design.md) · [Live 위치](live-location.md) · [HTTP 실험](network-reliability.md)
 
+## 설계 의사결정
+
+| 기술적 과제 | 선택한 구조 | 효과 및 확인 방법 |
+|---|---|---|
+| 위치 처리와 Android UI의 결합 | 순수 Kotlin 코어 / Compose 표현 계층 / Android 위치 어댑터 | JVM에서 결정적 위치 평가와 모듈 의존성 검사 |
+| 빠른 지도 전환과 재생 취소 | 단일 명령 큐, 실행 ID 및 generation, 작업 Dispatcher | 늦은 결과 차단, Reset·Activity 재생성 계측 |
+| 대형 도로망의 처리 비용 | 원본 도로와 표현 데이터를 분리하고 Spatial Grid·LOD·가시 Path 캐시 사용 | 매칭 판정 동등성, Macrobenchmark와 Perfetto |
+| 오프라인·실제 GPS·HTTP 실험의 격리 | 앱 2개와 독립 JVM HTTP 모듈 | 권한·APK·fixture 검사 및 실제 리스너 해제 |
+
+[성능 비교](refactor-performance.md) · [플랫폼 검증](verification.md) · [전체 문서 안내](index.md)
+
 ## 전체 9개 모듈
 
 실선은 Gradle 선언 의존성, 점선은 테스트 경계다. 기본 앱과 Live는 별도 APK이며 HTTP 실험은 독립 JVM 모듈이다.
@@ -78,7 +89,7 @@ flowchart LR
 
 `ui:map`은 지형·도로·경로 Path를 활성 장면 한 개에 대해 월드 좌표로 준비한다. 차량 데이터가 갱신되면 카메라 행렬로 경로와 지형을 투영하고 동적 오버레이를 그린다. Follow는 채택·추정·마지막 확인 위치를 사용한다. Overview는 계획 경로 bounds에 맞추고 수동 pan·zoom은 Free 모드로 전환한다. 이 상태는 지도 Composable이 소유한다. 카메라 조작과 지도 색상 변경은 재생 명령을 보내지 않는다.
 
-`benchmark`는 Release 상속 변형의 별도 패키지 `lab.recovery.app.benchmark`를 대상으로 한다. 콜드 스타트, 명시적으로 선택한 15초 DEMO, M10의 첫 45초 프레임 계측을 구성한다.
+`benchmark`는 Release 상속 변형의 별도 패키지 `lab.recovery.app.benchmark`를 대상으로 한다. 현재 OSM 성능 검증의 `RefactorMapBenchmark`는 O10 콜드 기동, O10→O07→O10 전환 및 O10 1× 주행·카메라 조작을 측정한다. 기존 합성 지도 벤치마크 결과는 [실기기 측정 이력](physical-device-validation.md)에 분리해 보존한다.
 
 
 ## 합성 지도 표현 개정 이력

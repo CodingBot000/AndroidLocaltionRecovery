@@ -4,6 +4,15 @@
 
 ## 설계 요약
 
+| 설계 선택 | 목적 |
+|---|---|
+| 원본 도로망과 표시용 geometry 분리 | 화면 단순화가 위치 판정에 영향을 주지 않도록 함 |
+| 월드 인덱스·Viewport Culling·LOD | 화면 밖 도형과 축척별 불필요한 세부 형상 제외 |
+| 정적·동적·라벨 Canvas 및 캐시 | 위치 갱신과 지도 준비의 책임 분리, 기존 도형 재사용 |
+| 저메모리 Software Canvas | API 26·48MiB 환경에서 정적 지도 viewport bitmap 재사용 |
+
+[성능 전후 측정](refactor-performance.md) · [실기기 후보 검증](rendering-memory-rca.md)
+
 실제 도로·건물·수역·POI를 Compose Canvas로 표시하되 화면 표현과 원본 위치 매칭 형상을 분리한다.
 
 ```mermaid

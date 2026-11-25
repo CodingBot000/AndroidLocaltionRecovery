@@ -2,6 +2,8 @@
 
 [README](../README.md) · [지도 설계](korea-map-design.md) · [화면](osm-visual-verification.md) · [라이선스](../data/osm/README.md)
 
+**재현 계약:** 날짜와 해시를 고정한 OSM 원본, 지역별 좌표 변환, 가공 데이터·시나리오 체크섬을 연결한다. Android 및 JVM은 동일한 가공본을 읽고 Ground Truth는 독립 평가에서만 사용한다.
+
 ## 데이터 흐름
 
 ```mermaid

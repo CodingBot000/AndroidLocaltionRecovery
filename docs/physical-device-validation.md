@@ -2,21 +2,23 @@
 
 [README](../README.md) · [통합 검증](verification.md) · [성능](refactor-performance.md)
 
-## 최신 상태 (2026-11-25)
+## 최신 확인 범위 (2026-11-26)
 
-| 환경 | 검증 | 결과 |
+| 환경 | 확인한 검증 | 결과·근거 |
 |---|---|---|
-| API 31 실기기 | O10 기동·렌더링 및 전환·재생 20회 | PASS |
-| API 31 실기기 | Live 시작·FGS 확인·Stop 후 해제 | PASS |
-| API 31 실기기 | 실제 GPS 수신 | FAIL · 120초 내 callback 0건 |
-| API 36 에뮬레이터 | 최신 O10/O07 Macrobenchmark | 측정 완료 |
-| 최신 OSM 실기기 | Macrobenchmark·배터리 | 미완료 |
+| SM-G975N · Android 12 / API 31 | 실내 fresh GPS 수신, 직접 provider 대조, FGS·listener 시작·정지 20회 | 수신 및 해제 확인; 이전 120초 무수신 원인은 미확정 · [실기기 GPS](real-device-final-validation.md) |
+| 같은 실기기 | O10 콜드 기동, 지도 전환, 주행·카메라 Macrobenchmark | 기준 A 및 후보 B 시나리오별 9회; 후보 기각 · [성능 RCA](rendering-memory-rca.md) |
+| 같은 실기기 | O10 1× 180초 × 10회, 지도 전환·재생 및 Live 각각 20회 | A/B 각각 통과; 반복 PSS 증가 원인은 미확정 · [메모리·Live](rendering-memory-rca.md) |
+| API 26·31·33·34·36 에뮬레이터 | 위치 권한·서비스 생명주기·오프라인 계측, API 26·48MiB | 환경별 결과는 [통합 검증](verification.md) 참조 |
+| SM-S908N · Android 16 / API 36 | 이전 합성 지도 버전의 기동·프레임·내구 계측 | 아래 과거 측정 이력; 최신 OSM 버전과 직접 비교하지 않음 |
 
-[최신 검증](verification.md#api-26-48mib-o10-수정-재검증) · [플랫폼 성능](verification.md#성능-비교와-자원)
+실기기 GPS 수신 시험은 실내에서 수행했다. 실기기 렌더링·내구 시험은 USB 연결 상태의 가상 주행이며, 화면 OFF 수신 편차는 별도 실험 기록에 남겼다. 전력 A/B는 NOT_RUN이다.
 
-## SM-G975N / Android 12 재검증
+## 실기기 검증 문서
 
-최신 main `d0b3822`에서 기존 실제 GPS 테스트, 직접 GPS 대조, O01·O10 FGS와 현재 GPS listener 시작·정지 20회를 통과했다. 아래 이전 실기기 표의 120초 무수신 상태는 해당 실행의 이력이다. SM-G975N 측정 조건과 최신 OSM 성능·메모리 결과는 별도 보고서에서 확인한다. [실기기 최종 검증](real-device-final-validation.md)
+- [2026-11-25 GPS·서비스·OSM 성능 및 내구](real-device-final-validation.md)
+- [2026-11-26 동일 단말 렌더링·메모리 A/B와 후보 기각](rendering-memory-rca.md)
+- [통합 품질 게이트 및 재현 명령](verification.md#최신-구현-검증-요약)
 
 ## 이전 실기기 측정 이력
 

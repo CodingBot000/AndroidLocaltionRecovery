@@ -2,6 +2,17 @@
 
 2026-11-25에 원격 `main`의 실패 커밋 `3b951c0`에서 조사했다. 범위는 Android 계측의 Compose 테스트 환경이다.
 
+## 결론
+
+| 관찰 | 조치와 판정 |
+|---|---|
+| 원격 API 36 계측 실패 | 최초 WrongThread 예외와 종료 시 SlotTable 예외를 분리 |
+| 테스트 클록과 UI 준비 동기화 | `StandardTestDispatcher` 명시, 서비스 활성 상태와 실제 Start UI 준비를 함께 확인 |
+| 수정 범위 | Live androidTest에 한정; 운영 코드·Runtime 의존성 유지 |
+| 회귀 | 로컬 API 36 ARM64에서 원본 3개를 5회 통과; 전체 원인과 발생 확률을 단정하지 않음 |
+
+[장애 분석](stability-investigation.md) · [통합 검증](verification.md)
+
 ## 최초 오류와 Activity 종료 오류
 
 직전 성공 `d9cd5da`에서 `3b951c0`까지 변경된 파일 18개는 Markdown이다. 실패 커밋의 API 36 x86_64 계측 두 건은 모두 첫 테스트에서 `SlotWriter.moveSlotGapTo`의 `length=2560; index=-56`로 끝났다. 원본 stdout에는 먼저 발생한 오류가 표시되지 않았다. [직전 성공](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45571046077/job/139057479424) · [원본 실패 1차](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45578634217/job/139082754732) · [원본 실패 2차](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45578634217/job/139087373650)

@@ -42,7 +42,7 @@ Follow, Overview, Free 및 재생·일시정지·Step·Reset·배속 조작을 �
 
 ## 지도 품질 개정 캡처
 
-[10개 지도의 최신 Follow·Overview와 전후 비교](map-visual-verification.md)
+[합성 지도 개정 당시 Follow·Overview와 전후 비교](map-visual-verification.md) · [현재 OSM 화면 검수](osm-visual-verification.md)
 
 ## 초기 확장판의 API 36 에뮬레이터 캡처
 
