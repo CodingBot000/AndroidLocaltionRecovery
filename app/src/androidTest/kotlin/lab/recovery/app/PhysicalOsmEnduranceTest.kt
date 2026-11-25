@@ -87,8 +87,11 @@ class PhysicalOsmEnduranceTest {
     private fun note(cycle: Int, phase: String, model: LabViewModel) {
         val memory = Debug.MemoryInfo().also(Debug::getMemoryInfo)
         val state = model.state.value
+        val runtime = Runtime.getRuntime()
+        val javaUsedKiB = (runtime.totalMemory() - runtime.freeMemory()) / 1024
         Log.i(TAG, "cycle=$cycle phase=$phase virtualMs=${state.snapshot.nowMs} totalPssKiB=${memory.totalPss} " +
             "javaPssKiB=${memory.dalvikPss} nativePssKiB=${memory.nativePss} " +
+            "javaUsedKiB=$javaUsedKiB nativeAllocatedKiB=${Debug.getNativeHeapAllocatedSize() / 1024} " +
             "graphicsKiB=${memory.getMemoryStat("summary.graphics")} backlogMs=${state.replay.backlogMs} " +
             "logs=${state.logs.size} trail=${state.trails.sumOf { it.points.size }}")
     }

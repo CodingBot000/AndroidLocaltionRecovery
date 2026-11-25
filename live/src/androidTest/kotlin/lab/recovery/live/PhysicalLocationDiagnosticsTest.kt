@@ -9,6 +9,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
+import android.os.Debug
 import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
@@ -64,14 +65,17 @@ class PhysicalLocationDiagnosticsTest {
                 if (cycle == 0) selectMap("O01")
                 if (cycle == 10) selectMap("O10")
                 val times = start()
+                val measure = cycle in setOf(0, 4, 9, 14, 19)
                 try {
                     val state = LiveSessions.updates.value
                     assertTrue("Session token must advance", state.token > previousToken)
                     previousToken = state.token
                     Log.i(TAG, "cycle=${cycle + 1} map=${state.mapId} foregroundMs=${times.first} " +
                         "activeMs=${times.second} callbacks=${state.received} dropped=${state.dropped}")
+                    if (measure) noteMemory(cycle + 1, "active")
                 } finally {
                     Log.i(TAG, "cycle=${cycle + 1} stopMs=${stop()}")
+                    if (measure) noteMemory(cycle + 1, "stopped")
                 }
             }
         }
@@ -116,6 +120,15 @@ class PhysicalLocationDiagnosticsTest {
                 Log.i(TAG, "sameTokenAfterUnlock=true stopMs=${stop()}")
             }
         }
+    }
+
+    private fun noteMemory(cycle: Int, phase: String) {
+        val memory = Debug.MemoryInfo().also(Debug::getMemoryInfo)
+        val runtime = Runtime.getRuntime()
+        val javaUsedKiB = (runtime.totalMemory() - runtime.freeMemory()) / 1024
+        Log.i(TAG, "memCycle=$cycle phase=$phase totalPssKiB=${memory.totalPss} " +
+            "javaPssKiB=${memory.dalvikPss} nativePssKiB=${memory.nativePss} " +
+            "javaUsedKiB=$javaUsedKiB nativeAllocatedKiB=${Debug.getNativeHeapAllocatedSize() / 1024}")
     }
 
     private fun requirePhysicalOptIn() {
