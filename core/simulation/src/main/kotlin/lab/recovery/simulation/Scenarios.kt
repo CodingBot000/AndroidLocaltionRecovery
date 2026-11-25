@@ -72,13 +72,7 @@ object FixtureReader {
         val version = schemaVersion.toInt()
         val duration = root["duration"].integer()
         if (duration !in 0..profile.durationLimit) throw InvalidFixture(FixtureError.DURATION_LIMIT, "${profile.durationLimit} ms")
-        val graph = if (map == null) legacyGraph(root, profile) else {
-            require(root["mapId"].string() == map.id)
-            require(root["routeVersion"].integer() == 1L)
-            val route = RoutePlan(map.network, root.getAsJsonArray("plannedRoute").map(JsonElement::string))
-            if (map.osm != null) require(root["mapChecksum"].string() == map.checksum)
-            RoadGraph(map.network, route, segmented = map.osm != null)
-        }
+        val graph = if (map == null) legacyGraph(root, profile) else fixtureGraph(root, map)
         val observations = root.getAsJsonArray("observations")
         if (observations.size() > profile.observationLimit) throw InvalidFixture(FixtureError.EVENT_LIMIT, "${profile.observationLimit} observations")
         val labels = mutableMapOf<Int, TruthLabel>()
@@ -194,3 +188,11 @@ internal fun JsonElement.integer(): Long {
     return asBigDecimal.longValueExact()
 }
 private fun JsonElement?.optionalNumber(): Double? = this?.takeUnless(JsonElement::isJsonNull)?.number()
+
+internal fun fixtureGraph(root: JsonObject, map: MapDefinition): RoadGraph {
+    require(root["mapId"].string() == map.id)
+    require(root["routeVersion"].integer() == 1L)
+    if (map.osm != null) require(root["mapChecksum"].string() == map.checksum)
+    val route = RoutePlan(map.network, root.getAsJsonArray("plannedRoute").map(JsonElement::string))
+    return RoadGraph(map.network, route, segmented = map.osm != null)
+}

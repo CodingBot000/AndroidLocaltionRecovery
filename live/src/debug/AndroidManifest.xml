@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:name=".LiveDebugApplication">
+        <activity android:name=".FaultHarnessActivity" android:exported="true"
+            android:permission="android.permission.DUMP" android:screenOrientation="portrait"
+            android:process=":fault" android:excludeFromRecents="true" />
+    </application>
+</manifest>

@@ -169,3 +169,105 @@ TalkBack을 활성화한 API 36 세로 환경에서 다음 계측 클래스로 �
 Android 계측 10건은 API 36 에뮬레이터에서 통과했다. 세로 회귀와 OSM 10개 화면 전환, 비행기 모드의 합성 DEMO_LONG 내구를 포함한다. 1× 가상 180초 주행이 실제 180.502초에 완료됐고, 초기화 세 번 뒤 새 실행의 로그·이력만 쌓였다. 별도 Git worktree에서 여러 셀에 걸치는 도형을 검색 결과에서 제거하자 화면 인덱스 일치 테스트가 실패했다. 정상 코드의 테스트는 통과했다.
 
 [성능 비교와 원본](refactor-performance.md) · [고난도 평가 원본](osm-challenge-results.json) · [지도 화면 검수](osm-visual-verification.md)
+
+## P25–P32 Android 플랫폼 신뢰성
+
+기준선은 `83a5e7f4774edcb636feb714378b3c1a557ce284`다. P17–P24와 수동 확대 유지 변경이 포함됐으며, 별도 기능 브랜치는 이 SHA에서 시작했다. 성능 원본의 구현 커밋은 `af584b0`이다. 이후 CI에서 발견한 위치 등록 상태 전이를 수정하고 계측을 다시 실행했다. PR #2의 base는 미병합 P17–P24를 포함하는 `codex/map-performance`다. [검토용 PR #2](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2) · [상위 PR #1](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/1) · [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45458847968/job/138675557669)
+
+| 단계 | 상태 | 증거 |
+|---|---|---|
+| P25 | PASS | 기준선 Gradle 검사와 Macrobenchmark, 기존 package와 빌드 작업 유지, 분리한 모듈과 APK 권한 검사. |
+| P26 | PASS | JVM 5개와 Android framework callback, OSM 10개·기준점 60개의 최대 수치 오차 0.0000431m. 대략·원시·영역 이탈·결측·시간과 mock 출처 확인. |
+| P27 | PASS | API 26·31·33·34·36의 대표 에뮬레이터에서 FGS lifecycle을 검증했다. API 31 대략 권한 흐름과 API 36 프로세스 복구를 확인했다. |
+| P28 | PASS | 로컬 O05 요청·응답, 허용 전이·끝점·경로 버전 검사, 엔진 epoch 교체. |
+| P29 | PASS | JVM 17개와 APK 검사에서 N01–N15 검증. 실제 HTTP 지연과 늦은 fake 응답 모두 확인. |
+| P30 | PASS | A01–A06 계측과 결함 주입을 수행했다. API 26·48MiB의 O10 기동 OOM과 Live 반복 중 OS 메모리 종료를 재현하고 수정했다. |
+| P31 | PASS | 정적 검사와 회귀, 성능 검증을 실행했다. 동일한 48MiB 환경에서 기본 앱 O10 기동·재생과 Live 반복을 재검증했다. [최신 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2/checks) |
+| P32 | PASS | 검증 문서, 원본 측정 집계, Git 커밋과 검토용 PR을 남겼다. [PR #2](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2) |
+
+### 수용 게이트
+
+| Gate | 상태 | 검증 결과 |
+|---|---|---|
+| G0 기존 앱 | PASS | 단위·Lint·APK·원본 평가와 API 34 비행기 모드 계측 10개, API 26·48MiB O10 기동 및 20회 재생·지도 전환 계측을 통과했다. |
+| G1 Live 어댑터 | PASS | pyproj 기준점·경계와 checksum, coarse/fine, provider disabled, mock, 기존 관측 제거, 영역 재진입. |
+| G2 FGS | PASS | API 26·31·33·34·36 계측과 API 36 권한·알림·프로세스 복구를 확인했다. API 31 실기기에서 Live 시작과 정지가 통과했다. 새 GPS 수신은 120초 제한 내 확인하지 못했으며 배터리는 미측정이다. |
+| G3 HTTP | PASS | 로컬 HTTP 17개, N14–N15 APK 확인, 의도적 세대·전이 결함을 테스트가 검출했다. |
+| G4 장애 분석 | PASS | A01–A06 증거와 API 26·48MiB O10 OOM·OS 메모리 종료의 원인, 수정 및 재검증을 기록했다. |
+| G5 개인정보·릴리스 | PASS | 원래 APK에 Live·HTTP 코드와 위치·인터넷 권한이 없다. Live Release에 HTTP 및 Debug fault가 없다. 지도와 계획 필드, 백업·cleartext 설정을 검사했다. |
+| G6 통합 성능 | PASS | API 36 재생 지표와 Live·HTTP 자원 측정을 기록했다. API 26·48MiB의 O10 및 Live 반복과 네이티브 메모리 표본을 재검증했다. |
+| G7 CI·문서 | PASS | Gradle 모듈·APK 격리와 대표 에뮬레이터 작업을 구성했다. 최신 커밋별 결과와 계측 로그는 PR에 연결된다. [최신 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/2/checks) |
+
+### 실행한 검사
+
+- Gradle 모듈 경계, JVM·Android 단위 **70개**, Debug Lint, 기본·Live Debug와 unsigned Release, 두 계측 APK와 benchmark APK 빌드가 통과했다.
+- 기존과 새 기본 APK의 JSON fixture 119개가 감사 원본과 바이트 단위로 일치했다. Live APK 양쪽의 공용 asset은 31개이며 장시간 재생과 평가 입력은 패키징하지 않는다.
+- 기존 fixture 23개 SHA-256, 합성 지도 재생성과 10개 도로망 검증, 국내 OSM 출처·hash를 통과했다. 평가 사례 84개와 로드 오류 3개 검사가 통과했다. legacy·extended·OSM·challenge 평가 JSON은 저장된 원본과 바이트 단위로 일치했다.
+- API 34에서 기본 앱 세로·오프라인 계측 **10개**와 O01/O10 지도 전환·재생 20회 계측 **1개**가 통과했다. 180초 합성 주행은 1×에서 180,010ms가 걸렸다.
+- API 31·33·34·36의 Live 계측에서 lifecycle 검사 3건씩 통과했다. Android 12의 대략적 권한 선택과 원시 FGS도 시스템 UI에서 통과했다. API 36에서 별도로 위치 권한 거절·대략 허용·정밀 철회, 위치 스위치, 알림 거절 및 알림 Stop, 시스템 Task Manager 정지 명령·force-stop·SIGKILL·재부팅을 확인했다.
+- API 26은 두 환경의 결과를 보존했다. 48MiB 힙에서 기존 O10 기동 OOM과 Live 대형 지도 오류를 재현했다. 수정 뒤 같은 48MiB에서 기본 앱 2건과 Live lifecycle 2건이 통과했다. API 30+ mock provider 검사는 API 26에서 건너뛰었다.
+- [Live 재현](live-location.md) · [HTTP 장애 매트릭스](network-reliability.md) · [ANR·Crash·heap 조사](stability-investigation.md) · [정규화 측정 원본](benchmarks/platform-reliability.json)
+
+```bash
+./gradlew verifyModuleBoundaries :core:map:test :core:location:test :core:simulation:test \
+  :feature:lab:testDebugUnitTest :ui:map:testDebugUnitTest :app:testDebugUnitTest \
+  :feature:lab:lintDebug :ui:map:lintDebug :app:lintDebug :app:assembleDebug \
+  :app:assembleRelease :app:assembleDebugAndroidTest :benchmark:assembleBenchmark \
+  :live:testDebugUnitTest :live:lintDebug :live:assembleDebug :live:assembleRelease \
+  :live:assembleDebugAndroidTest :route-lab:test
+python3 -B tools/check_apk.py app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release-unsigned.apk
+python3 -B tools/check_platform_apks.py --live-debug live/build/outputs/apk/debug/live-debug.apk \
+  --live-release live/build/outputs/apk/release/live-release-unsigned.apk \
+  --offline app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/release/app-release-unsigned.apk
+```
+
+### 성능 비교와 자원
+
+동일한 API 36 ARM64 에뮬레이터, 1080×2400 세로 화면, benchmark 빌드, `CompilationMode.None()`에서 각 케이스를 기준선과 최종 빌드에 각각 3회 실행했다.
+
+| 지표 | 기준선 | 최종 |
+|---|---:|---:|
+| O10 콜드 TTID 중앙값 | 386.318ms | 386.305ms |
+| O10 콜드 TTFD 중앙값 | 1,283.290ms | 1,252.978ms |
+| O10→O07 전환 프레임 CPU P95 | 111.3ms | 66.4ms |
+| O10 1× 주행·카메라 프레임 CPU P95 | 389.8ms | 375.7ms |
+| O10 1× 주행·카메라 프레임 시한 초과 P95 | 574.4ms | 540.0ms |
+
+Live API 34에서 사용 권한을 미리 설정한 시작→활성 중앙값은 554ms, Stop→서비스와 listener 해제는 100ms였다(각각 20회). O01·O10의 경로 미선택 원시 fix 처리 중앙값은 29.4µs이며 대기열·OS 전달 시간은 제외한다. 별도 O01 정밀 세션의 첫 시스템 FGS 관측은 Start 후 153ms, 에뮬레이터 주입 fix 관측은 290ms였다(각 1회). PSS는 같은 지도별 시작·후반 표본을 남겼다. heap 인스턴스와 PSS는 별개이며 이 수치로 GNSS 지연, 배터리 사용량 또는 누수율을 추정하지 않는다.
+
+JVM의 HTTP 정상 이탈 테스트는 25ms, 헤더/바디 timeout을 포함한 케이스는 346ms, 503 후 정상은 22ms, 전체 기한으로 소켓을 취소한 케이스는 242ms였다. 테스트 준비 시간이 포함된 각 단일 케이스의 경과이며 축소한 장애 시간 설정을 포함한다.
+
+최종 APK 바이트는 기본 Debug 20,229,048, 기본 unsigned Release 15,606,667, Live Debug 19,419,854, Live unsigned Release 14,725,850이다. 로컬 시험 조건의 분포와 원시 표본은 집계 JSON에서 확인할 수 있다. [측정 원본](benchmarks/platform-reliability.json)
+
+### API 26 48MiB O10 수정 재검증
+
+2026-11-25에 같은 API 26 ARM64 에뮬레이터를 1,536MiB RAM과 48MiB ART 앱 힙으로 재기동했다. 두 앱의 계측에서 `Runtime.maxMemory()`가 50,331,648바이트인지 확인했다. 기준선 `68a2998`의 O10 콜드 기동에서 ART OOM을 재현했다. 스트리밍만 적용한 중간 빌드에서는 O10 기동이 통과했고, Live 반복 중 시스템 메모리 압박으로 커널이 앱을 종료했다.
+
+지도 로더는 한 번에 JSON 항목 하나를 변환하고 읽은 바이트에서 SHA-256과 용량을 계산한다. 같은 Android 8 힙 조건에서는 전체 지도 레이어를 소프트웨어 캔버스의 뷰포트 비트맵 하나에 그리고 재사용한다. Live 반복 중 1초 간격 네이티브 힙 PSS 최대 관측값은 스트리밍만 적용했을 때 336,244KiB(13개 표본), 두 수정 적용 뒤 15,834KiB(12개 표본)였다. [측정 원본](benchmarks/platform-reliability.json)
+
+| 환경 | 검사 | 결과 |
+|---|---|---|
+| API 26·48MiB | 기본 앱 O10 콜드 기동과 지도 렌더링 | PASS |
+| API 26·48MiB | O01·O10 전환 및 합성 재생 20회, Activity 재생성 4회 | PASS |
+| API 26·48MiB | Live 지도 준비와 FGS·listener 시작/해제 20회(O01·O10 각각 10회), Home·화면 OFF·재생성 계측 | PASS |
+| API 31 실기기 | 기본 앱 O10 기동·렌더링 및 합성 재생·지도 전환 20회 | PASS |
+| API 31 실기기 | Live O10 시작, FGS 확인, Stop 후 해제 | PASS |
+| API 31 실기기 | 현재 세션의 실제 GPS 수신 | FAIL · 120초 재계측에서 콜백 0건. 좌표·기기 식별자를 기록하지 않았다. |
+
+JVM 테스트 70건, Lint, APK 원본과 격리 검사 및 평가 84건·로드 오류 3건이 통과했다. legacy·extended·OSM·challenge 평가 JSON은 저장된 결과와 바이트 단위로 일치했다.
+
+에뮬레이터를 `-memory 1536 -prop dalvik.vm.heapgrowthlimit=48m`으로 시작하고 두 APK 및 각 계측 APK를 설치한 뒤 실행한다.
+
+```bash
+adb -e shell am instrument -w -r \
+  -e class lab.recovery.app.OsmOfflineSmokeTest,lab.recovery.app.PlatformReplayStressTest \
+  -e expectedHeapMiB 48 lab.recovery.app.test/androidx.test.runner.AndroidJUnitRunner
+LIVE_EXPECTED_HEAP_MIB=48 tools/run_live_instrumentation.sh
+```
+
+지정된 실기기의 GPS 테스트는 앱의 정밀 위치 권한을 설정한 상태에서 아래 명령으로 실행한다. 일반 에뮬레이터 계측은 이 테스트를 선택하지 않는다.
+
+```bash
+adb -d shell am instrument -w -r -e class lab.recovery.live.LiveRealDeviceSmokeTest \
+  -e realLocation true lab.recovery.live.test/androidx.test.runner.AndroidJUnitRunner
+```

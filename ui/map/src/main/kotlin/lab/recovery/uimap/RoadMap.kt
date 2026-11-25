@@ -1,5 +1,7 @@
 package lab.recovery.uimap
 
+import android.os.Build
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -92,7 +94,7 @@ fun RoadMap(
             mapReady(runId)
         }
     }
-    var mode by remember(scene, runId) { mutableStateOf(CameraMode.FOLLOW) }
+    var mode by remember(scene, runId) { mutableStateOf(if (scene?.route == null) CameraMode.OVERVIEW else CameraMode.FOLLOW) }
     var free by remember(scene, runId) { mutableStateOf<Projection?>(null) }
     var manualScale by remember(scene, runId) { mutableStateOf<Double?>(null) }
     var viewport by remember { mutableStateOf(IntSize.Zero) }
@@ -102,16 +104,16 @@ fun RoadMap(
     var creditBounds by remember { mutableStateOf(Rect.Zero) }
     val style = if (dark) MapStyle.Night else MapStyle.Day
     val latest by rememberUpdatedState(overlay)
-    val followPoint by rememberUpdatedState(overlay.vehicle?.point)
+    val followPoint by rememberUpdatedState(overlay.vehicle?.point ?: overlay.raw.takeIf { scene?.route == null })
     val padding = with(LocalDensity.current) { 19.dp.toPx().toDouble() }
     fun projection(data: MapGeometry): Projection {
         val width = viewport.width.toDouble()
         val height = viewport.height.toDouble()
-        val routeBounds = data.route.bounds
+        val routeBounds = data.overviewBounds
         val fitted = routeBounds.fit(width, height, padding)
         val overview = Projection(routeBounds.center, fitted, width, height)
         return when (mode) {
-            CameraMode.FOLLOW -> Projection(followPoint?.let(data.cameraBounds::clamp) ?: data.start,
+            CameraMode.FOLLOW -> Projection(followPoint?.let(data.cameraBounds::clamp) ?: data.focus,
                 manualScale?.coerceIn(cameraZoomRange(fitted, width))
                     ?: maxOf(fitted, width / data.followMeters, .01), width, height).followOffset()
             CameraMode.OVERVIEW -> overview
@@ -122,7 +124,7 @@ fun RoadMap(
     fun manipulate(anchor: Point2D, pan: Point2D, zoom: Double) {
         val data = geometry ?: return
         val current = projection(data)
-        val limits = cameraZoomRange(data.route.bounds.fit(current.width, current.height, padding), current.width)
+        val limits = cameraZoomRange(data.overviewBounds.fit(current.width, current.height, padding), current.width)
         val next = current.manipulated(anchor, pan, zoom, limits.start, limits.endInclusive)
         free = next.copy(center = data.cameraBounds.clamp(next.center))
         // Overview and pan do not replace the last scale the user chose by zooming.
@@ -137,6 +139,14 @@ fun RoadMap(
     }
     val density = LocalDensity.current
     val labelCache = remember(geometry, density) { MapLabelCache(density) }
+    val softwareMap = remember(geometry) {
+        // Android 8's hardware renderer can exhaust system memory recording large map frames.
+        if (geometry != null && Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1 &&
+            Runtime.getRuntime().maxMemory() <= 48 * 1024 * 1024L
+        ) {
+            SoftwareMapLayer()
+        } else null
+    }
     val strokes = remember { MapStrokeCache() }
     val trailPaths = remember(runId) { OverlayPathCache() }
     val trailStrokes = remember { MapStrokeCache() }
@@ -159,7 +169,8 @@ fun RoadMap(
             if (viewport.width < 1 || viewport.height < 1) return@Canvas
             val camera = projection(data)
             val detail = mapDetail(mode, camera.visibleMeters)
-            drawMap(data, camera, style, detail, strokes)
+            if (softwareMap == null) drawMap(data, camera, style, detail, strokes)
+            else softwareMap.draw(this, data, camera, style, detail, strokes)
             if (!optimized) {
                 drawOverlay(latest, camera, style, trailPaths, trailStrokes)
                 val occupied = listOf(modeBounds, controlsBounds, creditBounds, tunnelBounds)
