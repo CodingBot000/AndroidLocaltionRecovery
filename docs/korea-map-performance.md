@@ -1,6 +1,6 @@
 # 국내 OSM 초기 렌더링 성능 비교 이력
 
-[후속 성능 비교](refactor-performance.md) · [최신 플랫폼 성능](verification.md#성능-비교와-자원)
+[후속 성능 비교](refactor-performance.md) · [2026-11-26 실기기 A/B](rendering-memory-rca.md) · [플랫폼 단계 성능](verification.md#성능-비교와-자원)
 
 국내 OSM 전환 단계의 에뮬레이터 단회 비교다. 후속 리팩터링 및 플랫폼 측정과 기준선이 다르다.
 

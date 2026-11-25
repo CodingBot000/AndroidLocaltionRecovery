@@ -2,6 +2,8 @@
 
 [README](../README.md) · [아키텍처](architecture.md) · [OSM 평가](osm-evaluation-report.md) · [고난도 평가](osm-challenge-report.md)
 
+**핵심 계약:** 관측을 무조건 채택하지 않고 품질·시간·이동 가능성을 검증하며, 불확실한 도로는 보류한다. 가상 주행의 기대값과 엔진 결과를 분리하여 위치 판단의 회귀를 확인한다. [고난도 독립 평가](osm-challenge-report.md) · [공간 검색 성능](refactor-performance.md#jvm-도로-매칭)
+
 ## 설계 요약
 
 위치 점프·시간 역전·낮은 정확도·평행도로 모호성·신호 손실을 구분한다. 엔진은 관측과 Tick, 도로망 및 계획 경로를 받아 위치·신호 상태·경로 상태·판정 근거를 반환한다. 모호한 도로는 강제로 확정하지 않는다.

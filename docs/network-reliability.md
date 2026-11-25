@@ -4,6 +4,15 @@
 
 ## 설계 요약
 
+| 장애 유형 | 대응 |
+|---|---|
+| Timeout·일시적 HTTP 오류 | 전체 기한과 시도 수를 제한하고 Retry-After·backoff 적용 |
+| 중복 및 지연 응답 | Outstanding 요청 병합, generation·version 비교 및 취소 |
+| 비정상 경로·잘못된 JSON | 스키마, 지도 해시, 도로 방향·전이·크기 검사; 기존 경로 보호 |
+| Reset·Stop·지도 변경 | 호출·응답·자원 해제 및 늦은 결과 무효화 |
+
+[테스트 코드](../route-lab/src/test) · [통합 검증](verification.md)
+
 실패·중복·취소·응답 역전에도 유효한 기존 경로를 보호한다. 독립 JVM 모듈의 loopback HTTP 실험이며 상용 서버 연동은 아니다.
 
 ```mermaid
