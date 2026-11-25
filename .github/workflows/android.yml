@@ -100,11 +100,25 @@ jobs:
           arch: x86_64
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -no-audio -no-boot-anim
-          script: LIVE_TEST_REPORT=build/reports/platform-live-api36.txt tools/run_live_instrumentation.sh
+          script: |
+            mkdir -p build/reports/compose-rca
+            adb shell getprop ro.build.fingerprint > build/reports/compose-rca/environment.txt
+            adb shell getprop dalvik.vm.heapgrowthlimit >> build/reports/compose-rca/environment.txt
+            adb shell wm size >> build/reports/compose-rca/environment.txt
+            adb logcat -b all -v threadtime -T 1 > "$RUNNER_TEMP/compose-rca-raw.txt" 2>&1 &
+            log_pid=$!
+            result=0
+            LIVE_TEST_REPORT=build/reports/platform-live-api36.txt tools/run_live_instrumentation.sh || result=$?
+            kill "$log_pid" 2>/dev/null || true
+            wait "$log_pid" 2>/dev/null || true
+            awk '/ [IWEF] (LiveRca|AndroidRuntime|TestRunner|LiveVerification) *:/ {print}' "$RUNNER_TEMP/compose-rca-raw.txt" > build/reports/compose-rca/timeline.txt
+            exit "$result"
       - name: Preserve Live instrumentation results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: live-api36-instrumentation
-          path: build/reports/platform-live-api36.txt
+          path: |
+            build/reports/platform-live-api36.txt
+            build/reports/compose-rca/*.txt
           if-no-files-found: ignore

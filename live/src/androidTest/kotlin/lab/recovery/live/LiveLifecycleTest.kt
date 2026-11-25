@@ -38,11 +38,13 @@ class LiveLifecycleTest {
     }
 
     @After fun cleanup() {
+        Log.i("LiveRca", "cleanup entered")
         rule.runOnIdle { LiveSessions.stop(rule.activity) }
         if (mockProvider) {
             shell("cmd location providers remove-test-provider gps")
             shell("appops set com.android.shell android:mock_location default")
         }
+        Log.i("LiveRca", "cleanup returned")
     }
 
     @Test fun foregroundSessionSurvivesHomeScreenOffAndActivityRecreation() {
@@ -96,34 +98,46 @@ class LiveLifecycleTest {
         val stopTimes = mutableListOf<Long>()
         val snapshots = mutableListOf<String>()
         val fixTimes = mutableListOf<Long>()
-        repeat(20) { cycle ->
-            if (cycle == 0) choose("O01")
-            if (cycle == 10) choose("O10")
-            val before = SystemClock.elapsedRealtime()
-            start()
-            waitPhase(SessionPhase.ACTIVE)
-            startTimes += SystemClock.elapsedRealtime() - before
-            assertForeground(true)
-            assertListener(true)
-            rule.waitUntil(15_000) {
-                rule.onAllNodesWithTag("camera-mode").fetchSemanticsNodes().isNotEmpty()
+        try {
+            repeat(20) { cycle ->
+                Log.i("LiveRca", "cycle=$cycle begin")
+                if (cycle == 0) choose("O01")
+                if (cycle == 10) choose("O10")
+                val before = SystemClock.elapsedRealtime()
+                Log.i("LiveRca", "cycle=$cycle start")
+                start()
+                waitPhase(SessionPhase.ACTIVE)
+                startTimes += SystemClock.elapsedRealtime() - before
+                assertForeground(true)
+                assertListener(true)
+                Log.i("LiveRca", "cycle=$cycle active")
+                rule.waitUntil(15_000) {
+                    rule.onAllNodesWithTag("camera-mode").fetchSemanticsNodes().isNotEmpty()
+                }
+                Log.i("LiveRca", "cycle=$cycle map-ready")
+                if (mockProvider) {
+                    inject(if (cycle < 10) "37.5275,126.922" else "37.544,127.054")
+                    rule.waitUntil(10_000) { LiveSessions.updates.value.latestFixProcessingNs != null }
+                    fixTimes += checkNotNull(LiveSessions.updates.value.latestFixProcessingNs)
+                }
+                if (cycle in setOf(0, 9, 10, 19)) {
+                    val summary = shell("dumpsys meminfo lab.recovery.live").lineSequence()
+                        .filter { it.contains("TOTAL PSS:") || it.trimStart().startsWith("Views:") }
+                        .joinToString(" ") { it.trim() }
+                    snapshots += "$cycle $summary"
+                }
+                Log.i("LiveRca", "cycle=$cycle stop")
+                val stop = SystemClock.elapsedRealtime()
+                rule.onNodeWithTag("live-stop").performClick()
+                assertReleased()
+                Log.i("LiveRca", "cycle=$cycle released")
+                stopTimes += SystemClock.elapsedRealtime() - stop
             }
-            if (mockProvider) {
-                inject(if (cycle < 10) "37.5275,126.922" else "37.544,127.054")
-                rule.waitUntil(10_000) { LiveSessions.updates.value.latestFixProcessingNs != null }
-                fixTimes += checkNotNull(LiveSessions.updates.value.latestFixProcessingNs)
-            }
-            if (cycle in setOf(0, 9, 10, 19)) {
-                val summary = shell("dumpsys meminfo lab.recovery.live").lineSequence()
-                    .filter { it.contains("TOTAL PSS:") || it.trimStart().startsWith("Views:") }
-                    .joinToString(" ") { it.trim() }
-                snapshots += "$cycle $summary"
-            }
-            val stop = SystemClock.elapsedRealtime()
-            rule.onNodeWithTag("live-stop").performClick()
-            assertReleased()
-            stopTimes += SystemClock.elapsedRealtime() - stop
+        } catch (first: Throwable) {
+            Log.e("LiveRca", "test body failed", first)
+            throw first
         }
+        Log.i("LiveRca", "stress body returned")
         Log.i("LiveVerification", "twenty_start_to_active_ms=$startTimes stop_to_release_ms=$stopTimes")
         Log.i("LiveVerification", "fix_processing_ns=$fixTimes")
         Log.i("LiveVerification", "memory_snapshots=$snapshots")
