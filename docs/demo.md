@@ -1,4 +1,30 @@
-# 데모 재현
+# 실행 가이드 및 데모
+
+[README](../README.md) · [지도 전체 화면](osm-visual-verification.md) · [Live 위치](live-location.md)
+
+## 기본 OSM 데모
+
+기본 ODEMO_LONG(서울 성수동, 가상 180초)을 실행한다. GPS 점프·신호 손실·재획득·경로 이탈과 복귀를 지도 및 진단 로그에서 확인한다.
+
+| 시나리오 | 관찰 내용 |
+|---|---|
+| ODEMO_LONG | 복합 위치 장애와 이탈·복귀 |
+| OL06 / OL07 | 남산 터널의 짧은·긴 손실 |
+| OL08 | 수영강 교량 위 정차·손실 |
+| OL13 | 수서 나들목 가상 이탈·복귀 |
+
+<p align="center">
+  <a href="demo/refactor/O10-mid.png"><img src="demo/refactor/O10-mid.png" width="210" alt="성수동 O10 Mid"></a>
+  <a href="demo/refactor/O07-follow.png"><img src="demo/refactor/O07-follow.png" width="210" alt="운중동 O07 Follow"></a>
+</p>
+
+<p align="center">성수동 O10 · Mid &nbsp; | &nbsp; 운중동 O07 · Follow</p>
+
+Follow, Overview, Free 및 재생·일시정지·Step·Reset·배속 조작을 지원한다. [전체 캡처](osm-visual-verification.md)
+
+## 합성 DEMO_LONG 재현 (기존 회귀)
+
+아래 시간표는 OSM 기본 데모가 아닌 기존 합성 DEMO_LONG에 해당한다.
 
 기본 [OSM 주행과 실제 캡처](osm-visual-verification.md)는 ODEMO_LONG에서 확인할 수 있다. 아래 시간표를 재현하려면 시나리오 선택에서 합성 **DEMO_LONG**을 고른 뒤 재생을 누른다. 1×에서 3분, 5×에서 약 36초가 걸린다. 판정 경계를 정밀하게 확인하려면 일시정지하고 한 단계씩 실행한다.
 

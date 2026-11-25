@@ -1,4 +1,33 @@
-# 위치 판정과 평가 방식
+# 위치 처리 엔진과 독립 평가
+
+[README](../README.md) · [아키텍처](architecture.md) · [OSM 평가](osm-evaluation-report.md) · [고난도 평가](osm-challenge-report.md)
+
+## 설계 요약
+
+위치 점프·시간 역전·낮은 정확도·평행도로 모호성·신호 손실을 구분한다. 엔진은 관측과 Tick, 도로망 및 계획 경로를 받아 위치·신호 상태·경로 상태·판정 근거를 반환한다. 모호한 도로는 강제로 확정하지 않는다.
+
+```mermaid
+flowchart TD
+    A[Observation / Tick] --> B[형식·시간·품질·이동 검사]
+    B -->|유효 관측| C[SpatialGrid · 원본 도로 후보]
+    C --> D[거리·방향·연결성·계획 경로 점수]
+    D --> E[확정 / NO_MATCH / AMBIGUOUS]
+    B -->|거부 / 손실| F[신호 상태 / 제한적 DR]
+    E --> G[TrackingEngine 상태와 이벤트]
+    F --> G
+    G --> H[독립 평가기]
+    I[Ground Truth / 기대값] --> H
+```
+
+| 정책 | 기준 |
+|---|---|
+| 정상 품질 | accuracy 20m 이하 |
+| 손실 | 마지막 채택 측정 이후 3초 |
+| DR | 최대 15초, 모호한 분기·경로 끝에서 중단 |
+| 재획득 | 시간·이동 조건을 만족하는 연속 후보 3건 |
+| 이탈·복귀 | 신뢰 가능한 채택 관측 3건 |
+
+기본 가상 재생과 Live 입력 정책은 구분한다([Live 위치](live-location.md)). 아래는 판정 세부 계약이다.
 
 ## 검증과 매칭
 

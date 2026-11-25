@@ -1,4 +1,21 @@
-# 국내 OSM 화면 검수
+# 국내 OSM 지도 실행 화면과 시각 검증
+
+[README](../README.md) · [실행 가이드](demo.md) · [렌더링 설계](korea-map-design.md)
+
+## 대표 화면 (성능 리팩터링 이후)
+
+<p align="center">
+  <a href="demo/refactor/O10-mid.png"><img src="demo/refactor/O10-mid.png" width="210" alt="성수동 O10 Mid"></a>
+  <a href="demo/refactor/O07-follow.png"><img src="demo/refactor/O07-follow.png" width="210" alt="운중동 O07 Follow"></a>
+</p>
+
+<p align="center">성수동 O10 · Mid &nbsp; | &nbsp; 운중동 O07 · Follow</p>
+
+[Follow 10개](demo/refactor/follow-review.jpg) · [Mid 10개](demo/refactor/mid-review.jpg) · [Overview 10개](demo/refactor/overview-review.jpg)
+
+원본은 보존하며 클릭 시 확대할 수 있다. 아래 표는 국내 OSM 전환 단계의 개별 캡처이며 후속 검수는 하단 기록에 있다.
+
+## 10개 지역 상세 캡처
 
 API 36 ARM64 에뮬레이터를 비행기 모드와 Wi-Fi 꺼짐 상태로 두고 1080×2400 세로 화면을 캡처했다. 각 지도에서 Follow, 두 번 축소한 Free(Mid), 계획 경로를 맞춘 Overview를 확인했다. 확대 수준에 따라 건물 상세, 시설 기호와 주요 도로의 노출이 바뀐다. 세 화면 모두 지도 모서리에 OSM 귀속이 표시된다.
 

@@ -1,6 +1,33 @@
-# 국내 OSM 지도 구성
+# 국내 OSM 지도 렌더링 설계
 
-대한민국 Geofabrik 추출본에서 10개 지역을 가공한다. 각 지역은 기존 시나리오의 환경을 유지하기 위해 다른 도로망을 사용한다. 앱과 JVM 평가는 같은 OSM v3 데이터와 가상 주행을 읽으며, 실제 차량 위치는 수집하지 않는다.
+[README](../README.md) · [아키텍처](architecture.md) · [데이터](osm-data-pipeline.md) · [화면](osm-visual-verification.md)
+
+## 설계 요약
+
+실제 도로·건물·수역·POI를 Compose Canvas로 표시하되 화면 표현과 원본 위치 매칭 형상을 분리한다.
+
+```mermaid
+flowchart TD
+    A[MapDefinition] --> B[MapWorld · 작업 Dispatcher]
+    B --> C[SpatialGrid / Bounds]
+    C --> D[Viewport Culling / LOD]
+    D --> E[Path cache]
+    E --> F[정적 지도 Canvas]
+    D --> G[라벨 후보 / 측정 cache]
+    G --> H[라벨 Canvas]
+    I[위치 / 이력] --> J[동적 Canvas]
+    K[카메라] --> F & H & J
+```
+
+| 확대 단계 | 표현 정책 |
+|---|---|
+| Detail | 개별 건물, 상세 도로 및 시설 |
+| Mid | 중간 단순화, 주요 시설과 도로 |
+| Overview | 전체 경로, 주요 도로 및 축소 형상 |
+
+Android 8·48MiB 이하 앱 힙 조건에서는 정적 지도에 Software Canvas와 단일 viewport bitmap을 사용한다. [장애 분석](stability-investigation.md)
+
+대한민국 Geofabrik 추출본에서 10개 지역을 가공한다. 각 지역은 기존 시나리오의 환경을 유지하기 위해 다른 도로망을 사용한다. 기본 오프라인 앱과 JVM 평가는 같은 OSM v3 데이터와 가상 주행을 읽으며 실제 차량 위치를 수집하지 않는다. 별도 Live 앱은 동일 지도 표현 모듈을 사용한다.
 
 ## 표시 레이어
 

@@ -1,4 +1,37 @@
-# Loopback 경로 신뢰성 실험
+# HTTP 경로 요청과 네트워크 장애 대응
+
+[README](../README.md) · [아키텍처](architecture.md) · [검증](verification.md)
+
+## 설계 요약
+
+실패·중복·취소·응답 역전에도 유효한 기존 경로를 보호한다. 독립 JVM 모듈의 loopback HTTP 실험이며 상용 서버 연동은 아니다.
+
+```mermaid
+sequenceDiagram
+    participant E as Synthetic engine
+    participant C as RouteCoordinator
+    participant H as OkHttp
+    participant M as MockWebServer
+    E->>C: REROUTE_RECOMMENDED
+    C->>H: 요청 ID / generation / version
+    H->>M: POST /route/lookup
+    alt 일시적 실패
+        M-->>H: 503 / timeout
+        H-->>C: 실패
+        C->>C: 제한된 backoff / deadline
+        C->>H: 동일 요청 재시도
+        H->>M: lookup
+    end
+    M-->>H: 대체 경로
+    H-->>C: 응답
+    alt 현재 요청과 유효한 경로
+        C->>C: 계획과 엔진을 함께 교체
+    else 오래된 응답 또는 검증 실패
+        C->>C: 응답 폐기 / 기존 계획 보호
+    end
+```
+
+Reset·Stop·지도 변경 또는 새 요청은 이전 generation을 무효화하고 호출을 취소한다. 아래는 요청 계약과 테스트 결과다.
 
 `:route-lab`은 JVM 모듈이다. `./gradlew :route-lab:test`가 임시 포트의 IPv4 loopback에 MockWebServer를 띄운다. 합성 O05 주행 OL13에서 관측된 기존 `REROUTE_RECOMMENDED`가 읽기 전용 `POST /route/lookup`을 시작한다. 고정된 대체 경로는 O05 공개 도로 ID와 허용 전이로 구성한다. 패키지 연결 상태는 `verifyModuleBoundaries`와 두 앱의 APK 검사에서 확인한다.
 

@@ -1,4 +1,33 @@
-# Android 장애와 자원 조사
+# Android 장애 분석과 재발 방지
+
+[README](../README.md) · [성능](refactor-performance.md) · [통합 검증](verification.md)
+
+## 핵심 사례: 저메모리 지도 OOM
+
+**문제:** API 26·48MiB 앱 힙에서 O10 기동 중 OOM을 재현했다. Streaming parsing만 적용한 중간 빌드는 기동했지만 Live 반복 중 네이티브 메모리 압박으로 OS가 앱을 종료했다.
+
+**수정:** 전체 JSON 객체 트리 대신 항목별 스트리밍 파싱을 적용했다. 해당 저메모리 조건의 정적 지도는 Software Canvas의 viewport bitmap 하나를 재사용한다.
+
+| 동일 저메모리 조건 | 관측 결과 |
+|---|---|
+| 스트리밍만 적용한 빌드 | Native Heap PSS 최대 336,244KiB (1초 간격 13개 표본) |
+| 렌더링 수정 후 | Native Heap PSS 최대 15,834KiB (12개 표본) |
+| 수정 후 회귀 | O10 기동, 지도 전환·재생 20회 및 Live 시작·종료 20회 통과 |
+
+전체 앱 메모리가 아닌 Native Heap PSS 최대 관측값이며 표본 수가 다르다. [원본과 조건](verification.md#api-26-48mib-o10-수정-재검증)
+
+## 조사 흐름
+
+```mermaid
+flowchart LR
+    A[장애 재현] --> B[OS 종료 이력 / Trace / Heap]
+    B --> C[원인 확인]
+    C --> D[수정]
+    D --> E[동일 조건 반복 검증]
+    E --> F[회귀 테스트 / 증거 보존]
+```
+
+의도적 ANR·Crash 재현과 실제 저메모리 결함을 구분한다. 아래는 각 원인·조치·검증 근거다.
 
 검증일은 2026-11-25(KST)다. 프로세스 장애는 폐기 가능한 ARM64 에뮬레이터에서 수행했다. 저장소에는 좌표·PID·기기 식별자·스택 전문·heap 원본 대신 집계 결과만 남겼다.
 

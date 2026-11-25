@@ -1,4 +1,22 @@
-# 실제 단말 검증
+# 실기기 및 에뮬레이터 검증 범위
+
+[README](../README.md) · [통합 검증](verification.md) · [성능](refactor-performance.md)
+
+## 최신 상태 (2026-11-25)
+
+| 환경 | 검증 | 결과 |
+|---|---|---|
+| API 31 실기기 | O10 기동·렌더링 및 전환·재생 20회 | PASS |
+| API 31 실기기 | Live 시작·FGS 확인·Stop 후 해제 | PASS |
+| API 31 실기기 | 실제 GPS 수신 | FAIL · 120초 내 callback 0건 |
+| API 36 에뮬레이터 | 최신 O10/O07 Macrobenchmark | 측정 완료 |
+| 최신 OSM 실기기 | Macrobenchmark·배터리 | 미완료 |
+
+[최신 검증](verification.md#api-26-48mib-o10-수정-재검증) · [플랫폼 성능](verification.md#성능-비교와-자원)
+
+## 이전 실기기 측정 이력
+
+아래 S22 Ultra 수치는 이전 합성 지도 빌드에 대한 기록이며 최신 OSM 버전 성능을 대표하지 않는다.
 
 검증일은 2026년 11월 24일 KST다. 삼성 갤럭시 S22 Ultra(SM-S908N), Android 16(API 36)에서 USB ADB로 실행했다. 위치 입력은 앱에 패키징된 합성 fixture를 사용했다.
 

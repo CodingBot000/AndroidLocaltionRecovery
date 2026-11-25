@@ -1,4 +1,34 @@
-# 검증 기록
+# 검증 결과 및 재현 이력
+
+[README](../README.md) · [성능](refactor-performance.md) · [실기기 범위](physical-device-validation.md) · [장애 분석](stability-investigation.md)
+
+## 최신 구현 검증 요약
+
+구현 기준 [main `d9cd5da`](https://github.com/CodingBot000/AndroidLocaltionRecovery/tree/d9cd5da5972898c2b1c372de91977647fa41cacc) · [CI 45571046077](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45571046077) (2026-11-25, build-and-test 및 live-api36 성공).
+
+| 검사 | 결과 | 범위 |
+|---|---|---|
+| 단위 테스트 | PASS · 70개 | JVM·Android |
+| 위치 평가 | PASS · 84개 및 로딩 오류 3개 | 합성·장시간·OSM·고난도 |
+| 빌드·Lint·APK | PASS | 권한·asset·HTTP 및 Debug 하네스 격리 |
+| Live 계측 | PASS | API 26·31·33·34·36 에뮬레이터, 원격 API 36 |
+| 저메모리 회귀 | PASS | API 26·48MiB O10 기동 및 반복 |
+| 실기기 Live 서비스 | PASS | API 31 시작·종료 |
+| 실기기 실제 GPS | FAIL | 120초 내 callback 0건 |
+| 최신 OSM 실기기 Macrobenchmark·배터리 | 미완료 | 과거 실기기 및 최신 에뮬레이터 기록 별도 보존 |
+
+CI 통과와 실기기 GPS 실패는 별개의 결과다.
+
+## 주요 기록 바로가기
+
+- [P17–P24 성능 리팩터링](#p17p24-성능-리팩터링-검증)
+- [P25–P32 플랫폼 신뢰성](#p25p32-android-플랫폼-신뢰성)
+- [최신 성능 비교](#성능-비교와-자원)
+- [저메모리 및 실기기 재검증](#api-26-48mib-o10-수정-재검증)
+
+## 단계별 검증 이력
+
+이하 기록은 각 단계 당시의 결과다. 과거 PASS·BLOCKED·NOT_RUN 및 PR 상태는 최신 상태와 구분한다.
 
 ## P00–P08 당시 결과
 

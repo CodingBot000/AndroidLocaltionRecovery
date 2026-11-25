@@ -1,4 +1,28 @@
-# OSM 오프라인 지도 파이프라인
+# OpenStreetMap 데이터 가공 및 재현
+
+[README](../README.md) · [지도 설계](korea-map-design.md) · [화면](osm-visual-verification.md) · [라이선스](../data/osm/README.md)
+
+## 데이터 흐름
+
+```mermaid
+flowchart TD
+    A[대한민국 PBF · 날짜와 SHA 고정] --> B[Python 전처리]
+    B --> C[공유 노드 / 방향 / 허용 회전]
+    B --> D[건물 / 수역 / POI]
+    C --> E[EPSG:5179 · 로컬 미터]
+    D --> E
+    E --> F[지도 JSON / manifest]
+    F --> G[가상 주행 / GPS 장애 생성]
+    F --> H[Android Asset / JVM]
+    G --> H
+    G --> I[Ground Truth / 기대값]
+    H --> L[관측 / Tick / 도로망 / 계획 경로]
+    L --> J[TrackingEngine]
+    J --> K[Evaluator]
+    I --> K
+```
+
+원본 다운로드와 앱 실행을 분리한다. 일반 빌드와 CI는 가공 데이터를 사용한다. 원본 중심선과 연결 정보는 위치 판정에, 표현용 단순화는 렌더링에 사용한다.
 
 OSM 데이터셋 `fixtures/osm/`은 이전 합성 지도·주행과 별도 카탈로그를 사용한다. Android에는 같은 폴더를 asset으로 패키징하며 JVM CLI도 동일한 JSON을 읽는다. 앱은 선택 지역 하나만 로드한다. 지도 데이터 출처는 지도 안에 표시하고, 출처 버튼에서 스냅샷과 ODbL 라이선스 및 주소를 오프라인으로 볼 수 있다.
 

@@ -1,4 +1,29 @@
-# Live 위치 실험
+# Android Live 위치 추적과 Foreground Service
+
+[README](../README.md) · [아키텍처](architecture.md) · [장애 조사](stability-investigation.md)
+
+## 설계 요약
+
+별도 APK에서 Android 위치 권한, Foreground Service의 생명주기, 화면 꺼짐·Activity 재생성·권한 철회 시 세션 안전성을 검증한다.
+
+```mermaid
+stateDiagram-v2
+    [*] --> IDLE
+    IDLE --> STARTING: Start / 권한 확인
+    IDLE --> ERROR: 권한 또는 provider 문제
+    STARTING --> ACTIVE: FGS 승격 / 지도 준비 / 등록
+    STARTING --> STOPPING: Stop 또는 오류
+    ACTIVE --> STOPPING: Stop / 권한 철회 / provider 비활성
+    STOPPING --> IDLE: 정상 해제
+    STOPPING --> ERROR: 오류 종료
+    ERROR --> STARTING: 사용자 Start / 조건 충족
+```
+
+Home·화면 잠금·Activity 재생성 중 서비스가 세션을 유지한다. 시스템 종료 후 자동 재시작하지 않고 다음 실행에서 중단을 알린다.
+
+**검증 범위:** API 26·31·33·34·36 에뮬레이터 및 API 31 실기기 서비스 lifecycle 검증. 실기기 실제 GPS 수신은 120초 내 callback 0건으로 실패했으며 배터리는 미측정이다. [실기기 결과](physical-device-validation.md)
+
+## 실행 방법
 
 `:live`는 기존 합성 재생 앱과 별도로 설치한다. 앱에서 국내 OSM 지도를 고른 뒤 Start를 누른다. Android가 위치 권한을 묻는 경우 선택을 마친 뒤 다시 Start를 누른다. 계획 경로 선택은 선택 사항이며 지정하지 않으면 원시 위치 진단만 제공한다. 지도 밖, 투영 검증 실패, 낮은 위치 품질, 대략적 권한은 화면에 각각 표시한다. 대략적 권한에서는 원시 진단만 제공한다.
 
@@ -31,7 +56,7 @@ Android Looper에서 콜백을 받고 16개 FIFO 대기열에 넣는다. 초과 
 
 `Location.elapsedRealtimeNanos`와 `SystemClock.elapsedRealtimeNanos()`에서 각각 측정과 수신 시간을 읽고 세션 기준으로 ms를 계산한다. 세션 이전, 미래, 수신 지연 3초 초과, 같은 ms 또는 역순 fix는 엔진에 전달하지 않는다. accuracy가 누락되거나 현재 엔진의 정밀 기준 20m를 넘으면 원시 진단을 유지한다. speed·bearing은 누락 상태를 보존한다. Android mock 플래그와 에뮬레이터 환경을 표시하며 mock 출처가 바뀌면 엔진 이력을 새로 시작한다.
 
-WGS84 입력은 경도·위도 순서로 EPSG:5179 Transverse Mercator에 투영한 뒤 지도별 원점을 뺀다. 지도 렌더러가 화면 Y축만 반전한다. 지도 체크섬과 경계 네 점·중심·도로점에서 0.5m 허용 오차를 검사한다. 지도 이탈과 품질 저하 시 계획 경로 및 DR 상태를 지우며, 재진입은 새 엔진 epoch에서 시작한다. 검증 자료는 기존 OSM 공개 좌표에서 유도했으며 `tools/osm/live_projection_samples.py`로 재생성할 수 있다.
+WGS84 입력은 경도·위도 순서로 EPSG:5179 Transverse Mercator에 투영한 뒤 지도별 원점을 뺀다. 지도 렌더러가 화면 Y축만 반전한다. 지도 체크섬과 경계 네 점·중심·도로점에서 0.5m 허용 오차를 검사한다. 지도 이탈과 품질 저하 시 엔진 및 DR 상태를 지우며, 재진입은 같은 선택 경로를 사용한 새 엔진 epoch에서 시작한다. 검증 자료는 기존 OSM 공개 좌표에서 유도했으며 `tools/osm/live_projection_samples.py`로 재생성할 수 있다.
 
 Release에는 OSM 지도·출처·카탈로그·투영 기준점과 기존 경로에서 추출한 6개 필드만 패키징한다. Live 코드가 합성 관측이나 Ground Truth를 읽을 경로를 제공하지 않는다.
 

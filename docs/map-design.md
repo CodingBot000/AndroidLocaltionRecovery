@@ -1,4 +1,8 @@
-# 합성 벡터 지도 디자인
+# 합성 지도 시각 설계 이력
+
+[현재 OSM 지도 설계](korea-map-design.md) · [최신 화면](osm-visual-verification.md)
+
+실제 OSM 전환 전 합성 지도 설계와 검증 조건을 보존한 기록이다.
 
 기준선 `84ae43d`에서 도로 노드·에지·전이와 모든 계획/실제 주행, Ground Truth, 관측·독립 기대값을 고정했다. 새 지도 데이터는 같은 v2 fixture의 표현 개정 `visualVersion=2`에 들어간다. `RoadNetwork`는 기존 차량 도로를 제공한다. `MapVisualData`의 구역, 필지, 건물, 수면, 산책로, 라벨은 화면 표현에 사용된다.
 
