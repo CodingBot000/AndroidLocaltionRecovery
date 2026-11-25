@@ -72,6 +72,7 @@ dependencies {
     testImplementation(libs.coroutines.test)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.test)
+    androidTestImplementation(libs.coroutines.test)
     androidTestImplementation(libs.android.test.runner)
     androidTestImplementation(libs.uiautomator)
 }

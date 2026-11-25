@@ -6,12 +6,14 @@ import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -19,7 +21,9 @@ import org.junit.Rule
 import org.junit.Test
 
 class LiveLifecycleTest {
-    @get:Rule val rule = createAndroidComposeRule<LiveActivity>()
+    // Queue composition work for the test clock instead of resuming it on the map worker.
+    @OptIn(ExperimentalTestApi::class)
+    @get:Rule val rule = createAndroidComposeRule<LiveActivity>(effectContext = StandardTestDispatcher())
     private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     private var mockProvider = false
 
