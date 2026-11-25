@@ -56,3 +56,8 @@ P17–P24의 비교이며 P25–P32와 기준선이 다르다. Android는 API 36
 두 실제 지도에서 관측별 후보 집합과 보정된 위치, 점수, 보류 판정을 비교했다. 워밍업 후 전체 입력 매칭을 번갈아 7회 측정한 관측당 시간 중앙값이다. JVM의 GC 후 생존 힙 단일 표본에서 O10 인덱스 생성 직후 약 1.16MB 증가가 관찰됐다. O07 표본은 GC 변동이 커서 인덱스의 별도 메모리 비용을 산정하지 않았다.
 
 [기준선 Macrobenchmark](benchmarks/refactor-before-macro.json) · [리팩터링 Macrobenchmark](benchmarks/refactor-after-macro.json) · [카메라 전환·메모리·Perfetto 집계](benchmarks/refactor-emulator-observations.json) · [JVM 원본](benchmarks/refactor-jvm-matching.csv)
+
+
+## SM-G975N / API 31 실기기 OSM 비교
+
+API 31 물리 단말에서 기준선 `653e311`과 최신 운영 소스 `d0b3822`를 같은 벤치마크로 시나리오별 9회 평가했다. O10 콜드 TTID 중앙값은 545.1→464.3ms, TTFD는 1,871.8→1,343.9ms였다. O10 주행·카메라 Frame CPU P95는 86.0→101.8ms였고 시한 초과 P95는 78.8→102.1ms였다. 단말, 컴파일 조건, 유효 표본과 제외 사유는 실기기 최종 보고서에 기록했다. [실기기 보고서](real-device-final-validation.md#rd3-실제-osm-성능)

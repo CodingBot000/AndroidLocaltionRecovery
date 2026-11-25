@@ -13,7 +13,7 @@
 | 대규모 도로망의 매칭 비용 | 순수 Kotlin Spatial Grid | O10 관측당 처리 시간 중앙값 **42.30 → 7.73µs (81.7% 감소)**, 기존 판정 일치 · [성능](docs/refactor-performance.md) |
 | Android 8·48MiB 앱 힙의 OOM 및 OS 메모리 종료 | Streaming JSON parsing, 저메모리 Software Canvas와 viewport bitmap 재사용 | Native Heap PSS 최대 관측값 **336,244 → 15,834KiB (95.3% 감소)**, 동일 환경 반복 검증 · [장애 분석](docs/stability-investigation.md) |
 | GPS 점프·터널 손실·평행도로 | Map Matching, 제한적 Dead Reckoning(DR), 재획득·이탈 판단 | 합성·OSM·고난도 가상 평가 **84개**, 로딩 오류 검사 3개 통과 · [평가](docs/verification.md) |
-| 권한 변경·Activity 재생성·백그라운드 위치 | LocationManager, Foreground Service, 제한된 callback queue와 자원 해제 | API 26·31·33·34·36 에뮬레이터, API 31 실기기 서비스 시작·종료 · [Live](docs/live-location.md) |
+| 권한 변경·Activity 재생성·백그라운드 위치 | LocationManager, Foreground Service, 제한된 callback queue와 자원 해제 | API 26·31·33·34·36 에뮬레이터, API 31 실기기 GPS 수신 및 FGS 시작·정지 20회 · [Live](docs/live-location.md) |
 | HTTP 실패·중복·응답 역전 | Timeout, Retry/Backoff, 취소, 요청 세대·경로 버전 검증 | 로컬 HTTP 테스트 **17개**, N01–N15 검증 · [네트워크](docs/network-reliability.md) |
 
 위치 매칭은 O10의 18,490개 방향성 에지를 대상으로 한 JVM 7회 반복 중앙값이다. 메모리 수치는 스트리밍만 적용한 중간 빌드와 렌더링 수정 후 빌드의 Native Heap PSS 최대 표본이며 전체 프로세스 메모리가 아니다.
@@ -103,9 +103,9 @@ API 26·48MiB 환경의 OOM 및 메모리 종료를 재현하고 수정했다. A
 | 저메모리 반복 | API 26·48MiB O10 기동, 지도 전환·재생 및 Live 시작·종료 각각 20회 |
 | CI·패키징 | 모듈 경계, Lint, Debug/unsigned Release, APK 격리, API 36 Live CI 통과 |
 
-[검증 이력과 재현 명령](docs/verification.md) · [구현 기준 main CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45571046077) (`d9cd5da`)
+[검증 이력과 재현 명령](docs/verification.md) · [구현 기준 main CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45595529668) (`d0b3822`)
 
-**남은 검증:** API 31 실기기 서비스 시작·종료는 통과했으나 실제 GPS 수신은 120초 내 callback 0건으로 실패했다. 최신 국내 상세 지도 실기기 Macrobenchmark와 배터리 소비 측정은 미완료다. [실기기 검증 범위](docs/physical-device-validation.md)
+**실기기 재검증:** API 31에서 실제 GPS 수신과 FGS·listener 해제를 확인했다. 과거 120초 무수신은 이번 조건에서 재현되지 않아 원인은 미확정이다. O10 콜드 TTFD 중앙값은 1,871.8→1,343.9ms였고 주행·카메라 시한 초과 P95는 78.8→102.1ms였다. O10 1× 재생 30분이 통과했다. 전력 A/B는 미실행이다. [실기기 최종 검증](docs/real-device-final-validation.md)
 
 ## 기술 스택
 

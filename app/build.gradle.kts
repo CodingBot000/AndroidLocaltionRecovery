@@ -44,6 +44,7 @@ dependencies {
     androidTestImplementation(libs.compose.test)
     androidTestImplementation(libs.coroutines.core)
     androidTestImplementation(libs.android.test.runner)
+    androidTestImplementation(libs.uiautomator)
     debugImplementation(libs.compose.test.manifest)
     "benchmarkImplementation"(libs.profileinstaller)
 }

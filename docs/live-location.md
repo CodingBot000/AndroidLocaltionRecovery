@@ -21,7 +21,7 @@ stateDiagram-v2
 
 Home·화면 잠금·Activity 재생성 중 서비스가 세션을 유지한다. 시스템 종료 후 자동 재시작하지 않고 다음 실행에서 중단을 알린다.
 
-**검증 범위:** API 26·31·33·34·36 에뮬레이터 및 API 31 실기기 서비스 lifecycle 검증. 실기기 실제 GPS 수신은 120초 내 callback 0건으로 실패했으며 배터리는 미측정이다. [실기기 결과](physical-device-validation.md)
+**검증 범위:** API 26·31·33·34·36 에뮬레이터 및 API 31 실기기 서비스 lifecycle 검증. SM-G975N 실내에서 기존 실제 GPS 테스트와 직접 GPS 대조, FGS·listener 시작·정지 20회를 통과했다. 과거 120초 무수신의 원인은 미확정이며 전력 A/B는 이번에 실행하지 않았다. [실기기 최종 검증](real-device-final-validation.md)
 
 ## 실행 방법
 
