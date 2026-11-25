@@ -1,0 +1,50 @@
+diff --git a/ui/map/src/main/kotlin/lab/recovery/uimap/MapLayers.kt b/ui/map/src/main/kotlin/lab/recovery/uimap/MapLayers.kt
+index 609b169..bb082b6 100644
+--- a/ui/map/src/main/kotlin/lab/recovery/uimap/MapLayers.kt
++++ b/ui/map/src/main/kotlin/lab/recovery/uimap/MapLayers.kt
+@@ -13,2 +13,3 @@ import androidx.compose.ui.graphics.drawscope.rotate
+ import androidx.compose.ui.graphics.drawscope.withTransform
++import androidx.compose.ui.graphics.nativeCanvas
+ import androidx.compose.ui.unit.dp
+@@ -74,2 +75,17 @@ internal fun DrawScope.drawMap(
+     fun dash(a: Float, b: Float) = cached.dash(a, b)
++    val useStraightRoadStrokes = data.world.optimized && drawContext.canvas.nativeCanvas.isHardwareAccelerated
++    fun roadPath(road: MapRoad) = if (data.isPlanned(road)) road.geometry.shape else data.path(road.geometry, detail)
++    fun DrawScope.drawRoadStroke(road: MapRoad, color: Color, stroke: Stroke) {
++        val points = road.geometry.points
++        if (useStraightRoadStrokes && points.size == 2) {
++            val start = Offset(points[0].x.toFloat(), -points[0].y.toFloat())
++            val end = Offset(points[1].x.toFloat(), -points[1].y.toFloat())
++            // Canvas.drawLine skips coincident endpoints, so keep their existing Path behavior.
++            if (start != end) {
++                drawLine(color, start, end, stroke.width, stroke.cap)
++                return
++            }
++        }
++        drawPath(roadPath(road), color, style = stroke)
++    }
+     val walkwayDash = if (detail == Detail.OVERVIEW) null else dash(1.3f, 4f)
+@@ -109,17 +125,16 @@ internal fun DrawScope.drawMap(
+             for (road in roads) {
+-                val (geometry, visual) = road
++                val visual = road.visual
+                 val paint = style.road(visual.roadClass, visual.structure)
+                 val edgeWidth = if (visual.structure == RoadStructure.BRIDGE || visual.structure == RoadStructure.ELEVATED) 2f else 0f
+-                drawPath(if (data.isPlanned(road)) geometry.shape else data.path(geometry, detail), paint.casing, style = stroke((paint.casingDp + edgeWidth) * roadFactor))
++                drawRoadStroke(road, paint.casing, stroke((paint.casingDp + edgeWidth) * roadFactor))
+             }
+             for (road in roads) {
+-                val (geometry, visual) = road
++                val visual = road.visual
+                 val paint = style.road(visual.roadClass, visual.structure)
+-                val shape = if (data.isPlanned(road)) geometry.shape else data.path(geometry, detail)
+-                drawPath(shape, paint.fill, style = stroke(paint.fillDp * roadFactor))
++                drawRoadStroke(road, paint.fill, stroke(paint.fillDp * roadFactor))
+                 when {
+                     visual.structure == RoadStructure.TUNNEL ->
+-                        drawPath(shape, style.tunnel.casing, style = stroke(1.2f, tunnelDash))
++                        drawPath(roadPath(road), style.tunnel.casing, style = stroke(1.2f, tunnelDash))
+                     visual.roadClass == RoadClass.EXPRESSWAY && highwayDash != null ->
+-                        drawPath(if (data.isPlanned(road)) geometry.shape else data.path(geometry, detail), paint.casing.copy(alpha = .65f), style = stroke(1f, highwayDash))
++                        drawPath(roadPath(road), paint.casing.copy(alpha = .65f), style = stroke(1f, highwayDash))
+                 }

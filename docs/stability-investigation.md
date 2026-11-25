@@ -84,3 +84,5 @@ API 30 이상에서 Live 화면은 자체 앱 종료 사유·시간·importance�
 ## API 31 실기기 GPS 무수신 재검증
 
 과거 120초의 callback 0건을 기준선에서 재시험했다. 현재 실내에서 Live와 직접 GPS 요청 모두 fresh 위치를 받아 과거 실패의 원인은 미확정으로 남겼다. Android GNSS 상태와 위치 listener를 순서대로 대조했고, 운영 GPS 정책은 그대로 사용했다. [실기기 RCA](real-device-final-validation.md#rd1-기존-gps-무수신-재검증)
+
+같은 단말의 O10 반복 재생 메모리와 FrameTimeline은 별도 실험으로 조사했다. PSS의 실행 단계별 표본, ART 객체 도달 가능성 및 네이티브 할당의 판정 범위를 기록했다. [렌더링·메모리 RCA](rendering-memory-rca.md)

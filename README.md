@@ -107,6 +107,8 @@ API 26·48MiB 환경의 OOM 및 메모리 종료를 재현하고 수정했다. A
 
 **실기기 재검증:** API 31에서 실제 GPS 수신과 FGS·listener 해제를 확인했다. 과거 120초 무수신은 이번 조건에서 재현되지 않아 원인은 미확정이다. O10 콜드 TTFD 중앙값은 1,871.8→1,343.9ms였고 주행·카메라 시한 초과 P95는 78.8→102.1ms였다. O10 1× 재생 30분이 통과했다. 전력 A/B는 미실행이다. [실기기 최종 검증](docs/real-device-final-validation.md)
 
+후속 SM-G975N A/B에서 두 점 도로 후보는 전환 Frame CPU P95를 92.5→62.0ms로 줄였다. 주행 시한 초과 P95가 68.5→85.0ms, 콜드 TTFD 중앙값이 1,388.2→1,808.9ms로 늘어 후보를 기각했다. [렌더링·메모리 RCA](docs/rendering-memory-rca.md)
+
 ## 기술 스택
 
 | 구분 | 기술 |
@@ -156,7 +158,7 @@ python3 -B tools/osm/verify.py
 |---|---|
 | 설계 | [전체 아키텍처](docs/architecture.md) · [위치 알고리즘](docs/algorithm.md) · [지도 렌더링](docs/korea-map-design.md) |
 | 데이터 및 화면 | [OSM 전처리](docs/osm-data-pipeline.md) · [데모](docs/demo.md) · [지도 갤러리](docs/osm-visual-verification.md) |
-| 문제 해결 | [성능 리팩터링](docs/refactor-performance.md) · [장애 조사](docs/stability-investigation.md) · [Compose 계측 RCA](docs/compose-slot-table-rca.md) |
+| 문제 해결 | [성능 리팩터링](docs/refactor-performance.md) · [렌더링·메모리 RCA](docs/rendering-memory-rca.md) · [장애 조사](docs/stability-investigation.md) · [Compose 계측 RCA](docs/compose-slot-table-rca.md) |
 | 플랫폼·HTTP | [Live 위치](docs/live-location.md) · [네트워크 신뢰성](docs/network-reliability.md) |
 | 검증 | [통합 검증](docs/verification.md) · [실기기 이력](docs/physical-device-validation.md) · [OSM 평가](docs/osm-evaluation-report.md) · [고난도 평가](docs/osm-challenge-report.md) |
 | 이전 평가 | [기본 합성](docs/evaluation-report.md) · [장시간 합성](docs/extended-evaluation-report.md) |
