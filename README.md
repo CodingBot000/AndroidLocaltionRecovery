@@ -156,7 +156,7 @@ python3 -B tools/osm/verify.py
 |---|---|
 | 설계 | [전체 아키텍처](docs/architecture.md) · [위치 알고리즘](docs/algorithm.md) · [지도 렌더링](docs/korea-map-design.md) |
 | 데이터 및 화면 | [OSM 전처리](docs/osm-data-pipeline.md) · [데모](docs/demo.md) · [지도 갤러리](docs/osm-visual-verification.md) |
-| 문제 해결 | [성능 리팩터링](docs/refactor-performance.md) · [장애 조사](docs/stability-investigation.md) · [Compose 계측 RCA](docs/compose-slot-table-rca.md) |
+| 문제 해결 | [성능 리팩터링](docs/refactor-performance.md) · [렌더링·메모리 RCA](docs/rendering-memory-rca.md) · [장애 조사](docs/stability-investigation.md) · [Compose 계측 RCA](docs/compose-slot-table-rca.md) |
 | 플랫폼·HTTP | [Live 위치](docs/live-location.md) · [네트워크 신뢰성](docs/network-reliability.md) |
 | 검증 | [통합 검증](docs/verification.md) · [실기기 이력](docs/physical-device-validation.md) · [OSM 평가](docs/osm-evaluation-report.md) · [고난도 평가](docs/osm-challenge-report.md) |
 | 이전 평가 | [기본 합성](docs/evaluation-report.md) · [장시간 합성](docs/extended-evaluation-report.md) |
