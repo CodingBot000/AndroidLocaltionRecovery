@@ -17,7 +17,9 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.After
 import org.junit.Assert.*
@@ -87,7 +89,12 @@ class LiveLifecycleTest {
             assertListener(true)
         }
 
-        assertTrue(device.pressHome())
+        rule.waitUntil(12_000) { rule.activity.hasWindowFocus() }
+        assertEquals(rule.activity.packageName, device.currentPackageName)
+        val launcher = checkNotNull(device.launcherPackageName)
+        val pressedHome = device.pressHome()
+        assertTrue("Home launcher appeared after pressing HOME (reported success: $pressedHome)",
+            device.wait(Until.hasObject(By.pkg(launcher)), 12_000))
         assertForeground(true)
         assertListener(true)
         device.sleep()
