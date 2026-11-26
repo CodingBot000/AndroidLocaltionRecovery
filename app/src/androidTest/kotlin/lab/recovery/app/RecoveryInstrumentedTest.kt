@@ -172,8 +172,15 @@ class RecoveryInstrumentedTest {
     }
     private fun stepTo(model: LabViewModel, time: Long) {
         val first = if (model.state.value.playback == Playback.READY) 0 else model.state.value.snapshot.nowMs + 200
-        for (tick in first..time step 200) model.send(UiIntent.Step)
-        rule.waitUntil(10_000) { model.state.value.snapshot.nowMs == time }
+        // Render the boundary after the real step queue has reached it.
+        rule.mainClock.autoAdvance = false
+        try {
+            for (tick in first..time step 200) model.send(UiIntent.Step)
+            rule.waitUntil(10_000) { model.state.value.snapshot.nowMs == time }
+        } finally {
+            rule.mainClock.autoAdvance = true
+        }
+        rule.waitForIdle()
     }
 
     @Test fun legacyDemoCompletesAndMatchesIndependentJvmReplay() {
