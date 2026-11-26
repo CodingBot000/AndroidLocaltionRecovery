@@ -3,6 +3,8 @@ package lab.recovery.app
 import lab.recovery.feature.*
 
 import android.content.pm.ActivityInfo
+import android.os.SystemClock
+import android.util.Log
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -91,9 +93,11 @@ class RecoveryInstrumentedTest {
         scroll("play-pause")
         rule.onNodeWithTag("play-pause").assertIsDisplayed()
         click("map-legend")
+        capture("small-ko-legend")
         rule.onNodeWithTag("legend-close").assertIsDisplayed().performClick()
         click("speed-button")
         rule.onNodeWithTag("speed-slider").assertIsDisplayed()
+        capture("small-ko-speed")
         rule.onNodeWithTag("speed-five-times").assertIsDisplayed().performClick()
         rule.waitUntil(5_000) { model.state.value.speed == 5f }
         rule.onNodeWithTag("speed-slider").assertDoesNotExist()
@@ -108,6 +112,10 @@ class RecoveryInstrumentedTest {
         ready(model, "OL07")
         val scenario = checkNotNull(model.state.value.scenario)
         val expected = runBlocking { playToEnd(ReplaySession(scenario)) }
+        val locale = rule.activity.resources.configuration.locales[0].language
+        val description = checkNotNull(model.state.value.selected.catalog).description.forLanguage(locale)
+        val descriptionNode = rule.onNodeWithTag("scenario-description").assertTextEquals(description.substringBefore(" · "))
+        descriptionNode.performClick().assertTextEquals(description).performClick()
         for (tag in listOf("signal", "map-status", "route-status", "recent-decision-heading", "tracking-map", "truth-toggle",
             "map-legend", "speed-button", "play-pause", "step", "reset")) {
             val node = rule.onNodeWithTag(tag).assertIsDisplayed()
@@ -125,8 +133,10 @@ class RecoveryInstrumentedTest {
         rule.onNodeWithTag("speed-button").performClick()
         rule.onNodeWithTag("speed-five-times").assertIsDisplayed().performClick()
         rule.waitUntil(5_000) { model.state.value.speed == 5f }
+        val start = SystemClock.elapsedRealtime()
         rule.onNodeWithTag("play-pause").assertIsEnabled().performClick()
         rule.waitUntil(scenario.durationMs / 5 + 15_000) { model.state.value.evaluation != null }
+        Log.i("RecoveryUiVerification", "OL07 five_times_click_to_evaluation_ms=${SystemClock.elapsedRealtime() - start}")
         assertEquals(expected, model.state.value.evaluation)
         click("open-results")
         rule.onNodeWithText(rule.activity.getString(lab.recovery.feature.R.string.osm_close)).assertIsDisplayed().performClick()
@@ -149,8 +159,10 @@ class RecoveryInstrumentedTest {
         assertEquals(1f, model.state.value.speed, 0f)
         val scenario = checkNotNull(model.state.value.scenario)
         val expected = runBlocking { playToEnd(ReplaySession(scenario)) }
+        val start = SystemClock.elapsedRealtime()
         click("play-pause")
         rule.waitUntil(scenario.durationMs + 15_000) { model.state.value.evaluation != null }
+        Log.i("RecoveryUiVerification", "OL07 normal_speed_click_to_evaluation_ms=${SystemClock.elapsedRealtime() - start}")
         assertEquals(expected, model.state.value.evaluation)
     }
 
