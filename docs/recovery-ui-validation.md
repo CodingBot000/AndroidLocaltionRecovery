@@ -52,7 +52,7 @@
 
 모듈 경계, JVM·Android 단위 테스트 83개, 앱·지도·Live Lint, Debug/unsigned Release·계측·Benchmark APK, fixture 해시·재생성·APK 권한/격리 검사가 통과했다. S 계열, 기존 DEMO, 합성 장시간, OSM 및 OSM 고난도 평가 JSON 5종이 기준 결과와 바이트 단위로 일치했다. Live에 한국어 UI를 추가한 뒤 Lint가 기존 앱 이름 및 알림 문자열의 번역을 요구해 한국어 값을 연결했다.
 
-API 36의 오프라인·시나리오·재생·지도 전환 계측 12개, 실제 상태별 캡처 계측 1개, 320×640·density 160·ko-KR·글꼴 130% 야간 지도와 조작 접근 계측 1개, TalkBack이 실제 활성화된 접근성 계측 1개가 통과했다. 후보의 화면에서 OL07 정상·추정·중단·재획득·복구와 결과, OL02 위치 점프 거부, OL10 모호성, OL13 이탈·복귀를 확인했다.
+API 36의 오프라인·시나리오·재생·지도 전환 계측 13개, 실제 상태별 캡처 계측 1개, 320×640·density 160·ko-KR·글꼴 130% 야간 지도와 조작 접근 계측 1개, TalkBack이 실제 활성화된 접근성 계측 1개가 통과했다. 후보의 화면에서 OL07 정상·추정·중단·재획득·복구와 결과, OL02 위치 점프 거부, OL10 모호성, OL13 이탈·복귀를 확인했다.
 
 OL07의 실제 5× 재생 결과가 독립 재생 결과와 일치했고, 결과 대화상자를 연 뒤 Reset에서 이전 결과가 해제됐다. API 36 Live 자원 정리 계측 7개도 통과했다.
 
@@ -87,7 +87,7 @@ Frame P95는 각 빌드의 원시 표본을 합산한 nearest-rank 값이다. �
 | API 33·34 | 각각 오프라인 스모크 1개와 Live lifecycle 3개 PASS. 위치 권한 거부·대략 위치, 알림 권한 거부, 알림에서 Stop까지 확인했다. |
 | API 36 · ARM64 | 최종 UI 오프라인·재생·전환 계측 13개 PASS. OL07 5×와 독립 평가 일치, 결과 진입과 Reset 포함. 실제 캡처, 한국어·글꼴 130% 야간 소형 화면, TalkBack을 각각 재실행해 PASS. Live lifecycle 및 정리 계측 7개 PASS. |
 
-API 26의 초기 후보에서 기존 `UiDevice.pressHome()` 반환값 단언이 실패했다. 기준선 비교에서는 통과했고, 후보의 추가 계측에서 false 반환 뒤 실제 런처가 화면에 표시됨을 확인했다. Home 키 동작의 결과를 화면에 표시된 런처로 검증하도록 계측을 보완했다. Home과 화면 OFF 상태의 FGS·리스너 및 복귀 시 동일 토큰·Stop 단언은 유지했다. 보완 후 전체 API 26 Live 계측을 다시 실행했다. 이 차이는 계측 동기화에서 확인됐으며 운영 Live 코드는 변경하지 않았다.
+API 26의 초기 후보에서 `UiDevice.pressHome()`이 false를 반환한 뒤 실제 런처가 화면에 표시됐다. 런처 노드로 확인하도록 수정한 계측은 로컬 API 26을 통과했으나 GitHub의 API 36 x86_64에서는 키 입력 성공 뒤에도 해당 노드를 찾지 못했다. 최종 계측은 Home 입력 뒤 Live Activity의 `onStop`에 해당하는 수명 주기와 창 포커스 해제를 확인한다. 홈·화면 OFF에서 FGS와 리스너가 유지되고 복귀 후 같은 토큰을 사용하며 Stop에서 자원이 해제되는지 검사한다. 이 보완은 계측 APK에만 적용했다.
 
 ## Phase 9 · 대표 화면과 문서
 
@@ -106,3 +106,7 @@ API 26의 초기 후보에서 기존 `UiDevice.pressHome()` 반환값 단언이 
 | [OL13 복귀](demo/recovery-ui/ol13-return.png) | 67,000ms | TRACKING · MAP_MATCHED · ON_ROUTE · `ROUTE_RETURNED` |
 
 README의 대표 화면 세 장과 데모를 위의 실제 캡처로 갱신했다. 국내 OSM 갤러리와 이전 검증 결과는 각 시기 기록에서 참조한다. 공개 원본 9장은 가상 주행이며 Live 화면은 `FLAG_SECURE`를 적용한 상태에서 계측으로 검수했다. [현재 데모](demo.md#ol07-시연)
+
+## Phase 10 · 변경 검토와 PR
+
+`codex/recovery-ui-refactoring`에서 단계별 커밋을 검토하고 `main`을 대상으로 초안 PR을 제출했다. 기준선과의 diff에서 위치·지도 엔진, fixture와 정답, 앱·Live manifest, Live 서비스, 빌드·CI 설정이 동일함을 확인했다. 새 기록과 캡처를 포함한 Markdown 29개에서 상대 링크와 앵커를 검사했다. 초기 PR CI의 `live-api36` 실패와 계측 보완은 Phase 8에 기록했다. 최종 head의 CI 결과와 머지 상태는 PR에서 확인할 수 있다. 전환 성능 판정과 물리 단말 검증이 남아 있다. [PR #9](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9) · [GitHub Actions 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks)
