@@ -7,7 +7,10 @@ import android.os.ParcelFileDescriptor
 import android.os.SystemClock
 import android.util.Log
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -52,6 +55,7 @@ class LiveLifecycleTest {
     }
 
     @Test fun foregroundSessionSurvivesHomeScreenOffAndActivityRecreation() {
+        rule.onNodeWithTag("live-mode").assertIsDisplayed()
         choose("O01", "OL01")
         val before = SystemClock.elapsedRealtime()
         start()
@@ -60,17 +64,21 @@ class LiveLifecycleTest {
         waitPhase(SessionPhase.ACTIVE)
         val active = LiveSessions.updates.value
         assertEquals(Precision.FINE, active.precision)
+        expectLabel("live-phase", R.string.live_phase_active)
+        expectLabel("live-precision", R.string.live_permission_fine)
         assertTrue(active.token > 0)
         assertListener(true)
         if (mockProvider) {
             inject("37.5275,126.922")
             rule.waitUntil(12_000) { LiveSessions.updates.value.reading?.status == FixStatus.TRACKING }
             assertTrue(LiveSessions.updates.value.reading?.fix?.mock == true)
+            expectLabel("live-fix-source", R.string.live_source_emulator_mock)
             Log.i("LiveVerification", "simulated_fix_latency_from_start_ms=${SystemClock.elapsedRealtime() - before}")
             SystemClock.sleep(1_100) // Respect the framework registration interval.
             inject("36.36,127.39")
             rule.waitUntil(12_000) { LiveSessions.updates.value.reading?.status == FixStatus.OUTSIDE_COVERAGE }
             assertNull(LiveSessions.updates.value.reading?.tracking)
+            expectLabel("live-fix-status", R.string.live_fix_outside)
         }
         repeat(3) {
             rule.activityRule.scenario.recreate()
@@ -95,6 +103,12 @@ class LiveLifecycleTest {
         rule.onNodeWithTag("live-stop").performClick()
         assertReleased()
         Log.i("LiveVerification", "first_foreground_poll_ms=${promoted - before} stop_to_release_ms=${SystemClock.elapsedRealtime() - stop}")
+    }
+
+    private fun expectLabel(tag: String, label: Int) {
+        val text = rule.activity.getString(label)
+        rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag(tag) and hasText(text)).fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithTag(tag).assertTextEquals(text)
     }
 
     @Test fun twentyStartStopCyclesAndTwoMapSizesReleaseListenerAndForegroundService() {

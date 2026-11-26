@@ -8,6 +8,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.SystemBarStyle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +40,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
@@ -61,23 +66,26 @@ import java.util.Date
 import java.util.Locale
 
 class LiveActivity : ComponentActivity() {
-    private var permissionNotice by mutableStateOf<String?>(null)
+    private var permissionNotice by mutableStateOf<Int?>(null)
+    private var availablePrecision by mutableStateOf(Precision.NONE)
     private var notificationsAllowed by mutableStateOf(false)
     private val locationPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        permissionNotice = when (AndroidLocationSource(this).precision()) {
-            Precision.NONE -> "Location permission denied"
-            Precision.COARSE -> "Approximate permission granted. Tap Start for raw diagnostics."
-            Precision.FINE -> "Precise permission granted. Tap Start to begin."
+        availablePrecision = AndroidLocationSource(this).precision()
+        permissionNotice = when (availablePrecision) {
+            Precision.NONE -> R.string.live_notice_denied
+            Precision.COARSE -> R.string.live_notice_coarse
+            Precision.FINE -> R.string.live_notice_fine
         }
     }
     private val notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         notificationsAllowed = granted
-        permissionNotice = if (granted) null else "Notifications denied. Stop remains available here."
+        permissionNotice = if (granted) null else R.string.live_notice_notifications
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        val bars = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+        enableEdgeToEdge(statusBarStyle = bars, navigationBarStyle = bars)
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         val repository = ScenarioRepository { applicationContext.assets.open(it) }
         setContent {
@@ -93,9 +101,9 @@ class LiveActivity : ComponentActivity() {
             val exits by produceState<List<ExitSummary>?>(null) {
                 value = withContext(Dispatchers.IO) { recentExits(applicationContext) }
             }
-            MaterialTheme {
-                Surface {
-                    LiveScreen(state, catalog, previousSession, exits, permissionNotice,
+            MaterialTheme(colorScheme = liveColors) {
+                Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                    LiveScreen(state, catalog, previousSession, exits, permissionNotice, availablePrecision,
                         Build.VERSION.SDK_INT >= 33 && !notificationsAllowed,
                         start = ::requestStart,
                         stop = { LiveSessions.stop(this) },
@@ -109,6 +117,7 @@ class LiveActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        availablePrecision = AndroidLocationSource(this).precision()
         notificationsAllowed = Build.VERSION.SDK_INT < 33 ||
             checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
     }
@@ -124,6 +133,13 @@ class LiveActivity : ComponentActivity() {
     }
 }
 
+private val liveColors = darkColorScheme(
+    background = Color(0xFF111A27), onBackground = Color(0xFFEDF3F9),
+    surface = Color(0xFF1B293B), onSurface = Color(0xFFEDF3F9),
+    primary = Color(0xFF94E1CF), onPrimary = Color(0xFF0B3023), error = Color(0xFFFF9F91),
+    onSurfaceVariant = Color(0xFFB9C9DA), outline = Color(0xFF465B71),
+)
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun LiveScreen(
@@ -131,7 +147,8 @@ private fun LiveScreen(
     catalog: ScenarioCatalog?,
     previousSession: Boolean,
     exits: List<ExitSummary>?,
-    notice: String?,
+    notice: Int?,
+    availablePrecision: Precision,
     offerNotifications: Boolean,
     start: (String, String?) -> Unit,
     stop: () -> Unit,
@@ -143,71 +160,87 @@ private fun LiveScreen(
     val running = state.phase in setOf(SessionPhase.STARTING, SessionPhase.ACTIVE, SessionPhase.STOPPING)
     val map = if (running) state.mapId else mapId
     val route = if (running) state.routeId else routeId
-    val language = Locale.getDefault().language
-    val mapSelect = catalog?.maps.orEmpty().mapValues { (_, name) -> name.forLanguage(language) }
-    val routeSelect = catalog?.entries.orEmpty().filter { !it.evaluation && it.mapId == map }
-        .associate { it.id to "${it.id} · ${it.title.forLanguage(language)}" }
+    val language = LocalConfiguration.current.locales[0].language
+    val mapSelect = remember(catalog, language) { catalog?.maps.orEmpty().mapValues { (_, name) -> name.forLanguage(language) } }
+    val routeSelect = remember(catalog, map, language) {
+        catalog?.entries.orEmpty().filter { !it.evaluation && it.mapId == map }
+            .associate { it.id to "${it.id} · ${it.title.forLanguage(language)}" }
+    }
 
     Column(
         Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }.safeDrawingPadding().verticalScroll(rememberScrollState()).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        Text("Live location", style = MaterialTheme.typography.headlineMedium)
-        Text("Android location diagnostics", style = MaterialTheme.typography.bodyMedium)
-        Choice(mapSelect[map] ?: "Choose an offline map", mapSelect, !running, "live-map") {
+        Text(stringResource(R.string.live_mode), style = MaterialTheme.typography.titleLarge, modifier = Modifier.testTag("live-mode"))
+        Text(stringResource(R.string.live_subtitle), style = MaterialTheme.typography.bodyMedium)
+        Choice(mapSelect[map] ?: stringResource(R.string.live_choose_map), mapSelect, !running, "live-map") {
             mapId = it
             routeId = null
         }
-        Choice(routeSelect[route] ?: "No planned route", linkedMapOf("" to "No planned route") + routeSelect,
+        val noRoute = stringResource(R.string.live_no_route)
+        Choice(routeSelect[route] ?: noRoute, linkedMapOf("" to noRoute) + routeSelect,
             !running && map != null, "live-route") { routeId = it.ifBlank { null } }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             if (running) {
                 Button(stop, enabled = state.phase != SessionPhase.STOPPING, modifier = Modifier.testTag("live-stop")) {
-                    Text("Stop")
+                    Text(stringResource(R.string.live_stop))
                 }
             } else {
                 Button(onClick = {
                     map?.let { start(it, route) }
-                }, enabled = map != null, modifier = Modifier.testTag("live-start")) { Text("Start") }
+                }, enabled = map != null, modifier = Modifier.testTag("live-start")) { Text(stringResource(R.string.live_start)) }
             }
-            if (offerNotifications) OutlinedButton(enableNotifications) { Text("Enable notifications") }
+            if (offerNotifications) OutlinedButton(enableNotifications) { Text(stringResource(R.string.live_enable_notifications)) }
         }
         LaunchedEffect(running) { if (running) startedHere = true }
-        Text(state.phase.name.readable(), modifier = Modifier.testTag("live-phase"))
-        if (previousSession && !startedHere && !running && state.issue == null) Text("Previous session interrupted. Start a new session to continue.")
-        state.issue?.let { Text(it.name.readable(), color = MaterialTheme.colorScheme.error) }
-        notice?.let { Text(it) }
-        val reading = state.reading
-        if (reading != null) {
-            Text(if (state.precision == Precision.COARSE) "Approximate location · raw diagnostics only" else "Precise location",
-                modifier = Modifier.testTag("live-precision"))
-            Text(reading.status.name.readable(), modifier = Modifier.testTag("live-fix-status"))
-            reading.fix?.let { fix ->
-                val emulator = Build.HARDWARE in setOf("ranchu", "goldfish") || Build.MODEL.startsWith("sdk_")
-                Text(when {
-                    emulator && fix.mock -> "Emulator position · Android mock"
-                    emulator -> "Emulator position"
-                    fix.mock -> "Android mock location"
-                    else -> "Android location"
-                }, modifier = Modifier.testTag("live-fix-source"))
-                Text("Provider ${fix.provider ?: "unknown"}")
-                Text("Accuracy ${fix.accuracy?.let { "${it.toInt()} m" } ?: "unknown"}")
-            }
-            reading.tracking?.let { Text("${it.signal.name.readable()} · ${it.route.name.readable()} · ${it.source.name.readable()}") }
-            Text("Fixes received ${state.received} · processed ${state.processed} · dropped ${state.dropped}")
+        if (previousSession && !startedHere && !running && state.issue == null) {
+            Text(stringResource(R.string.live_previous_session))
         }
+        state.issue?.let { Text(stringResource(it.labelResource()), color = MaterialTheme.colorScheme.error) }
+        notice?.let { Text(stringResource(it)) }
+        LiveStatus(state, if (running) state.precision else availablePrecision)
         state.map?.let { LiveRoadMap(it, state) }
         if (Build.VERSION.SDK_INT < 30) {
-            Text("Process exit history requires Android 11.", style = MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.live_exit_unavailable), style = MaterialTheme.typography.bodySmall)
         } else {
             exits?.firstOrNull()?.let {
                 val date = DateFormat.getDateTimeInstance().format(Date(it.timestamp))
-                Text("Last process exit · ${it.reason.name.readable()} · $date · importance ${it.importance}",
+                Text(stringResource(R.string.live_process_exit, it.reason.name.readable(), date, it.importance),
                     modifier = Modifier.testTag("live-exit"), style = MaterialTheme.typography.bodySmall)
             }
         }
     }
 }
+
+@Composable
+private fun LiveStatus(state: LiveState, precision: Precision) {
+    Surface(Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surface) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(stringResource(state.phase.labelResource()), style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.testTag("live-phase"))
+            Text(stringResource(precision.labelResource()), modifier = Modifier.testTag("live-precision"))
+            state.reading?.let { reading ->
+                Text(stringResource(reading.status.labelResource()), modifier = Modifier.testTag("live-fix-status"))
+                reading.fix?.let { fix ->
+                    Text(stringResource(fixSourceResource(isEmulator, fix.mock)), modifier = Modifier.testTag("live-fix-source"))
+                    val provider = fix.provider ?: stringResource(R.string.live_value_unknown)
+                    val accuracy = fix.accuracy?.let { stringResource(R.string.live_meters, it) }
+                        ?: stringResource(R.string.live_value_unknown)
+                    Text(stringResource(R.string.live_provider_accuracy, provider, accuracy),
+                        style = MaterialTheme.typography.bodySmall)
+                }
+                reading.tracking?.let {
+                    Text(stringResource(R.string.live_engine_status, it.signal.name, it.source.name, it.route.name),
+                        style = MaterialTheme.typography.bodySmall)
+                }
+                Text(stringResource(R.string.live_fix_counts, state.received, state.processed, state.dropped),
+                    style = MaterialTheme.typography.bodySmall)
+            }
+        }
+    }
+}
+
+private val isEmulator = Build.HARDWARE in setOf("ranchu", "goldfish") || Build.MODEL.startsWith("sdk_")
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -242,13 +275,15 @@ private fun LiveRoadMap(map: LiveMap, state: LiveState) {
         MapMarker(it, kind)
     }
     RoadMap(scene, MapOverlay(vehicle = marker, raw = reading?.point, accuracyMeters = reading?.fix?.accuracy),
-        false, MapStrings("Offline map", "Follow", "Overview", "Free", "Zoom in", "Zoom out", "Tunnel"),
+        false, MapStrings(stringResource(R.string.live_map), stringResource(R.string.live_follow),
+            stringResource(R.string.live_overview), stringResource(R.string.live_free),
+            stringResource(R.string.live_zoom_in), stringResource(R.string.live_zoom_out), stringResource(R.string.live_tunnel)),
         Modifier.fillMaxWidth().height(340.dp), MapCredits(osm.attribution) { showCredits = true }, runId = state.token)
     if (showCredits) AlertDialog(
         onDismissRequest = { showCredits = false },
         title = { Text(osm.attribution) },
         text = { Text(listOf(osm.license, osm.licenseUrl, osm.snapshot, osm.sourceUrl).joinToString("\n")) },
-        confirmButton = { TextButton({ showCredits = false }) { Text("Close") } },
+        confirmButton = { TextButton({ showCredits = false }) { Text(stringResource(R.string.live_close)) } },
     )
 }
 
