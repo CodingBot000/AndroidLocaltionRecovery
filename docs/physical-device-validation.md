@@ -2,12 +2,16 @@
 
 [README](../README.md) · [통합 검증](verification.md) · [성능](refactor-performance.md)
 
-## 최신 확인 범위 (2026-11-26)
+## PR #9 후속 후보 (2026-11-26)
+
+제품 코드 `ce617de`의 실기기 Macrobenchmark, O10 180초×10회 A/C 내구·PSS, 지도 전환·재생 및 Live 20회, 실제 GPS는 단말 미연결로 **BLOCKED**다. 해당 단말의 설정 변경이나 위치 시험은 없었다. [UI 후보 검증과 게이트](recovery-ui-validation.md)
+
+## 기존 확인 범위 (2026-11-25–26)
 
 | 환경 | 확인한 검증 | 결과·근거 |
 |---|---|---|
-| SM-G975N · Android 12 / API 31 | 실내 fresh GPS 수신, 직접 provider 대조, FGS·listener 시작·정지 20회 | 수신 및 해제 확인; 이전 120초 무수신 원인은 미확정 · [실기기 GPS](real-device-final-validation.md) |
-| 같은 실기기 | O10 콜드 기동, 지도 전환, 주행·카메라 Macrobenchmark | 기준 A 및 후보 B 시나리오별 9회; 후보 기각 · [성능 RCA](rendering-memory-rca.md) |
+| SM-G975N · Android 12 / API 31 | 실내 fresh GPS 수신, 직접 provider 대조, FGS·listener 시작·정지 20회 | `d0b3822` 제품에서 수신 및 해제 확인. 이전 120초 무수신 원인은 미확정 · [실기기 GPS](real-device-final-validation.md) |
+| 같은 실기기 | O10 콜드 기동, 지도 전환, 주행·카메라 Macrobenchmark | 기준 `a067a97` 및 당시 후보 시나리오별 9회. 그 후보는 기각했다. [성능 RCA](rendering-memory-rca.md) |
 | 같은 실기기 | O10 1× 180초 × 10회, 지도 전환·재생 및 Live 각각 20회 | A/B 각각 통과; 반복 PSS 증가 원인은 미확정 · [메모리·Live](rendering-memory-rca.md) |
 | API 26·31·33·34·36 에뮬레이터 | 위치 권한·서비스 생명주기·오프라인 계측, API 26·48MiB | 환경별 결과는 [통합 검증](verification.md) 참조 |
 | SM-S908N · Android 16 / API 36 | 이전 합성 지도 버전의 기동·프레임·내구 계측 | 아래 과거 측정 이력; 최신 OSM 버전과 직접 비교하지 않음 |

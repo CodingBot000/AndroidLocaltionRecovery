@@ -6,7 +6,7 @@ GPS 신호가 불안정하거나 끊기는 상황에서 위치 판단과 화면 
 
 외부 지도 SDK 없이 국내 OpenStreetMap 10개 지역을 오프라인으로 표시한다. 가상 주행, 실제 Android 위치 수신, HTTP 장애 실험을 독립 실행 환경으로 분리하여 동작을 재현하고 검증할 수 있다.
 
-[전체 아키텍처](docs/architecture.md) · [실기기 성능 분석](docs/rendering-memory-rca.md) · [장애 대응](docs/stability-investigation.md) · [검증 결과](docs/verification.md) · [전체 문서 안내](docs/index.md)
+[전체 아키텍처](docs/architecture.md) · [지도 전환 성능 조사](docs/recovery-ui-switch-rca.md) · [실기기 성능 이력](docs/rendering-memory-rca.md) · [장애 대응](docs/stability-investigation.md) · [검증 결과](docs/verification.md) · [전체 문서 안내](docs/index.md)
 
 <p align="center">
   <a href="docs/demo/recovery-ui/ol07-tracking.png"><img src="docs/demo/recovery-ui/ol07-tracking.png" width="220" alt="OL07 28초 정상 추적 및 도로 매칭 위치"></a>
@@ -15,7 +15,7 @@ GPS 신호가 불안정하거나 끊기는 상황에서 위치 판단과 화면 
 </p>
 <p align="center">남산 터널 OL07 · 정상 추적 28초 &nbsp; | &nbsp; DR 추정 54초 &nbsp; | &nbsp; 정상 복구 73초</p>
 
-기본 앱의 **대표 사례 → OL07 → 5× → 재생**으로 GPS 손실부터 재획득까지 확인할 수 있다. [OL07 시연 절차](docs/demo.md#ol07-시연) · [지도 갤러리](docs/osm-visual-verification.md) · [UI 검증 및 성능 비교](docs/recovery-ui-validation.md)
+기본 앱에서 **대표 사례(Demos) → OL07 → 배속 버튼 → 5× → 재생(Play)** 순으로 테스트한다. 63초에는 추정 상한에 도달해 마지막 확인 위치로 전환한다. [63초 추정 중단 화면](docs/demo/recovery-ui/ol07-last-known.png) · [OL07 시연 절차](docs/demo.md#ol07-시연) · [지도 갤러리](docs/osm-visual-verification.md) · [UI 검증 및 성능 비교](docs/recovery-ui-validation.md)
 
 ## 핵심 구현 및 검증 성과
 
@@ -24,7 +24,7 @@ GPS 신호가 불안정하거나 끊기는 상황에서 위치 판단과 화면 
 | GPS 이상치·신호 손실·경로 이탈 | Map Matching, 신호 상태기계, 최대 15초 Dead Reckoning, 연속 관측 기반 복구 | 가상 위치 평가 84개 및 로딩 오류 3개 통과 · [알고리즘](docs/algorithm.md) |
 | 복잡한 도로망의 위치 매칭 비용 | 원본 도로의 Spatial Grid와 결정적 후보 판정 | O10 관측당 처리 시간 중앙값 **42.30 → 7.73µs (81.7% 감소)**, 기존 판정 일치 · [성능](docs/refactor-performance.md#jvm-도로-매칭) |
 | Android 8 저메모리 환경 | Streaming JSON parsing, Software Canvas, viewport bitmap 재사용 | API 26·48MiB에서 OOM·OS 메모리 종료 수정, O10 기동 및 전환·재생·Live 각 20회 검증 · [장애 분석](docs/stability-investigation.md) |
-| 실제 위치 수신 및 자원 수명 | LocationManager, 위치 Foreground Service, 권한별 처리, 세션 토큰·제한 큐 | API 26·31·33·34·36 에뮬레이터 및 API 31 실기기 fresh GPS 수신·FGS/리스너 시작·해제 20회 · [Live](docs/live-location.md) |
+| 실제 위치 수신 및 자원 수명 | LocationManager, 위치 Foreground Service, 권한별 처리, 세션 토큰·제한 큐 | API 26·31·33·34·36 에뮬레이터 수명 검증. 과거 API 31 실기기에서 새 GPS 관측 수신 및 별도 FGS·리스너 시작·해제 20회 · [Live](docs/live-location.md) |
 | HTTP 요청 장애 및 응답 역전 | Timeout, bounded retry/backoff, 취소, 요청 generation 및 경로 version 확인 | 독립 JVM loopback HTTP 테스트 17개와 APK 격리 검사 · [네트워크](docs/network-reliability.md) |
 
 매칭 시간은 18,490개 방향성 에지를 가진 O10에서 JVM 7회 반복 측정한 값이다. 위치 평가는 재현 가능한 가상 관측의 판정 계약 검증이며 실제 주행 정확도 통계가 아니다. 실기기의 GPS 수신과 짧은 서비스 반복 시험은 별개다.
@@ -110,10 +110,11 @@ ANR·Crash는 진단용 하네스와 계측 환경의 재현 사례이며 상용
 | JVM·Android 단위 테스트 | UI 후보 83개 통과 |
 | 독립 위치 평가 | 합성·장시간·OSM·고난도 84개 및 로딩 오류 3개 통과 |
 | Android 플랫폼 계측 | API 26·31·33·34·36 에뮬레이터, 권한·서비스 생명주기 및 접근성 검증 |
-| 실기기 검증 | SM-G975N Android 12의 fresh GPS 수신, Live 20회 시작·해제, O10 1× 재생 30분 및 성능 측정 |
+| 실기기 검증 이력 | 2026-11-25–26의 SM-G975N Android 12에서 fresh GPS 수신, Live 20회 시작·해제, O10 1× 재생 30분 및 성능을 측정했다. [빌드별 범위](docs/physical-device-validation.md) |
+| 현재 UI 후보의 실기기 | 연결된 단말이 없어 성능·메모리 내구·GPS는 BLOCKED다. [현재 검증](docs/recovery-ui-validation.md) |
 | GitHub Actions | 모듈 경계·단위 테스트·Lint·Debug/unsigned Release APK·fixture·평가와 API 36 Live 계측 |
 
-[구현 기준 CI (main 73f728f)](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45677049357) · [현재 Actions](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions) · [검증 이력 및 재현 명령](docs/verification.md)
+[UI 후보 PR 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) · [기존 main 73f728f 검사 이력](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45677049357) · [검증 이력 및 재현 명령](docs/verification.md)
 
 ## 기술 스택
 

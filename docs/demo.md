@@ -5,15 +5,15 @@
 ## OL07 시연
 
 1. 기본 앱의 **대표 사례** 또는 **Demos**에서 **OL07**을 고른다.
-2. 배속을 **5×**로 설정하고 **재생**을 누른다. 120초의 가상 주행은 명목상 약 24초이며, 실제 실행 시간은 기기와 처리 지연에 따라 달라진다.
-3. 상태 경계를 자세히 보려면 **일시정지**와 **Step**을 사용한다. **진단 보기**에서 원래 판정 코드를, 완료 후 **결과**에서 해당 가상 주행의 평가를 확인한다.
+2. 지도 아래의 **1× ▾**를 눌러 **5×**를 고른 뒤 **재생**을 누른다. 120초의 가상 주행은 명목상 약 24초이며, 실제 실행 시간은 기기와 처리 지연에 따라 달라진다.
+3. 상태 경계를 자세히 보려면 **일시정지**와 **Step**을 사용한다. **지도 범례**에서 위치 출처별 표식을 확인하고 **진단 보기**에서 판정 로그를 읽는다. 완료 후 **결과**에서 해당 가상 주행의 평가를 확인한다.
 
 | 관측한 가상 시각 | 화면과 실제 판정 |
 |---:|---|
 | 28초 | 정상 추적과 지도 매칭 위치. [실행 화면](demo/recovery-ui/ol07-tracking.png) |
-| 54초 | GPS 손실, 경로 기반 DR 추정과 추정 상한. [실행 화면](demo/recovery-ui/ol07-estimating.png) |
+| 54초 | GPS 손실과 경로 기반 DR. 마지막 Fix 이후 6초, 추정 상한까지 9초. [실행 화면](demo/recovery-ui/ol07-estimating.png) |
 | 63초 | `DR_LIMIT`로 추정을 멈추고 마지막 확인 위치를 표시. [실행 화면](demo/recovery-ui/ol07-last-known.png) |
-| 71초 | 재획득 후보를 확인하는 중. |
+| 71초 | 재획득 후보를 확인하는 중. [실행 화면](demo/recovery-ui/ol07-recovering.png) |
 | 73초 | `SIGNAL_RECOVERED`와 정상 추적 복귀. [실행 화면](demo/recovery-ui/ol07-recovered.png) |
 | 120초 | 주행 완료. 매칭 정확도·커버리지의 분모와 해당 실행의 복구 지연을 표시. [결과 화면](demo/recovery-ui/ol07-complete-results.png) |
 
@@ -30,7 +30,7 @@
 | OL10 | 삼성동 평행도로의 모호한 매칭 · [첫 관측](demo/recovery-ui/ol10-ambiguous.png) |
 | OL13 | 수서 나들목의 [이탈 및 재탐색 권고 44초](demo/recovery-ui/ol13-departure.png)와 [복귀 67초](demo/recovery-ui/ol13-return.png) |
 
-Follow, Overview, Free 및 재생·일시정지·Step·Reset·배속 조작을 지원한다. [지도 갤러리](osm-visual-verification.md) · [캡처 환경과 실제 판정](recovery-ui-validation.md#phase-9--대표-화면과-문서)
+Follow, Overview, Free 및 재생·일시정지·Step·Reset·배속 조작을 지원한다. [지도 갤러리](osm-visual-verification.md) · [최종 캡처 환경과 실제 판정](recovery-ui-validation.md#f6--실제-화면과-문서)
 
 ## 합성 DEMO_LONG 재현 (기존 회귀)
 

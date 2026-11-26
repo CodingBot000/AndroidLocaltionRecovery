@@ -1,5 +1,84 @@
 # 위치 복구 UI 리팩터링과 검증
 
+## PR #9 후속 검증
+
+후속 작업의 제품 코드와 새 화면·성능 측정 기준은 `ce617de`다. [지도 전환 RCA](recovery-ui-switch-rca.md)에서 원본 재실행, 요청별 내부·외부 구간, 접근성 캐시 대조를 기록했다. 아래 Phase 0–10은 최초 UI 후보의 검증 이력이다.
+
+### F0–F2 · 기준선과 지도 전환
+
+시작 시 원격 `main` 및 PR head가 명세와 일치했다. A/B 격리 빌드에서 원본 계측 APK가 동일했다. 같은 요청에서 새 지도의 첫 present가 끝난 뒤 외부 접근성 노드 검색이 늦어지는 구간을 확인했다. 동일 B의 진단 캐시 대조에서 U3 중앙값은 639.6→126.9ms, 첫 present는 121.6→116.9ms였다. 진단 전용 코드는 제품 및 원본 벤치마크에 적용하지 않았다.
+
+### F3 · 첫 화면과 재생
+
+`RecoveryLab.kt`에서 지도 높이와 카메라 계약을 유지하면서 제목과 모드를 같은 줄에 두고, 시나리오의 지역 이름을 짧게 표시했다. 같은 설명을 눌러 카탈로그의 전체 내용을 펼칠 수 있다. Fix 경과, DR 상한, 재획득 후보와 추정 중단 사유는 실제 세션 상태에서 독립 표시한다. `Latest significant event`와 발생 시각·reason code는 현재 상태와 별도로 읽힌다. 이제 지도 아래에서 범례·Truth, Play·Step·Reset, 배속 진입을 찾을 수 있다. 배속 창의 5× 바로 선택과 0.5×–5× 슬라이더를 실제로 조작했다.
+
+첫 배치의 54초 화면에서 재생 버튼 하단이 잘려 재생 상태를 범례 행에 옮겼다. 첫 계측의 가로 드래그는 좁아진 창에서 트랙 밖을 시작점으로 잡았다. 실제 트랙 안쪽에서 시작하는 터치로 0.5×→5× 이동을 재시험했다. 최종 표준 화면에서 첫 화면 노드의 클립 여부를 비교하고 5× 실행과 독립 평가 일치를 확인했다.
+
+초기 후보 `664d8f5`는 71초에 추정 중단 이유와 재획득 후보가 함께 줄바꿈되어 하단 재생 버튼 일부가 잘렸다. 최종 제품은 `LOST + LAST_KNOWN`에 추정 중단 사유를 표시하고, `RECOVERING`에서는 현재 후보를 강조한다. 이전 중단 사유는 진단과 이벤트에 남는다. 표준 크기의 OL07 비완료 상태마다 실제 재생·Step·Reset·배속·범례·Truth 컨트롤의 가시 높이를 정상 상태와 비교했다. 좁은 화면의 시나리오 선택 제목은 두 행까지 허용한다.
+
+### F4 · 성능과 기능 회귀
+
+초기 UI 후보 `664d8f5`의 원본 전환 프레임 지표는 두 차례 조사 임계값을 넘었다. 71초 화면을 보완한 `ce617de`는 같은 원본 하네스에서 다시 측정했다. 두 제품 후보의 데이터와 진단 trace는 각각 보존한다. [성능과 재시험](recovery-ui-switch-rca.md)
+
+모듈 경계, 단위 테스트 83개, Debug Lint, Debug·unsigned Release·계측·Benchmark APK, fixture 해시·재생성·APK 권한 및 Live/HTTP 격리를 새로 실행했다. S 계열, 기존 DEMO, 합성 장시간, OSM, OSM 고난도 평가 JSON 5종은 이전 검증 결과와 바이트 단위로 일치했다. 오프라인 APK의 fixture 119개와 Live APK의 감사 대상 asset 31개를 확인했다.
+
+첫 API 36 전체 계측 중 `longOutageShowsDrThenLastKnownAndRecovers`에서 Compose `SnapshotStateObserver`가 서로 다른 스레드에서 관측되는 예외가 한 번 발생했다. 같은 케이스 단독 재실행은 이전 B와 C에서 각각 2회 통과했다. Live 계측의 전체 디스패처 대안을 시험했으나 오프라인 앱의 초기 화면이 준비되지 않아 기각했다. 오프라인 계측은 연속 Step을 보낼 때만 테스트 프레임 클록을 정지하고 실제 엔진이 기존 경계 시각에 도달한 뒤 화면 작업을 재개하도록 동기화했다. 기존 단언·제한 시간과 제품 코드를 유지했다. [관련 Live 계측 조사](compose-slot-table-rca.md)
+
+API 36 Live 정리 계측은 lifecycle 검사의 종료 정리 뒤 권한이 없는 상태에서 시작해 준비 검사가 실패했다. 에뮬레이터 실행에 필요한 권한을 다시 부여한 뒤 7개 모두 통과했고 종료 시 권한을 회수했다. 위치 스위치 검사는 Android의 `No location access` 시스템 창이 앱 상태를 가렸다. 해당 창을 닫고 기존 앱 표시와 FGS 정지·권한 철회·명시적 재시작을 재확인했다.
+
+최종 API 36 오프라인 14개가 통과했다. OL07의 1×·5× 모두 실제 Play부터 완료까지 실행해 독립 `ReplaySession`과 같은 `Evaluation`을 얻었다. Play 입력부터 결과 관측까지 1×는 120.538초, 5×는 24.514초였다. 5× 시험에서는 결과를 연 뒤 Reset해 평가와 이전 판정 코드가 제거됨을 확인했다. 실제 TalkBack의 카메라와 재생 조작, 최근 판정 제목, 범례·배속 창의 열기·닫기와 슬라이더 접근도 통과했다. 320×640·한국어·글꼴 130%의 야간 화면에서는 전체 OL07 이름이 두 줄로 표시됐다. 스크롤 후 범례를 닫고 배속 창에서 5×를 선택했다.
+
+API 36의 Live lifecycle 3개와 정리 계측 7개에 사용한 Live 앱과 계측 APK는 최종 빌드와 각각 바이트 단위로 일치했다. 정밀·대략 위치, 알림 허용/거부와 Stop, 위치 스위치 및 중단 복구를 시스템 UI에서도 검증했다.
+
+| 환경 | 최종 제품의 플랫폼 검증 |
+|---|---|
+| API 26 · ART 48MiB | O10 기동 및 20회 전환·재생·재생성 계측 2개 통과. Live lifecycle 2개 통과. API 30+ 전용 모의 provider 1개는 기존 가정으로 건너뛰었다. |
+| API 31 | 오프라인 1개, Live lifecycle 3개 통과. |
+| API 33·34 | 각 오프라인 1개와 Live lifecycle 3개 통과. 위치 권한 거부·대략 허용, 알림 권한 거부 및 알림에서 Stop을 확인했다. |
+| API 36 | 오프라인 14개, 실제 TalkBack, 한국어 글꼴 130% 소형 화면, 최종 실제 캡처, Live lifecycle 3개와 별도 정리 7개 통과. |
+
+API 33의 첫 오프라인 실행과 표시 대기만 추가한 재실행에서는 테스트 터치 뒤 OSM 출처 대화상자가 열리지 않았다. 동일 제품의 실제 화면에서 Android 입력으로 출처 버튼을 탭해 라이선스·출처·닫기 버튼이 보이는 것을 확인했다. 계측도 화면에 보이는 Android 출처 버튼을 터치하도록 맞췄으며, 기존 표시 단언과 후속 지도·카메라 단언을 유지한 채 API 33에서 두 번 통과했다.
+
+### F5 · 실기기
+
+F0와 모든 에뮬레이터를 종료한 뒤의 `adb devices -l`에서 물리 단말이 없었다. 동일 실기기 A/C Macrobenchmark, 빌드별 O10 180초×10회 독립 내구·PSS, 지도 전환 및 Live 각 20회, fresh non-mock GPS와 실기기 자원 해제는 **BLOCKED**다. 실제 단말의 실행 수는 0이며 변경하거나 복원할 물리 단말 설정은 없었다. 이전 실기기 기록은 제품 SHA와 날짜를 구분해 남겼다. [실기기 범위와 이력](physical-device-validation.md)
+
+### F6 · 실제 화면과 문서
+
+공개 PNG 10장은 제품 `ce617de`의 Debug APK에서 실제 Step과 독립 재생을 대조해 촬영했다. API 36 ARM64, 1,080×2,400, density 420, en-US, 글꼴 100%, Day·Follow 조건이다. 새 캡처의 시나리오·시각·신호·위치 출처·경로·reason code 기록은 이전 UI와 바이트 단위로 일치했다. 실제 화면에 재생·배속·범례 조작이 보이는지 확인한 뒤 PNG 원본을 그대로 반영했다. [캡처 및 측정 APK의 해시](benchmarks/recovery-ui-pr9-final-api36.json)
+
+| OL07 가상 시각 | 실제 화면과 판정 |
+|---:|---|
+| 28초 | TRACKING · MAP_MATCHED · ON_ROUTE. 22초 `AMBIGUOUS`는 최근 판정 이력이다. [정상](demo/recovery-ui/ol07-tracking.png) |
+| 54초 | LOST · DEAD_RECKONED. Fix 경과 6초, DR 상한 잔여 9초. [추정](demo/recovery-ui/ol07-estimating.png) |
+| 63초 | LOST · LAST_KNOWN. Fix 경과 15초, `DR_LIMIT`. [추정 중단](demo/recovery-ui/ol07-last-known.png) |
+| 71초 | RECOVERING · LAST_KNOWN. 실제 재획득 후보 1/3과 `RECOVERY_PENDING`. [재획득](demo/recovery-ui/ol07-recovering.png) |
+| 73초 | TRACKING · MAP_MATCHED · ON_ROUTE와 `SIGNAL_RECOVERED`. [복구](demo/recovery-ui/ol07-recovered.png) |
+| 120초 | `RUN_COMPLETED`, 단일 가상 주행의 커버리지·paired 오차와 검사 결과. [평가](demo/recovery-ui/ol07-complete-results.png) |
+
+README에는 정상·추정·복구 세 장과 추정 중단 링크를 배치했다. 상세 시연에는 OL02 거부, OL10 모호성, OL13 이탈·복귀의 실제 화면도 연결했다. 공개 자료는 가상 주행 캡처이며 `FLAG_SECURE`가 적용된 Live 화면은 계측으로 확인했다. 기존 OSM 갤러리와 이전 PR 캡처는 이력으로 보존했다. Markdown 30개에서 상대 링크와 앵커 372개를 검사했다. [실행 안내](demo.md#ol07-시연)
+
+### F7 · 기존 PR과 수용 게이트
+
+같은 `codex/recovery-ui-refactoring` 브랜치에서 초안 PR #9을 갱신한다. 제품·성능·캡처 코드는 `ce617de`이며 이후 커밋은 계측·수치 집계·문서·이미지다. 최종 head의 PR/push 검사 결과는 PR 설명과 검사 탭에서 확인할 수 있다. [PR #9](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9) · [최종 head 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks)
+
+| 게이트 | 판정 | 근거 |
+|---|---|---|
+| G0 기준선·변경 추적 | PASS | A/B/C 소스, APK 및 환경을 기록하고 제품 diff를 확인했다. |
+| G1 기존 전환 지표 | PASS | 원본 workload·선택 조건·종료 신호를 보존하고 시나리오별 9회를 수행했다. |
+| G2 지도 전환 RCA | PASS | 동일 요청·run ID로 내부 준비·첫 frame present·외부 관측을 연결하고 접근성 캐시 효과를 대조했다. |
+| G3 최종 에뮬레이터 성능 | INCONCLUSIVE | 지도 준비와 전환 P95는 최종 조사 기준 이내였다. 주행 P95가 재측정에서 크게 달랐다. [수치](recovery-ui-switch-rca.md#f4--최종-제품-성능) |
+| G4 화면 정보 및 조작 | PASS | OL07 상태별 캡처의 첫 화면 컨트롤과 실제 5× 선택을 확인했다. |
+| G5 기능·엔진 동등성 | PASS | 단위 83개, 평가 JSON 5종 동일, 앱 UI·지도·카메라·재생·Live 계측 및 APK 검사. |
+| G6 OS·접근성 | PASS | API 26·48MiB와 31/33/34/36, 한·영 및 글꼴 130%, 실제 TalkBack. |
+| G7 실기기 성능 | BLOCKED | 연결된 물리 단말 없음. |
+| G8 실기기 메모리·내구 | BLOCKED | A/C 각각 독립 실행 0회. |
+| G9 실제 GPS·서비스 | BLOCKED | 물리 GPS 미실행, 물리 단말 설정 변경 없음. |
+| G10 공개 자료 | PASS | 최종 원본 PNG, 이전 이력, 상대 링크 및 개인정보 노출 검사. |
+| G11 최종 원격 CI | [최종 head 판정](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) | PR과 push의 `build-and-test`·`live-api36`. |
+
+G3·G7–G9가 남아 있어 Draft를 유지했다.
+
 ## Phase 0 · 기준선
 
 원격 `main`의 `a732af2dddfb86514fbfa76a6d7971f31e8d23da`에서 `codex/recovery-ui-refactoring` 작업 브랜치를 시작했다. 기존 작업 폴더와 분리했으며 Android 36 ARM64 에뮬레이터 한 대에서 Debug 화면과 Release 상속 벤치마크 APK를 준비했다. 앱·Live·원본 계측 APK의 SHA-256과 기준 화면 원본은 로컬 `build/reports/recovery-ui/baseline/`에 보존한다. [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45790812053)
@@ -95,17 +174,17 @@ API 26의 초기 후보에서 `UiDevice.pressHome()`이 false를 반환한 뒤 �
 
 | 원본 | 가상 시각 | 관측 상태 및 판정 |
 |---|---:|---|
-| [OL07 정상](demo/recovery-ui/ol07-tracking.png) | 28,000ms | TRACKING · MAP_MATCHED · ON_ROUTE |
-| [OL07 추정](demo/recovery-ui/ol07-estimating.png) | 54,000ms | LOST · DEAD_RECKONED · UNKNOWN. Fix 경과 6초, 추정 상한 9초 남음 |
-| [OL07 중단](demo/recovery-ui/ol07-last-known.png) | 63,000ms | LOST · LAST_KNOWN · `DR_LIMIT` |
-| [OL07 복구](demo/recovery-ui/ol07-recovered.png) | 73,000ms | TRACKING · MAP_MATCHED · ON_ROUTE · `SIGNAL_RECOVERED` |
-| [OL07 결과](demo/recovery-ui/ol07-complete-results.png) | 120,000ms | `RUN_COMPLETED`, 해당 가상 실행 평가 |
-| [OL02 관측 거부](demo/recovery-ui/ol02-jump.png) | 32,000ms | DEGRADED · `IMPLAUSIBLE_MOVE` |
-| [OL10 모호성](demo/recovery-ui/ol10-ambiguous.png) | 0ms | TRACKING · OBSERVED · UNKNOWN · `AMBIGUOUS` |
-| [OL13 이탈](demo/recovery-ui/ol13-departure.png) | 44,000ms | TRACKING · MAP_MATCHED · OFF_ROUTE · `REROUTE_RECOMMENDED` |
-| [OL13 복귀](demo/recovery-ui/ol13-return.png) | 67,000ms | TRACKING · MAP_MATCHED · ON_ROUTE · `ROUTE_RETURNED` |
+| [OL07 정상](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo/recovery-ui/ol07-tracking.png) | 28,000ms | TRACKING · MAP_MATCHED · ON_ROUTE |
+| [OL07 추정](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo/recovery-ui/ol07-estimating.png) | 54,000ms | LOST · DEAD_RECKONED · UNKNOWN. Fix 경과 6초, 추정 상한 9초 남음 |
+| [OL07 중단](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo/recovery-ui/ol07-last-known.png) | 63,000ms | LOST · LAST_KNOWN · `DR_LIMIT` |
+| [OL07 복구](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo/recovery-ui/ol07-recovered.png) | 73,000ms | TRACKING · MAP_MATCHED · ON_ROUTE · `SIGNAL_RECOVERED` |
+| [OL07 결과](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo/recovery-ui/ol07-complete-results.png) | 120,000ms | `RUN_COMPLETED`, 해당 가상 실행 평가 |
+| [OL02 관측 거부](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo/recovery-ui/ol02-jump.png) | 32,000ms | DEGRADED · `IMPLAUSIBLE_MOVE` |
+| [OL10 모호성](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo/recovery-ui/ol10-ambiguous.png) | 0ms | TRACKING · OBSERVED · UNKNOWN · `AMBIGUOUS` |
+| [OL13 이탈](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo/recovery-ui/ol13-departure.png) | 44,000ms | TRACKING · MAP_MATCHED · OFF_ROUTE · `REROUTE_RECOMMENDED` |
+| [OL13 복귀](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo/recovery-ui/ol13-return.png) | 67,000ms | TRACKING · MAP_MATCHED · ON_ROUTE · `ROUTE_RETURNED` |
 
-README의 대표 화면 세 장과 데모를 위의 실제 캡처로 갱신했다. 국내 OSM 갤러리와 이전 검증 결과는 각 시기 기록에서 참조한다. 공개 원본 9장은 가상 주행이며 Live 화면은 `FLAG_SECURE`를 적용한 상태에서 계측으로 검수했다. [현재 데모](demo.md#ol07-시연)
+README의 대표 화면 세 장과 데모를 위의 실제 캡처로 갱신했다. 국내 OSM 갤러리와 이전 검증 결과는 각 시기 기록에서 참조한다. 공개 원본 9장은 가상 주행이며 Live 화면은 `FLAG_SECURE`를 적용한 상태에서 계측으로 검수했다. [당시 데모](https://github.com/CodingBot000/AndroidLocaltionRecovery/blob/8c572cd1d5e8c1378834310bccab43b058f16e4a/docs/demo.md)
 
 ## Phase 10 · 변경 검토와 PR
 

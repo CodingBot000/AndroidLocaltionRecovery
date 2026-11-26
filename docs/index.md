@@ -23,6 +23,7 @@
 | [OSM 화면 검수](osm-visual-verification.md) | 국내 10개 지역과 Follow·Mid·Overview 화면 |
 | [데모](demo.md) | 앱에서 장애·복구·지도 제어를 확인하는 방법 |
 | [위치 복구 UI 검증](recovery-ui-validation.md) | 실제 OL07 화면, 접근성·OS 회귀 및 에뮬레이터 성능 비교 |
+| [지도 전환 성능 조사](recovery-ui-switch-rca.md) | 앱 내부 준비, 실제 첫 프레임, 접근성 관측 및 최종 비교 |
 | [데이터 출처·라이선스](../data/osm/README.md) | OpenStreetMap/ODbL 표기 및 출처 |
 
 ## 정량 평가

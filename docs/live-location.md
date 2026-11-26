@@ -21,7 +21,7 @@ stateDiagram-v2
 
 Home·화면 잠금·Activity 재생성 중 서비스가 세션을 유지한다. 시스템 종료 후 자동 재시작하지 않고 다음 실행에서 중단을 알린다.
 
-**검증 범위:** API 26·31·33·34·36 에뮬레이터의 서비스 lifecycle 및 권한 흐름, API 31 SM-G975N의 실내 fresh GPS 수신과 직접 GPS 대조, FGS·listener 시작·정지 20회를 확인했다. 실제 수신 시험과 짧은 시작·종료 반복은 별개다. 과거 120초 무수신의 원인은 미확정이며, 화면 OFF 수신 편차와 실제 주행 범위는 실기기 기록을 기준으로 해석한다. [실기기 GPS 검증](real-device-final-validation.md) · [후속 Live 자원 해제](rendering-memory-rca.md#실기기-live-반복)
+UI 후보 `ce617de`의 Live 검증 범위는 UI 후속 기록에 있다. 새 후보의 실기기 GPS는 단말 미연결로 BLOCKED다. 2026-11-25의 제품 기준 `d0b3822`에서 API 31 SM-G975N의 실내 fresh GPS 수신, 직접 GPS 대조와 별도 FGS·listener 시작·정지 20회를 확인했다. 당시 120초 무수신과 화면 OFF 수신 편차는 별도 검증 이력에 기록했다. [현재 Live 검증](recovery-ui-validation.md) · [과거 실기기 GPS](real-device-final-validation.md) · [과거 자원 해제](rendering-memory-rca.md#실기기-live-반복)
 
 ## 실행 방법
 

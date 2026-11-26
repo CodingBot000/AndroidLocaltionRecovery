@@ -4,18 +4,19 @@
 
 ## 최신 구현 검증 요약
 
-2026-11-26의 UI 작업 기준은 `a732af2`다. 해당 main의 CI가 통과했다. UI 후보의 로컬 검증은 아래 표와 별도 보고서에 기록했다. [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45790812053) · [UI 검증](recovery-ui-validation.md) · [최신 Actions](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions)
+2026-11-26 UI 후속 검증은 main `a732af2`와 최종 UI 제품 `ce617de`를 비교한다. 최종 커밋의 원격 검사 상태는 PR에서 확인할 수 있다. [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45790812053) · [PR #9 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) · [UI 검증](recovery-ui-validation.md)
 
 | 검사 | 확인한 결과 | 상세 근거 |
 |---|---|---|
-| 단위 테스트 | UI 후보 JVM·Android 83개 통과 | [UI 검증](recovery-ui-validation.md#phase-8--회귀-및-실행-검증) |
+| 단위 테스트 | UI 후보 JVM·Android 83개 통과 | [UI 검증](recovery-ui-validation.md#f4--성능과-기능-회귀) |
 | 위치 평가 | 합성·장시간·OSM·고난도 84개와 로딩 오류 3개 통과 | [기본 합성](evaluation-report.md) · [장시간](extended-evaluation-report.md) · [OSM](osm-evaluation-report.md) · [독립 평가](osm-challenge-report.md) |
-| 빌드·Lint·APK | UI 후보의 권한·asset·HTTP 및 Debug 하네스 격리 검사 통과 | [UI 검증](recovery-ui-validation.md#phase-8--회귀-및-실행-검증) |
+| 빌드·Lint·APK | UI 후보의 권한·asset·HTTP 및 Debug 하네스 격리 검사 통과 | [UI 검증](recovery-ui-validation.md#f4--성능과-기능-회귀) |
 | UI 접근성·실행 | API 36 TalkBack, 320×640·글꼴 130% 한국어, 실제 OL07·OL02·OL10·OL13 | [UI 검증](recovery-ui-validation.md) |
 | Live 계측 | API 26·31·33·34·36 에뮬레이터; 원격 API 36 | [Live](live-location.md) · [CI 장애 RCA](compose-slot-table-rca.md) |
 | 저메모리 회귀 | API 26·48MiB O10 기동 및 전환·재생·Live 반복 통과 | [저메모리 상세](#api-26-48mib-o10-수정-재검증) |
-| 실기기 Live | API 31 실내 fresh GPS 수신, FGS·listener 해제 20회 | [실기기 GPS](real-device-final-validation.md) |
-| UI 후보 성능 | 동일 API 36 에뮬레이터 기준·후보 시나리오별 9회. 지도 준비 대기의 회귀 신호는 조사 중이며 실기기 검증은 BLOCKED | [UI 성능 비교](recovery-ui-validation.md#최종-후보-성능-비교) |
+| 현재 UI 후보 실기기 | 단말 미연결로 성능·내구·GPS **BLOCKED** | [실기기 검증 범위](physical-device-validation.md) |
+| 과거 실기기 Live | `d0b3822`에서 API 31 실내 fresh GPS 및 별도 FGS·listener 해제 20회 | [2026-11-25 검증](real-device-final-validation.md) |
+| UI 후보 성능 | API 36 A/C 시나리오별 9회. 첫 present 지연 미재현, 전환 Overrun P95 임계값 초과로 **INCONCLUSIVE** | [최종 성능 및 재시험](recovery-ui-switch-rca.md#f4--최종-제품-성능) |
 | 과거 실기기 성능·내구 | 기준선 및 렌더러 후보 시나리오별 9회, O10 180초 × 10회씩. 렌더러 후보 기각 | [실기기 렌더링 A/B](rendering-memory-rca.md) |
 
 CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않는다. 과거 GPS 무수신 원인과 반복 PSS 증가 기전은 미확정이다. 측정 환경별 한계와 실패·재실행은 상세 보고서에 보존한다.
