@@ -14,9 +14,9 @@
 | UI 접근성·실행 | API 36 TalkBack, 320×640·글꼴 130% 한국어, 실제 OL07·OL02·OL10·OL13 | [UI 검증](recovery-ui-validation.md) |
 | Live 계측 | API 26·31·33·34·36 에뮬레이터; 원격 API 36 | [Live](live-location.md) · [CI 장애 RCA](compose-slot-table-rca.md) |
 | 저메모리 회귀 | API 26·48MiB O10 기동 및 전환·재생·Live 반복 통과 | [저메모리 상세](#api-26-48mib-o10-수정-재검증) |
-| 현재 UI 후보 실기기 | 단말 미연결로 성능·내구·GPS **BLOCKED** | [실기기 검증 범위](physical-device-validation.md) |
+| 현재 UI 후보 실기기 | SM-G975N에서 G7 원본 각 9회와 콜드 재시험 각 6회. 기동 **INCONCLUSIVE**. 내구·GPS **NOT_RUN** | [G7 실기기 결과](recovery-ui-physical-g7.md) |
 | 과거 실기기 Live | `d0b3822`에서 API 31 실내 fresh GPS 및 별도 FGS·listener 해제 20회 | [2026-11-25 검증](real-device-final-validation.md) |
-| UI 후보 성능 | API 36 A/C 시나리오별 9회. 첫 present 지연 미재현, 전환 Overrun P95 임계값 초과로 **INCONCLUSIVE** | [최종 성능 및 재시험](recovery-ui-switch-rca.md#f4--최종-제품-성능) |
+| UI 후보 에뮬레이터 성능 | API 36 A/C 시나리오별 9회. 지도 전환은 조사 기준 이내였고 주행 재시험 편차로 **INCONCLUSIVE** | [최종 성능 및 재시험](recovery-ui-switch-rca.md#f4--최종-제품-성능) |
 | 과거 실기기 성능·내구 | 기준선 및 렌더러 후보 시나리오별 9회, O10 180초 × 10회씩. 렌더러 후보 기각 | [실기기 렌더링 A/B](rendering-memory-rca.md) |
 
 CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않는다. 과거 GPS 무수신 원인과 반복 PSS 증가 기전은 미확정이다. 측정 환경별 한계와 실패·재실행은 상세 보고서에 보존한다.

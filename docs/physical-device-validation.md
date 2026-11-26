@@ -2,9 +2,9 @@
 
 [README](../README.md) · [통합 검증](verification.md) · [성능](refactor-performance.md)
 
-## PR #9 후속 후보 (2026-11-26)
+## PR #9 실기기 성능 (2026-11-27)
 
-제품 코드 `ce617de`의 실기기 Macrobenchmark, O10 180초×10회 A/C 내구·PSS, 지도 전환·재생 및 Live 20회, 실제 GPS는 단말 미연결로 **BLOCKED**다. 해당 단말의 설정 변경이나 위치 시험은 없었다. [UI 후보 검증과 게이트](recovery-ui-validation.md)
+SM-G975N에서 `a732af2`와 `ce617de`의 원본 Macrobenchmark를 시나리오별 각 9회 비교했다. 지도 전환과 주행은 조사 기준 이내였다. 콜드 TTFD는 본 측정에서 30.7% 늘었으나 재시험에서 같은 방향의 차이가 반복되지 않아 G7 종합 판정은 **INCONCLUSIVE**다. G8 내구·PSS 및 G9 GPS는 **NOT_RUN**이다. [G7 실기기 결과와 복원](recovery-ui-physical-g7.md) · [UI 후보 게이트](recovery-ui-validation.md)
 
 ## 기존 확인 범위 (2026-11-25–26)
 

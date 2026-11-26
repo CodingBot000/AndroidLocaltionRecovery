@@ -41,7 +41,7 @@ API 33의 첫 오프라인 실행과 표시 대기만 추가한 재실행에서�
 
 ### F5 · 실기기
 
-F0와 모든 에뮬레이터를 종료한 뒤의 `adb devices -l`에서 물리 단말이 없었다. 동일 실기기 A/C Macrobenchmark, 빌드별 O10 180초×10회 독립 내구·PSS, 지도 전환 및 Live 각 20회, fresh non-mock GPS와 실기기 자원 해제는 **BLOCKED**다. 실제 단말의 실행 수는 0이며 변경하거나 복원할 물리 단말 설정은 없었다. 이전 실기기 기록은 제품 SHA와 날짜를 구분해 남겼다. [실기기 범위와 이력](physical-device-validation.md)
+2026-11-26의 UI 후속 작업에서는 단말이 없어 F5가 BLOCKED였다. 2026-11-27 연결된 SM-G975N에서 G7을 실행했다. 같은 실기기의 지도 준비는 675.4→675.0ms, 주행 Overrun P95는 101.4→102.0ms였다. 콜드 TTFD는 본 측정 1,465.6→1,915.0ms, 독립 재시험 2,113.2→2,011.0ms로 방향이 달랐다. 성능 수용은 **INCONCLUSIVE**다. G8 내구·PSS와 G9 실제 GPS는 **NOT_RUN**이다. [실기기 결과와 복원](recovery-ui-physical-g7.md) · [실기기 범위와 이력](physical-device-validation.md)
 
 ### F6 · 실제 화면과 문서
 
@@ -71,9 +71,9 @@ README에는 정상·추정·복구 세 장과 추정 중단 링크를 배치했
 | G4 화면 정보 및 조작 | PASS | OL07 상태별 캡처의 첫 화면 컨트롤과 실제 5× 선택을 확인했다. |
 | G5 기능·엔진 동등성 | PASS | 단위 83개, 평가 JSON 5종 동일, 앱 UI·지도·카메라·재생·Live 계측 및 APK 검사. |
 | G6 OS·접근성 | PASS | API 26·48MiB와 31/33/34/36, 한·영 및 글꼴 130%, 실제 TalkBack. |
-| G7 실기기 성능 | BLOCKED | 연결된 물리 단말 없음. |
-| G8 실기기 메모리·내구 | BLOCKED | A/C 각각 독립 실행 0회. |
-| G9 실제 GPS·서비스 | BLOCKED | 물리 GPS 미실행, 물리 단말 설정 변경 없음. |
+| G7 실기기 성능 | INCONCLUSIVE | A/C 원본 9회씩, 콜드 재시험 6회씩. 주행 악화는 재현되지 않았고 콜드 본 시험과 재시험의 방향이 달랐다. [실기기 G7](recovery-ui-physical-g7.md) |
+| G8 실기기 메모리·내구 | NOT_RUN | A/C 독립 내구 실행 0회. |
+| G9 실제 GPS·서비스 | NOT_RUN | G7은 가상 주행 성능 범위에서 실행했다. |
 | G10 공개 자료 | PASS | 최종 원본 PNG, 이전 이력, 상대 링크 및 개인정보 노출 검사. |
 | G11 최종 원격 CI | [최종 head 판정](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) | PR과 push의 `build-and-test`·`live-api36`. |
 
