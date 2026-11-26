@@ -1,6 +1,5 @@
 package lab.recovery.feature
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -53,12 +52,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import lab.recovery.location.PositionSource
 import lab.recovery.location.SignalState
 
-internal val Background = Color(0xFF101716)
-internal val Panel = Color(0xFF172120)
-internal val Rule = Color(0xFF31403D)
-internal val Muted = Color(0xFFABBDB5)
-internal val Ink = Color(0xFFEAF5EF)
-internal val Mint = Color(0xFFA3F2CB)
+internal val Background = Color(0xFF111A27)
+internal val Panel = Color(0xFF1B293B)
+internal val Rule = Color(0xFF465B71)
+internal val Muted = Color(0xFFB9C9DA)
+internal val Ink = Color(0xFFEDF3F9)
+internal val Mint = Color(0xFF94E1CF)
 internal val Amber = Color(0xFFFFCA83)
 internal val Coral = Color(0xFFFF9F91)
 internal val Sky = Color(0xFF9ACAF0)
@@ -88,6 +87,7 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
     val error by remember(state) { derivedStateOf { state.value.error } }
     val evaluation by remember(state) { derivedStateOf { state.value.evaluation } }
     val runId by remember(state) { derivedStateOf { state.value.runId } }
+    val truth by remember(state) { derivedStateOf { state.value.showTruth } }
     var expandedLogs by remember(runId) { mutableStateOf(false) }
     var diagnostics by rememberSaveable { mutableStateOf(false) }
     var expandedDescription by remember(selection.id) { mutableStateOf(false) }
@@ -103,8 +103,12 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
             Column(Modifier.padding(start = 12.dp, end = 12.dp, top = 4.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(stringResource(R.string.lab_title), style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.lab_title), style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.simulation_mode), color = Muted,
+                            style = MaterialTheme.typography.labelSmall, modifier = Modifier.testTag("simulation-mode"))
+                    }
                     TextButton(onClick = { night = !night }, modifier = Modifier.testTag("map-theme")) {
                         Text(stringResource(if (night) R.string.map_night else R.string.map_day))
                     }
@@ -124,14 +128,10 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
                 )
             }
         }
+        item { DriveHud(state.value, Modifier.padding(horizontal = 12.dp)) }
         item {
-            Column(Modifier.padding(horizontal = 12.dp).fillMaxWidth()) {
-                val current = state.value
-                DriveHud(current)
-                Spacer(Modifier.height(5.dp))
-                TrackingMap(current, Modifier.fillMaxWidth().height(mapHeight), night, optimizedMap, onMapReady)
-                MapLegend(current.showTruth, { onIntent(UiIntent.ToggleTruth) })
-            }
+            TrackingMap(state.value, Modifier.padding(horizontal = 12.dp).fillMaxWidth().height(mapHeight),
+                night, optimizedMap, onMapReady)
         }
         item {
             Column(Modifier.padding(horizontal = 12.dp)) {
@@ -141,6 +141,11 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
                 LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth(),
                     color = Mint, trackColor = Rule, gapSize = 0.dp, drawStopIndicator = {})
                 PlaybackControls(current, onIntent)
+            }
+        }
+        item {
+            Column(Modifier.padding(horizontal = 12.dp)) {
+                MapLegend(truth) { onIntent(UiIntent.ToggleTruth) }
             }
         }
         error?.let { item { Text(it, color = Coral, modifier = Modifier.padding(horizontal = 12.dp).testTag("error")) } }
@@ -174,7 +179,7 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
 }
 
 @Composable
-private fun DriveHud(state: UiState) {
+private fun DriveHud(state: UiState, modifier: Modifier) = Column(modifier) {
     val snapshot = state.snapshot
     val statusColor = when (snapshot.signal) {
         SignalState.TRACKING -> Mint
