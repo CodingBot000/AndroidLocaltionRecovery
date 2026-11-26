@@ -34,7 +34,9 @@ private val featuredScenarios = listOf("OL07", "OL02", "OL10", "OL13", "ODEMO_LO
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun ScenarioMenu(selected: ScenarioChoice, entries: List<ScenarioChoice>, onIntent: (UiIntent) -> Unit) {
-    val language = androidx.compose.ui.platform.LocalConfiguration.current.locales[0].language
+    val config = androidx.compose.ui.platform.LocalConfiguration.current
+    val language = config.locales[0].language
+    val titleLines = if (config.screenWidthDp <= 360) 2 else 1
     var open by remember { mutableStateOf(false) }
     var featuredOpen by remember { mutableStateOf(false) }
     val featured = remember(entries) {
@@ -47,7 +49,7 @@ internal fun ScenarioMenu(selected: ScenarioChoice, entries: List<ScenarioChoice
             OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().testTag("scenario-menu")) {
                 Text(if (selected.id == "OSM_DEFAULT") selected.title else
                     "${selected.id} · ${selected.catalog?.title?.forLanguage(language) ?: selected.title}",
-                    modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    modifier = Modifier.weight(1f), maxLines = titleLines, overflow = TextOverflow.Ellipsis)
                 Text("▾", color = Muted)
             }
             DropdownMenu(expanded = open, onDismissRequest = { open = false },

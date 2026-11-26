@@ -111,9 +111,11 @@ internal fun DriveHud(ui: State<UiState>, settings: TrackingSettings, modifier: 
                         style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold,
                         modifier = Modifier.testTag("recovery-candidates"))
                 }
-                if (snapshot.source == PositionSource.LAST_KNOWN) snapshot.drUnavailable?.let {
-                    Text(stringResource(it.estimationLabel()), color = Amber, style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier.testTag("estimation-stop"))
+                if (snapshot.signal == SignalState.LOST && snapshot.source == PositionSource.LAST_KNOWN) {
+                    snapshot.drUnavailable?.let {
+                        Text(stringResource(it.estimationLabel()), color = Amber, style = MaterialTheme.typography.labelLarge,
+                            modifier = Modifier.testTag("estimation-stop"))
+                    }
                 }
             }
             val velocity = readout.speedMps?.let { stringResource(R.string.accepted_speed, number(it)) }
