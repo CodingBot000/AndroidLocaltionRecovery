@@ -1,0 +1,349 @@
+{
+  "dateKst": "2026-11-27",
+  "device": "SM-G975N, Exynos 9820, Android 12/API 31, ARM64, USB",
+  "sourceCommits": {
+    "A": "a732af2dddfb86514fbfa76a6d7971f31e8d23da",
+    "C": "ce617de21ffbf5485564c9d7bc589a3b6085c02c"
+  },
+  "priorPrHead": "bb271ed356037585cc8f9106cb8de1d464a388da",
+  "artifactSha256": {
+    "A": {
+      "instrumentation-only.patch": "7d5c3c54989d536cbd0107814273f2f2a6fe877edf8754cf2f9ced1591d2e5d4",
+      "live-debug-androidTest.apk": "0298088032c9df686fd3884d98ab14ef22c19df7f6b401a62ac4cb1814b03ec1",
+      "live-debug.apk": "03d5609b364ebc9ccbc1bce69caf600c7eb8f2d68cdbe373787df10b1ebed362",
+      "original-live-debug-androidTest.apk": "473e5403a039847fedf6b136f5743a5e1a06f6839619004ea73f832210130836",
+      "status-instrumentation-only.patch": "26b35c9b5d89ec0c79c3e3cfa89abed58b1ffa03e53bd1d24081b578ef358951",
+      "status-live-debug-androidTest.apk": "036264b693713b6342f8de868f8dcf0799625205bfab4f1f342c9dc7fb9e9291"
+    },
+    "C": {
+      "instrumentation-only.patch": "8bf18e4ed3b3589d53864e3c7d5e2934375f9fd5e6f643d84b1debd1838d5577",
+      "live-debug-androidTest.apk": "04e3047c63606d1de547f15a40b29c4cc08bca8967eecb5c3bcd396963b23dd3",
+      "live-debug.apk": "2fdc390a26f6877c237c36add65c1ffa02181029cc602820897e4ab3280af294",
+      "original-live-debug-androidTest.apk": "ae5c348d125a4f1ce2c9fb695573007822519ccf8f05b32a315d40b87af04531",
+      "status-instrumentation-only.patch": "c775354b288b1c11093275ae3f9f9501a6867c36eeaac450a94b3b74bfe77b69",
+      "status-live-debug-androidTest.apk": "3bd259324d16af15404ef720db06f986f296957c4639881387e3e41afa46a096"
+    }
+  },
+  "measurementContracts": {
+    "freshTimeoutMs": 120000,
+    "screenOffMinimumMs": 300000,
+    "manualUnlockTimeoutMs": 90000
+  },
+  "results": {
+    "A": [
+      {
+        "mode": "gps",
+        "attempt": "gps-first",
+        "hostExitCode": 16,
+        "evidence": {
+          "active": {
+            "active": true,
+            "fgs": true,
+            "listener": true,
+            "secure": true
+          },
+          "released": {
+            "released": true,
+            "fgsRows": 0,
+            "listenerRows": 0,
+            "readingCleared": true
+          },
+          "gnssLive": {
+            "callbacks": 0,
+            "processed": 0,
+            "dropped": 0,
+            "reading": "WAITING",
+            "issue": null,
+            "gnssStarted": 0,
+            "epochs": 122,
+            "visibleMax": 0,
+            "usedMax": 0,
+            "firstFixMs": null
+          },
+          "gnssDirect": {
+            "callbackCount": 0,
+            "fresh": 0,
+            "gnssStarted": 1,
+            "epochs": 121,
+            "visibleMax": 0,
+            "usedMax": 0,
+            "firstFixMs": null
+          }
+        },
+        "gpsJUnit": {
+          "junitPassed": false,
+          "wallSeconds": 124.215,
+          "timedOutWithoutFreshGps": {
+            "callbacks": 0,
+            "processed": 0,
+            "status": "WAITING",
+            "issue": null
+          }
+        },
+        "gnss-diagnosticJUnit": {
+          "junitPassed": true,
+          "wallSeconds": 247.473
+        },
+        "gps-release": {
+          "zero": true
+        },
+        "diagnostic-release": {
+          "zero": true
+        },
+        "release-before-permission-restore": {
+          "zero": true
+        },
+        "permissionsRestored": true
+      },
+      {
+        "mode": "lifecycle",
+        "attempt": "lifecycle-first",
+        "hostExitCode": 1,
+        "evidence": {
+          "activityRecreation": {
+            "g9Recreated": 3,
+            "sameToken": true,
+            "fgs": true,
+            "listener": true
+          },
+          "screenOffStarted": {
+            "g9ScreenOffStarted": true
+          },
+          "screenOff": {
+            "screenOffMs": 303979,
+            "callbacks": 0
+          },
+          "manualUnlockRequired": {
+            "unlockRequired": true
+          }
+        },
+        "lifecycleJUnit": {
+          "junitPassed": false,
+          "wallSeconds": 404.249,
+          "manualUnlockTimedOut": true
+        },
+        "lifecycle-release": {
+          "zero": true
+        },
+        "release-before-permission-restore": {
+          "zero": true
+        },
+        "permissionsRestored": true
+      },
+      {
+        "mode": "status",
+        "attempt": "status-first",
+        "hostExitCode": 0,
+        "evidence": {
+          "pendingUi": {
+            "uiPending": true,
+            "phase": "ACTIVE",
+            "precision": "FINE",
+            "fixStatus": "WAITING",
+            "received": 0,
+            "processed": 0,
+            "dropped": 0,
+            "providerLabelVisible": false,
+            "countersMatch": true,
+            "secure": true
+          },
+          "released": {
+            "released": true,
+            "fgsRows": 0,
+            "listenerRows": 0,
+            "readingCleared": true
+          }
+        },
+        "statusJUnit": {
+          "junitPassed": true,
+          "wallSeconds": 4.1
+        },
+        "status-release": {
+          "zero": true
+        },
+        "release-before-permission-restore": {
+          "zero": true
+        },
+        "permissionsRestored": true
+      }
+    ],
+    "C": [
+      {
+        "mode": "gps",
+        "attempt": "gps-first",
+        "hostExitCode": 16,
+        "evidence": {
+          "active": {
+            "active": true,
+            "fgs": true,
+            "listener": true,
+            "secure": true
+          },
+          "released": {
+            "released": true,
+            "fgsRows": 0,
+            "listenerRows": 0,
+            "readingCleared": true
+          },
+          "gnssLive": {
+            "callbacks": 0,
+            "processed": 0,
+            "dropped": 0,
+            "reading": "WAITING",
+            "issue": null,
+            "gnssStarted": 1,
+            "epochs": 120,
+            "visibleMax": 0,
+            "usedMax": 0,
+            "firstFixMs": null
+          },
+          "gnssDirect": {
+            "callbackCount": 0,
+            "fresh": 0,
+            "gnssStarted": 1,
+            "epochs": 120,
+            "visibleMax": 0,
+            "usedMax": 0,
+            "firstFixMs": null
+          }
+        },
+        "gpsJUnit": {
+          "junitPassed": false,
+          "wallSeconds": 124.427,
+          "timedOutWithoutFreshGps": {
+            "callbacks": 0,
+            "processed": 0,
+            "status": "WAITING",
+            "issue": null
+          }
+        },
+        "gnss-diagnosticJUnit": {
+          "junitPassed": true,
+          "wallSeconds": 247.525
+        },
+        "gps-release": {
+          "zero": true
+        },
+        "diagnostic-release": {
+          "zero": true
+        },
+        "release-before-permission-restore": {
+          "zero": true
+        },
+        "permissionsRestored": true
+      },
+      {
+        "mode": "status",
+        "attempt": "status-first",
+        "hostExitCode": 0,
+        "evidence": {
+          "pendingUi": {
+            "uiPending": true,
+            "phase": "ACTIVE",
+            "precision": "FINE",
+            "fixStatus": "WAITING",
+            "received": 0,
+            "processed": 0,
+            "dropped": 0,
+            "providerLabelVisible": false,
+            "countersMatch": true,
+            "secure": true
+          },
+          "released": {
+            "released": true,
+            "fgsRows": 0,
+            "listenerRows": 0,
+            "readingCleared": true
+          }
+        },
+        "statusJUnit": {
+          "junitPassed": true,
+          "wallSeconds": 4.61
+        },
+        "status-release": {
+          "zero": true
+        },
+        "release-before-permission-restore": {
+          "zero": true
+        },
+        "permissionsRestored": true
+      }
+    ]
+  },
+  "restoration": {
+    "apkBytesMatch": {
+      "lab.recovery.app": true,
+      "lab.recovery.app.test": true,
+      "lab.recovery.live": true,
+      "lab.recovery.live.test": true,
+      "lab.recovery.app.benchmark": true,
+      "lab.recovery.benchmark": true
+    },
+    "reopenedThenBackgroundKilledForStoppedBit": [],
+    "existingDataInodesMatch": {
+      "lab.recovery.app": true,
+      "lab.recovery.app.test": true,
+      "lab.recovery.live": true,
+      "lab.recovery.live.test": true,
+      "lab.recovery.app.benchmark": true,
+      "lab.recovery.benchmark": true
+    },
+    "stoppedBitsMatch": {
+      "lab.recovery.app": true,
+      "lab.recovery.app.test": true,
+      "lab.recovery.live": true,
+      "lab.recovery.live.test": true,
+      "lab.recovery.app.benchmark": true,
+      "lab.recovery.benchmark": true
+    },
+    "trackedSystemSettingsMatch": {
+      "system": true,
+      "global": true
+    },
+    "displaySizeMatch": true,
+    "displayDensityMatch": true,
+    "locationSwitchMatch": true,
+    "locationPermissionAndFlagsMatch": true,
+    "existingLiveMarkerBytesMatch": true,
+    "mediaFileManifestsMatch": {
+      "lab.recovery.benchmark": true
+    },
+    "keyguardConfigurationAndStateMatch": false,
+    "keyguardShowing": true,
+    "secureSettingMatch": true,
+    "screenAwake": true,
+    "homeRestored": false,
+    "testDirectoriesVerifiedAndRemoved": {
+      "A/gps-first": 15,
+      "C/gps-first": 16,
+      "A/status-first": 12,
+      "C/status-first": 12,
+      "A/lifecycle-first": 12
+    }
+  },
+  "priorGates": {
+    "G3": "INCONCLUSIVE",
+    "G7": "INCONCLUSIVE",
+    "G8": "INCONCLUSIVE"
+  },
+  "gateG9": "INCONCLUSIVE",
+  "coverage": {
+    "freshGps": {
+      "A": "NO_FIX",
+      "C": "NO_FIX"
+    },
+    "pendingUi": {
+      "A": "PASS",
+      "C": "PASS"
+    },
+    "activityRecreationAndScreenOffHold": {
+      "A": "PASS",
+      "C": "BLOCKED"
+    },
+    "returnAndUiStopAfterUnlock": {
+      "A": "BLOCKED",
+      "C": "BLOCKED"
+    },
+    "deviceStateRestoration": "APP_PERMISSION_AND_CONFIGURATION_RESTORED_HOME_BLOCKED_ON_MANUAL_UNLOCK"
+  }
+}

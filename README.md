@@ -112,6 +112,7 @@ ANR·Crash는 진단용 하네스와 계측 환경의 재현 사례이며 상용
 | Android 플랫폼 계측 | API 26·31·33·34·36 에뮬레이터, 권한·서비스 생명주기 및 접근성 검증 |
 | 실기기 검증 이력 | 2026-11-25–26의 SM-G975N Android 12에서 fresh GPS 수신, Live 20회 시작·해제, O10 1× 재생 30분 및 성능을 측정했다. [빌드별 범위](docs/physical-device-validation.md) |
 | 현재 UI 후보의 실기기 | SM-G975N에서 원본 성능 시험과 빌드별 독립 30분 내구 시험을 완료했다. 기동과 유휴 Native PSS의 수용 판정은 INCONCLUSIVE다. [G7 성능](docs/recovery-ui-physical-g7.md) · [G8 메모리·내구](docs/recovery-ui-physical-g8.md) |
+| 현재 UI 후보의 실제 위치 | A/C에서 Live 및 직접 GPS 요청을 관찰했다. fresh fix가 없었고 잠금 복귀 검증이 남아 G9는 INCONCLUSIVE다. [G9 GPS·서비스](docs/recovery-ui-physical-g9.md) |
 | GitHub Actions | 모듈 경계·단위 테스트·Lint·Debug/unsigned Release APK·fixture·평가와 API 36 Live 계측 |
 
 [UI 후보 PR 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) · [기존 main 73f728f 검사 이력](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45677049357) · [검증 이력 및 재현 명령](docs/verification.md)
