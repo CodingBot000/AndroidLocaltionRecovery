@@ -27,6 +27,8 @@ Home·화면 잠금·Activity 재생성 중 서비스가 세션을 유지한다.
 
 `:live`는 기존 합성 재생 앱과 별도로 설치한다. 앱에서 국내 OSM 지도를 고른 뒤 Start를 누른다. Android가 위치 권한을 묻는 경우 선택을 마친 뒤 다시 Start를 누른다. 계획 경로 선택은 선택 사항이며 지정하지 않으면 원시 위치 진단만 제공한다. 지도 밖, 투영 검증 실패, 낮은 위치 품질, 대략적 권한은 화면에 각각 표시한다. 대략적 권한에서는 원시 진단만 제공한다.
 
+**LIVE LOCATION** 화면에서 Start와 Stop 아래에 세션 상태, 권한 수준과 현재 fix 상태를 묶어 표시한다. 위치가 수신되면 제공자, Android 모의·에뮬레이터 구분, 마지막 수신 정확도 및 수신·처리·드롭 건수를 확인할 수 있다. [Live UI 검증](recovery-ui-validation.md#phase-7--live-화면)
+
 ```bash
 ./gradlew :live:assembleDebug :live:assembleRelease :live:assembleDebugAndroidTest
 adb install -r live/build/outputs/apk/debug/live-debug.apk

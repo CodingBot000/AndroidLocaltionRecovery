@@ -4,17 +4,19 @@
 
 ## 최신 구현 검증 요약
 
-검증 근거 기준: 2026-11-26. 제품 코드의 검증된 main [`73f728f`](https://github.com/CodingBot000/AndroidLocaltionRecovery/tree/73f728fe093579b1c74b9a3d29f502c9844fb95f) · [main CI 45677049357](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45677049357) 성공. [최신 Actions](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions)
+2026-11-26의 UI 작업 기준은 `a732af2`다. 해당 main의 CI가 통과했다. UI 후보의 로컬 검증은 아래 표와 별도 보고서에 기록했다. [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45790812053) · [UI 검증](recovery-ui-validation.md) · [최신 Actions](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions)
 
 | 검사 | 확인한 결과 | 상세 근거 |
 |---|---|---|
-| 단위 테스트 | JVM·Android 70개 통과 | [워크플로](../.github/workflows/android.yml) |
+| 단위 테스트 | UI 후보 JVM·Android 83개 통과 | [UI 검증](recovery-ui-validation.md#phase-8--회귀-및-실행-검증) |
 | 위치 평가 | 합성·장시간·OSM·고난도 84개와 로딩 오류 3개 통과 | [기본 합성](evaluation-report.md) · [장시간](extended-evaluation-report.md) · [OSM](osm-evaluation-report.md) · [독립 평가](osm-challenge-report.md) |
-| 빌드·Lint·APK | 권한·asset·HTTP 및 Debug 하네스 격리 검사 통과 | [CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45677049357) |
+| 빌드·Lint·APK | UI 후보의 권한·asset·HTTP 및 Debug 하네스 격리 검사 통과 | [UI 검증](recovery-ui-validation.md#phase-8--회귀-및-실행-검증) |
+| UI 접근성·실행 | API 36 TalkBack, 320×640·글꼴 130% 한국어, 실제 OL07·OL02·OL10·OL13 | [UI 검증](recovery-ui-validation.md) |
 | Live 계측 | API 26·31·33·34·36 에뮬레이터; 원격 API 36 | [Live](live-location.md) · [CI 장애 RCA](compose-slot-table-rca.md) |
 | 저메모리 회귀 | API 26·48MiB O10 기동 및 전환·재생·Live 반복 통과 | [저메모리 상세](#api-26-48mib-o10-수정-재검증) |
 | 실기기 Live | API 31 실내 fresh GPS 수신, FGS·listener 해제 20회 | [실기기 GPS](real-device-final-validation.md) |
-| 실기기 성능·내구 | 기준선 및 후보 시나리오별 9회, O10 180초 × 10회씩; 후보 기각 | [후속 실기기 A/B](rendering-memory-rca.md) |
+| UI 후보 성능 | 동일 API 36 에뮬레이터 기준·후보 시나리오별 9회. 지도 준비 대기의 회귀 신호는 조사 중이며 실기기 검증은 BLOCKED | [UI 성능 비교](recovery-ui-validation.md#최종-후보-성능-비교) |
+| 과거 실기기 성능·내구 | 기준선 및 렌더러 후보 시나리오별 9회, O10 180초 × 10회씩. 렌더러 후보 기각 | [실기기 렌더링 A/B](rendering-memory-rca.md) |
 
 CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않는다. 과거 GPS 무수신 원인과 반복 PSS 증가 기전은 미확정이다. 측정 환경별 한계와 실패·재실행은 상세 보고서에 보존한다.
 

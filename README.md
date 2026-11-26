@@ -9,12 +9,13 @@ GPS 신호가 불안정하거나 끊기는 상황에서 위치 판단과 화면 
 [전체 아키텍처](docs/architecture.md) · [실기기 성능 분석](docs/rendering-memory-rca.md) · [장애 대응](docs/stability-investigation.md) · [검증 결과](docs/verification.md) · [전체 문서 안내](docs/index.md)
 
 <p align="center">
-  <a href="docs/demo/refactor/O10-mid.png"><img src="docs/demo/refactor/O10-mid.png" width="210" alt="성수동 O10 실제 앱 화면"></a>
-  <a href="docs/demo/refactor/O07-follow.png"><img src="docs/demo/refactor/O07-follow.png" width="210" alt="운중동 O07 실제 앱 화면"></a>
+  <a href="docs/demo/recovery-ui/ol07-tracking.png"><img src="docs/demo/recovery-ui/ol07-tracking.png" width="220" alt="OL07 28초 정상 추적 및 도로 매칭 위치"></a>
+  <a href="docs/demo/recovery-ui/ol07-estimating.png"><img src="docs/demo/recovery-ui/ol07-estimating.png" width="220" alt="OL07 54초 GPS 신호 손실 및 DR 추정"></a>
+  <a href="docs/demo/recovery-ui/ol07-recovered.png"><img src="docs/demo/recovery-ui/ol07-recovered.png" width="220" alt="OL07 73초 SIGNAL_RECOVERED 및 정상 추적 복귀"></a>
 </p>
-<p align="center">성수동 O10 · Mid &nbsp; | &nbsp; 운중동 O07 · Follow</p>
+<p align="center">남산 터널 OL07 · 정상 추적 28초 &nbsp; | &nbsp; DR 추정 54초 &nbsp; | &nbsp; 정상 복구 73초</p>
 
-[10개 지역 지도와 주행 화면](docs/osm-visual-verification.md) · [GPS 장애·복구 데모](docs/demo.md)
+기본 앱의 **대표 사례 → OL07 → 5× → 재생**으로 GPS 손실부터 재획득까지 확인할 수 있다. [OL07 시연 절차](docs/demo.md#ol07-시연) · [지도 갤러리](docs/osm-visual-verification.md) · [UI 검증 및 성능 비교](docs/recovery-ui-validation.md)
 
 ## 핵심 구현 및 검증 성과
 
@@ -106,7 +107,7 @@ ANR·Crash는 진단용 하네스와 계측 환경의 재현 사례이며 상용
 
 | 품질 게이트 | 기록된 결과 |
 |---|---|
-| JVM·Android 단위 테스트 | 70개 통과 |
+| JVM·Android 단위 테스트 | UI 후보 83개 통과 |
 | 독립 위치 평가 | 합성·장시간·OSM·고난도 84개 및 로딩 오류 3개 통과 |
 | Android 플랫폼 계측 | API 26·31·33·34·36 에뮬레이터, 권한·서비스 생명주기 및 접근성 검증 |
 | 실기기 검증 | SM-G975N Android 12의 fresh GPS 수신, Live 20회 시작·해제, O10 1× 재생 30분 및 성능 측정 |

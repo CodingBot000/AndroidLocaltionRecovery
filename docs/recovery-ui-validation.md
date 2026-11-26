@@ -88,3 +88,21 @@ Frame P95는 각 빌드의 원시 표본을 합산한 nearest-rank 값이다. �
 | API 36 · ARM64 | 최종 UI 오프라인·재생·전환 계측 13개 PASS. OL07 5×와 독립 평가 일치, 결과 진입과 Reset 포함. 실제 캡처, 한국어·글꼴 130% 야간 소형 화면, TalkBack을 각각 재실행해 PASS. Live lifecycle 및 정리 계측 7개 PASS. |
 
 API 26의 초기 후보에서 기존 `UiDevice.pressHome()` 반환값 단언이 실패했다. 기준선 비교에서는 통과했고, 후보의 추가 계측에서 false 반환 뒤 실제 런처가 화면에 표시됨을 확인했다. Home 키 동작의 결과를 화면에 표시된 런처로 검증하도록 계측을 보완했다. Home과 화면 OFF 상태의 FGS·리스너 및 복귀 시 동일 토큰·Stop 단언은 유지했다. 보완 후 전체 API 26 Live 계측을 다시 실행했다. 이 차이는 계측 동기화에서 확인됐으며 운영 Live 코드는 변경하지 않았다.
+
+## Phase 9 · 대표 화면과 문서
+
+최종 앱 UI 소스 `3e35cf85446d9a2fc8f0079232ea58a0197e43ad`의 Debug APK를 API 36 ARM64 에뮬레이터에서 실행했다. 공개 PNG는 1080×2400, density 420, en-US, 글꼴 100%, Day와 기본 Follow로 촬영했다. `RecoveryUiCaptureTest`가 실제 앱의 Step을 반복 실행했고 별도 재생 결과로 상태와 관측 이벤트를 확인했다. 최종 후보와 기준선의 시나리오·가상 시각·신호·위치 출처·경로·실제 reason code 기록은 동일했다.
+
+| 원본 | 가상 시각 | 관측 상태 및 판정 |
+|---|---:|---|
+| [OL07 정상](demo/recovery-ui/ol07-tracking.png) | 28,000ms | TRACKING · MAP_MATCHED · ON_ROUTE |
+| [OL07 추정](demo/recovery-ui/ol07-estimating.png) | 54,000ms | LOST · DEAD_RECKONED · UNKNOWN. Fix 경과 6초, 추정 상한 9초 남음 |
+| [OL07 중단](demo/recovery-ui/ol07-last-known.png) | 63,000ms | LOST · LAST_KNOWN · `DR_LIMIT` |
+| [OL07 복구](demo/recovery-ui/ol07-recovered.png) | 73,000ms | TRACKING · MAP_MATCHED · ON_ROUTE · `SIGNAL_RECOVERED` |
+| [OL07 결과](demo/recovery-ui/ol07-complete-results.png) | 120,000ms | `RUN_COMPLETED`, 해당 가상 실행 평가 |
+| [OL02 관측 거부](demo/recovery-ui/ol02-jump.png) | 32,000ms | DEGRADED · `IMPLAUSIBLE_MOVE` |
+| [OL10 모호성](demo/recovery-ui/ol10-ambiguous.png) | 0ms | TRACKING · OBSERVED · UNKNOWN · `AMBIGUOUS` |
+| [OL13 이탈](demo/recovery-ui/ol13-departure.png) | 44,000ms | TRACKING · MAP_MATCHED · OFF_ROUTE · `REROUTE_RECOMMENDED` |
+| [OL13 복귀](demo/recovery-ui/ol13-return.png) | 67,000ms | TRACKING · MAP_MATCHED · ON_ROUTE · `ROUTE_RETURNED` |
+
+README의 대표 화면 세 장과 데모를 위의 실제 캡처로 갱신했다. 국내 OSM 갤러리와 이전 검증 결과는 각 시기 기록에서 참조한다. 공개 원본 9장은 가상 주행이며 Live 화면은 `FLAG_SECURE`를 적용한 상태에서 계측으로 검수했다. [현재 데모](demo.md#ol07-시연)

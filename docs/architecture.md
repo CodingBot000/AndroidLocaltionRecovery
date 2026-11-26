@@ -82,6 +82,7 @@ flowchart LR
 - `ReplaySession`이 가상 시각별 관측·Tick·종료를 결정적으로 처리한다. 모든 이벤트는 바로 평가기에 기록된다. `ReplayController`는 단일 명령 큐와 현재 실행 ID로 데이터 로딩, 엔진, 완료 결과를 조율한다. 무거운 단계에는 IO·작업 Dispatcher를 사용한다.
 - 재생 deadline은 단조 시계와 하나의 가상 시간 기준점에서 계산한다. Pause는 가상 진행량을 동결하고 배속 변경은 변경 시각까지 진행된 양을 반영한다. 지연 발생 시 최대 12개 가상 시각을 한 차례 처리한 뒤 다음 명령을 받을 수 있다. 256칸 입력 큐가 가득 차면 화면에 재시도 상태를 표시한다.
 - 화면 로그는 500건, 표시 이력은 출처별 1,000개다. 이력은 추정 시작·중단, 위치 거부·재정합, 출처 변경에서 끊긴다. 세션 전환은 이전 timer generation과 실행 ID를 무효화한다. 세로 Activity 재생성은 같은 ViewModel을 사용하고, 제거 시 컨트롤러 scope를 취소한다. 기존 백그라운드 동작에 따라 ViewModel 생존 동안 재생을 이어간다.
+- `DriveHud`는 엔진 snapshot과 `ReplaySession`에 전달된 동일 설정으로 Fix 경과, 활성 DR 상한과 재획득 분모를 읽는다. 주요 판정 요약은 현재 실행의 제한된 로그에서 한 건을 선택한다. `RunResults`는 완료한 실행의 `Evaluation` 분모와 paired 오차를 사용한다. 지도 마커와 범례는 `ui:map`의 `MapSymbol` 색상을 공유한다. [표시와 검증 근거](recovery-ui-validation.md)
 
 ## 지도
 
