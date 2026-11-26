@@ -222,7 +222,7 @@ internal fun DrawScope.drawOverlay(
     }
     rawMarker?.let { placement ->
         val at = placement.center
-        if (placement.outside && raw != null) {
+        if (placement.outside) {
             drawOffscreenObservation(at, raw - at, style)
         } else if (rawSymbol == MapSymbol.REJECTED) {
             drawRawCross(at, style, overlapsVehicle(at))

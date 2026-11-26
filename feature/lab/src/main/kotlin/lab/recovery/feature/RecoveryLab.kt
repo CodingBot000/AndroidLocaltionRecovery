@@ -15,10 +15,8 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -85,10 +83,11 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
     val evaluation by remember(state) { derivedStateOf { state.value.evaluation } }
     val runId by remember(state) { derivedStateOf { state.value.runId } }
     val truth by remember(state) { derivedStateOf { state.value.showTruth } }
-    var expandedLogs by remember(runId) { mutableStateOf(false) }
-    var diagnostics by rememberSaveable { mutableStateOf(false) }
+    val recentDecision by remember(state) { derivedStateOf {
+        state.value.let { it.logs.recentDecision(it.runId) }
+    } }
+    var diagnostics by rememberSaveable(runId) { mutableStateOf(false) }
     var expandedDescription by remember(selection.id) { mutableStateOf(false) }
-    val logCount by remember(state) { derivedStateOf { state.value.logs.size } }
     var night by rememberSaveable { mutableStateOf(false) }
     val language = LocalConfiguration.current.locales[0].language
     LazyColumn(
@@ -127,6 +126,9 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
         }
         item { DriveHud(state.value, settings, Modifier.padding(horizontal = 12.dp)) }
         item {
+            DecisionSummary(recentDecision, { diagnostics = true }, Modifier.padding(horizontal = 12.dp))
+        }
+        item {
             TrackingMap(state.value, Modifier.padding(horizontal = 12.dp).fillMaxWidth().height(mapHeight),
                 night, optimizedMap, onMapReady)
         }
@@ -146,31 +148,8 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
             }
         }
         error?.let { item { Text(it, color = Coral, modifier = Modifier.padding(horizontal = 12.dp).testTag("error")) } }
-        item {
-            OutlinedButton(onClick = { diagnostics = !diagnostics }, modifier = Modifier.padding(horizontal = 12.dp)
-                .testTag("diagnostics-toggle")) {
-                Text(stringResource(if (diagnostics) R.string.hide_diagnostics else R.string.show_diagnostics))
-            }
-        }
-        if (diagnostics) {
-            item { Diagnostics(state.value, Modifier.padding(horizontal = 12.dp)) }
-            item {
-                val logs = state.value.logs
-                Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(stringResource(R.string.decision_log), style = MaterialTheme.typography.titleMedium)
-                    if (logs.size > 6) TextButton(onClick = { expandedLogs = !expandedLogs }) {
-                        Text(if (expandedLogs) stringResource(R.string.recent_log) else stringResource(R.string.all_log, logs.size))
-                    }
-                }
-                if (logs.isEmpty()) Text(stringResource(R.string.empty_log), color = Muted, modifier = Modifier.padding(horizontal = 12.dp))
-            }
-            items(if (expandedLogs) logCount else minOf(6, logCount)) { index ->
-                val logs = state.value.logs
-                logs.getOrNull(logs.lastIndex - index)?.let { LogLine(it, Modifier.padding(horizontal = 12.dp)) }
-            }
-        }
         evaluation?.let { item { EvaluationPanel(it, Modifier.padding(horizontal = 12.dp)) } }
         item { Spacer(Modifier.height(12.dp)) }
     }
+    if (diagnostics) DiagnosticsDialog(state.value, settings) { diagnostics = false }
 }

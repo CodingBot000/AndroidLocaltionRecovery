@@ -31,3 +31,7 @@
 ## Phase 3 · 지도 마커와 범례
 
 `MapLayers.kt`의 동적 레이어에서 원시 GPS의 링, 실제 거부 관측의 X, 화면 밖 관측 방향을 나눴다. 겹치는 보조 마커의 외곽을 조정해 실제 투영 좌표와 차량 방향을 함께 읽을 수 있다. `TrackingMap.kt`는 실제 관측과 엔진 판정을 연결한다. 범례의 색은 지도 테마에서 가져오고 Truth 토글과 상세 범례를 제공한다. 정적 지도 경로 및 준비 방식은 동일하다. `:ui:map:testDebugUnitTest :feature:lab:testDebugUnitTest`가 통과했다. 추가 테스트 3개는 좌표·겹침·화면 밖 표시, 테마별 팔레트 및 관측별 거부 판정을 확인했다.
+
+## Phase 4 · 주요 판정과 상세 진단
+
+`RecentDecision.kt`에서 현재 run ID의 최근 주요 이벤트 하나를 지도 위에 시간과 원래 reason code로 표시했다. 일반 채택과 Tick은 요약에서 제외하고, 시간 변경만으로 주요 판정의 접근성 공지가 반복되지 않도록 텍스트의 live region을 분리했다. `LabDiagnostics.kt`는 접근 가능한 대화상자에서 제한된 기존 전체 로그를 지연 렌더링한다. `:feature:lab:testDebugUnitTest` 통과. 새 테스트 2개는 엔진 순서, 일반 판정의 제외, 실행 전환을 확인했다.

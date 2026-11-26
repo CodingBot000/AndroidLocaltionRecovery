@@ -31,4 +31,26 @@
     <string name="map_symbol_trail">Accepted trail</string>
     <string name="map_symbol_outside">GPS beyond the viewport</string>
     <string name="legend_explanation">The DR trail is dashed. The edge arrow points toward an off-screen observation.</string>
+    <string name="position_diagnostics">Position diagnostics</string>
+    <string name="no_key_decision">No key decisions yet</string>
+    <string name="event_signal_lost">GPS signal lost</string>
+    <string name="event_signal_recovered">GPS fix recovered</string>
+    <string name="event_dr">Route-based DR started</string>
+    <string name="event_impossible_move">Position jump rejected</string>
+    <string name="event_low_quality">Low-quality observation</string>
+    <string name="event_accuracy_exceeded">Accuracy limit exceeded</string>
+    <string name="event_ambiguous">Road match held · ambiguous</string>
+    <string name="event_no_match">No usable road match</string>
+    <string name="event_candidate_pending">Recovery candidate pending</string>
+    <string name="event_candidate_timeout">Recovery candidates expired</string>
+    <string name="event_candidate_discontinuity">Recovery road connection rejected</string>
+    <string name="event_departure">Off route · reroute recommended</string>
+    <string name="event_route_return">Returned to the planned route</string>
+    <string name="diagnostic_source_confidence">Source / confidence</string>
+    <string name="diagnostic_road_route">Road / route</string>
+    <string name="diagnostic_received_accuracy">Last received accuracy</string>
+    <string name="diagnostic_delivery_delay">Measurement → receipt</string>
+    <string name="diagnostic_fix_age">Time since last accepted fix</string>
+    <string name="diagnostic_last_decision">Last observation decision</string>
+    <string name="diagnostic_estimation">Estimation stop</string>
 </resources>

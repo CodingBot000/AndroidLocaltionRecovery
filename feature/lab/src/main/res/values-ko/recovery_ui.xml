@@ -31,4 +31,26 @@
     <string name="map_symbol_trail">채택 위치 이력</string>
     <string name="map_symbol_outside">화면 밖 GPS</string>
     <string name="legend_explanation">DR 추정 궤적은 점선이다. 화면 가장자리 화살표는 화면 밖 관측 방향을 가리킨다.</string>
+    <string name="position_diagnostics">위치 상세 진단</string>
+    <string name="no_key_decision">주요 판정 없음</string>
+    <string name="event_signal_lost">GPS 신호 손실</string>
+    <string name="event_signal_recovered">GPS 위치 재획득</string>
+    <string name="event_dr">경로 기반 DR 시작</string>
+    <string name="event_impossible_move">위치 점프 거부</string>
+    <string name="event_low_quality">낮은 품질의 관측</string>
+    <string name="event_accuracy_exceeded">관측 정확도 한도 초과</string>
+    <string name="event_ambiguous">도로 매칭 보류 · 모호성</string>
+    <string name="event_no_match">채택할 도로 매칭 없음</string>
+    <string name="event_candidate_pending">재획득 후보 확인 중</string>
+    <string name="event_candidate_timeout">재획득 후보 만료</string>
+    <string name="event_candidate_discontinuity">재획득 후보 도로 연결 불일치</string>
+    <string name="event_departure">경로 이탈 · 재탐색 권고</string>
+    <string name="event_route_return">계획 경로 복귀</string>
+    <string name="diagnostic_source_confidence">위치 출처 / 신뢰도</string>
+    <string name="diagnostic_road_route">도로 / 경로 상태</string>
+    <string name="diagnostic_received_accuracy">마지막 수신 정확도</string>
+    <string name="diagnostic_delivery_delay">측정 → 수신</string>
+    <string name="diagnostic_fix_age">마지막 채택 위치 경과</string>
+    <string name="diagnostic_last_decision">최근 관측 판정</string>
+    <string name="diagnostic_estimation">추정 중단</string>
 </resources>
