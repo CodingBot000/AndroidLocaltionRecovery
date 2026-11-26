@@ -79,7 +79,7 @@ class RecoveryUiCaptureTest {
                 "ol07-recovering" to { f -> f.update.snapshot.signal == SignalState.RECOVERING },
                 "ol07-recovered" to { f -> f.update.events.any { it.reason == Reason.SIGNAL_RECOVERED } },
                 "ol07-complete" to { f -> f.complete },
-            ), activity, folder, manifest)
+            ), activity, folder, manifest, verifyFirstScreen = label == "candidate")
             sequence(model, "OL02", listOf("ol02-jump" to { f -> f.update.events.any { it.reason == Reason.IMPLAUSIBLE_MOVE } }),
                 activity, folder, manifest)
             sequence(model, "OL10", listOf("ol10-ambiguous" to { f -> f.update.events.any { it.reason == Reason.AMBIGUOUS } }),
@@ -98,6 +98,7 @@ class RecoveryUiCaptureTest {
         activity: ActivityScenario<MainActivity>,
         folder: File,
         manifest: File,
+        verifyFirstScreen: Boolean = false,
     ) {
         val screen = device.findObject(By.res("lab-screen"))
         repeat(4) { if (!device.hasObject(By.res("map-theme"))) screen?.swipe(androidx.test.uiautomator.Direction.DOWN, 0.75f) }
@@ -110,6 +111,7 @@ class RecoveryUiCaptureTest {
         }
         val oracle = ReplaySession(checkNotNull(model.state.value.scenario))
         val timeline = runBlocking { buildList { while (true) add(oracle.step() ?: break) } }
+        val originalControlHeights = mutableMapOf<String, Int>()
         var index = -1
         for ((name, matches) in frames) {
             val target = timeline.indexOfFirst(matches)
@@ -139,6 +141,14 @@ class RecoveryUiCaptureTest {
             await {
                 device.findObject(By.res("virtual-time"))?.text?.substringBefore(" / ") ==
                     "%02d:%04.1f".format(java.util.Locale.ROOT, observed.nowMs / 60_000, observed.nowMs % 60_000 / 1000.0)
+            }
+            if (verifyFirstScreen && !frame.complete && device.displayWidth == 1080 && device.displayHeight == 2400) {
+                for (tag in listOf("play-pause", "step", "reset", "speed-button", "map-legend", "truth-toggle")) {
+                    val bounds = checkNotNull(device.findObject(By.res(tag))) { "$tag is visible at $name" }.visibleBounds
+                    val trackingHeight = originalControlHeights.getOrPut(tag) { bounds.height() }
+                    assertTrue("$tag is clipped at $name: $bounds versus $trackingHeight pixels in Tracking",
+                        bounds.height() > 0 && bounds.height() >= trackingHeight - 2)
+                }
             }
             capture(activity, folder, name)
             manifest.appendText("$name\t$id\t${observed.nowMs}\t${observed.signal}\t${observed.source}\t" +
