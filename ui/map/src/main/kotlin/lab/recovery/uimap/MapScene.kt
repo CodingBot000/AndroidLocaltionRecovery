@@ -24,6 +24,7 @@ data class MapOverlay(
     val lastKnown: Point2D? = null,
     val truth: Point2D? = null,
     val trails: List<MapTrail> = emptyList(),
+    val rawRejected: Boolean = false,
 )
 data class MapStrings(
     val map: String,

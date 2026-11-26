@@ -142,7 +142,7 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
         }
         item {
             Column(Modifier.padding(horizontal = 12.dp)) {
-                MapLegend(truth) { onIntent(UiIntent.ToggleTruth) }
+                MapLegend(truth, night) { onIntent(UiIntent.ToggleTruth) }
             }
         }
         error?.let { item { Text(it, color = Coral, modifier = Modifier.padding(horizontal = 12.dp).testTag("error")) } }

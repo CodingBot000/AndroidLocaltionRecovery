@@ -18,4 +18,17 @@
     <string name="dr_route_end">DR reached the route end</string>
     <string name="dr_no_anchor">DR needs a valid route anchor</string>
     <string name="dr_unavailable">DR unavailable</string>
+    <string name="legend_details">Map legend</string>
+    <string name="map_symbol_fix">Accepted fix</string>
+    <string name="map_symbol_gps">Raw GPS</string>
+    <string name="map_symbol_rejected">Rejected</string>
+    <string name="map_symbol_dr">DR</string>
+    <string name="map_symbol_last">Last known</string>
+    <string name="map_symbol_truth">Simulated ground truth</string>
+    <string name="truth_visible">Truth on</string>
+    <string name="truth_hidden">Truth off</string>
+    <string name="map_symbol_plan">Planned route</string>
+    <string name="map_symbol_trail">Accepted trail</string>
+    <string name="map_symbol_outside">GPS beyond the viewport</string>
+    <string name="legend_explanation">The DR trail is dashed. The edge arrow points toward an off-screen observation.</string>
 </resources>

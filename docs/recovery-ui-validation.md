@@ -27,3 +27,7 @@
 ## Phase 2 · 위치 HUD
 
 `DriveHud.kt`에서 신호, 위치 출처, 경로를 독립적으로 표시하고 실제 채택 측정 시각에서 Fix 경과를 산출했다. `ReplayController`는 세션에 전달하는 동일 설정 인스턴스를 읽기 전용으로 제공한다. 활성 DR의 상한 시간과 재획득 분모에 이 설정을 사용한다. 과거 관측 정확도는 마지막 수신값으로 표시하고 속도는 최신 채택 관측에 한정했다. `:feature:lab:testDebugUnitTest :core:simulation:test`가 통과했다. 새 단위 테스트 3개는 추정 활성·중단, 실제 설정값, null·stale과 후보 분모를 확인했다.
+
+## Phase 3 · 지도 마커와 범례
+
+`MapLayers.kt`의 동적 레이어에서 원시 GPS의 링, 실제 거부 관측의 X, 화면 밖 관측 방향을 나눴다. 겹치는 보조 마커의 외곽을 조정해 실제 투영 좌표와 차량 방향을 함께 읽을 수 있다. `TrackingMap.kt`는 실제 관측과 엔진 판정을 연결한다. 범례의 색은 지도 테마에서 가져오고 Truth 토글과 상세 범례를 제공한다. 정적 지도 경로 및 준비 방식은 동일하다. `:ui:map:testDebugUnitTest :feature:lab:testDebugUnitTest`가 통과했다. 추가 테스트 3개는 좌표·겹침·화면 밖 표시, 테마별 팔레트 및 관측별 거부 판정을 확인했다.

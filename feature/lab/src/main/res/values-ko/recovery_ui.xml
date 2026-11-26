@@ -18,4 +18,17 @@
     <string name="dr_route_end">경로 끝에서 DR 중단</string>
     <string name="dr_no_anchor">DR 기준 위치 없음</string>
     <string name="dr_unavailable">DR 사용 불가</string>
+    <string name="legend_details">지도 범례</string>
+    <string name="map_symbol_fix">채택 위치</string>
+    <string name="map_symbol_gps">원시 GPS</string>
+    <string name="map_symbol_rejected">거부 관측</string>
+    <string name="map_symbol_dr">DR 추정</string>
+    <string name="map_symbol_last">마지막 위치</string>
+    <string name="map_symbol_truth">가상 실제 위치</string>
+    <string name="truth_visible">실제 위치 표시</string>
+    <string name="truth_hidden">실제 위치 숨김</string>
+    <string name="map_symbol_plan">계획 경로</string>
+    <string name="map_symbol_trail">채택 위치 이력</string>
+    <string name="map_symbol_outside">화면 밖 GPS</string>
+    <string name="legend_explanation">DR 추정 궤적은 점선이다. 화면 가장자리 화살표는 화면 밖 관측 방향을 가리킨다.</string>
 </resources>
