@@ -1,5 +1,7 @@
 # PR #9 실기기 GPS·Live 서비스 검증
 
+이 문서는 최초 시도를 기록한다. 사용자가 잠금을 해제한 뒤 시작한 별도 재시험은 [G9 미완료 항목 재시험](recovery-ui-physical-g9-followup.md)에 기록했다.
+
 ## 범위와 조건
 
 2026-11-27 KST에 SM-G975N(Android 12/API 31, Exynos 9820, ARM64)에서 기준 A `a732af2dddfb86514fbfa76a6d7971f31e8d23da`와 최종 제품 C `ce617de21ffbf5485564c9d7bc589a3b6085c02c`를 비교했다. 시작 시 [PR #9](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9)는 `bb271ed356037585cc8f9106cb8de1d464a388da`였다. 격리된 두 worktree에서 계측 APK의 관측만 보완했다. 실기기에 설치한 A/C 제품 Debug APK는 G8에서 사용한 제품 APK와 바이트 단위로 일치했다.

@@ -47,6 +47,8 @@ API 33의 첫 오프라인 실행과 표시 대기만 추가한 재실행에서�
 
 G9에서는 A/C 실제 GPS의 120초 smoke와 실패 대조를 실행했다. Live와 직접 GPS 요청 모두 위성·fix가 관측되지 않았다. 대기 UI와 FGS·리스너 해제는 확인했다. A의 Activity 재생성 3회와 화면 OFF 303.979초는 세션을 유지했다. Wake 뒤 수동 잠금 해제가 이뤄지지 않아 A의 복귀와 C의 수명은 BLOCKED였다. G9 판정은 **INCONCLUSIVE**다. [G9 결과와 복원](recovery-ui-physical-g9.md) · [실기기 범위와 이력](physical-device-validation.md)
 
+G9 재시험은 사용자가 잠금을 해제한 홈 화면에서 시작했다. A의 Activity 재생성 3회와 화면 OFF 303.560초 동안 세션 유지를 다시 확인했다. Wake 뒤 90초 수동 해제 시간 초과가 재현돼 A 복귀·UI Stop, C 수명과 추가 GPS 대조는 BLOCKED다. G9 **INCONCLUSIVE**를 유지했다. [G9 재시험·복원](recovery-ui-physical-g9-followup.md)
+
 ### F6 · 실제 화면과 문서
 
 공개 PNG 10장은 제품 `ce617de`의 Debug APK에서 실제 Step과 독립 재생을 대조해 촬영했다. API 36 ARM64, 1,080×2,400, density 420, en-US, 글꼴 100%, Day·Follow 조건이다. 새 캡처의 시나리오·시각·신호·위치 출처·경로·reason code 기록은 이전 UI와 바이트 단위로 일치했다. 실제 화면에 재생·배속·범례 조작이 보이는지 확인한 뒤 PNG 원본을 그대로 반영했다. [캡처 및 측정 APK의 해시](benchmarks/recovery-ui-pr9-final-api36.json)
@@ -77,7 +79,7 @@ README에는 정상·추정·복구 세 장과 추정 중단 링크를 배치했
 | G6 OS·접근성 | PASS | API 26·48MiB와 31/33/34/36, 한·영 및 글꼴 130%, 실제 TalkBack. |
 | G7 실기기 성능 | INCONCLUSIVE | A/C 원본 9회씩, 콜드 재시험 6회씩. 주행 악화는 재현되지 않았고 콜드 본 시험과 재시험의 방향이 달랐다. [실기기 G7](recovery-ui-physical-g7.md) |
 | G8 실기기 메모리·내구 | INCONCLUSIVE | A/C 각각 독립 내구 1회와 전환·Live 반복 통과. 유휴 120초 Native PSS +10.35%. [실기기 G8](recovery-ui-physical-g8.md) |
-| G9 실제 GPS·서비스 | INCONCLUSIVE | A/C Live·직접 요청 무수신, 대기 UI와 해제 확인. A 화면 OFF 세션 유지, 잠금 후 복귀 및 C 수명 BLOCKED. [실기기 G9](recovery-ui-physical-g9.md) |
+| G9 실제 GPS·서비스 | INCONCLUSIVE | A/C의 기존 Live·직접 GPS 무수신, 대기 UI와 해제 확인. A 화면 OFF 유지 재시험 통과, 잠금 후 복귀·C 수명·추가 GPS BLOCKED. [최초 G9](recovery-ui-physical-g9.md) · [재시험](recovery-ui-physical-g9-followup.md) |
 | G10 공개 자료 | PASS | 최종 원본 PNG, 이전 이력, 상대 링크 및 개인정보 노출 검사. |
 | G11 최종 원격 CI | [최종 head 판정](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) | PR과 push의 `build-and-test`·`live-api36`. |
 
