@@ -55,6 +55,21 @@ class RecoveryInstrumentedTest {
         rule.onNodeWithTag(tag).performClick()
     }
 
+    @Test fun featuredMenuOpensTheExistingScenarios() {
+        val model = model()
+        ready(model, "ODEMO_LONG")
+        rule.waitUntil(10_000) { model.state.value.choices.any { it.id == "OL07" } }
+        for (id in listOf("OL07", "OL02", "OL10", "OL13", "ODEMO_LONG")) {
+            val previous = model.state.value.runId
+            click("featured-menu")
+            rule.onNodeWithTag("featured-$id").performClick()
+            ready(model, id)
+            assertTrue(model.state.value.runId > previous)
+            assertEquals(0L, model.state.value.snapshot.nowMs)
+            assertTrue(model.state.value.logs.isEmpty())
+        }
+    }
+
     private fun select(id: String) {
         click("scenario-menu")
         rule.onNodeWithTag("scenario-$id").performScrollTo().performClick()

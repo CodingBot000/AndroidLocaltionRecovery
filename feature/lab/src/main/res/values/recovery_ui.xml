@@ -53,4 +53,13 @@
     <string name="diagnostic_fix_age">Time since last accepted fix</string>
     <string name="diagnostic_last_decision">Last observation decision</string>
     <string name="diagnostic_estimation">Estimation stop</string>
+    <string name="featured_demos">Demos</string>
+    <string name="featured_recommended">Recommended</string>
+    <string name="replay_loading">Loading</string>
+    <string name="replay_ready">Ready</string>
+    <string name="replay_playing">Playing</string>
+    <string name="replay_paused">Paused</string>
+    <string name="replay_complete">Run complete</string>
+    <string name="replay_error">Replay error</string>
+    <string name="replay_reset">Replay</string>
 </resources>

@@ -81,6 +81,8 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
     val entries by remember(state) { derivedStateOf { state.value.choices } }
     val error by remember(state) { derivedStateOf { state.value.error } }
     val evaluation by remember(state) { derivedStateOf { state.value.evaluation } }
+    val playback by remember(state) { derivedStateOf { state.value.playback } }
+    val speed by remember(state) { derivedStateOf { state.value.speed } }
     val runId by remember(state) { derivedStateOf { state.value.runId } }
     val truth by remember(state) { derivedStateOf { state.value.showTruth } }
     val recentDecision by remember(state) { derivedStateOf {
@@ -134,12 +136,13 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
         }
         item {
             Column(Modifier.padding(horizontal = 12.dp)) {
-                val current = state.value
-                val duration = current.scenario?.durationMs ?: 0L
-                val progress = if (duration > 0) current.snapshot.nowMs.toFloat() / duration else 0f
-                LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth(),
+                LinearProgressIndicator(progress = {
+                    val current = state.value
+                    val duration = current.scenario?.durationMs ?: 0L
+                    if (duration > 0) current.snapshot.nowMs.toFloat() / duration else 0f
+                }, modifier = Modifier.fillMaxWidth(),
                     color = Mint, trackColor = Rule, gapSize = 0.dp, drawStopIndicator = {})
-                PlaybackControls(current, onIntent)
+                PlaybackControls(playback, speed, onIntent)
             }
         }
         item {

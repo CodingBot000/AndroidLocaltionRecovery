@@ -53,4 +53,13 @@
     <string name="diagnostic_fix_age">마지막 채택 위치 경과</string>
     <string name="diagnostic_last_decision">최근 관측 판정</string>
     <string name="diagnostic_estimation">추정 중단</string>
+    <string name="featured_demos">대표 사례</string>
+    <string name="featured_recommended">대표 시연</string>
+    <string name="replay_loading">불러오는 중</string>
+    <string name="replay_ready">재생 준비</string>
+    <string name="replay_playing">재생 중</string>
+    <string name="replay_paused">일시정지</string>
+    <string name="replay_complete">주행 완료</string>
+    <string name="replay_error">재생 오류</string>
+    <string name="replay_reset">다시 준비</string>
 </resources>
