@@ -68,6 +68,7 @@ def read_trace(trace, path):
         'timeline': frames.__dict__,
         'firstDrawFrame': join_first_frame(trace, stages),
         'mapStatusLookup': external_lookup(trace, stages),
+        'timelineOverrunByLegMs': split_timeline(trace, end, stages),
     }
 
 
@@ -96,6 +97,25 @@ def external_lookup(trace, stages):
         AND s.name='UiDevice#waitForIdle'
     """)
     return idle.__dict__
+
+
+def split_timeline(trace, end, stages):
+    if stages is None:
+        return None
+    start, turn = stages['T0'], stages['U3']
+    rows = trace.query(f"""
+      SELECT CASE WHEN a.ts < {turn} THEN 'forward' ELSE 'return' END as leg,
+        (a.ts + a.dur - e.ts - e.dur)/1e6 AS overrunMs
+      FROM actual_frame_timeline_slice a JOIN process p USING (upid)
+      JOIN expected_frame_timeline_slice e ON e.upid=a.upid AND e.surface_frame_token=a.surface_frame_token
+      WHERE a.ts >= {start} AND a.ts < {end} AND p.name='{TARGET}' AND a.layer_name LIKE '%{ACTIVITY}%'
+        AND a.dur > 0 AND e.dur > 0
+      GROUP BY a.upid, a.surface_frame_token HAVING COUNT(*) = 1 ORDER BY a.ts
+    """)
+    result = {'forward': [], 'return': []}
+    for row in rows:
+        result[row.leg].append(row.overrunMs)
+    return result
 
 
 def join_first_frame(trace, stages):

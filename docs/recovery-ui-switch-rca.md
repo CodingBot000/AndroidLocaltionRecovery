@@ -39,3 +39,51 @@ TTFD 중앙값의 10% 이상 증가, 주행·전환 Overrun P95의 10% 이상 �
 **해당 범위에서 배제** · 수백 ms 크기의 큐/자산 읽기, 세션 초기화, Compose HUD 배치 및 지도 준비·첫 표시 지연은 같은 요청의 단계 비교로 배제했다. B의 소규모 지도 준비 차이와 최댓값 증가를 숨기지 않았다. 반복 조건의 스케줄링과 프레임 부하는 서로 달라졌으며 이전 프레임 P95 지연의 전체 원인과 각 플랫폼의 접근성 캐시 무효화 시점은 미확정이다.
 
 제품의 전환·캐시·지도 렌더러와 원본 계측은 유지했다. 캐시 제거는 원인을 격리하기 위한 진단 변형에서만 실행했다. 원래 성능 비교의 선택 조건, 제한 시간 및 세 종료 신호를 보존한다. 외부 측정값은 최종 제품 비교에서 별도로 보고한다.
+
+## F4 · 최종 제품 성능
+
+최종 앱 C는 `664d8f5`의 제품 코드다. 동일 하네스에서 A1–C1–C2–A2–A3–C3 순서로 시나리오마다 A/C 각각 9회를 실행했다. 1080×2400·density 420·ko-KR·font 100%에서 API 36 ARM64 SwiftShader로 측정했다. 애니메이션 스케일은 모두 0, 시뮬레이션 배터리 온도는 25°C, thermal status는 0이었다. 각 세트의 호스트 load average와 원본 해시는 JSON에 남겼다.
+
+| 원본 측정 (ms) | A 9회 | C 9회 |
+|---|---:|---:|
+| 콜드 TTID 중앙값 | 200.9 | 200.0 |
+| 콜드 TTFD 중앙값 | 784.5 | 796.7 |
+| O10→O07 외부 준비 중앙값 | 470.6 | 414.2 |
+| 전환 Frame CPU P95 | 58.9 | 64.0 |
+| 전환 Frame Overrun P95 | 42.7 | 48.0 |
+| 주행 Frame CPU P95 | 358.8 | 361.6 |
+| 주행 Frame Overrun P95 | 510.1 | 510.0 |
+
+전환 표본은 60→72개, 주행은 461→469개다. 전환 Overrun의 5.3ms·12.5% 상승으로 원본 전환 케이스를 C4–A4–A5–C5 독립 세트로 재시험했다. 추가 A/C 각각 6회의 준비 중앙값은 484.8→836.0ms, Overrun P95는 48.0→61.2ms였다. 원시 표본 39→50개를 집계했다. 초기 본 시험과 추가 세트를 각각 보존했다. 이전 B의 이번 재실행 6회 준비 중앙값은 460.1ms, 전환 Overrun P95는 42.5ms였으며 C와 같은 세트에서 직접 대응한 값은 아니다.
+
+별도 A/C 진단 전환 각 6회에서 요청→READY 중앙값은 24.1→24.3ms, 첫 draw는 55.4→51.9ms, 대응 surface의 첫 present는 121.4→118.3ms였다. 실제 지도 캔버스는 A와 C에서 동일한 1,016×1,215px, Follow·Detail, 2.1167px/m였다. 따라서 별도 크기 고정 변형을 추가할 필요가 없었다. 각 present 이후 외부 준비 관측까지의 중앙값은 257.5→413.6ms였다. 원본 재시험에서 관측한 준비 시간의 재상승을 첫 화면의 지연으로 환산할 수 없다.
+
+진단 trace에서 동일 토큰을 일대일로 연결한 app surface의 Overrun P95는 U3 전 A 54.1ms(21개) → C 45.8ms(21개), 이후 A 9.1ms(16개) → C 1.4ms(24개)였다. U3 이후에는 O10 복귀가 들어간다. 이 값과 AndroidX 원본 FrameTimingMetric은 별개다. 원본 재시험의 앱 UI 실행 중앙값은 93.0→108.1ms이며 RenderThread는 212.3→211.3ms였다. C의 느린 프레임 일부는 같은 반복에 집중됐고, 가장 큰 프레임도 유효 표본에 포함했다.
+
+**INCONCLUSIVE** · 지도 첫 표시 지연은 이 비교에서 재현되지 않았지만 원본 전환 P95의 조사 임계값 초과는 두 시험에 남았다. 진단 trace에서 같은 방향의 앱 프레임 지연을 재현하지 못해 반복별 프레임 비용과 관측·스케줄링의 기여도를 확정하지 못했다. 확인된 별도 제품 원인이 없어 추가 렌더러 변경은 적용하지 않았다. [최종 반복·원시 프레임·trace 요약](benchmarks/recovery-ui-pr9-final-api36.json)
+
+## 재현
+
+원본 비교에서는 각 SHA의 깨끗한 worktree에서 `:app:assembleBenchmark :benchmark:assembleBenchmark`를 실행한다. 동일한 원본 계측 APK를 설치하고 전체 `lab.recovery.benchmark.RefactorMapBenchmark`를 실행한다. 원래 `switchO10ToO07Ms` 세 개를 같은 세트의 `*benchmarkData.json` 옆 `switch-ready-ms.json` 배열로 저장한다. `tools/summarize_render_benchmark.py`는 여러 세트의 원시 프레임과 반복을 읽는다. 에뮬레이터에서는 `-e androidx.benchmark.suppressErrors EMULATOR`만 적용한다.
+
+진단은 별도로 체크아웃한 깨끗한 worktree와 전용 APK에서 실행한다. `probe_a`와 `probe_b`는 각각 A와 B worktree 경로다.
+
+```bash
+python3 -B tools/recovery_switch_probe.py "$probe_a"
+python3 -B tools/recovery_switch_probe.py "$probe_b"
+# 각 worktree에서 빌드한 뒤 A/B 대상 APK와 동일 진단 계측 APK를 교대로 설치한다.
+./gradlew :app:assembleBenchmark :benchmark:assembleBenchmark
+adb shell am instrument -w -r -e androidx.benchmark.suppressErrors EMULATOR \
+  -e class 'lab.recovery.benchmark.RefactorMapBenchmark#switchO10ToO07' \
+  lab.recovery.benchmark/androidx.test.runner.AndroidJUnitRunner
+adb logcat -d -v raw -s 'RecoverySwitchRCA:I' '*:S'
+```
+
+실행당 새 T0 세 개에 해당하는 `RecoverySwitchRCA` 메시지만 각 세트의 `switch.log`에 저장한다. 출력된 Perfetto trace는 같은 폴더에 보존한다. 각 세트 폴더명은 `A1` 등 비교군과 번호로 끝나야 한다. 계측 인자 `-e switchClearCache true`를 추가하면 U1의 동일 selector를 읽기 전에만 접근성 캐시를 비운다.
+
+```bash
+python3 -B tools/summarize_recovery_switch_probe.py diagnostic-*/switch.log --output intervals.json
+python3 -B tools/analyze_recovery_switch_trace.py diagnostic-* --output traces.json
+```
+
+두 번째 명령은 로컬 Perfetto Python Trace Processor 환경을 사용한다. 원본 trace·APK·계측 로그는 로컬에 보존하고, 공개 JSON에는 해시·정규화 반복·집계값을 포함한다.
