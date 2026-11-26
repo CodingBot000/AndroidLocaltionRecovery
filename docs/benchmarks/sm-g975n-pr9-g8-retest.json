@@ -1,0 +1,3862 @@
+{
+  "dateKst": "2026-11-27",
+  "device": "SM-G975N, Exynos 9820, Android 12/API 31, ARM64, USB",
+  "sourceCommits": {
+    "A": "a732af2dddfb86514fbfa76a6d7971f31e8d23da",
+    "C": "ce617de21ffbf5485564c9d7bc589a3b6085c02c"
+  },
+  "initialPrHead": "85cced17da60c6fc7e700676d1e662cdd6a26e7f",
+  "previousEvidence": "sm-g975n-pr9-g8.json",
+  "previousOrder": [
+    "A",
+    "C"
+  ],
+  "retestOrder": [
+    "C",
+    "A"
+  ],
+  "independentRunsPerBuildInRetest": 1,
+  "environmentControls": {
+    "initialTemperatureDifferenceC": 1.0,
+    "initialEnvironmentParity": {
+      "usbPowered": true,
+      "acPowered": true,
+      "wirelessPowered": true,
+      "chargeStatus": true,
+      "levelPct": true,
+      "thermalStatus": true,
+      "displayPx": true,
+      "density": true,
+      "fontScale": true,
+      "screenRefreshHz": true,
+      "airplaneMode": true,
+      "wifi": true
+    }
+  },
+  "excludedRuns": [],
+  "priorG9HomeRestoredBeforeRetest": true,
+  "additionalGpsOrLiveLifecycleRuns": 0,
+  "sameProductApkBytesAsFirstG8": true,
+  "apkAndPatchSha256": {
+    "A": {
+      "app-debug-androidTest.apk": "9fec7ff7c44d2dd0f4e41d2450a0e6920a64021da548d90cae8970e4e25d49c2",
+      "app-debug.apk": "10e5622e8bf57ca14452a29c03447f1d2a7d348b96c3c44bf19bb8552a8bd6c4",
+      "instrumentation-only.patch": "978fb3a47e700447e7973fa5ee916c2e0386221cb229c74031e6dae765e72988"
+    },
+    "C": {
+      "app-debug-androidTest.apk": "0d151ab43d8f7c27cf7bd8cd2ed060191f4e3ac4d2dbabfa8e39ca4f86d69971",
+      "app-debug.apk": "41654439f533ec7deae52492a272a504a763d8dc699abaddef5956494e073920",
+      "instrumentation-only.patch": "978fb3a47e700447e7973fa5ee916c2e0386221cb229c74031e6dae765e72988"
+    }
+  },
+  "priorComparison": {
+    "totalPssKiB": {
+      "peakThroughRun": {
+        "A": 426749,
+        "C": 437070,
+        "delta": 10321,
+        "deltaPct": 2.4185176766670757
+      },
+      "peakThroughIdle120s": {
+        "A": 426749,
+        "C": 437070,
+        "delta": 10321,
+        "deltaPct": 2.4185176766670757
+      },
+      "completedCycles2To10Median": {
+        "A": 413606,
+        "C": 415612,
+        "delta": 2006,
+        "deltaPct": 0.48500263535828925
+      },
+      "completedCycles2To10TheilSen": {
+        "A": 2662.25,
+        "C": 4537.525,
+        "delta": 1875.2749999999996,
+        "deltaPct": 70.43947788524743
+      },
+      "idle60s": {
+        "A": 394077,
+        "C": 380550,
+        "delta": -13527,
+        "deltaPct": -3.432577897212985
+      },
+      "idle120s": {
+        "A": 384256,
+        "C": 380640,
+        "delta": -3616,
+        "deltaPct": -0.9410393071285772
+      }
+    },
+    "nativePssKiB": {
+      "peakThroughRun": {
+        "A": 113309,
+        "C": 117227,
+        "delta": 3918,
+        "deltaPct": 3.457801233794311
+      },
+      "peakThroughIdle120s": {
+        "A": 113309,
+        "C": 117227,
+        "delta": 3918,
+        "deltaPct": 3.457801233794311
+      },
+      "completedCycles2To10Median": {
+        "A": 103022,
+        "C": 105804,
+        "delta": 2782,
+        "deltaPct": 2.700394090582603
+      },
+      "completedCycles2To10TheilSen": {
+        "A": 1354.5333333333333,
+        "C": 2609.0,
+        "delta": 1254.4666666666667,
+        "deltaPct": 92.61246185648193
+      },
+      "idle60s": {
+        "A": 113309,
+        "C": 114475,
+        "delta": 1166,
+        "deltaPct": 1.0290444713129565
+      },
+      "idle120s": {
+        "A": 103730,
+        "C": 114467,
+        "delta": 10737,
+        "deltaPct": 10.350911018991615
+      }
+    },
+    "javaPssKiB": {
+      "peakThroughRun": {
+        "A": 64602,
+        "C": 66053,
+        "delta": 1451,
+        "deltaPct": 2.2460604934831707
+      },
+      "peakThroughIdle120s": {
+        "A": 64602,
+        "C": 66053,
+        "delta": 1451,
+        "deltaPct": 2.2460604934831707
+      },
+      "completedCycles2To10Median": {
+        "A": 51180,
+        "C": 51121,
+        "delta": -59,
+        "deltaPct": -0.11527940601797626
+      },
+      "completedCycles2To10TheilSen": {
+        "A": 788.875,
+        "C": 1714.7767857142858,
+        "delta": 925.9017857142858,
+        "deltaPct": 117.36989836340177
+      },
+      "idle60s": {
+        "A": 56287,
+        "C": 42819,
+        "delta": -13468,
+        "deltaPct": -23.9273722173859
+      },
+      "idle120s": {
+        "A": 56316,
+        "C": 42828,
+        "delta": -13488,
+        "deltaPct": -23.950564670786278
+      }
+    },
+    "javaUsedKiB": {
+      "peakThroughRun": {
+        "A": 63078,
+        "C": 63674,
+        "delta": 596,
+        "deltaPct": 0.9448619169916572
+      },
+      "peakThroughIdle120s": {
+        "A": 63078,
+        "C": 63674,
+        "delta": 596,
+        "deltaPct": 0.9448619169916572
+      },
+      "completedCycles2To10Median": {
+        "A": 52083,
+        "C": 51982,
+        "delta": -101,
+        "deltaPct": -0.1939212410959401
+      },
+      "completedCycles2To10TheilSen": {
+        "A": 796.125,
+        "C": 1715.4107142857142,
+        "delta": 919.2857142857142,
+        "deltaPct": 115.47002220577349
+      },
+      "idle60s": {
+        "A": 57209,
+        "C": 43686,
+        "delta": -13523,
+        "deltaPct": -23.637889143316613
+      },
+      "idle120s": {
+        "A": 57225,
+        "C": 43686,
+        "delta": -13539,
+        "deltaPct": -23.659239842726077
+      }
+    },
+    "graphicsKiB": {
+      "peakThroughRun": {
+        "A": 153619,
+        "C": 154967,
+        "delta": 1348,
+        "deltaPct": 0.8774956222862951
+      },
+      "peakThroughIdle120s": {
+        "A": 153619,
+        "C": 154967,
+        "delta": 1348,
+        "deltaPct": 0.8774956222862951
+      },
+      "completedCycles2To10Median": {
+        "A": 152083,
+        "C": 152651,
+        "delta": 568,
+        "deltaPct": 0.37348027064167955
+      },
+      "completedCycles2To10TheilSen": {
+        "A": 228.0,
+        "C": 182.4,
+        "delta": -45.599999999999994,
+        "deltaPct": -19.999999999999996
+      },
+      "idle60s": {
+        "A": 118831,
+        "C": 117863,
+        "delta": -968,
+        "deltaPct": -0.8146022502545591
+      },
+      "idle120s": {
+        "A": 118831,
+        "C": 117863,
+        "delta": -968,
+        "deltaPct": -0.8146022502545591
+      }
+    }
+  },
+  "retestComparison": {
+    "totalPssKiB": {
+      "peakThroughRun": {
+        "A": 402833,
+        "C": 414044,
+        "delta": 11211,
+        "deltaPct": 2.783039125394393
+      },
+      "peakThroughIdle120s": {
+        "A": 402833,
+        "C": 414044,
+        "delta": 11211,
+        "deltaPct": 2.783039125394393
+      },
+      "completedCycles2To10Median": {
+        "A": 364399,
+        "C": 387378,
+        "delta": 22979,
+        "deltaPct": 6.305999742041002
+      },
+      "completedCycles2To10TheilSen": {
+        "A": -3107.833333333333,
+        "C": 2532.15,
+        "delta": 5639.983333333334,
+        "deltaPct": null
+      },
+      "idle60s": {
+        "A": 345603,
+        "C": 349311,
+        "delta": 3708,
+        "deltaPct": 1.0729073532347755
+      },
+      "idle120s": {
+        "A": 345611,
+        "C": 349322,
+        "delta": 3711,
+        "deltaPct": 1.0737505461342334
+      },
+      "idle300s": {
+        "A": 345631,
+        "C": 349339,
+        "delta": 3708,
+        "deltaPct": 1.0728204356669435
+      },
+      "idle600s": {
+        "A": 345659,
+        "C": 349366,
+        "delta": 3707,
+        "deltaPct": 1.0724442297177283
+      }
+    },
+    "nativePssKiB": {
+      "peakThroughRun": {
+        "A": 100957,
+        "C": 115142,
+        "delta": 14185,
+        "deltaPct": 14.050536366968114
+      },
+      "peakThroughIdle120s": {
+        "A": 100957,
+        "C": 115142,
+        "delta": 14185,
+        "deltaPct": 14.050536366968114
+      },
+      "completedCycles2To10Median": {
+        "A": 92273,
+        "C": 101988,
+        "delta": 9715,
+        "deltaPct": 10.52854030973307
+      },
+      "completedCycles2To10TheilSen": {
+        "A": 1026.125,
+        "C": 2612.5238095238096,
+        "delta": 1586.3988095238096,
+        "deltaPct": 154.60093161396608
+      },
+      "idle60s": {
+        "A": 98147,
+        "C": 105408,
+        "delta": 7261,
+        "deltaPct": 7.398086543653903
+      },
+      "idle120s": {
+        "A": 98147,
+        "C": 105408,
+        "delta": 7261,
+        "deltaPct": 7.398086543653903
+      },
+      "idle300s": {
+        "A": 98147,
+        "C": 105408,
+        "delta": 7261,
+        "deltaPct": 7.398086543653903
+      },
+      "idle600s": {
+        "A": 98147,
+        "C": 105408,
+        "delta": 7261,
+        "deltaPct": 7.398086543653903
+      }
+    },
+    "javaPssKiB": {
+      "peakThroughRun": {
+        "A": 61650,
+        "C": 66110,
+        "delta": 4460,
+        "deltaPct": 7.234387672343878
+      },
+      "peakThroughIdle120s": {
+        "A": 61650,
+        "C": 66110,
+        "delta": 4460,
+        "deltaPct": 7.234387672343878
+      },
+      "completedCycles2To10Median": {
+        "A": 42677,
+        "C": 56354,
+        "delta": 13677,
+        "deltaPct": 32.0477071959135
+      },
+      "completedCycles2To10TheilSen": {
+        "A": -697.25,
+        "C": -911.6,
+        "delta": -214.35000000000002,
+        "deltaPct": null
+      },
+      "idle60s": {
+        "A": 45673,
+        "C": 42811,
+        "delta": -2862,
+        "deltaPct": -6.2662842379524015
+      },
+      "idle120s": {
+        "A": 45681,
+        "C": 42823,
+        "delta": -2858,
+        "deltaPct": -6.256430463431184
+      },
+      "idle300s": {
+        "A": 45705,
+        "C": 42839,
+        "delta": -2866,
+        "deltaPct": -6.270648725522376
+      },
+      "idle600s": {
+        "A": 45733,
+        "C": 42867,
+        "delta": -2866,
+        "deltaPct": -6.266809524850769
+      }
+    },
+    "javaUsedKiB": {
+      "peakThroughRun": {
+        "A": 62960,
+        "C": 64595,
+        "delta": 1635,
+        "deltaPct": 2.5968869123252913
+      },
+      "peakThroughIdle120s": {
+        "A": 62960,
+        "C": 64595,
+        "delta": 1635,
+        "deltaPct": 2.5968869123252913
+      },
+      "completedCycles2To10Median": {
+        "A": 43859,
+        "C": 57214,
+        "delta": 13355,
+        "deltaPct": 30.449850657789735
+      },
+      "completedCycles2To10TheilSen": {
+        "A": -1322.3333333333335,
+        "C": -894.15,
+        "delta": 428.1833333333335,
+        "deltaPct": null
+      },
+      "idle60s": {
+        "A": 46923,
+        "C": 43687,
+        "delta": -3236,
+        "deltaPct": -6.89640474820451
+      },
+      "idle120s": {
+        "A": 46923,
+        "C": 43687,
+        "delta": -3236,
+        "deltaPct": -6.89640474820451
+      },
+      "idle300s": {
+        "A": 46955,
+        "C": 43703,
+        "delta": -3252,
+        "deltaPct": -6.9257800021297005
+      },
+      "idle600s": {
+        "A": 46987,
+        "C": 43719,
+        "delta": -3268,
+        "deltaPct": -6.9551152446421405
+      }
+    },
+    "graphicsKiB": {
+      "peakThroughRun": {
+        "A": 155467,
+        "C": 146171,
+        "delta": -9296,
+        "deltaPct": -5.979403989271037
+      },
+      "peakThroughIdle120s": {
+        "A": 155467,
+        "C": 146171,
+        "delta": -9296,
+        "deltaPct": -5.979403989271037
+      },
+      "completedCycles2To10Median": {
+        "A": 130935,
+        "C": 143499,
+        "delta": 12564,
+        "deltaPct": 9.595600870661025
+      },
+      "completedCycles2To10TheilSen": {
+        "A": -1296.0,
+        "C": 466.1428571428571,
+        "delta": 1762.142857142857,
+        "deltaPct": null
+      },
+      "idle60s": {
+        "A": 104535,
+        "C": 110071,
+        "delta": 5536,
+        "deltaPct": 5.295833931219218
+      },
+      "idle120s": {
+        "A": 104535,
+        "C": 110071,
+        "delta": 5536,
+        "deltaPct": 5.295833931219218
+      },
+      "idle300s": {
+        "A": 104535,
+        "C": 110071,
+        "delta": 5536,
+        "deltaPct": 5.295833931219218
+      },
+      "idle600s": {
+        "A": 104535,
+        "C": 110071,
+        "delta": 5536,
+        "deltaPct": 5.295833931219218
+      }
+    }
+  },
+  "retestRuns": {
+    "C": {
+      "schemaVersion": 1,
+      "source": "Debug.getMemoryInfo / Runtime / Debug.getNativeHeapAllocatedSize",
+      "phaseSamples": [
+        {
+          "cycle": 1,
+          "phase": "ready",
+          "totalPssKiB": 197064,
+          "javaPssKiB": 43912,
+          "nativePssKiB": 31186,
+          "javaUsedKiB": 44863,
+          "nativeAllocatedKiB": 21595,
+          "graphicsKiB": 36183,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 0.0
+        },
+        {
+          "cycle": 1,
+          "phase": "playing",
+          "totalPssKiB": 238983,
+          "javaPssKiB": 60697,
+          "nativePssKiB": 41250,
+          "javaUsedKiB": 61752,
+          "nativeAllocatedKiB": 28607,
+          "graphicsKiB": 50227,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "offsetSeconds": 45.123
+        },
+        {
+          "cycle": 1,
+          "phase": "playing",
+          "totalPssKiB": 222982,
+          "javaPssKiB": 44529,
+          "nativePssKiB": 42340,
+          "javaUsedKiB": 45491,
+          "nativeAllocatedKiB": 23107,
+          "graphicsKiB": 48591,
+          "virtualMs": 90000,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "offsetSeconds": 90.131
+        },
+        {
+          "cycle": 1,
+          "phase": "playing",
+          "totalPssKiB": 230766,
+          "javaPssKiB": 51705,
+          "nativePssKiB": 42792,
+          "javaUsedKiB": 52612,
+          "nativeAllocatedKiB": 18800,
+          "graphicsKiB": 48591,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "offsetSeconds": 135.222
+        },
+        {
+          "cycle": 1,
+          "phase": "completed",
+          "totalPssKiB": 241668,
+          "javaPssKiB": 60114,
+          "nativePssKiB": 43435,
+          "javaUsedKiB": 61090,
+          "nativeAllocatedKiB": 18408,
+          "graphicsKiB": 50227,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "offsetSeconds": 180.202
+        },
+        {
+          "cycle": 1,
+          "phase": "reset",
+          "totalPssKiB": 224024,
+          "javaPssKiB": 40686,
+          "nativePssKiB": 46411,
+          "javaUsedKiB": 41914,
+          "nativeAllocatedKiB": 17802,
+          "graphicsKiB": 49051,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 180.488
+        },
+        {
+          "cycle": 2,
+          "phase": "ready",
+          "totalPssKiB": 229316,
+          "javaPssKiB": 41050,
+          "nativePssKiB": 46459,
+          "javaUsedKiB": 41914,
+          "nativeAllocatedKiB": 15593,
+          "graphicsKiB": 53931,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 180.561
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 265826,
+          "javaPssKiB": 47266,
+          "nativePssKiB": 57916,
+          "javaUsedKiB": 48159,
+          "nativeAllocatedKiB": 21656,
+          "graphicsKiB": 71307,
+          "virtualMs": 45000,
+          "backlogMs": 3,
+          "logs": 55,
+          "trail": 46,
+          "offsetSeconds": 225.75
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 336838,
+          "javaPssKiB": 51522,
+          "nativePssKiB": 74192,
+          "javaUsedKiB": 52478,
+          "nativeAllocatedKiB": 32301,
+          "graphicsKiB": 121071,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "offsetSeconds": 270.84
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 367954,
+          "javaPssKiB": 55486,
+          "nativePssKiB": 86324,
+          "javaUsedKiB": 56469,
+          "nativeAllocatedKiB": 33950,
+          "graphicsKiB": 136023,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "offsetSeconds": 315.842
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 382931,
+          "javaPssKiB": 61286,
+          "nativePssKiB": 90080,
+          "javaUsedKiB": 62188,
+          "nativeAllocatedKiB": 30276,
+          "graphicsKiB": 141539,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "offsetSeconds": 360.845
+        },
+        {
+          "cycle": 2,
+          "phase": "completed",
+          "totalPssKiB": 382935,
+          "javaPssKiB": 61290,
+          "nativePssKiB": 90080,
+          "javaUsedKiB": 62188,
+          "nativeAllocatedKiB": 30276,
+          "graphicsKiB": 141539,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "offsetSeconds": 360.964
+        },
+        {
+          "cycle": 2,
+          "phase": "reset",
+          "totalPssKiB": 364467,
+          "javaPssKiB": 42654,
+          "nativePssKiB": 90160,
+          "javaUsedKiB": 43696,
+          "nativeAllocatedKiB": 33357,
+          "graphicsKiB": 141539,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 361.282
+        },
+        {
+          "cycle": 3,
+          "phase": "ready",
+          "totalPssKiB": 370035,
+          "javaPssKiB": 42838,
+          "nativePssKiB": 94520,
+          "javaUsedKiB": 43696,
+          "nativeAllocatedKiB": 29357,
+          "graphicsKiB": 142563,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 361.351
+        },
+        {
+          "cycle": 3,
+          "phase": "playing",
+          "totalPssKiB": 370491,
+          "javaPssKiB": 48046,
+          "nativePssKiB": 90664,
+          "javaUsedKiB": 48936,
+          "nativeAllocatedKiB": 27027,
+          "graphicsKiB": 141539,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "offsetSeconds": 406.533
+        },
+        {
+          "cycle": 3,
+          "phase": "playing",
+          "totalPssKiB": 376763,
+          "javaPssKiB": 52126,
+          "nativePssKiB": 92612,
+          "javaUsedKiB": 53100,
+          "nativeAllocatedKiB": 21387,
+          "graphicsKiB": 141539,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "offsetSeconds": 451.637
+        },
+        {
+          "cycle": 3,
+          "phase": "playing",
+          "totalPssKiB": 383938,
+          "javaPssKiB": 56050,
+          "nativePssKiB": 96040,
+          "javaUsedKiB": 56920,
+          "nativeAllocatedKiB": 12082,
+          "graphicsKiB": 141539,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "offsetSeconds": 496.71
+        },
+        {
+          "cycle": 3,
+          "phase": "completed",
+          "totalPssKiB": 387378,
+          "javaPssKiB": 60626,
+          "nativePssKiB": 94600,
+          "javaUsedKiB": 61515,
+          "nativeAllocatedKiB": 4938,
+          "graphicsKiB": 141539,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "offsetSeconds": 541.561
+        },
+        {
+          "cycle": 3,
+          "phase": "reset",
+          "totalPssKiB": 390150,
+          "javaPssKiB": 63354,
+          "nativePssKiB": 94604,
+          "javaUsedKiB": 64595,
+          "nativeAllocatedKiB": 11646,
+          "graphicsKiB": 141539,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 541.768
+        },
+        {
+          "cycle": 4,
+          "phase": "ready",
+          "totalPssKiB": 394642,
+          "javaPssKiB": 63670,
+          "nativePssKiB": 98284,
+          "javaUsedKiB": 64595,
+          "nativeAllocatedKiB": 5577,
+          "graphicsKiB": 142051,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 541.855
+        },
+        {
+          "cycle": 4,
+          "phase": "playing",
+          "totalPssKiB": 369258,
+          "javaPssKiB": 43302,
+          "nativePssKiB": 93888,
+          "javaUsedKiB": 44170,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 141539,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 587.032
+        },
+        {
+          "cycle": 4,
+          "phase": "playing",
+          "totalPssKiB": 372312,
+          "javaPssKiB": 44410,
+          "nativePssKiB": 95936,
+          "javaUsedKiB": 45357,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 141539,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 632.132
+        },
+        {
+          "cycle": 4,
+          "phase": "playing",
+          "totalPssKiB": 376832,
+          "javaPssKiB": 45410,
+          "nativePssKiB": 99412,
+          "javaUsedKiB": 46380,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 141539,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 677.135
+        },
+        {
+          "cycle": 4,
+          "phase": "completed",
+          "totalPssKiB": 377532,
+          "javaPssKiB": 48254,
+          "nativePssKiB": 97236,
+          "javaUsedKiB": 49108,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 141539,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 722.118
+        },
+        {
+          "cycle": 4,
+          "phase": "reset",
+          "totalPssKiB": 380800,
+          "javaPssKiB": 50982,
+          "nativePssKiB": 97236,
+          "javaUsedKiB": 52188,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 142051,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 722.345
+        },
+        {
+          "cycle": 5,
+          "phase": "ready",
+          "totalPssKiB": 386408,
+          "javaPssKiB": 51294,
+          "nativePssKiB": 101204,
+          "javaUsedKiB": 52188,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143399,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 722.441
+        },
+        {
+          "cycle": 5,
+          "phase": "playing",
+          "totalPssKiB": 385204,
+          "javaPssKiB": 55354,
+          "nativePssKiB": 96900,
+          "javaUsedKiB": 56234,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 142375,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 767.644
+        },
+        {
+          "cycle": 5,
+          "phase": "playing",
+          "totalPssKiB": 388420,
+          "javaPssKiB": 56162,
+          "nativePssKiB": 98364,
+          "javaUsedKiB": 57027,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 90000,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 812.625
+        },
+        {
+          "cycle": 5,
+          "phase": "playing",
+          "totalPssKiB": 392312,
+          "javaPssKiB": 56822,
+          "nativePssKiB": 101464,
+          "javaUsedKiB": 57782,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 857.72
+        },
+        {
+          "cycle": 5,
+          "phase": "completed",
+          "totalPssKiB": 393264,
+          "javaPssKiB": 59294,
+          "nativePssKiB": 99932,
+          "javaUsedKiB": 60192,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 902.711
+        },
+        {
+          "cycle": 5,
+          "phase": "reset",
+          "totalPssKiB": 395956,
+          "javaPssKiB": 61982,
+          "nativePssKiB": 99932,
+          "javaUsedKiB": 63272,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 902.915
+        },
+        {
+          "cycle": 6,
+          "phase": "ready",
+          "totalPssKiB": 400284,
+          "javaPssKiB": 62334,
+          "nativePssKiB": 103396,
+          "javaUsedKiB": 63272,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144011,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 903.012
+        },
+        {
+          "cycle": 6,
+          "phase": "playing",
+          "totalPssKiB": 374596,
+          "javaPssKiB": 41710,
+          "nativePssKiB": 99240,
+          "javaUsedKiB": 42574,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 948.19
+        },
+        {
+          "cycle": 6,
+          "phase": "playing",
+          "totalPssKiB": 377688,
+          "javaPssKiB": 42822,
+          "nativePssKiB": 100852,
+          "javaUsedKiB": 43787,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 993.283
+        },
+        {
+          "cycle": 6,
+          "phase": "playing",
+          "totalPssKiB": 382300,
+          "javaPssKiB": 43910,
+          "nativePssKiB": 104368,
+          "javaUsedKiB": 44775,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1038.366
+        },
+        {
+          "cycle": 6,
+          "phase": "completed",
+          "totalPssKiB": 382595,
+          "javaPssKiB": 46582,
+          "nativePssKiB": 101988,
+          "javaUsedKiB": 47521,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 180000,
+          "backlogMs": 3,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1083.271
+        },
+        {
+          "cycle": 6,
+          "phase": "reset",
+          "totalPssKiB": 385431,
+          "javaPssKiB": 49358,
+          "nativePssKiB": 102044,
+          "javaUsedKiB": 50601,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1083.492
+        },
+        {
+          "cycle": 7,
+          "phase": "ready",
+          "totalPssKiB": 390695,
+          "javaPssKiB": 49694,
+          "nativePssKiB": 105436,
+          "javaUsedKiB": 50601,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 145035,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1083.628
+        },
+        {
+          "cycle": 7,
+          "phase": "playing",
+          "totalPssKiB": 384311,
+          "javaPssKiB": 51306,
+          "nativePssKiB": 99128,
+          "javaUsedKiB": 52315,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 143499,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1128.815
+        },
+        {
+          "cycle": 7,
+          "phase": "playing",
+          "totalPssKiB": 390363,
+          "javaPssKiB": 52554,
+          "nativePssKiB": 102660,
+          "javaUsedKiB": 53523,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1173.89
+        },
+        {
+          "cycle": 7,
+          "phase": "playing",
+          "totalPssKiB": 394571,
+          "javaPssKiB": 53526,
+          "nativePssKiB": 105888,
+          "javaUsedKiB": 54495,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1218.972
+        },
+        {
+          "cycle": 7,
+          "phase": "completed",
+          "totalPssKiB": 395599,
+          "javaPssKiB": 56354,
+          "nativePssKiB": 104080,
+          "javaUsedKiB": 57214,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 180000,
+          "backlogMs": 3,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1263.965
+        },
+        {
+          "cycle": 7,
+          "phase": "reset",
+          "totalPssKiB": 399431,
+          "javaPssKiB": 59098,
+          "nativePssKiB": 104648,
+          "javaUsedKiB": 60310,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 145147,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1264.225
+        },
+        {
+          "cycle": 8,
+          "phase": "ready",
+          "totalPssKiB": 403951,
+          "javaPssKiB": 59398,
+          "nativePssKiB": 108356,
+          "javaUsedKiB": 60310,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 145659,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1264.36
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 398975,
+          "javaPssKiB": 60946,
+          "nativePssKiB": 103008,
+          "javaUsedKiB": 61966,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1309.531
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 401871,
+          "javaPssKiB": 62094,
+          "nativePssKiB": 104868,
+          "javaUsedKiB": 63050,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1354.63
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 406579,
+          "javaPssKiB": 63010,
+          "nativePssKiB": 108412,
+          "javaUsedKiB": 63956,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1399.727
+        },
+        {
+          "cycle": 8,
+          "phase": "completed",
+          "totalPssKiB": 384611,
+          "javaPssKiB": 41440,
+          "nativePssKiB": 107820,
+          "javaUsedKiB": 42350,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1444.593
+        },
+        {
+          "cycle": 8,
+          "phase": "reset",
+          "totalPssKiB": 387519,
+          "javaPssKiB": 44180,
+          "nativePssKiB": 108380,
+          "javaUsedKiB": 45430,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1444.827
+        },
+        {
+          "cycle": 9,
+          "phase": "ready",
+          "totalPssKiB": 391783,
+          "javaPssKiB": 44516,
+          "nativePssKiB": 110772,
+          "javaUsedKiB": 45430,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 146171,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1444.958
+        },
+        {
+          "cycle": 9,
+          "phase": "playing",
+          "totalPssKiB": 387331,
+          "javaPssKiB": 47470,
+          "nativePssKiB": 104814,
+          "javaUsedKiB": 48479,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1490.121
+        },
+        {
+          "cycle": 9,
+          "phase": "playing",
+          "totalPssKiB": 389410,
+          "javaPssKiB": 48106,
+          "nativePssKiB": 106422,
+          "javaUsedKiB": 49053,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1535.205
+        },
+        {
+          "cycle": 9,
+          "phase": "playing",
+          "totalPssKiB": 394066,
+          "javaPssKiB": 48758,
+          "nativePssKiB": 109786,
+          "javaUsedKiB": 49723,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 145147,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1580.289
+        },
+        {
+          "cycle": 9,
+          "phase": "completed",
+          "totalPssKiB": 393858,
+          "javaPssKiB": 51210,
+          "nativePssKiB": 107610,
+          "javaUsedKiB": 52073,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 180000,
+          "backlogMs": 3,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1625.253
+        },
+        {
+          "cycle": 9,
+          "phase": "reset",
+          "totalPssKiB": 396550,
+          "javaPssKiB": 53922,
+          "nativePssKiB": 107586,
+          "javaUsedKiB": 55153,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1625.488
+        },
+        {
+          "cycle": 10,
+          "phase": "ready",
+          "totalPssKiB": 402110,
+          "javaPssKiB": 54250,
+          "nativePssKiB": 111282,
+          "javaUsedKiB": 55153,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 146171,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1625.62
+        },
+        {
+          "cycle": 10,
+          "phase": "playing",
+          "totalPssKiB": 401342,
+          "javaPssKiB": 57830,
+          "nativePssKiB": 108446,
+          "javaUsedKiB": 58832,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1670.814
+        },
+        {
+          "cycle": 10,
+          "phase": "playing",
+          "totalPssKiB": 405400,
+          "javaPssKiB": 58674,
+          "nativePssKiB": 111786,
+          "javaUsedKiB": 59659,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1715.924
+        },
+        {
+          "cycle": 10,
+          "phase": "playing",
+          "totalPssKiB": 409548,
+          "javaPssKiB": 59338,
+          "nativePssKiB": 115142,
+          "javaUsedKiB": 60268,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1760.997
+        },
+        {
+          "cycle": 10,
+          "phase": "completed",
+          "totalPssKiB": 409612,
+          "javaPssKiB": 61734,
+          "nativePssKiB": 112770,
+          "javaUsedKiB": 62651,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 180000,
+          "backlogMs": 3,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1805.857
+        },
+        {
+          "cycle": 10,
+          "phase": "reset",
+          "totalPssKiB": 414044,
+          "javaPssKiB": 66110,
+          "nativePssKiB": 112794,
+          "javaUsedKiB": 43655,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 144635,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1806.089
+        },
+        {
+          "cycle": 10,
+          "phase": "idle60s",
+          "totalPssKiB": 349311,
+          "javaPssKiB": 42811,
+          "nativePssKiB": 105408,
+          "javaUsedKiB": 43687,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 110071,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1866.248
+        },
+        {
+          "cycle": 10,
+          "phase": "idle120s",
+          "totalPssKiB": 349322,
+          "javaPssKiB": 42823,
+          "nativePssKiB": 105408,
+          "javaUsedKiB": 43687,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 110071,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1926.401
+        },
+        {
+          "cycle": 10,
+          "phase": "idle300s",
+          "totalPssKiB": 349339,
+          "javaPssKiB": 42839,
+          "nativePssKiB": 105408,
+          "javaUsedKiB": 43703,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 110071,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 2106.566
+        },
+        {
+          "cycle": 10,
+          "phase": "idle600s",
+          "totalPssKiB": 349366,
+          "javaPssKiB": 42867,
+          "nativePssKiB": 105408,
+          "javaUsedKiB": 43719,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 110071,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 2406.712
+        }
+      ],
+      "sampleCount": 65,
+      "peakTotalPssKiB": 414044,
+      "lastResetToIdle120sPssRecoveryKiB": 64722,
+      "completedCycles2To10": {
+        "totalPssKiB": {
+          "n": 9,
+          "min": 377532,
+          "median": 387378,
+          "max": 409612,
+          "lastThreeRange": [
+            384611,
+            409612
+          ],
+          "theilSenSlopeKiBPerCycle": 2532.15
+        },
+        "javaPssKiB": {
+          "n": 9,
+          "min": 41440,
+          "median": 56354,
+          "max": 61734,
+          "lastThreeRange": [
+            41440,
+            61734
+          ],
+          "theilSenSlopeKiBPerCycle": -911.6
+        },
+        "nativePssKiB": {
+          "n": 9,
+          "min": 90080,
+          "median": 101988,
+          "max": 112770,
+          "lastThreeRange": [
+            107610,
+            112770
+          ],
+          "theilSenSlopeKiBPerCycle": 2612.5238095238096
+        },
+        "javaUsedKiB": {
+          "n": 9,
+          "min": 42350,
+          "median": 57214,
+          "max": 62651,
+          "lastThreeRange": [
+            42350,
+            62651
+          ],
+          "theilSenSlopeKiBPerCycle": -894.15
+        },
+        "nativeAllocatedKiB": {
+          "n": 2,
+          "min": 4938,
+          "median": 17607.0,
+          "max": 30276,
+          "lastThreeRange": [
+            4938,
+            30276
+          ],
+          "theilSenSlopeKiBPerCycle": -25338.0
+        },
+        "graphicsKiB": {
+          "n": 9,
+          "min": 141539,
+          "median": 143499,
+          "max": 144635,
+          "lastThreeRange": [
+            144635,
+            144635
+          ],
+          "theilSenSlopeKiBPerCycle": 466.1428571428571
+        }
+      },
+      "independentRuns": 1,
+      "sameProcessAcrossAllRecordedPhases": true,
+      "instrumentationPassed": true,
+      "totalReplayWallMs": 1801462,
+      "maxSampledBacklogMs": 3,
+      "maxSampledLogs": 223,
+      "maxSampledTrail": 168,
+      "actualSecondsAfterLastReset": {
+        "idle60s": 60.159,
+        "idle120s": 120.312,
+        "idle300s": 300.477,
+        "idle600s": 600.623
+      },
+      "offlineNetworkRestored": true,
+      "environmentAtStart": {
+        "usbPowered": true,
+        "acPowered": false,
+        "wirelessPowered": false,
+        "chargeStatus": 5,
+        "levelPct": 100,
+        "temperatureC": 29.8,
+        "thermalStatus": 0,
+        "displayPx": [
+          1080,
+          2280
+        ],
+        "density": 420,
+        "screenRefreshHz": 60,
+        "fontScale": 1.1,
+        "airplaneMode": true,
+        "wifi": false
+      },
+      "sampledTemperatureRangeC": [
+        28.1,
+        29.8
+      ],
+      "sampledBatteryPctRange": [
+        100,
+        100
+      ],
+      "sampledUsbPoweredAll": true,
+      "nativeAllocationAvailableSamples": 20,
+      "sampledThermalStatuses": [
+        0
+      ]
+    },
+    "A": {
+      "schemaVersion": 1,
+      "source": "Debug.getMemoryInfo / Runtime / Debug.getNativeHeapAllocatedSize",
+      "phaseSamples": [
+        {
+          "cycle": 1,
+          "phase": "ready",
+          "totalPssKiB": 206178,
+          "javaPssKiB": 51479,
+          "nativePssKiB": 32435,
+          "javaUsedKiB": 52470,
+          "nativeAllocatedKiB": 21782,
+          "graphicsKiB": 32615,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 0.0
+        },
+        {
+          "cycle": 1,
+          "phase": "playing",
+          "totalPssKiB": 258420,
+          "javaPssKiB": 44847,
+          "nativePssKiB": 54766,
+          "javaUsedKiB": 45727,
+          "nativeAllocatedKiB": 40784,
+          "graphicsKiB": 68343,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "offsetSeconds": 45.153
+        },
+        {
+          "cycle": 1,
+          "phase": "playing",
+          "totalPssKiB": 332962,
+          "javaPssKiB": 45519,
+          "nativePssKiB": 71086,
+          "javaUsedKiB": 46447,
+          "nativeAllocatedKiB": 50665,
+          "graphicsKiB": 125103,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "offsetSeconds": 90.238
+        },
+        {
+          "cycle": 1,
+          "phase": "playing",
+          "totalPssKiB": 364709,
+          "javaPssKiB": 46171,
+          "nativePssKiB": 83141,
+          "javaUsedKiB": 47146,
+          "nativeAllocatedKiB": 50966,
+          "graphicsKiB": 143883,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "offsetSeconds": 135.308
+        },
+        {
+          "cycle": 1,
+          "phase": "completed",
+          "totalPssKiB": 376657,
+          "javaPssKiB": 48227,
+          "nativePssKiB": 87249,
+          "javaUsedKiB": 49117,
+          "nativeAllocatedKiB": 49468,
+          "graphicsKiB": 149435,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "offsetSeconds": 180.26
+        },
+        {
+          "cycle": 1,
+          "phase": "reset",
+          "totalPssKiB": 381653,
+          "javaPssKiB": 50919,
+          "nativePssKiB": 89525,
+          "javaUsedKiB": 52213,
+          "nativeAllocatedKiB": 56041,
+          "graphicsKiB": 149435,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 180.564
+        },
+        {
+          "cycle": 2,
+          "phase": "ready",
+          "totalPssKiB": 386829,
+          "javaPssKiB": 51275,
+          "nativePssKiB": 92733,
+          "javaUsedKiB": 52213,
+          "nativeAllocatedKiB": 49241,
+          "graphicsKiB": 151047,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 180.646
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 383649,
+          "javaPssKiB": 54391,
+          "nativePssKiB": 86957,
+          "javaUsedKiB": 55355,
+          "nativeAllocatedKiB": 44743,
+          "graphicsKiB": 150535,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "offsetSeconds": 225.799
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 389593,
+          "javaPssKiB": 55955,
+          "nativePssKiB": 90077,
+          "javaUsedKiB": 56836,
+          "nativeAllocatedKiB": 39024,
+          "graphicsKiB": 151671,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "offsetSeconds": 270.857
+        },
+        {
+          "cycle": 2,
+          "phase": "playing",
+          "totalPssKiB": 393897,
+          "javaPssKiB": 56151,
+          "nativePssKiB": 94021,
+          "javaUsedKiB": 57153,
+          "nativeAllocatedKiB": 33447,
+          "graphicsKiB": 151671,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "offsetSeconds": 315.915
+        },
+        {
+          "cycle": 2,
+          "phase": "completed",
+          "totalPssKiB": 393829,
+          "javaPssKiB": 57963,
+          "nativePssKiB": 92273,
+          "javaUsedKiB": 58863,
+          "nativeAllocatedKiB": 22084,
+          "graphicsKiB": 151671,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "offsetSeconds": 360.85
+        },
+        {
+          "cycle": 2,
+          "phase": "reset",
+          "totalPssKiB": 396627,
+          "javaPssKiB": 60703,
+          "nativePssKiB": 92277,
+          "javaUsedKiB": 61943,
+          "nativeAllocatedKiB": 26746,
+          "graphicsKiB": 151671,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 361.051
+        },
+        {
+          "cycle": 3,
+          "phase": "ready",
+          "totalPssKiB": 402833,
+          "javaPssKiB": 61011,
+          "nativePssKiB": 96013,
+          "javaUsedKiB": 61943,
+          "nativeAllocatedKiB": 22296,
+          "graphicsKiB": 153823,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "offsetSeconds": 361.128
+        },
+        {
+          "cycle": 3,
+          "phase": "playing",
+          "totalPssKiB": 376549,
+          "javaPssKiB": 39451,
+          "nativePssKiB": 91621,
+          "javaUsedKiB": 40311,
+          "nativeAllocatedKiB": 17775,
+          "graphicsKiB": 153347,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "offsetSeconds": 406.277
+        },
+        {
+          "cycle": 3,
+          "phase": "playing",
+          "totalPssKiB": 379045,
+          "javaPssKiB": 39891,
+          "nativePssKiB": 93437,
+          "javaUsedKiB": 40771,
+          "nativeAllocatedKiB": 12005,
+          "graphicsKiB": 153347,
+          "virtualMs": 90200,
+          "backlogMs": 0,
+          "logs": 116,
+          "trail": 93,
+          "offsetSeconds": 451.34
+        },
+        {
+          "cycle": 3,
+          "phase": "playing",
+          "totalPssKiB": 382669,
+          "javaPssKiB": 40299,
+          "nativePssKiB": 96821,
+          "javaUsedKiB": 41256,
+          "nativeAllocatedKiB": 4125,
+          "graphicsKiB": 153347,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "offsetSeconds": 496.412
+        },
+        {
+          "cycle": 3,
+          "phase": "completed",
+          "totalPssKiB": 384041,
+          "javaPssKiB": 42163,
+          "nativePssKiB": 94945,
+          "javaUsedKiB": 43022,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 154443,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 541.431
+        },
+        {
+          "cycle": 3,
+          "phase": "reset",
+          "totalPssKiB": 386689,
+          "javaPssKiB": 44839,
+          "nativePssKiB": 94901,
+          "javaUsedKiB": 46102,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 154443,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 541.656
+        },
+        {
+          "cycle": 4,
+          "phase": "ready",
+          "totalPssKiB": 391929,
+          "javaPssKiB": 45207,
+          "nativePssKiB": 98745,
+          "javaUsedKiB": 46102,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155467,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 541.782
+        },
+        {
+          "cycle": 4,
+          "phase": "playing",
+          "totalPssKiB": 388081,
+          "javaPssKiB": 48159,
+          "nativePssKiB": 92909,
+          "javaUsedKiB": 49131,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 154443,
+          "virtualMs": 45000,
+          "backlogMs": 3,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 586.98
+        },
+        {
+          "cycle": 4,
+          "phase": "playing",
+          "totalPssKiB": 391474,
+          "javaPssKiB": 48482,
+          "nativePssKiB": 96049,
+          "javaUsedKiB": 49443,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 154443,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 632.053
+        },
+        {
+          "cycle": 4,
+          "phase": "playing",
+          "totalPssKiB": 395398,
+          "javaPssKiB": 48690,
+          "nativePssKiB": 99569,
+          "javaUsedKiB": 49649,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 154443,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 677.14
+        },
+        {
+          "cycle": 4,
+          "phase": "completed",
+          "totalPssKiB": 394946,
+          "javaPssKiB": 50298,
+          "nativePssKiB": 97465,
+          "javaUsedKiB": 51195,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 154443,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 722.014
+        },
+        {
+          "cycle": 4,
+          "phase": "reset",
+          "totalPssKiB": 397610,
+          "javaPssKiB": 52954,
+          "nativePssKiB": 97465,
+          "javaUsedKiB": 54275,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 154443,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 722.253
+        },
+        {
+          "cycle": 5,
+          "phase": "ready",
+          "totalPssKiB": 402518,
+          "javaPssKiB": 53342,
+          "nativePssKiB": 100957,
+          "javaUsedKiB": 54275,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 155467,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 722.381
+        },
+        {
+          "cycle": 5,
+          "phase": "playing",
+          "totalPssKiB": 395812,
+          "javaPssKiB": 53697,
+          "nativePssKiB": 95053,
+          "javaUsedKiB": 54686,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 154443,
+          "virtualMs": 45000,
+          "backlogMs": 1,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 767.565
+        },
+        {
+          "cycle": 5,
+          "phase": "playing",
+          "totalPssKiB": 398024,
+          "javaPssKiB": 52513,
+          "nativePssKiB": 98277,
+          "javaUsedKiB": 53482,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 154443,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 812.662
+        },
+        {
+          "cycle": 5,
+          "phase": "playing",
+          "totalPssKiB": 305810,
+          "javaPssKiB": 45528,
+          "nativePssKiB": 85322,
+          "javaUsedKiB": 46436,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 84960,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 857.606
+        },
+        {
+          "cycle": 5,
+          "phase": "completed",
+          "totalPssKiB": 302634,
+          "javaPssKiB": 43879,
+          "nativePssKiB": 72349,
+          "javaUsedKiB": 48772,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 84960,
+          "virtualMs": 180000,
+          "backlogMs": 3,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 902.52
+        },
+        {
+          "cycle": 5,
+          "phase": "reset",
+          "totalPssKiB": 297876,
+          "javaPssKiB": 44119,
+          "nativePssKiB": 64265,
+          "javaUsedKiB": 51356,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 84960,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 902.675
+        },
+        {
+          "cycle": 6,
+          "phase": "ready",
+          "totalPssKiB": 298997,
+          "javaPssKiB": 42932,
+          "nativePssKiB": 65385,
+          "javaUsedKiB": 51356,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 84960,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 902.716
+        },
+        {
+          "cycle": 6,
+          "phase": "playing",
+          "totalPssKiB": 276498,
+          "javaPssKiB": 38577,
+          "nativePssKiB": 45640,
+          "javaUsedKiB": 41683,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 65003,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 947.894
+        },
+        {
+          "cycle": 6,
+          "phase": "playing",
+          "totalPssKiB": 301072,
+          "javaPssKiB": 38982,
+          "nativePssKiB": 60059,
+          "javaUsedKiB": 40272,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 101279,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 992.982
+        },
+        {
+          "cycle": 6,
+          "phase": "playing",
+          "totalPssKiB": 354612,
+          "javaPssKiB": 61650,
+          "nativePssKiB": 70503,
+          "javaUsedKiB": 62960,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 122803,
+          "virtualMs": 135200,
+          "backlogMs": 3,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1038.07
+        },
+        {
+          "cycle": 6,
+          "phase": "completed",
+          "totalPssKiB": 361173,
+          "javaPssKiB": 61294,
+          "nativePssKiB": 74483,
+          "javaUsedKiB": 62520,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 126235,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1082.972
+        },
+        {
+          "cycle": 6,
+          "phase": "reset",
+          "totalPssKiB": 341117,
+          "javaPssKiB": 41258,
+          "nativePssKiB": 74443,
+          "javaUsedKiB": 42807,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 126235,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1083.221
+        },
+        {
+          "cycle": 7,
+          "phase": "ready",
+          "totalPssKiB": 348149,
+          "javaPssKiB": 41618,
+          "nativePssKiB": 80351,
+          "javaUsedKiB": 42807,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 127583,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1083.351
+        },
+        {
+          "cycle": 7,
+          "phase": "playing",
+          "totalPssKiB": 358549,
+          "javaPssKiB": 43764,
+          "nativePssKiB": 86231,
+          "javaUsedKiB": 45070,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130743,
+          "virtualMs": 45000,
+          "backlogMs": 3,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1128.538
+        },
+        {
+          "cycle": 7,
+          "phase": "playing",
+          "totalPssKiB": 358325,
+          "javaPssKiB": 42192,
+          "nativePssKiB": 87775,
+          "javaUsedKiB": 43435,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130743,
+          "virtualMs": 90000,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1173.534
+        },
+        {
+          "cycle": 7,
+          "phase": "playing",
+          "totalPssKiB": 360757,
+          "javaPssKiB": 40704,
+          "nativePssKiB": 91599,
+          "javaUsedKiB": 41966,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130743,
+          "virtualMs": 135200,
+          "backlogMs": 1,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1218.63
+        },
+        {
+          "cycle": 7,
+          "phase": "completed",
+          "totalPssKiB": 358231,
+          "javaPssKiB": 40464,
+          "nativePssKiB": 89295,
+          "javaUsedKiB": 41653,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130743,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1263.637
+        },
+        {
+          "cycle": 7,
+          "phase": "reset",
+          "totalPssKiB": 360871,
+          "javaPssKiB": 43120,
+          "nativePssKiB": 89275,
+          "javaUsedKiB": 44685,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130743,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1263.882
+        },
+        {
+          "cycle": 8,
+          "phase": "ready",
+          "totalPssKiB": 366055,
+          "javaPssKiB": 43452,
+          "nativePssKiB": 92611,
+          "javaUsedKiB": 44685,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 132279,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1264.004
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 362115,
+          "javaPssKiB": 44288,
+          "nativePssKiB": 89371,
+          "javaUsedKiB": 45587,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130775,
+          "virtualMs": 45000,
+          "backlogMs": 3,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1309.195
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 362014,
+          "javaPssKiB": 42792,
+          "nativePssKiB": 90943,
+          "javaUsedKiB": 44055,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130775,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1354.284
+        },
+        {
+          "cycle": 8,
+          "phase": "playing",
+          "totalPssKiB": 363859,
+          "javaPssKiB": 41285,
+          "nativePssKiB": 94223,
+          "javaUsedKiB": 42548,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130775,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1399.273
+        },
+        {
+          "cycle": 8,
+          "phase": "completed",
+          "totalPssKiB": 361163,
+          "javaPssKiB": 41185,
+          "nativePssKiB": 91607,
+          "javaUsedKiB": 42376,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130775,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1444.286
+        },
+        {
+          "cycle": 8,
+          "phase": "reset",
+          "totalPssKiB": 363691,
+          "javaPssKiB": 43877,
+          "nativePssKiB": 91647,
+          "javaUsedKiB": 45408,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130775,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1444.522
+        },
+        {
+          "cycle": 9,
+          "phase": "ready",
+          "totalPssKiB": 369835,
+          "javaPssKiB": 44173,
+          "nativePssKiB": 96463,
+          "javaUsedKiB": 45408,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 131863,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1444.64
+        },
+        {
+          "cycle": 9,
+          "phase": "playing",
+          "totalPssKiB": 364203,
+          "javaPssKiB": 45129,
+          "nativePssKiB": 90791,
+          "javaUsedKiB": 46421,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1489.825
+        },
+        {
+          "cycle": 9,
+          "phase": "playing",
+          "totalPssKiB": 365187,
+          "javaPssKiB": 43569,
+          "nativePssKiB": 93275,
+          "javaUsedKiB": 44859,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 90200,
+          "backlogMs": 1,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1534.918
+        },
+        {
+          "cycle": 9,
+          "phase": "playing",
+          "totalPssKiB": 367391,
+          "javaPssKiB": 42041,
+          "nativePssKiB": 96875,
+          "javaUsedKiB": 43302,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1580.014
+        },
+        {
+          "cycle": 9,
+          "phase": "completed",
+          "totalPssKiB": 364399,
+          "javaPssKiB": 41893,
+          "nativePssKiB": 94039,
+          "javaUsedKiB": 43084,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 180000,
+          "backlogMs": 1,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1624.914
+        },
+        {
+          "cycle": 9,
+          "phase": "reset",
+          "totalPssKiB": 368671,
+          "javaPssKiB": 44565,
+          "nativePssKiB": 94227,
+          "javaUsedKiB": 46116,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1625.135
+        },
+        {
+          "cycle": 10,
+          "phase": "ready",
+          "totalPssKiB": 372419,
+          "javaPssKiB": 44889,
+          "nativePssKiB": 98091,
+          "javaUsedKiB": 46116,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 131959,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1625.26
+        },
+        {
+          "cycle": 10,
+          "phase": "playing",
+          "totalPssKiB": 368787,
+          "javaPssKiB": 45873,
+          "nativePssKiB": 94487,
+          "javaUsedKiB": 47145,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 45000,
+          "backlogMs": 2,
+          "logs": 55,
+          "trail": 46,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1670.445
+        },
+        {
+          "cycle": 10,
+          "phase": "playing",
+          "totalPssKiB": 367819,
+          "javaPssKiB": 44181,
+          "nativePssKiB": 95375,
+          "javaUsedKiB": 45458,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 90200,
+          "backlogMs": 2,
+          "logs": 116,
+          "trail": 93,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1715.538
+        },
+        {
+          "cycle": 10,
+          "phase": "playing",
+          "totalPssKiB": 370131,
+          "javaPssKiB": 42757,
+          "nativePssKiB": 98979,
+          "javaUsedKiB": 44012,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 135200,
+          "backlogMs": 2,
+          "logs": 167,
+          "trail": 123,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1760.639
+        },
+        {
+          "cycle": 10,
+          "phase": "completed",
+          "totalPssKiB": 366743,
+          "javaPssKiB": 42677,
+          "nativePssKiB": 95667,
+          "javaUsedKiB": 43859,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 180000,
+          "backlogMs": 2,
+          "logs": 223,
+          "trail": 168,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1805.529
+        },
+        {
+          "cycle": 10,
+          "phase": "reset",
+          "totalPssKiB": 369591,
+          "javaPssKiB": 45333,
+          "nativePssKiB": 95851,
+          "javaUsedKiB": 46891,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 130935,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1805.768
+        },
+        {
+          "cycle": 10,
+          "phase": "idle60s",
+          "totalPssKiB": 345603,
+          "javaPssKiB": 45673,
+          "nativePssKiB": 98147,
+          "javaUsedKiB": 46923,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 104535,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1865.94
+        },
+        {
+          "cycle": 10,
+          "phase": "idle120s",
+          "totalPssKiB": 345611,
+          "javaPssKiB": 45681,
+          "nativePssKiB": 98147,
+          "javaUsedKiB": 46923,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 104535,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 1926.114
+        },
+        {
+          "cycle": 10,
+          "phase": "idle300s",
+          "totalPssKiB": 345631,
+          "javaPssKiB": 45705,
+          "nativePssKiB": 98147,
+          "javaUsedKiB": 46955,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 104535,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 2106.286
+        },
+        {
+          "cycle": 10,
+          "phase": "idle600s",
+          "totalPssKiB": 345659,
+          "javaPssKiB": 45733,
+          "nativePssKiB": 98147,
+          "javaUsedKiB": 46987,
+          "nativeAllocatedKiB": null,
+          "graphicsKiB": 104535,
+          "virtualMs": 0,
+          "backlogMs": 0,
+          "logs": 0,
+          "trail": 0,
+          "nativeAllocatedStatus": "UNAVAILABLE_REPORTED_ZERO",
+          "offsetSeconds": 2406.453
+        }
+      ],
+      "sampleCount": 64,
+      "peakTotalPssKiB": 402833,
+      "lastResetToIdle120sPssRecoveryKiB": 23980,
+      "completedCycles2To10": {
+        "totalPssKiB": {
+          "n": 9,
+          "min": 302634,
+          "median": 364399,
+          "max": 394946,
+          "lastThreeRange": [
+            361163,
+            366743
+          ],
+          "theilSenSlopeKiBPerCycle": -3107.833333333333
+        },
+        "javaPssKiB": {
+          "n": 9,
+          "min": 40464,
+          "median": 42677,
+          "max": 61294,
+          "lastThreeRange": [
+            41185,
+            42677
+          ],
+          "theilSenSlopeKiBPerCycle": -697.25
+        },
+        "nativePssKiB": {
+          "n": 9,
+          "min": 72349,
+          "median": 92273,
+          "max": 97465,
+          "lastThreeRange": [
+            91607,
+            95667
+          ],
+          "theilSenSlopeKiBPerCycle": 1026.125
+        },
+        "javaUsedKiB": {
+          "n": 9,
+          "min": 41653,
+          "median": 43859,
+          "max": 62520,
+          "lastThreeRange": [
+            42376,
+            43859
+          ],
+          "theilSenSlopeKiBPerCycle": -1322.3333333333335
+        },
+        "nativeAllocatedKiB": {
+          "n": 1,
+          "min": 22084,
+          "median": 22084,
+          "max": 22084,
+          "lastThreeRange": [
+            22084,
+            22084
+          ],
+          "theilSenSlopeKiBPerCycle": null
+        },
+        "graphicsKiB": {
+          "n": 9,
+          "min": 84960,
+          "median": 130935,
+          "max": 154443,
+          "lastThreeRange": [
+            130775,
+            130935
+          ],
+          "theilSenSlopeKiBPerCycle": -1296.0
+        }
+      },
+      "independentRuns": 1,
+      "sameProcessAcrossAllRecordedPhases": true,
+      "instrumentationPassed": true,
+      "totalReplayWallMs": 1801088,
+      "maxSampledBacklogMs": 3,
+      "maxSampledLogs": 223,
+      "maxSampledTrail": 168,
+      "actualSecondsAfterLastReset": {
+        "idle60s": 60.172,
+        "idle120s": 120.346,
+        "idle300s": 300.518,
+        "idle600s": 600.685
+      },
+      "offlineNetworkRestored": true,
+      "environmentAtStart": {
+        "usbPowered": true,
+        "acPowered": false,
+        "wirelessPowered": false,
+        "chargeStatus": 5,
+        "levelPct": 100,
+        "temperatureC": 28.8,
+        "thermalStatus": 0,
+        "displayPx": [
+          1080,
+          2280
+        ],
+        "density": 420,
+        "screenRefreshHz": 60,
+        "fontScale": 1.1,
+        "airplaneMode": true,
+        "wifi": false
+      },
+      "sampledTemperatureRangeC": [
+        28.5,
+        30.1
+      ],
+      "sampledBatteryPctRange": [
+        100,
+        100
+      ],
+      "sampledUsbPoweredAll": true,
+      "nativeAllocationAvailableSamples": 16,
+      "sampledThermalStatuses": [
+        0
+      ]
+    }
+  },
+  "tenPercentInvestigationThreshold": {
+    "totalPssKiB": {
+      "peakThroughIdle120s": false,
+      "completedCycles2To10Median": false,
+      "idle120s": false
+    },
+    "nativePssKiB": {
+      "peakThroughIdle120s": true,
+      "completedCycles2To10Median": true,
+      "idle120s": false
+    }
+  },
+  "priorGates": {
+    "G3": "INCONCLUSIVE",
+    "G7": "INCONCLUSIVE",
+    "G9": "INCONCLUSIVE"
+  },
+  "restoration": {
+    "afterEndurance": {
+      "apkBytesMatch": {
+        "lab.recovery.app": true,
+        "lab.recovery.app.test": true,
+        "lab.recovery.live": true,
+        "lab.recovery.live.test": true,
+        "lab.recovery.app.benchmark": true,
+        "lab.recovery.benchmark": true
+      },
+      "reopenedThenBackgroundKilledForStoppedBit": [],
+      "existingDataInodesMatch": {
+        "lab.recovery.app": true,
+        "lab.recovery.app.test": true,
+        "lab.recovery.live": true,
+        "lab.recovery.live.test": true,
+        "lab.recovery.app.benchmark": true,
+        "lab.recovery.benchmark": true
+      },
+      "stoppedBitsMatch": {
+        "lab.recovery.app": true,
+        "lab.recovery.app.test": true,
+        "lab.recovery.live": true,
+        "lab.recovery.live.test": true,
+        "lab.recovery.app.benchmark": true,
+        "lab.recovery.benchmark": true
+      },
+      "trackedSystemSettingsMatch": {
+        "system": true,
+        "global": true
+      },
+      "displaySizeMatch": true,
+      "displayDensityMatch": true,
+      "locationSwitchMatch": true,
+      "locationPermissionAndFlagsMatch": true,
+      "existingLiveMarkerBytesMatch": true,
+      "mediaFileManifestsMatch": {
+        "lab.recovery.benchmark": true
+      },
+      "keyguardConfigurationAndStateMatch": true,
+      "keyguardShowing": false,
+      "secureSettingMatch": true,
+      "screenAwake": true,
+      "homeRestored": true,
+      "testDirectoriesVerifiedAndRemoved": {
+        "C/offline-first": 11,
+        "A/offline-first": 11
+      }
+    },
+    "afterDiagnostics": {
+      "apkBytesMatch": {
+        "lab.recovery.app": true,
+        "lab.recovery.app.test": true,
+        "lab.recovery.live": true,
+        "lab.recovery.live.test": true,
+        "lab.recovery.app.benchmark": true,
+        "lab.recovery.benchmark": true
+      },
+      "reopenedThenBackgroundKilledForStoppedBit": [],
+      "existingDataInodesMatch": {
+        "lab.recovery.app": true,
+        "lab.recovery.app.test": true,
+        "lab.recovery.live": true,
+        "lab.recovery.live.test": true,
+        "lab.recovery.app.benchmark": true,
+        "lab.recovery.benchmark": true
+      },
+      "stoppedBitsMatch": {
+        "lab.recovery.app": true,
+        "lab.recovery.app.test": true,
+        "lab.recovery.live": true,
+        "lab.recovery.live.test": true,
+        "lab.recovery.app.benchmark": true,
+        "lab.recovery.benchmark": true
+      },
+      "trackedSystemSettingsMatch": {
+        "system": true,
+        "global": true
+      },
+      "displaySizeMatch": true,
+      "displayDensityMatch": true,
+      "locationSwitchMatch": true,
+      "locationPermissionAndFlagsMatch": true,
+      "existingLiveMarkerBytesMatch": true,
+      "mediaFileManifestsMatch": {
+        "lab.recovery.benchmark": true
+      },
+      "keyguardConfigurationAndStateMatch": true,
+      "keyguardShowing": false,
+      "secureSettingMatch": true,
+      "screenAwake": true,
+      "homeRestored": true,
+      "testDirectoriesVerifiedAndRemoved": {
+        "C/diagnostic-ownership": 31,
+        "A/diagnostic-ownership": 31
+      }
+    }
+  },
+  "enduranceRawSha256": {
+    "C": {
+      "endurance.txt": "fe77776db2e3cc00edcd708d0e4f69746020383c3291ac3fbd21aae5b6b9a1e5",
+      "samples.log": "e3175cbb862ed9c8555d667ffd9b2b195ca2a4a1f0a023ea3152e09273df4210",
+      "environment-start.txt": "6c449671591bb344ee4fb69cd4abd3bd9a976adcb3a331490cdadeeec7dfc6c6",
+      "environment.log": "7539375b9fc21d891f29e2599e65540f6c1763364b38cfca4d532a68fe614638"
+    },
+    "A": {
+      "endurance.txt": "bd1b8d6d36d0b0ef43ce76e9d1d3854c8149df3d9e111f8831cbf8af49c529d5",
+      "samples.log": "d490b8f057179d4177d5a3a5a145c5050cc10f5f6c05eeb29bcfc35f7b95e4a8",
+      "environment-start.txt": "4270e215d2efb25d2cd0e4942c76b47e043906429ed34ca5456b7b27455a9c6d",
+      "environment.log": "1713721f4b0a828c1976e24356cfa3ff0b552a869ccd208a10a8c689b1083d10"
+    }
+  },
+  "gateG8": {
+    "functionalEndurance": "PASS",
+    "memoryAndEnduranceOverall": "INCONCLUSIVE",
+    "priorIdle120NativeIncreaseAtLeastTenPercentReproduced": false,
+    "higherCandidateNativeCompletedSlopeReproduced": true,
+    "causeConfirmed": false
+  },
+  "diagnosis": {
+    "order": [
+      "C",
+      "A"
+    ],
+    "separateFromEndurance": true,
+    "replayCountPerBuild": 1,
+    "forcedGcRequested": false,
+    "testHarnessSha256": "c468a7b997e25e08061d147d1957feb1748b7084ecfe9a4fa3b9780dc7006f80",
+    "nativeConfigAndDriverSha256": "f89fed8c939afbff166beea7c49a1914d25146ef23ca9539c775fd74a0dc7145",
+    "heapAnalysisSourceSha256": "dcffa851a67c06f0d230bdcc6231003aaaf4fbae7804c7fb7d8d87f5b72336f8",
+    "coverageLimitations": [
+      "Native profile covers sampled libc.malloc after map-ready through one replay and Reset.",
+      "Native allocations across the second through tenth run and the 600-second idle were not profiled.",
+      "HPROF root traces were collected in the diagnostic process after Reset and after Activity close.",
+      "In combined Shark searches ancestor paths can suppress paths for nested selected objects."
+    ],
+    "builds": {
+      "C": {
+        "environment": {
+          "sameProcessForAllStages": true,
+          "networkRestored": true,
+          "hostExitCode": 0
+        },
+        "javaHeap": {
+          "reset": {
+            "status": "MEASURED",
+            "secondsAfterPhaseMarker": 21.735,
+            "engine": "Shark 2.14",
+            "explicitGcRequested": false,
+            "types": {
+              "android.graphics.Path": {
+                "selected": 2163,
+                "rootedPathsReported": 20,
+                "unreachableReported": 0,
+                "unaccounted": 2143,
+                "rootTypes": {
+                  "STICKY_CLASS": 20
+                },
+                "maxSharkRetainedBytes": 26,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "STICKY_CLASS",
+                    "path": "android.content.res.ResourcesImpl.sPreloadedDrawables -> android.util.LongSparseArray[].[index] -> android.util.LongSparseArray.mValues -> java.lang.Object[].[index] -> android.graphics.drawable.StateListDrawable$StateListState.mDrawables -> android.graphics.drawable.Drawable[].[index] -> android.graphics.drawable.GradientDrawable.mPath"
+                  }
+                ]
+              },
+              "androidx.compose.ui.graphics.AndroidPath": {
+                "selected": 2143,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 2143,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.app.MainActivity": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "STICKY_CLASS": 1
+                },
+                "maxSharkRetainedBytes": 3411,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "STICKY_CLASS",
+                    "path": "android.app.ActivityThread.sCurrentActivityThread -> android.app.ActivityThread.mLastResumedActivity -> android.app.ActivityThread$ActivityClientRecord.activity"
+                  }
+                ]
+              },
+              "lab.recovery.feature.LabViewModel": {
+                "selected": 1,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 1,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.simulation.ReplaySession": {
+                "selected": 1,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 1,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.MapGeometry": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 2324,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.runtime.snapshots.SnapshotKt.applyObservers -> java.util.ArrayList.[index] -> androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.f$0 -> androidx.compose.runtime.Recomposer._knownCompositions -> java.util.ArrayList.[index] -> androidx.compose.runtime.CompositionImpl.slotTable -> androidx.compose.runtime.SlotTable.slots -> java.lang.Object[].[index]"
+                  }
+                ]
+              },
+              "lab.recovery.uimap.MapLabelCache": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 7627,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.runtime.snapshots.SnapshotKt.applyObservers -> java.util.ArrayList.[index] -> androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.f$0 -> androidx.compose.runtime.Recomposer._knownCompositions -> java.util.ArrayList.[index] -> androidx.compose.runtime.CompositionImpl.slotTable -> androidx.compose.runtime.SlotTable.slots -> java.lang.Object[].[index]"
+                  }
+                ]
+              },
+              "lab.recovery.uimap.MapWorld": {
+                "selected": 1,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 1,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.PreparedMapSlot": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 16,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.runtime.snapshots.SnapshotKt.applyObservers -> java.util.ArrayList.[index] -> androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.f$0 -> androidx.compose.runtime.Recomposer._knownCompositions -> java.util.ArrayList.[index] -> androidx.compose.runtime.CompositionImpl.slotTable -> androidx.compose.runtime.SlotTable.slots -> java.lang.Object[].[index]"
+                  }
+                ]
+              },
+              "lab.recovery.uimap.WorldPath": {
+                "selected": 26600,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 26600,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              }
+            },
+            "singleTypeQueries": {
+              "lab.recovery.uimap.MapWorld": {
+                "status": "MEASURED",
+                "selectedInstances": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "shortestRootPath": {
+                  "root": "THREAD_OBJECT",
+                  "referenceChain": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.runtime.snapshots.SnapshotKt.applyObservers -> java.util.ArrayList.[index] -> androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.f$0 -> androidx.compose.runtime.Recomposer._knownCompositions -> java.util.ArrayList.[index] -> androidx.compose.runtime.CompositionImpl.slotTable -> androidx.compose.runtime.SlotTable.slots -> java.lang.Object[].[index] -> lab.recovery.uimap.PreparedMapSlot.world"
+                },
+                "maxSharkRetainedBytes": 8501242
+              },
+              "lab.recovery.simulation.ReplaySession": {
+                "status": "MEASURED",
+                "selectedInstances": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "shortestRootPath": {
+                  "root": "STICKY_CLASS",
+                  "referenceChain": "android.app.ActivityThread.sCurrentActivityThread -> android.app.ActivityThread.mLastResumedActivity -> android.app.ActivityThread$ActivityClientRecord.activity -> lab.recovery.app.MainActivity._viewModelStore -> androidx.lifecycle.ViewModelStore.map -> java.util.LinkedHashMap.[index] -> lab.recovery.feature.LabViewModel.controller -> lab.recovery.simulation.ReplayController.cursor"
+                },
+                "maxSharkRetainedBytes": 799186
+              },
+              "androidx.compose.ui.graphics.AndroidPath": {
+                "status": "MEASURED",
+                "selectedInstances": 2143,
+                "rootedPathsReported": 2143,
+                "unreachableReported": 0,
+                "shortestRootPath": {
+                  "root": "THREAD_OBJECT",
+                  "referenceChain": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.runtime.snapshots.SnapshotKt.applyObservers -> java.util.ArrayList.[index] -> androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.f$0 -> androidx.compose.runtime.Recomposer._knownCompositions -> java.util.ArrayList.[index] -> androidx.compose.runtime.CompositionImpl.slotTable -> androidx.compose.runtime.SlotTable.slots -> java.lang.Object[].[index] -> lab.recovery.uimap.MapGeometry.route -> lab.recovery.uimap.WorldPath.shape$delegate -> kotlin.UnsafeLazyImpl._value"
+                },
+                "maxSharkRetainedBytes": 50
+              }
+            }
+          },
+          "closedIdle": {
+            "status": "MEASURED",
+            "secondsAfterPhaseMarker": 0.432,
+            "engine": "Shark 2.14",
+            "explicitGcRequested": false,
+            "types": {
+              "android.graphics.Path": {
+                "selected": 20,
+                "rootedPathsReported": 20,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "STICKY_CLASS": 20
+                },
+                "maxSharkRetainedBytes": 26,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "STICKY_CLASS",
+                    "path": "android.content.res.ResourcesImpl.sPreloadedDrawables -> android.util.LongSparseArray[].[index] -> android.util.LongSparseArray.mValues -> java.lang.Object[].[index] -> android.graphics.drawable.StateListDrawable$StateListState.mDrawables -> android.graphics.drawable.Drawable[].[index] -> android.graphics.drawable.GradientDrawable.mPath"
+                  }
+                ]
+              },
+              "androidx.compose.ui.graphics.AndroidPath": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.app.MainActivity": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.feature.LabViewModel": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 21466603,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread. -> kotlin.jvm.internal.Ref$ObjectRef.element"
+                  }
+                ]
+              },
+              "lab.recovery.simulation.ReplaySession": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.MapGeometry": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.MapLabelCache": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.MapWorld": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.PreparedMapSlot": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.WorldPath": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              }
+            }
+          }
+        },
+        "nativeHeap": {
+          "status": "MEASURED",
+          "samplingIntervalBytes": 65536,
+          "trackedHeap": "libc.malloc",
+          "traceStats": [
+            {
+              "name": "heapprofd_client_spinlock_blocked",
+              "severity": "info",
+              "value": 216000
+            },
+            {
+              "name": "heapprofd_unwind_samples",
+              "severity": "info",
+              "value": 1299063
+            },
+            {
+              "name": "heapprofd_unwind_time_us",
+              "severity": "info",
+              "value": 175458268
+            }
+          ],
+          "profiledProcessCount": 1,
+          "points": [
+            {
+              "offsetSecondsFromReady": 0.993,
+              "phase": "ready",
+              "estimatedOutstandingBytes": 0,
+              "records": 8
+            },
+            {
+              "offsetSecondsFromReady": 35.505,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 16056320,
+              "records": 1162
+            },
+            {
+              "offsetSecondsFromReady": 50.497,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 20578304,
+              "records": 656
+            },
+            {
+              "offsetSecondsFromReady": 65.481,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 25034752,
+              "records": 908
+            },
+            {
+              "offsetSecondsFromReady": 80.497,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 29229056,
+              "records": 600
+            },
+            {
+              "offsetSecondsFromReady": 95.609,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 37027840,
+              "records": 593
+            },
+            {
+              "offsetSecondsFromReady": 110.489,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 42139648,
+              "records": 629
+            },
+            {
+              "offsetSecondsFromReady": 125.493,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 42598400,
+              "records": 500
+            },
+            {
+              "offsetSecondsFromReady": 140.685,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 54622610,
+              "records": 643
+            },
+            {
+              "offsetSecondsFromReady": 155.481,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 51970048,
+              "records": 568
+            },
+            {
+              "offsetSecondsFromReady": 170.661,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 57871728,
+              "records": 608
+            },
+            {
+              "offsetSecondsFromReady": 185.489,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 56688640,
+              "records": 638
+            },
+            {
+              "offsetSecondsFromReady": 200.657,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 62738160,
+              "records": 562
+            },
+            {
+              "offsetSecondsFromReady": 204.685,
+              "phase": "completed",
+              "estimatedOutstandingBytes": 59768832,
+              "records": 383
+            },
+            {
+              "offsetSecondsFromReady": 229.041,
+              "phase": "reset",
+              "estimatedOutstandingBytes": 59834368,
+              "records": 249
+            },
+            {
+              "offsetSecondsFromReady": 233.593,
+              "phase": "reset",
+              "estimatedOutstandingBytes": 59572224,
+              "records": 41
+            }
+          ],
+          "lastPointByPhaseNativeBytes": {
+            "ready": [
+              {
+                "scope": "Other call stacks",
+                "callsites": 4,
+                "sampled_net_bytes": 0
+              }
+            ],
+            "replayAfterReadyPause": [
+              {
+                "scope": "Includes libhwui.so",
+                "callsites": 1090,
+                "sampled_net_bytes": 62017264
+              },
+              {
+                "scope": "Other call stacks",
+                "callsites": 310,
+                "sampled_net_bytes": 720896
+              }
+            ],
+            "completed": [
+              {
+                "scope": "Includes libhwui.so",
+                "callsites": 1097,
+                "sampled_net_bytes": 59310080
+              },
+              {
+                "scope": "Other call stacks",
+                "callsites": 314,
+                "sampled_net_bytes": 458752
+              }
+            ],
+            "reset": [
+              {
+                "scope": "Includes libhwui.so",
+                "callsites": 1102,
+                "sampled_net_bytes": 58916864
+              },
+              {
+                "scope": "Other call stacks",
+                "callsites": 353,
+                "sampled_net_bytes": 655360
+              }
+            ]
+          }
+        },
+        "localRawArtifactSha256": {
+          "native.perfetto-trace": "8ebd7f96b128d4b60f57f9c9a85f70493f8c14998d5a24378571d34afaaf62d2",
+          "reset.hprof": "e7ff2eda5a5476c4928aa93268533b4fc953ace909f872a1f1c36000e4beb619",
+          "closedIdle.hprof": "34f3e8f904432ad3633c8fefde2d672959736d034b997c8947819474599283b3"
+        },
+        "instrumentationApkSha256": "578a477f21f07d4f717a296fce2e8a9c1a9f964bb72623eb429656a0d103b2f3"
+      },
+      "A": {
+        "environment": {
+          "sameProcessForAllStages": true,
+          "networkRestored": true,
+          "hostExitCode": 0
+        },
+        "javaHeap": {
+          "reset": {
+            "status": "MEASURED",
+            "secondsAfterPhaseMarker": 21.886,
+            "engine": "Shark 2.14",
+            "explicitGcRequested": false,
+            "types": {
+              "android.graphics.Path": {
+                "selected": 2164,
+                "rootedPathsReported": 20,
+                "unreachableReported": 0,
+                "unaccounted": 2144,
+                "rootTypes": {
+                  "STICKY_CLASS": 20
+                },
+                "maxSharkRetainedBytes": 26,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "STICKY_CLASS",
+                    "path": "android.content.res.ResourcesImpl.sPreloadedDrawables -> android.util.LongSparseArray[].[index] -> android.util.LongSparseArray.mValues -> java.lang.Object[].[index] -> android.graphics.drawable.StateListDrawable$StateListState.mDrawables -> android.graphics.drawable.Drawable[].[index] -> android.graphics.drawable.GradientDrawable.mPath"
+                  }
+                ]
+              },
+              "androidx.compose.ui.graphics.AndroidPath": {
+                "selected": 2144,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 2143,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 106,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.material3.SliderDefaults.trackPath"
+                  }
+                ]
+              },
+              "lab.recovery.app.MainActivity": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "STICKY_CLASS": 1
+                },
+                "maxSharkRetainedBytes": 3411,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "STICKY_CLASS",
+                    "path": "android.app.ActivityThread.sCurrentActivityThread -> android.app.ActivityThread.mLastResumedActivity -> android.app.ActivityThread$ActivityClientRecord.activity"
+                  }
+                ]
+              },
+              "lab.recovery.feature.LabViewModel": {
+                "selected": 1,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 1,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.simulation.ReplaySession": {
+                "selected": 1,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 1,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.MapGeometry": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 2324,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.runtime.snapshots.SnapshotKt.applyObservers -> java.util.ArrayList.[index] -> androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.f$0 -> androidx.compose.runtime.Recomposer._knownCompositions -> java.util.ArrayList.[index] -> androidx.compose.runtime.CompositionImpl.slotTable -> androidx.compose.runtime.SlotTable.slots -> java.lang.Object[].[index]"
+                  }
+                ]
+              },
+              "lab.recovery.uimap.MapLabelCache": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 7627,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.runtime.snapshots.SnapshotKt.applyObservers -> java.util.ArrayList.[index] -> androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.f$0 -> androidx.compose.runtime.Recomposer._knownCompositions -> java.util.ArrayList.[index] -> androidx.compose.runtime.CompositionImpl.slotTable -> androidx.compose.runtime.SlotTable.slots -> java.lang.Object[].[index]"
+                  }
+                ]
+              },
+              "lab.recovery.uimap.MapWorld": {
+                "selected": 1,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 1,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.PreparedMapSlot": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 16,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.runtime.snapshots.SnapshotKt.applyObservers -> java.util.ArrayList.[index] -> androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.f$0 -> androidx.compose.runtime.Recomposer._knownCompositions -> java.util.ArrayList.[index] -> androidx.compose.runtime.CompositionImpl.slotTable -> androidx.compose.runtime.SlotTable.slots -> java.lang.Object[].[index]"
+                  }
+                ]
+              },
+              "lab.recovery.uimap.WorldPath": {
+                "selected": 26600,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 26600,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              }
+            },
+            "singleTypeQueries": {
+              "lab.recovery.uimap.MapWorld": {
+                "status": "MEASURED",
+                "selectedInstances": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "shortestRootPath": {
+                  "root": "THREAD_OBJECT",
+                  "referenceChain": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.runtime.snapshots.SnapshotKt.applyObservers -> java.util.ArrayList.[index] -> androidx.compose.runtime.Recomposer$recompositionRunner$2$$ExternalSyntheticLambda0.f$0 -> androidx.compose.runtime.Recomposer._knownCompositions -> java.util.ArrayList.[index] -> androidx.compose.runtime.CompositionImpl.slotTable -> androidx.compose.runtime.SlotTable.slots -> java.lang.Object[].[index] -> lab.recovery.uimap.PreparedMapSlot.world"
+                },
+                "maxSharkRetainedBytes": 8501242
+              },
+              "lab.recovery.simulation.ReplaySession": {
+                "status": "MEASURED",
+                "selectedInstances": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "shortestRootPath": {
+                  "root": "STICKY_CLASS",
+                  "referenceChain": "android.app.ActivityThread.sCurrentActivityThread -> android.app.ActivityThread.mLastResumedActivity -> android.app.ActivityThread$ActivityClientRecord.activity -> lab.recovery.app.MainActivity._viewModelStore -> androidx.lifecycle.ViewModelStore.map -> java.util.LinkedHashMap.[index] -> lab.recovery.feature.LabViewModel.controller -> lab.recovery.simulation.ReplayController.cursor"
+                },
+                "maxSharkRetainedBytes": 799354
+              },
+              "androidx.compose.ui.graphics.AndroidPath": {
+                "status": "MEASURED",
+                "selectedInstances": 2144,
+                "rootedPathsReported": 2144,
+                "unreachableReported": 0,
+                "shortestRootPath": {
+                  "root": "THREAD_OBJECT",
+                  "referenceChain": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.material3.SliderDefaults.trackPath"
+                },
+                "maxSharkRetainedBytes": 106
+              }
+            }
+          },
+          "closedIdle": {
+            "status": "MEASURED",
+            "secondsAfterPhaseMarker": -0.467,
+            "engine": "Shark 2.14",
+            "explicitGcRequested": false,
+            "types": {
+              "android.graphics.Path": {
+                "selected": 21,
+                "rootedPathsReported": 20,
+                "unreachableReported": 0,
+                "unaccounted": 1,
+                "rootTypes": {
+                  "STICKY_CLASS": 20
+                },
+                "maxSharkRetainedBytes": 26,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "STICKY_CLASS",
+                    "path": "android.content.res.ResourcesImpl.sPreloadedDrawables -> android.util.LongSparseArray[].[index] -> android.util.LongSparseArray.mValues -> java.lang.Object[].[index] -> android.graphics.drawable.StateListDrawable$StateListState.mDrawables -> android.graphics.drawable.Drawable[].[index] -> android.graphics.drawable.GradientDrawable.mPath"
+                  }
+                ]
+              },
+              "androidx.compose.ui.graphics.AndroidPath": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 106,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread.contextClassLoader -> dalvik.system.PathClassLoader.runtimeInternalObjects -> java.lang.Object[].[index] -> androidx.compose.material3.SliderDefaults.trackPath"
+                  }
+                ]
+              },
+              "lab.recovery.app.MainActivity": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.feature.LabViewModel": {
+                "selected": 1,
+                "rootedPathsReported": 1,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {
+                  "THREAD_OBJECT": 1
+                },
+                "maxSharkRetainedBytes": 21466434,
+                "exampleShortestRootPaths": [
+                  {
+                    "root": "THREAD_OBJECT",
+                    "path": "android.app.Instrumentation$InstrumentationThread. -> kotlin.jvm.internal.Ref$ObjectRef.element"
+                  }
+                ]
+              },
+              "lab.recovery.simulation.ReplaySession": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.MapGeometry": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.MapLabelCache": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.MapWorld": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.PreparedMapSlot": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              },
+              "lab.recovery.uimap.WorldPath": {
+                "selected": 0,
+                "rootedPathsReported": 0,
+                "unreachableReported": 0,
+                "unaccounted": 0,
+                "rootTypes": {},
+                "maxSharkRetainedBytes": null,
+                "exampleShortestRootPaths": []
+              }
+            }
+          }
+        },
+        "nativeHeap": {
+          "status": "MEASURED",
+          "samplingIntervalBytes": 65536,
+          "trackedHeap": "libc.malloc",
+          "traceStats": [
+            {
+              "name": "heapprofd_client_spinlock_blocked",
+              "severity": "info",
+              "value": 240000
+            },
+            {
+              "name": "heapprofd_unwind_samples",
+              "severity": "info",
+              "value": 1296944
+            },
+            {
+              "name": "heapprofd_unwind_time_us",
+              "severity": "info",
+              "value": 174212427
+            }
+          ],
+          "profiledProcessCount": 1,
+          "points": [
+            {
+              "offsetSecondsFromReady": 1.182,
+              "phase": "ready",
+              "estimatedOutstandingBytes": 131072,
+              "records": 9
+            },
+            {
+              "offsetSecondsFromReady": 35.698,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 16056320,
+              "records": 802
+            },
+            {
+              "offsetSecondsFromReady": 50.698,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 21626880,
+              "records": 706
+            },
+            {
+              "offsetSecondsFromReady": 65.678,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 25231360,
+              "records": 818
+            },
+            {
+              "offsetSecondsFromReady": 80.686,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 29491200,
+              "records": 727
+            },
+            {
+              "offsetSecondsFromReady": 95.702,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 35979264,
+              "records": 588
+            },
+            {
+              "offsetSecondsFromReady": 110.682,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 41222144,
+              "records": 629
+            },
+            {
+              "offsetSecondsFromReady": 125.702,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 41680896,
+              "records": 514
+            },
+            {
+              "offsetSecondsFromReady": 140.698,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 48955392,
+              "records": 639
+            },
+            {
+              "offsetSecondsFromReady": 155.686,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 49741824,
+              "records": 595
+            },
+            {
+              "offsetSecondsFromReady": 170.702,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 52101120,
+              "records": 540
+            },
+            {
+              "offsetSecondsFromReady": 185.69,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 53870592,
+              "records": 665
+            },
+            {
+              "offsetSecondsFromReady": 200.858,
+              "phase": "replayAfterReadyPause",
+              "estimatedOutstandingBytes": 62680592,
+              "records": 596
+            },
+            {
+              "offsetSecondsFromReady": 205.37,
+              "phase": "completed",
+              "estimatedOutstandingBytes": 55640064,
+              "records": 354
+            },
+            {
+              "offsetSecondsFromReady": 229.794,
+              "phase": "reset",
+              "estimatedOutstandingBytes": 55771136,
+              "records": 266
+            },
+            {
+              "offsetSecondsFromReady": 234.042,
+              "phase": "reset",
+              "estimatedOutstandingBytes": 55508992,
+              "records": 18
+            }
+          ],
+          "lastPointByPhaseNativeBytes": {
+            "ready": [
+              {
+                "scope": "Other call stacks",
+                "callsites": 5,
+                "sampled_net_bytes": 131072
+              }
+            ],
+            "replayAfterReadyPause": [
+              {
+                "scope": "Includes libhwui.so",
+                "callsites": 926,
+                "sampled_net_bytes": 62352912
+              },
+              {
+                "scope": "Other call stacks",
+                "callsites": 284,
+                "sampled_net_bytes": 327680
+              }
+            ],
+            "completed": [
+              {
+                "scope": "Includes libhwui.so",
+                "callsites": 934,
+                "sampled_net_bytes": 55443456
+              },
+              {
+                "scope": "Other call stacks",
+                "callsites": 289,
+                "sampled_net_bytes": 196608
+              }
+            ],
+            "reset": [
+              {
+                "scope": "Includes libhwui.so",
+                "callsites": 939,
+                "sampled_net_bytes": 55246848
+              },
+              {
+                "scope": "Other call stacks",
+                "callsites": 315,
+                "sampled_net_bytes": 262144
+              }
+            ]
+          }
+        },
+        "localRawArtifactSha256": {
+          "native.perfetto-trace": "0278edfab95111f15ff936d9dbfbe2e7c9a356676ad9d0c668a58c8980108012",
+          "reset.hprof": "f193221b75322b78e9fa72554a2cd16bbd38df29fe4495b8b9a20815932e90bd",
+          "closedIdle.hprof": "9eeac12da4f80e60c8419252b113e2bfe7b2f437706692f0dd2f6c6eea964cc5"
+        },
+        "instrumentationApkSha256": "42e64f1e6202c96a551a152486281dc1e0a4254831e14ed60c7fc44ad937070d"
+      }
+    }
+  }
+}

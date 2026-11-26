@@ -6,7 +6,7 @@
 
 SM-G975N에서 `a732af2`와 `ce617de`의 원본 Macrobenchmark를 시나리오별 각 9회 비교했다. 지도 전환과 주행은 조사 기준 이내였다. 콜드 TTFD는 본 측정에서 30.7% 늘었으나 재시험에서 같은 방향의 차이가 반복되지 않아 G7 종합 판정은 **INCONCLUSIVE**다. [G7 실기기 결과와 복원](recovery-ui-physical-g7.md)
 
-G8은 A/C 각각 독립 내구 실행 1회, 지도 전환·재생 20회 및 Live 시작·종료 20회를 통과했다. 유휴 120초 Native PSS가 10.35% 증가하고 완료 기울기가 커져 G8 메모리 수용은 **INCONCLUSIVE**다. [G8 실기기 결과와 복원](recovery-ui-physical-g8.md)
+G8 최초 시험은 A/C 각각 독립 내구 실행 1회, 지도 전환·재생 20회 및 Live 시작·종료 20회를 통과했다. 역순 재시험은 빌드별 독립 내구 실행 1회와 유휴 600초까지 완료했다. 유휴 120초 Native PSS 증가는 최초 +10.35%, 재시험 +7.40%였으며 재시험의 Native PSS 완료 중앙값과 최대값은 +10.53%와 +14.05%였다. G8 메모리 수용은 **INCONCLUSIVE**다. [G8 최초](recovery-ui-physical-g8.md) · [G8 최종 재시험](recovery-ui-physical-g8-retest.md)
 
 G9은 A/C의 Live·직접 GPS 무수신과 대기 UI를 확인했다. A는 303.979초 화면 OFF 동안 세션을 유지했다. 잠금 해제가 필요한 A 복귀와 C 수명은 BLOCKED였고 G9 종합 판정은 **INCONCLUSIVE**다. [G9 GPS·서비스](recovery-ui-physical-g9.md) · [UI 후보 게이트](recovery-ui-validation.md)
 
