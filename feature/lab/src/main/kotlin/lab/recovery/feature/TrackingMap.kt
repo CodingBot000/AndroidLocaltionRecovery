@@ -3,7 +3,8 @@ package lab.recovery.feature
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -22,11 +23,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import lab.recovery.location.PositionSource
 import lab.recovery.location.DecisionEvent
@@ -107,23 +110,22 @@ internal fun List<DecisionEvent>.rejects(observation: LocationObservation): Bool
     lastOrNull { it.observation == observation && it.decision != null }?.decision == ObservationDecision.REJECTED
 
 @Composable
-internal fun MapLegend(truthEnabled: Boolean, dark: Boolean, toggle: () -> Unit) {
+@OptIn(ExperimentalComposeUiApi::class)
+internal fun MapLegend(truthEnabled: Boolean, dark: Boolean, playback: Playback, toggle: () -> Unit) {
     var details by remember { mutableStateOf(false) }
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), itemVerticalAlignment = Alignment.CenterVertically) {
-        TextButton(onClick = toggle, modifier = Modifier.testTag("truth-toggle").semantics { selected = truthEnabled }) {
-            LegendItem(MapSymbol.TRUTH, dark, if (truthEnabled) R.string.truth_visible else R.string.truth_hidden)
-        }
-        LegendItem(MapSymbol.FIX, dark)
-        LegendItem(MapSymbol.GPS, dark)
-        LegendItem(MapSymbol.REJECTED, dark)
-        LegendItem(MapSymbol.DR, dark)
-        LegendItem(MapSymbol.LAST, dark)
-        TextButton(onClick = { details = true }, modifier = Modifier.testTag("map-legend")) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        TextButton(onClick = { details = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("map-legend")) {
             Text(stringResource(R.string.legend_details))
+        }
+        Text(stringResource(playback.labelResource()), color = Muted, style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.testTag("playback-state"))
+        TextButton(onClick = toggle, modifier = Modifier.heightIn(min = 48.dp).testTag("truth-toggle").semantics { selected = truthEnabled }) {
+            LegendItem(MapSymbol.TRUTH, dark, if (truthEnabled) R.string.truth_visible else R.string.truth_hidden)
         }
     }
     if (details) AlertDialog(
         onDismissRequest = { details = false },
+        modifier = Modifier.semantics { testTagsAsResourceId = true },
         title = { Text(stringResource(R.string.legend_details)) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -131,7 +133,9 @@ internal fun MapLegend(truthEnabled: Boolean, dark: Boolean, toggle: () -> Unit)
                 Text(stringResource(R.string.legend_explanation), style = MaterialTheme.typography.bodySmall)
             }
         },
-        confirmButton = { TextButton(onClick = { details = false }) { Text(stringResource(R.string.osm_close)) } },
+        confirmButton = {
+            TextButton(onClick = { details = false }, modifier = Modifier.testTag("legend-close")) { Text(stringResource(R.string.osm_close)) }
+        },
     )
 }
 

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -30,6 +31,9 @@ internal fun DecisionSummary(event: DecisionEvent?, open: () -> Unit, showResult
     Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         Column(Modifier.weight(1f)) {
+            Text(stringResource(R.string.latest_significant_event), color = Muted,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.testTag("recent-decision-heading").semantics { heading() })
             val label = event?.reason?.summaryResource()
             Text(
                 stringResource(label ?: R.string.no_key_decision),

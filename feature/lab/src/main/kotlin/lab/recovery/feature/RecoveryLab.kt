@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -96,13 +97,14 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
     LazyColumn(
         modifier = Modifier.widthIn(max = 760.dp).fillMaxWidth().testTag("lab-screen")
             .semantics { testTagsAsResourceId = true },
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         item {
-            Column(Modifier.padding(start = 12.dp, end = 12.dp, top = 4.dp)) {
+            Column(Modifier.padding(horizontal = 12.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween) {
-                    Column(Modifier.weight(1f)) {
+                    FlowRow(Modifier.weight(1f), horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        itemVerticalAlignment = Alignment.CenterVertically) {
                         Text(stringResource(R.string.lab_title), style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold)
                         Text(stringResource(R.string.simulation_mode), color = Muted,
@@ -113,22 +115,24 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
                     }
                 }
                 ScenarioMenu(selection, entries, onIntent)
+                val catalogDescription = selection.catalog?.description?.forLanguage(language)
+                val description = catalogDescription ?: selection.description.takeIf { it != 0 }
+                    ?.let { stringResource(it) }.orEmpty()
                 Text(
-                    text = selection.catalog?.description?.forLanguage(language)
-                        ?: selection.description.takeIf { it != 0 }?.let { stringResource(it) }.orEmpty(),
+                    text = if (!expandedDescription && catalogDescription != null) description.substringBefore(" · ") else description,
                     modifier = Modifier.fillMaxWidth().clickable(
                         onClickLabel = stringResource(if (expandedDescription) R.string.collapse_description else R.string.expand_description),
                     ) { expandedDescription = !expandedDescription }
                         .padding(start = 4.dp, top = 3.dp, end = 4.dp)
                         .testTag("scenario-description").semantics { liveRegion = LiveRegionMode.Polite },
-                    maxLines = if (expandedDescription) Int.MAX_VALUE else 1,
+                    maxLines = if (expandedDescription || catalogDescription != null) Int.MAX_VALUE else 1,
                     overflow = TextOverflow.Ellipsis,
                     color = Muted, style = MaterialTheme.typography.bodySmall,
                 )
             }
         }
         item {
-            Column(Modifier.padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 DriveHud(state, settings, Modifier)
                 DecisionSummary(recentDecision, { diagnostics = true },
                     evaluation?.let { { resultsOpen = true } }, Modifier)
@@ -137,6 +141,7 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
         }
         item {
             Column(Modifier.padding(horizontal = 12.dp)) {
+                MapLegend(truth, night, playback) { onIntent(UiIntent.ToggleTruth) }
                 LinearProgressIndicator(progress = {
                     val current = state.value
                     val duration = current.scenario?.durationMs ?: 0L
@@ -147,11 +152,6 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
             }
         }
         evaluation?.let { item { EvaluationPanel(it, Modifier.padding(horizontal = 12.dp)) } }
-        item {
-            Column(Modifier.padding(horizontal = 12.dp)) {
-                MapLegend(truth, night) { onIntent(UiIntent.ToggleTruth) }
-            }
-        }
         error?.let { item { Text(it, color = Coral, modifier = Modifier.padding(horizontal = 12.dp).testTag("error")) } }
         item { Spacer(Modifier.height(12.dp)) }
     }

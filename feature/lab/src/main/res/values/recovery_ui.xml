@@ -9,9 +9,10 @@
     <string name="fix_age">Fix age %1$s s</string>
     <string name="no_valid_fix">Waiting for a valid fix</string>
     <string name="recovery_progress">Recovery candidates %1$d/%2$d</string>
-    <string name="dr_time_remaining">Route DR · up to %1$s s left</string>
+    <string name="dr_time_remaining">DR up to %1$s s left</string>
     <string name="current_accuracy">Accepted GPS accuracy ±%1$s m</string>
     <string name="last_accuracy">Last received accuracy ±%1$s m</string>
+    <string name="gps_accuracy_unavailable">GPS accuracy unavailable</string>
     <string name="accepted_speed">Accepted speed %1$s m/s</string>
     <string name="dr_limit">DR time limit reached</string>
     <string name="dr_branch">DR stopped at a branch</string>
@@ -32,6 +33,7 @@
     <string name="map_symbol_outside">GPS beyond the viewport</string>
     <string name="legend_explanation">The DR trail is dashed. The edge arrow points toward an off-screen observation.</string>
     <string name="position_diagnostics">Position diagnostics</string>
+    <string name="latest_significant_event">Latest significant event</string>
     <string name="no_key_decision">No key decisions yet</string>
     <string name="event_signal_lost">GPS signal lost</string>
     <string name="event_signal_recovered">GPS fix recovered</string>

@@ -9,9 +9,10 @@
     <string name="fix_age">마지막 채택 후 %1$s초</string>
     <string name="no_valid_fix">유효 위치 대기 중</string>
     <string name="recovery_progress">재획득 후보 %1$d/%2$d</string>
-    <string name="dr_time_remaining">경로 기반 DR · 최대 %1$s초 남음</string>
+    <string name="dr_time_remaining">DR 최대 %1$s초 남음</string>
     <string name="current_accuracy">채택 GPS 정확도 ±%1$s m</string>
     <string name="last_accuracy">마지막 수신 정확도 ±%1$s m</string>
+    <string name="gps_accuracy_unavailable">GPS 정확도 확인 불가</string>
     <string name="accepted_speed">채택 속도 %1$s m/s</string>
     <string name="dr_limit">DR 시간 한도 도달</string>
     <string name="dr_branch">분기점에서 DR 중단</string>
@@ -32,6 +33,7 @@
     <string name="map_symbol_outside">화면 밖 GPS</string>
     <string name="legend_explanation">DR 추정 궤적은 점선이다. 화면 가장자리 화살표는 화면 밖 관측 방향을 가리킨다.</string>
     <string name="position_diagnostics">위치 상세 진단</string>
+    <string name="latest_significant_event">최근 주요 판정</string>
     <string name="no_key_decision">주요 판정 없음</string>
     <string name="event_signal_lost">GPS 신호 손실</string>
     <string name="event_signal_recovered">GPS 위치 재획득</string>

@@ -95,21 +95,33 @@ internal fun DriveHud(ui: State<UiState>, settings: TrackingSettings, modifier: 
                 color = if (snapshot.route == RouteStatus.OFF_ROUTE) Coral else Muted,
                 style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("route-status"))
         }
-        val items = buildList {
-            add(readout.fixAgeMs?.let { stringResource(R.string.fix_age, number(it / 1000.0)) }
-                ?: stringResource(R.string.no_valid_fix))
-            readout.recoveryCandidates?.let { (count, target) -> add(stringResource(R.string.recovery_progress, count, target)) }
-            readout.drRemainingMs?.let { add(stringResource(R.string.dr_time_remaining, number(it / 1000.0))) }
-            if (snapshot.source == PositionSource.LAST_KNOWN) {
-                snapshot.drUnavailable?.let { add(stringResource(it.estimationLabel())) }
+        Column(Modifier.testTag("tracking-detail"), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp), itemVerticalAlignment = Alignment.CenterVertically) {
+                val fixAge = readout.fixAgeMs?.let { stringResource(R.string.fix_age, number(it / 1000.0)) }
+                Text(fixAge ?: stringResource(R.string.no_valid_fix), color = if (fixAge == null) Muted else Ink,
+                    style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.testTag("fix-age"))
+                readout.drRemainingMs?.let {
+                    Text(stringResource(R.string.dr_time_remaining, number(it / 1000.0)), color = Amber,
+                        style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold,
+                        modifier = Modifier.testTag("dr-remaining"))
+                }
+                readout.recoveryCandidates?.let { (count, target) ->
+                    Text(stringResource(R.string.recovery_progress, count, target), color = Amber,
+                        style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold,
+                        modifier = Modifier.testTag("recovery-candidates"))
+                }
+                if (snapshot.source == PositionSource.LAST_KNOWN) snapshot.drUnavailable?.let {
+                    Text(stringResource(it.estimationLabel()), color = Amber, style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.testTag("estimation-stop"))
+                }
             }
-            readout.speedMps?.let { add(stringResource(R.string.accepted_speed, number(it))) }
-            readout.accuracyMeters?.let {
-                add(stringResource(if (readout.currentAccuracy) R.string.current_accuracy else R.string.last_accuracy, number(it)))
-            }
+            val velocity = readout.speedMps?.let { stringResource(R.string.accepted_speed, number(it)) }
+            val accuracy = readout.accuracyMeters?.let {
+                stringResource(if (readout.currentAccuracy) R.string.current_accuracy else R.string.last_accuracy, number(it))
+            } ?: stringResource(R.string.gps_accuracy_unavailable)
+            Text(listOfNotNull(velocity, accuracy).joinToString(" · "), color = Muted, style = MaterialTheme.typography.bodySmall)
         }
-        Text(items.joinToString(" · "), color = Muted, style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.testTag("tracking-detail"))
     }
 }
 
