@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -63,7 +64,8 @@ internal fun TrackingSnapshot.driveReadout(settings: TrackingSettings): DriveRea
 }
 
 @Composable
-internal fun DriveHud(state: UiState, settings: TrackingSettings, modifier: Modifier) {
+internal fun DriveHud(ui: State<UiState>, settings: TrackingSettings, modifier: Modifier) {
+    val state = ui.value
     val snapshot = state.snapshot
     val readout = snapshot.driveReadout(settings)
     val statusColor = when (snapshot.signal) {

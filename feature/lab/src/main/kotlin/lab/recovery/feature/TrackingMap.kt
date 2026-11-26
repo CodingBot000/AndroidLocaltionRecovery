@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,9 +47,10 @@ import lab.recovery.uimap.mapLegendBackground
 
 @Composable
 internal fun TrackingMap(
-    state: UiState, modifier: Modifier, dark: Boolean, optimized: Boolean,
+    ui: State<UiState>, modifier: Modifier, dark: Boolean, optimized: Boolean,
     onMapReady: (Long) -> Unit,
 ) {
+    val state = ui.value
     val scenario = state.scenario
     val source = scenario?.map?.osm
     var sourceOpen by remember(scenario) { mutableStateOf(false) }

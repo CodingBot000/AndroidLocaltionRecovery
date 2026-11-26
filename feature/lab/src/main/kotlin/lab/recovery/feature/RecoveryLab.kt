@@ -127,14 +127,13 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
                 )
             }
         }
-        item { DriveHud(state.value, settings, Modifier.padding(horizontal = 12.dp)) }
         item {
-            DecisionSummary(recentDecision, { diagnostics = true },
-                evaluation?.let { { resultsOpen = true } }, Modifier.padding(horizontal = 12.dp))
-        }
-        item {
-            TrackingMap(state.value, Modifier.padding(horizontal = 12.dp).fillMaxWidth().height(mapHeight),
-                night, optimizedMap, onMapReady)
+            Column(Modifier.padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                DriveHud(state, settings, Modifier)
+                DecisionSummary(recentDecision, { diagnostics = true },
+                    evaluation?.let { { resultsOpen = true } }, Modifier)
+                TrackingMap(state, Modifier.fillMaxWidth().height(mapHeight), night, optimizedMap, onMapReady)
+            }
         }
         item {
             Column(Modifier.padding(horizontal = 12.dp)) {
