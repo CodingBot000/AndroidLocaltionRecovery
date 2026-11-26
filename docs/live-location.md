@@ -21,7 +21,7 @@ stateDiagram-v2
 
 Home·화면 잠금·Activity 재생성 중 서비스가 세션을 유지한다. 시스템 종료 후 자동 재시작하지 않고 다음 실행에서 중단을 알린다.
 
-UI 후보 `ce617de`의 Live 검증 범위는 UI 후속 기록에 있다. 2026-11-27 실기기 시험은 가상 주행 성능 G7만 실행했고 실제 GPS는 NOT_RUN이다. 2026-11-25의 제품 기준 `d0b3822`에서 API 31 SM-G975N의 실내 fresh GPS 수신, 직접 GPS 대조와 별도 FGS·listener 시작·정지 20회를 확인했다. 당시 120초 무수신과 화면 OFF 수신 편차는 별도 검증 이력에 기록했다. [현재 Live 검증](recovery-ui-validation.md) · [과거 실기기 GPS](real-device-final-validation.md) · [과거 자원 해제](rendering-memory-rca.md#실기기-live-반복)
+2026-11-27 SM-G975N에서 기준 A와 UI 후보 `ce617de`가 각각 G8 Live 시작·종료 20회를 통과했다. 마지막 Stop 뒤 FGS와 활성 리스너는 각각 0개였고 임시 위치 권한을 회수했다. G9 실제 GPS는 NOT_RUN이다. 2026-11-25의 제품 기준 `d0b3822`에서 API 31 SM-G975N의 실내 fresh GPS 수신, 직접 GPS 대조와 별도 FGS·listener 시작·정지 20회를 확인했다. [현재 G8 Live 검증](recovery-ui-physical-g8.md#지도-전환재생과-live-해제) · [과거 실기기 GPS](real-device-final-validation.md)
 
 ## 실행 방법
 
