@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.ParcelFileDescriptor
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -12,6 +13,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import lab.recovery.feature.LabViewModel
 import lab.recovery.feature.Playback
 import lab.recovery.feature.UiIntent
@@ -40,10 +44,13 @@ class OsmOfflineSmokeTest {
         }
         val model = ViewModelProvider(rule.activity)[LabViewModel::class.java]
         rule.waitUntil(20_000) {
-            model.state.value.scenario?.id == "ODEMO_LONG" &&
+            rule.activity.hasWindowFocus() && model.state.value.scenario?.id == "ODEMO_LONG" &&
                 model.state.value.choices.any { it.id == "OL01" } && mapReady()
         }
-        rule.onNodeWithTag("osm-attribution").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("osm-attribution").assertIsDisplayed()
+        val device = UiDevice.getInstance(instrumentation)
+        checkNotNull(device.wait(Until.findObject(By.res("osm-attribution").clickable(true)), 5_000)).click()
+        rule.waitUntil(5_000) { rule.onNodeWithTag("osm-source-details").isDisplayed() }
         rule.onNodeWithTag("osm-source-details").assertIsDisplayed()
         rule.onNodeWithTag("osm-source-close").performClick()
 
