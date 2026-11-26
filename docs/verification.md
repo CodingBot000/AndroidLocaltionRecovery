@@ -91,7 +91,7 @@ ARM64 API 36 에뮬레이터에서 비행기 모드를 켜고 Wi-Fi를 끈 뒤 �
 ./gradlew :core:simulation:run --args='fixtures/evaluation docs/evaluation-results.json docs/evaluation-report.md'
 ```
 
-[평가 요약](evaluation-report.md) · [평가 JSON](evaluation-results.json) · [v1 데모 시작 화면](demo/ready.png) · [v1 데모 결과 화면](demo/results.png) · [알고리즘](algorithm.md)
+[평가 요약](evaluation-report.md) · [평가 JSON](evaluation-results.json) · [알고리즘](algorithm.md)
 
 ## P09 기준선
 
