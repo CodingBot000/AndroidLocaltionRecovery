@@ -14,7 +14,7 @@ GPS 신호가 불안정하거나 끊기는 상황에서 위치 판단과 화면 
 </p>
 <p align="center">성수동 O10 · Mid &nbsp; | &nbsp; 운중동 O07 · Follow</p>
 
-[10개 지역 지도와 주행 화면](docs/osm-visual-verification.md) · [데모 실행](docs/demo.md)
+[10개 지역 지도와 주행 화면](docs/osm-visual-verification.md) · [GPS 장애·복구 데모](docs/demo.md)
 
 ## 핵심 구현 및 검증 성과
 

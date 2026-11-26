@@ -91,7 +91,7 @@ ARM64 API 36 에뮬레이터에서 비행기 모드를 켜고 Wi-Fi를 끈 뒤 �
 ./gradlew :core:simulation:run --args='fixtures/evaluation docs/evaluation-results.json docs/evaluation-report.md'
 ```
 
-[평가 요약](evaluation-report.md) · [평가 JSON](evaluation-results.json) · [데모](demo.md) · [알고리즘](algorithm.md)
+[평가 요약](evaluation-report.md) · [평가 JSON](evaluation-results.json) · [v1 데모 시작 화면](demo/ready.png) · [v1 데모 결과 화면](demo/results.png) · [알고리즘](algorithm.md)
 
 ## P09 기준선
 
@@ -130,7 +130,7 @@ ARM64 API 36 에뮬레이터에서 비행기 모드를 켜고 Wi-Fi를 끈 뒤 �
 
 별도 복제본 두 곳에서 결함을 각각 주입했다. 좌표가 같으면 입체교차의 연결을 허용하는 변경에는 `RoadNetworkTest.levelsAndExplicitTurnsControlConnectivity`가 실패했다. Step에서 엔진 진행을 생략하는 변경에는 `ReplayControllerTest.aStepProcessesAllEventsAtTheNextScheduledTimestamp`가 실패했다. 정상 소스에서 두 테스트와 전체 단위 테스트를 다시 실행해 통과했다.
 
-[확장 코드 원격 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45393491037) · [확장 결과 커밋 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45394373488) · [평가 요약](extended-evaluation-report.md) · [지도별 화면](demo.md) · [내구 및 성능 환경](physical-device-validation.md)
+[확장 코드 원격 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45393491037) · [확장 결과 커밋 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45394373488) · [평가 요약](extended-evaluation-report.md) · [합성 주행 재현](demo.md) · [내구 및 성능 환경](physical-device-validation.md)
 
 Galaxy S22 Ultra에서 기준선 콜드 스타트·15초 DEMO를 각각 7회 재측정했다. 확장 빌드는 콜드 스타트·15초 DEMO와 M10 45초 재생을 각각 7회 측정했다. M10의 실기기 성능을 추가 Perfetto 추적으로 조사했다. 같은 단말에서 오프라인 1× 내구 재검증에 성공했고, 비행기 모드와 Wi-Fi를 검증 전 상태로 복원했다. [실기기 실행 조건과 결과](physical-device-validation.md)
 
