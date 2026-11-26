@@ -60,7 +60,7 @@ def read_trace(trace, path):
     with path.open('rb') as source:
         sha256 = hashlib.file_digest(source, 'sha256').hexdigest()
     return {
-        'id': path.stem.split('_202')[0],
+        'id': path.stem.rsplit('_', 1)[0],
         'sha256': sha256,
         'measureBlockMs': (end - start) / NS_PER_MS,
         'scheduling': scheduling,
@@ -163,15 +163,16 @@ def join_first_frame(trace, stages):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('sets', nargs='+', type=Path)
+    parser.add_argument('--scenario', choices=('switchO10ToO07', 'rideO10'), default='switchO10ToO07')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     if len({folder.name for folder in args.sets}) != len(args.sets):
         parser.error('duplicate set names')
     report = {}
     for folder in args.sets:
-        cases = sorted(folder.glob('*switchO10ToO07_iter*.perfetto-trace'))
+        cases = sorted(folder.glob(f'*{args.scenario}_iter*.perfetto-trace'))
         if len(cases) != 3:
-            parser.error(f'{folder}: expected three switch traces')
+            parser.error(f'{folder}: expected three {args.scenario} traces')
         report[folder.name] = [analyze(path) for path in cases]
     args.output.write_text(json.dumps(report, allow_nan=False, indent=2) + '\n')
 
