@@ -62,4 +62,33 @@
     <string name="replay_complete">Run complete</string>
     <string name="replay_error">Replay error</string>
     <string name="replay_reset">Replay</string>
+    <string name="simulation_results">Simulation results</string>
+    <string name="open_results">Results</string>
+    <string name="result_observations">Observations</string>
+    <string name="result_accuracy">Match accuracy</string>
+    <string name="result_coverage">Match coverage</string>
+    <string name="result_recovery">Recovery delay</string>
+    <string name="result_delay_range">%1$d–%2$d ms (n=%3$d)</string>
+    <string name="result_departures">Departure alerts</string>
+    <string name="result_rejection">False rejections</string>
+    <string name="result_acceptance">Invalid acceptances</string>
+    <string name="result_paired">Same accepted fixes (n=%1$d)</string>
+    <string name="result_checks">Scenario checks passed</string>
+    <string name="result_details">Full results</string>
+    <string name="result_hide_details">Hide details</string>
+    <string name="result_fixture">Scenario / schema</string>
+    <string name="result_low_quality">Low-quality use</string>
+    <string name="result_unfinished">Unfinished recoveries</string>
+    <string name="result_departure_detail">Departure false alarms / misses</string>
+    <string name="result_match_detail">Ambiguous / without match</string>
+    <string name="result_raw_error">Raw position error</string>
+    <string name="result_accepted_error">Accepted position error</string>
+    <string name="result_dr_error">DR position error</string>
+    <string name="result_paired_raw">Paired raw position error</string>
+    <string name="result_paired_accepted">Paired accepted position error</string>
+    <string name="result_loss_delay">Signal loss delay</string>
+    <string name="result_realignment">Realignment distance</string>
+    <string name="result_departure_delay">Departure detection delay</string>
+    <string name="result_tick_loss">Tick / signal timeout</string>
+    <string name="result_distribution">Mean %1$s, median %2$s, p95 %3$s, max %4$s m</string>
 </resources>

@@ -62,4 +62,33 @@
     <string name="replay_complete">주행 완료</string>
     <string name="replay_error">재생 오류</string>
     <string name="replay_reset">다시 준비</string>
+    <string name="simulation_results">가상 주행 결과</string>
+    <string name="open_results">결과</string>
+    <string name="result_observations">관측 수</string>
+    <string name="result_accuracy">매칭 정확도</string>
+    <string name="result_coverage">매칭 커버리지</string>
+    <string name="result_recovery">복구 지연</string>
+    <string name="result_delay_range">%1$d–%2$d ms (n=%3$d)</string>
+    <string name="result_departures">경로 이탈 권고</string>
+    <string name="result_rejection">정상 관측 오거부</string>
+    <string name="result_acceptance">이상 관측 오채택</string>
+    <string name="result_paired">동일한 채택 관측 (n=%1$d)</string>
+    <string name="result_checks">시나리오 기대 판정 일치</string>
+    <string name="result_details">상세 결과</string>
+    <string name="result_hide_details">상세 접기</string>
+    <string name="result_fixture">시나리오 / 스키마</string>
+    <string name="result_low_quality">낮은 품질 관측 사용</string>
+    <string name="result_unfinished">미완료 복구</string>
+    <string name="result_departure_detail">이탈 오탐 / 미탐</string>
+    <string name="result_match_detail">모호한 매칭 / 매칭 없음</string>
+    <string name="result_raw_error">원시 위치 오차</string>
+    <string name="result_accepted_error">채택 위치 오차</string>
+    <string name="result_dr_error">DR 위치 오차</string>
+    <string name="result_paired_raw">동일 채택 표본 원시 오차</string>
+    <string name="result_paired_accepted">동일 채택 표본 채택 오차</string>
+    <string name="result_loss_delay">신호 손실 감지 지연</string>
+    <string name="result_realignment">복구 재정렬 거리</string>
+    <string name="result_departure_delay">이탈 감지 지연</string>
+    <string name="result_tick_loss">Tick / 신호 손실 시간</string>
+    <string name="result_distribution">평균 %1$s, 중앙값 %2$s, p95 %3$s, 최대 %4$s m</string>
 </resources>

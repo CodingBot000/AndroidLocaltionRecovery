@@ -26,7 +26,7 @@ internal fun List<DecisionEvent>.recentDecision(runId: Long): DecisionEvent? =
     lastOrNull { it.runId == runId && it.reason.summaryResource() != null }
 
 @Composable
-internal fun DecisionSummary(event: DecisionEvent?, open: () -> Unit, modifier: Modifier) {
+internal fun DecisionSummary(event: DecisionEvent?, open: () -> Unit, showResults: (() -> Unit)?, modifier: Modifier) {
     Row(modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         Column(Modifier.weight(1f)) {
@@ -44,6 +44,9 @@ internal fun DecisionSummary(event: DecisionEvent?, open: () -> Unit, modifier: 
         }
         TextButton(onClick = open, modifier = Modifier.heightIn(min = 48.dp).testTag("diagnostics-toggle")) {
             Text(stringResource(R.string.show_diagnostics))
+        }
+        if (showResults != null) TextButton(onClick = showResults, modifier = Modifier.testTag("open-results")) {
+            Text(stringResource(R.string.open_results))
         }
     }
 }

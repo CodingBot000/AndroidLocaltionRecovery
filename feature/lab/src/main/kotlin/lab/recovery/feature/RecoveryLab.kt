@@ -89,6 +89,7 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
         state.value.let { it.logs.recentDecision(it.runId) }
     } }
     var diagnostics by rememberSaveable(runId) { mutableStateOf(false) }
+    var resultsOpen by rememberSaveable(runId) { mutableStateOf(false) }
     var expandedDescription by remember(selection.id) { mutableStateOf(false) }
     var night by rememberSaveable { mutableStateOf(false) }
     val language = LocalConfiguration.current.locales[0].language
@@ -128,7 +129,8 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
         }
         item { DriveHud(state.value, settings, Modifier.padding(horizontal = 12.dp)) }
         item {
-            DecisionSummary(recentDecision, { diagnostics = true }, Modifier.padding(horizontal = 12.dp))
+            DecisionSummary(recentDecision, { diagnostics = true },
+                evaluation?.let { { resultsOpen = true } }, Modifier.padding(horizontal = 12.dp))
         }
         item {
             TrackingMap(state.value, Modifier.padding(horizontal = 12.dp).fillMaxWidth().height(mapHeight),
@@ -145,14 +147,15 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, setti
                 PlaybackControls(playback, speed, onIntent)
             }
         }
+        evaluation?.let { item { EvaluationPanel(it, Modifier.padding(horizontal = 12.dp)) } }
         item {
             Column(Modifier.padding(horizontal = 12.dp)) {
                 MapLegend(truth, night) { onIntent(UiIntent.ToggleTruth) }
             }
         }
         error?.let { item { Text(it, color = Coral, modifier = Modifier.padding(horizontal = 12.dp).testTag("error")) } }
-        evaluation?.let { item { EvaluationPanel(it, Modifier.padding(horizontal = 12.dp)) } }
         item { Spacer(Modifier.height(12.dp)) }
     }
     if (diagnostics) DiagnosticsDialog(state.value, settings) { diagnostics = false }
+    if (resultsOpen) evaluation?.let { ResultsDialog(it) { resultsOpen = false } }
 }
