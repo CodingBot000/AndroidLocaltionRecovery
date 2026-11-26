@@ -43,6 +43,13 @@ class TalkBackInstrumentedTest {
             screen.waitFor("camera-mode") { it.text?.toString() == free }
             screen.focusAndClick("recenter")
             screen.waitFor("camera-mode") { it.text?.toString() == follow }
+            screen.focus("recent-decision-heading")
+            screen.openOrClose("map-legend")
+            screen.openOrClose("legend-close")
+            screen.openOrClose("speed-button")
+            screen.waitFor("speed-slider") { it.rangeInfo != null }
+            screen.focus("speed-slider")
+            screen.openOrClose("speed-close")
 
             screen.focusAndClick("step")
             screen.waitFor("signal") { it.text?.toString() == "TRACKING" }
@@ -84,6 +91,12 @@ class TalkBackInstrumentedTest {
         fun focus(tag: String) = perform(tag, click = false)
 
         fun focusAndClick(tag: String) = perform(tag, click = true)
+
+        fun openOrClose(tag: String) {
+            focus(tag)
+            val button = waitFor(tag) { it.isEnabled && it.isClickable }
+            assertTrue("Accessibility click for $tag", button.performAction(AccessibilityNodeInfo.ACTION_CLICK))
+        }
 
         private fun perform(tag: String, click: Boolean) {
             val event = automation.executeAndWaitForEvent({

@@ -3,8 +3,11 @@ package lab.recovery.app
 import lab.recovery.feature.*
 
 import android.content.pm.ActivityInfo
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.getBoundsInRoot
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
@@ -21,6 +24,7 @@ import lab.recovery.simulation.ScenarioRepository
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.runBlocking
 import lab.recovery.location.PositionSource
@@ -86,8 +90,13 @@ class RecoveryInstrumentedTest {
         rule.waitUntil(5_000) { model.state.value.snapshot.lastAcceptedAtMs != null }
         scroll("play-pause")
         rule.onNodeWithTag("play-pause").assertIsDisplayed()
-        scroll("speed-slider")
+        click("map-legend")
+        rule.onNodeWithTag("legend-close").assertIsDisplayed().performClick()
+        click("speed-button")
         rule.onNodeWithTag("speed-slider").assertIsDisplayed()
+        rule.onNodeWithTag("speed-five-times").assertIsDisplayed().performClick()
+        rule.waitUntil(5_000) { model.state.value.speed == 5f }
+        rule.onNodeWithTag("speed-slider").assertDoesNotExist()
     }
 
     @Test fun featuredTunnelAtFiveTimesKeepsEvaluationAndClearsResultsOnReset() {
@@ -99,8 +108,24 @@ class RecoveryInstrumentedTest {
         ready(model, "OL07")
         val scenario = checkNotNull(model.state.value.scenario)
         val expected = runBlocking { playToEnd(ReplaySession(scenario)) }
-        setSpeed(model, 5f)
-        click("play-pause")
+        for (tag in listOf("signal", "map-status", "route-status", "recent-decision-heading", "tracking-map", "truth-toggle",
+            "map-legend", "speed-button", "play-pause", "step", "reset")) {
+            val node = rule.onNodeWithTag(tag).assertIsDisplayed()
+            val clipped = node.getBoundsInRoot()
+            val measured = node.getUnclippedBoundsInRoot()
+            assertTrue("$tag is fully visible on the first screen: $clipped of $measured",
+                clipped.bottom - clipped.top >= measured.bottom - measured.top - 1.dp &&
+                    clipped.right - clipped.left >= measured.right - measured.left - 1.dp)
+        }
+        rule.onNodeWithTag("recent-decision-heading").assertTextEquals(
+            rule.activity.getString(lab.recovery.feature.R.string.latest_significant_event),
+        )
+        rule.onNodeWithTag("map-legend").performClick()
+        rule.onNodeWithTag("legend-close").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("speed-button").performClick()
+        rule.onNodeWithTag("speed-five-times").assertIsDisplayed().performClick()
+        rule.waitUntil(5_000) { model.state.value.speed == 5f }
+        rule.onNodeWithTag("play-pause").assertIsEnabled().performClick()
         rule.waitUntil(scenario.durationMs / 5 + 15_000) { model.state.value.evaluation != null }
         assertEquals(expected, model.state.value.evaluation)
         click("open-results")
@@ -111,6 +136,22 @@ class RecoveryInstrumentedTest {
         assertTrue(model.state.value.runId > completed)
         assertNull(model.state.value.evaluation)
         rule.onNodeWithTag("open-results").assertDoesNotExist()
+        rule.onNodeWithTag("recent-decision-code").assertDoesNotExist()
+    }
+
+    @Test fun featuredTunnelAtNormalSpeedMatchesIndependentEvaluation() {
+        val model = model()
+        ready(model, "ODEMO_LONG")
+        rule.waitUntil(10_000) { model.state.value.choices.any { it.id == "OL07" } }
+        click("featured-menu")
+        rule.onNodeWithTag("featured-OL07").performClick()
+        ready(model, "OL07")
+        assertEquals(1f, model.state.value.speed, 0f)
+        val scenario = checkNotNull(model.state.value.scenario)
+        val expected = runBlocking { playToEnd(ReplaySession(scenario)) }
+        click("play-pause")
+        rule.waitUntil(scenario.durationMs + 15_000) { model.state.value.evaluation != null }
+        assertEquals(expected, model.state.value.evaluation)
     }
 
     private fun select(id: String) {
@@ -175,16 +216,19 @@ class RecoveryInstrumentedTest {
         readySyntheticDemo(model)
         select("DEMO")
         ready(model, "DEMO")
-        setSpeed(model, 1.5f)
+        click("speed-button")
+        moveSpeedSlider(model, 1.5f)
         rule.onNodeWithTag("speed-value").assertTextEquals("1.5×")
-        setSpeed(model, 0.5f)
+        moveSpeedSlider(model, 0.5f)
         rule.onNodeWithTag("speed-value").assertTextEquals("0.5×")
         rule.onNodeWithTag("speed-slider").performTouchInput {
-            swipeRight(startX = width * 0.03f, endX = width * 0.97f, durationMillis = 550)
+            swipeRight(startX = width * 0.10f, endX = width * 0.99f, durationMillis = 550)
         }
-        rule.waitForIdle()
+        rule.waitUntil(5_000) { model.state.value.speed == 5f }
         assertEquals(5f, model.state.value.speed, 0f)
         rule.onNodeWithTag("speed-value").assertTextEquals("5×")
+        rule.onNodeWithTag("speed-close").performClick()
+        rule.onNodeWithTag("speed-slider").assertDoesNotExist()
         assertEquals(0L, model.state.value.snapshot.nowMs)
     }
 
@@ -263,7 +307,12 @@ class RecoveryInstrumentedTest {
     }
 
     private fun setSpeed(model: LabViewModel, speed: Float) {
-        rule.onNodeWithTag("lab-screen").performScrollToNode(hasTestTag("speed-slider"))
+        click("speed-button")
+        moveSpeedSlider(model, speed)
+        rule.onNodeWithTag("speed-close").performClick()
+    }
+
+    private fun moveSpeedSlider(model: LabViewModel, speed: Float) {
         rule.onNodeWithTag("speed-slider").performSemanticsAction(SemanticsActions.SetProgress) { set ->
             assertTrue(set(speed))
         }
