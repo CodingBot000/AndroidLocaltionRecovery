@@ -42,7 +42,7 @@
 | [렌더링·메모리 분석 지표](rendering-memory-interview-notes.md) | TTID·TTFD·FrameTimeline·PSS·heap 분석 및 실험 설계 |
 | [초기 OSM 성능](korea-map-performance.md) | 에뮬레이터 단회 비교; 최신 실기기 수치와 별개 |
 | [합성 지도·시나리오](map-and-scenarios.md) | OSM 이전 데이터·주행 계약 |
-| [합성 지도 디자인](map-design.md) · [시각 검수](map-visual-verification.md) | OSM 이전 표현 개정과 실제 캡처 |
+| [합성 지도 디자인](map-design.md) · [시각 검수](map-visual-verification.md) | OSM 이전 표현 개정과 검수 결과 |
 | [초기 구현 계획 이력](implementation-plan.md) | 단계별 구현·검증 기준의 역사적 기록 |
 
 실험별 기준 SHA와 빌드·환경·측정 조건을 연결한 문서를 근거로 사용한다. 과거 실패나 미완료 판정은 해당 실험의 이력이며, 현재 확인 범위는 [통합 검증의 최신 요약](verification.md#최신-구현-검증-요약)에서 확인한다.
