@@ -50,6 +50,12 @@ class RecoveryUiCaptureTest {
             await { device.hasObject(By.textStartsWith("OL01 ·")) }
             capture(activity, folder, "scenario-menu")
             device.pressBack()
+            if (label == "candidate") {
+                device.findObject(By.res("featured-menu")).click()
+                await { device.hasObject(By.res("featured-OL07")) }
+                capture(activity, folder, "featured-menu")
+                device.pressBack()
+            }
             sequence(model, "ODEMO_LONG", listOf("odemo-normal" to { frame -> frame.update.snapshot.nowMs >= 28_000L }),
                 activity, folder, manifest)
             if (label == "baseline") {
@@ -60,6 +66,11 @@ class RecoveryUiCaptureTest {
                 await { device.hasObject(By.res("position-source")) }
                 capture(activity, folder, "diagnostics")
                 device.findObject(By.res("diagnostics-toggle"))?.click()
+            } else {
+                device.findObject(By.res("diagnostics-toggle")).click()
+                await { device.hasObject(By.res("position-source")) }
+                capture(activity, folder, "diagnostics")
+                device.pressBack()
             }
             sequence(model, "OL07", listOf(
                 "ol07-tracking" to { f -> f.update.snapshot.nowMs >= 28_000L && f.update.snapshot.signal == SignalState.TRACKING },
@@ -89,7 +100,7 @@ class RecoveryUiCaptureTest {
         manifest: File,
     ) {
         val screen = device.findObject(By.res("lab-screen"))
-        repeat(4) { if (!device.hasObject(By.res("scenario-menu"))) screen?.swipe(androidx.test.uiautomator.Direction.DOWN, 0.75f) }
+        repeat(4) { if (!device.hasObject(By.res("map-theme"))) screen?.swipe(androidx.test.uiautomator.Direction.DOWN, 0.75f) }
         val previous = model.state.value.runId
         val choice = model.state.value.choices.single { it.id == id }
         model.send(UiIntent.Select(choice))
@@ -103,6 +114,7 @@ class RecoveryUiCaptureTest {
         for ((name, matches) in frames) {
             val target = timeline.indexOfFirst(matches)
             if (target < 0) {
+                check(name == "ol07-recovering" || name == "ol10-ambiguous") { "Required capture not observed: $name" }
                 manifest.appendText("$name\t$id\tNO_OBSERVED_FRAME\n")
                 continue
             }
@@ -114,7 +126,10 @@ class RecoveryUiCaptureTest {
                 index = end
             }
             val frame = timeline[target]
-            if (frame.complete) await { model.state.value.evaluation != null }
+            if (frame.complete) {
+                await { model.state.value.evaluation != null }
+                assertEquals(runBlocking { oracle.result() }, model.state.value.evaluation)
+            }
             val state = model.state.value
             assertEquals(frame.update.snapshot, state.snapshot)
             assertTrue(frame.update.events.all { expected ->

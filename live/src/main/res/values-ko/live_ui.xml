@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">위치 복구 Live</string>
+    <string name="channel_name">실제 위치 추적</string>
+    <string name="notification_tracking">실제 위치 세션 실행 중</string>
+    <string name="stop_tracking">추적 중지</string>
     <string name="live_mode">실제 위치 · LIVE LOCATION</string>
     <string name="live_subtitle">Android 위치 진단</string>
     <string name="live_choose_map">오프라인 지도 선택</string>

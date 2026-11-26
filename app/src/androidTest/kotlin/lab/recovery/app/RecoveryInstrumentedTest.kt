@@ -8,6 +8,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performSemanticsAction
@@ -68,6 +69,48 @@ class RecoveryInstrumentedTest {
             assertEquals(0L, model.state.value.snapshot.nowMs)
             assertTrue(model.state.value.logs.isEmpty())
         }
+    }
+
+    @Test fun featuredReplayAndNightControlsStayReachableOnSmallScreens() {
+        val model = model()
+        rule.waitUntil(10_000) { model.state.value.choices.any { it.id == "OL07" } }
+        click("featured-menu")
+        rule.onNodeWithTag("featured-OL07").performClick()
+        rule.waitUntil(10_000) { model.state.value.scenario?.id == "OL07" && model.state.value.playback == Playback.READY }
+        click("map-theme")
+        scroll("tracking-map")
+        rule.onNodeWithTag("tracking-map").assertIsDisplayed()
+        rule.onNodeWithTag("camera-mode").assertIsDisplayed()
+        capture("small-ko-night")
+        click("step")
+        rule.waitUntil(5_000) { model.state.value.snapshot.lastAcceptedAtMs != null }
+        scroll("play-pause")
+        rule.onNodeWithTag("play-pause").assertIsDisplayed()
+        scroll("speed-slider")
+        rule.onNodeWithTag("speed-slider").assertIsDisplayed()
+    }
+
+    @Test fun featuredTunnelAtFiveTimesKeepsEvaluationAndClearsResultsOnReset() {
+        val model = model()
+        ready(model, "ODEMO_LONG")
+        rule.waitUntil(10_000) { model.state.value.choices.any { it.id == "OL07" } }
+        click("featured-menu")
+        rule.onNodeWithTag("featured-OL07").performClick()
+        ready(model, "OL07")
+        val scenario = checkNotNull(model.state.value.scenario)
+        val expected = runBlocking { playToEnd(ReplaySession(scenario)) }
+        setSpeed(model, 5f)
+        click("play-pause")
+        rule.waitUntil(scenario.durationMs / 5 + 15_000) { model.state.value.evaluation != null }
+        assertEquals(expected, model.state.value.evaluation)
+        click("open-results")
+        rule.onNodeWithText(rule.activity.getString(lab.recovery.feature.R.string.osm_close)).assertIsDisplayed().performClick()
+        val completed = model.state.value.runId
+        click("reset")
+        ready(model, "OL07")
+        assertTrue(model.state.value.runId > completed)
+        assertNull(model.state.value.evaluation)
+        rule.onNodeWithTag("open-results").assertDoesNotExist()
     }
 
     private fun select(id: String) {
