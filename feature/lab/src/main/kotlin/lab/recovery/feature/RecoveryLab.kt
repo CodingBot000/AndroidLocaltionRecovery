@@ -40,17 +40,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import lab.recovery.location.PositionSource
-import lab.recovery.location.SignalState
+import lab.recovery.location.TrackingSettings
 
 internal val Background = Color(0xFF111A27)
 internal val Panel = Color(0xFF1B293B)
@@ -73,7 +70,7 @@ fun RecoveryLab(model: LabViewModel, optimizedMap: Boolean = true, onMapReady: (
         Surface(Modifier.fillMaxSize(), color = Background) {
             BoxWithConstraints(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
                 contentAlignment = Alignment.TopCenter) {
-                LabScreen(state, model::send, (maxHeight * 0.55f).coerceAtLeast(230.dp), optimizedMap, onMapReady)
+                LabScreen(state, model::send, model.trackingSettings, (maxHeight * 0.55f).coerceAtLeast(230.dp), optimizedMap, onMapReady)
             }
         }
     }
@@ -81,7 +78,7 @@ fun RecoveryLab(model: LabViewModel, optimizedMap: Boolean = true, onMapReady: (
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHeight: Dp, optimizedMap: Boolean, onMapReady: (Long) -> Unit) {
+private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, settings: TrackingSettings, mapHeight: Dp, optimizedMap: Boolean, onMapReady: (Long) -> Unit) {
     val selection by remember(state) { derivedStateOf { state.value.selected } }
     val entries by remember(state) { derivedStateOf { state.value.choices } }
     val error by remember(state) { derivedStateOf { state.value.error } }
@@ -128,7 +125,7 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
                 )
             }
         }
-        item { DriveHud(state.value, Modifier.padding(horizontal = 12.dp)) }
+        item { DriveHud(state.value, settings, Modifier.padding(horizontal = 12.dp)) }
         item {
             TrackingMap(state.value, Modifier.padding(horizontal = 12.dp).fillMaxWidth().height(mapHeight),
                 night, optimizedMap, onMapReady)
@@ -176,50 +173,4 @@ private fun LabScreen(state: State<UiState>, onIntent: (UiIntent) -> Unit, mapHe
         evaluation?.let { item { EvaluationPanel(it, Modifier.padding(horizontal = 12.dp)) } }
         item { Spacer(Modifier.height(12.dp)) }
     }
-}
-
-@Composable
-private fun DriveHud(state: UiState, modifier: Modifier) = Column(modifier) {
-    val snapshot = state.snapshot
-    val statusColor = when (snapshot.signal) {
-        SignalState.TRACKING -> Mint
-        SignalState.LOST -> Coral
-        SignalState.DEGRADED, SignalState.RECOVERING -> Amber
-        SignalState.ACQUIRING -> Muted
-    }
-    val source = stringResource(when (snapshot.source) {
-        PositionSource.NONE -> R.string.position_none
-        PositionSource.OBSERVED -> R.string.position_observed
-        PositionSource.MAP_MATCHED -> R.string.position_matched
-        PositionSource.DEAD_RECKONED -> R.string.position_estimated
-        PositionSource.LAST_KNOWN -> R.string.position_last
-    })
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-        Text(snapshot.signal.name, color = statusColor, style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold, modifier = Modifier.testTag("signal"))
-        val progress = "${time(snapshot.nowMs)} / ${time(state.scenario?.durationMs ?: 0L)}"
-        Text(progress, color = Ink,
-            style = MaterialTheme.typography.labelMedium, fontFamily = FontFamily.Monospace,
-            modifier = Modifier.testTag("virtual-time").semantics {
-                contentDescription = progress + " · " + state.speed.toString().removeSuffix(".0") + "×"
-            })
-    }
-    val route = androidx.compose.ui.res.stringResource(when (snapshot.route) {
-        lab.recovery.location.RouteStatus.UNKNOWN -> R.string.route_unknown
-        lab.recovery.location.RouteStatus.ON_ROUTE -> R.string.route_on
-        lab.recovery.location.RouteStatus.SUSPECTED_OFF_ROUTE -> R.string.route_suspected
-        lab.recovery.location.RouteStatus.OFF_ROUTE -> R.string.route_off
-    })
-    val receivedAccuracy = snapshot.lastObservation?.accuracyMeters?.takeIf { it.isFinite() && it >= 0 }
-    val speed = snapshot.lastObservation?.takeIf { it.measuredAtMs == snapshot.lastAcceptedAtMs && snapshot.lastDecision == lab.recovery.location.Reason.ACCEPTED }
-        ?.speedMps?.takeIf { it.isFinite() && it >= 0 }
-    val quality = stringResource(R.string.hud_accuracy, receivedAccuracy?.let { "${number(it)} m" } ?: "—")
-    val velocity = stringResource(R.string.hud_speed, speed?.let { "${number(it)} m/s" } ?: "—")
-    val candidates = if (snapshot.recoveryCandidates == 0) "" else
-        " · " + stringResource(R.string.hud_candidates, snapshot.recoveryCandidates)
-    Text("${state.scenario?.map?.id?.plus(" · ").orEmpty()}$source · $route$candidates",
-        color = if (snapshot.route == lab.recovery.location.RouteStatus.OFF_ROUTE) Coral else Muted,
-        style = MaterialTheme.typography.labelSmall, modifier = Modifier.testTag("map-status"))
-    Text("$velocity · $quality" + (snapshot.drUnavailable?.let { " · ${it.name}" } ?: ""),
-        style = MaterialTheme.typography.labelSmall, color = Muted, modifier = Modifier.testTag("tracking-detail"))
 }

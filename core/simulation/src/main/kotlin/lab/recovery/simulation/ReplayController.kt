@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import lab.recovery.location.DecisionEvent
 import lab.recovery.location.TrackingSnapshot
+import lab.recovery.location.TrackingSettings
 
 enum class Playback { LOADING, READY, PLAYING, PAUSED, COMPLETE, ERROR }
 data class ReplayState(
@@ -45,6 +46,7 @@ class ReplayController(
     private val worker: CoroutineDispatcher = Dispatchers.Default,
     private val io: CoroutineDispatcher = Dispatchers.IO,
     clock: ReplayClock = MonotonicReplayClock,
+    val trackingSettings: TrackingSettings = TrackingSettings(),
 ) : AutoCloseable {
     private val scope = CoroutineScope(parentScope.coroutineContext + SupervisorJob(parentScope.coroutineContext[Job]))
     private val timeline = ReplayTimeline(clock)
@@ -152,7 +154,7 @@ class ReplayController(
         if (scenario == null) {
             mutableState.value = state.value.copy(playback = Playback.ERROR, error = result.error)
         } else {
-            cursor = withContext(worker) { ReplaySession(scenario, runId = result.id) }
+            cursor = withContext(worker) { ReplaySession(scenario, trackingSettings, runId = result.id) }
             if (activeId == result.id) {
                 mutableState.value = state.value.copy(selected = scenario.id, playback = Playback.READY, scenario = scenario)
             }

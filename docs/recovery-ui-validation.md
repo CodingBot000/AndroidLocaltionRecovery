@@ -23,3 +23,7 @@
 ## Phase 1 · 정보 배치
 
 `RecoveryLab.kt`와 한·영 리소스에서 기본 헤더에 가상 주행 모드를 표시하고, 기존 지도 높이를 유지한 채 재생 조작을 지도 바로 다음에 배치했다. HUD, 지도, 범례는 목록에서 별도 항목으로 구성했다. 색상은 짙은 남색 계열과 상태별 강조를 사용한다. `:feature:lab:compileDebugKotlin`과 원본 기준선 Macrobenchmark 3회×3개 시나리오가 통과했다. 후보의 화면과 성능은 Phase 8에서 확인한다.
+
+## Phase 2 · 위치 HUD
+
+`DriveHud.kt`에서 신호, 위치 출처, 경로를 독립적으로 표시하고 실제 채택 측정 시각에서 Fix 경과를 산출했다. `ReplayController`는 세션에 전달하는 동일 설정 인스턴스를 읽기 전용으로 제공한다. 활성 DR의 상한 시간과 재획득 분모에 이 설정을 사용한다. 과거 관측 정확도는 마지막 수신값으로 표시하고 속도는 최신 채택 관측에 한정했다. `:feature:lab:testDebugUnitTest :core:simulation:test`가 통과했다. 새 단위 테스트 3개는 추정 활성·중단, 실제 설정값, null·stale과 후보 분모를 확인했다.

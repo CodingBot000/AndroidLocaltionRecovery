@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="simulation_mode">SIMULATION</string>
+    <string name="signal_acquiring">ACQUIRING</string>
+    <string name="signal_tracking">TRACKING</string>
+    <string name="signal_degraded">DEGRADED</string>
+    <string name="signal_lost">LOST</string>
+    <string name="signal_recovering">RECOVERING</string>
+    <string name="fix_age">Fix age %1$s s</string>
+    <string name="no_valid_fix">Waiting for a valid fix</string>
+    <string name="recovery_progress">Recovery candidates %1$d/%2$d</string>
+    <string name="dr_time_remaining">Route DR · up to %1$s s left</string>
+    <string name="current_accuracy">Accepted GPS accuracy ±%1$s m</string>
+    <string name="last_accuracy">Last received accuracy ±%1$s m</string>
+    <string name="accepted_speed">Accepted speed %1$s m/s</string>
+    <string name="dr_limit">DR time limit reached</string>
+    <string name="dr_branch">DR stopped at a branch</string>
+    <string name="dr_route_end">DR reached the route end</string>
+    <string name="dr_no_anchor">DR needs a valid route anchor</string>
+    <string name="dr_unavailable">DR unavailable</string>
 </resources>

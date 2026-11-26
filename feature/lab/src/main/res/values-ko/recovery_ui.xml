@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="simulation_mode">가상 주행 · SIMULATION</string>
+    <string name="signal_acquiring">신호 탐색</string>
+    <string name="signal_tracking">정상 추적</string>
+    <string name="signal_degraded">신호 품질 저하</string>
+    <string name="signal_lost">신호 손실</string>
+    <string name="signal_recovering">신호 재획득 중</string>
+    <string name="fix_age">마지막 채택 후 %1$s초</string>
+    <string name="no_valid_fix">유효 위치 대기 중</string>
+    <string name="recovery_progress">재획득 후보 %1$d/%2$d</string>
+    <string name="dr_time_remaining">경로 기반 DR · 최대 %1$s초 남음</string>
+    <string name="current_accuracy">채택 GPS 정확도 ±%1$s m</string>
+    <string name="last_accuracy">마지막 수신 정확도 ±%1$s m</string>
+    <string name="accepted_speed">채택 속도 %1$s m/s</string>
+    <string name="dr_limit">DR 시간 한도 도달</string>
+    <string name="dr_branch">분기점에서 DR 중단</string>
+    <string name="dr_route_end">경로 끝에서 DR 중단</string>
+    <string name="dr_no_anchor">DR 기준 위치 없음</string>
+    <string name="dr_unavailable">DR 사용 불가</string>
 </resources>

@@ -116,6 +116,7 @@ class LabViewModel(
     private val commandError = MutableStateFlow<String?>(null)
     private val controller = ReplayController(viewModelScope, initial.id,
         { id -> load(legacy[id] ?: ScenarioChoice(id, id, 0, "")) }, worker, io, clock)
+    internal val trackingSettings get() = controller.trackingSettings
 
     val state = combine(controller.state, showTruth, commandError, choices) { replay, truth, error, entries ->
         UiState(replay, entries.firstOrNull { it.id == replay.selected } ?: initial, truth, replay.error ?: error, entries)
