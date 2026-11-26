@@ -9,7 +9,7 @@
 | 시나리오 | 관찰 내용 |
 |---|---|
 | ODEMO_LONG | 복합 위치 장애와 이탈·복귀 |
-| OL06 / OL07 | 남산 터널의 짧은·긴 손실 |
+| OL06 / OL07 | 남산 터널의 짧은·긴 손실 · [OL07 신호 손실 중 위치 추정 화면](demo/osm/O03-follow.png) |
 | OL08 | 수영강 교량 위 정차·손실 |
 | OL13 | 수서 나들목 가상 이탈·복귀 |
 
@@ -24,9 +24,7 @@ Follow, Overview, Free 및 재생·일시정지·Step·Reset·배속 조작을 �
 
 ## 합성 DEMO_LONG 재현 (기존 회귀)
 
-아래 시간표는 OSM 기본 데모가 아닌 기존 합성 DEMO_LONG에 해당한다.
-
-기본 [OSM 주행과 실제 캡처](osm-visual-verification.md)는 ODEMO_LONG에서 확인할 수 있다. 아래 시간표를 재현하려면 시나리오 선택에서 합성 **DEMO_LONG**을 고른 뒤 재생을 누른다. 1×에서 3분, 5×에서 약 36초가 걸린다. 판정 경계를 정밀하게 확인하려면 일시정지하고 한 단계씩 실행한다.
+시나리오 선택에서 합성 **DEMO_LONG**을 고른 뒤 재생을 누른다. 1×에서 3분, 5×에서 약 36초가 걸린다. 판정 경계를 정밀하게 확인하려면 일시정지하고 한 단계씩 실행한다.
 
 | 가상 시각 | 화면에서 확인할 내용 |
 |---:|---|
@@ -40,25 +38,4 @@ Follow, Overview, Free 및 재생·일시정지·Step·Reset·배속 조작을 �
 
 카메라 **전체 경로**는 계획 경로 전체를 맞춘다. 확대·축소 또는 지도 끌기는 수동 탐색으로 전환하고 **차량 추적**은 채택·추정 위치로 돌아온다. 지도 테마와 가상 실제 위치 표시는 재생 중에도 바꿀 수 있다. 판정과 요약은 **진단 보기** 및 주행 종료 후 **결과**에서 확인한다.
 
-## 지도 품질 개정 캡처
-
-[합성 지도 개정 당시 Follow·Overview와 전후 비교](map-visual-verification.md) · [현재 OSM 화면 검수](osm-visual-verification.md)
-
-## 초기 확장판의 API 36 에뮬레이터 캡처
-
-모든 지도는 아래 시나리오를 실제 앱에서 선택한 뒤 첫 예정 시각을 처리하고 Overview로 전환하여 촬영했다.
-
-| 지도 | 시나리오 | 캡처 |
-|---|---|---|
-| M01 도심 격자 | L01 | [전체 경로](demo/extended/M01.png) |
-| M02 고속화도로 | L02 | [전체 경로](demo/extended/M02.png) |
-| M03 터널 회랑 | L07 | [전체 경로](demo/extended/M03.png) |
-| M04 평행도로 | L10 | [전체 경로](demo/extended/M04.png) |
-| M05 입체 교차로 | L13 | [전체 경로](demo/extended/M05.png) |
-| M06 수변·교량 | L08 | [전체 경로](demo/extended/M06.png) |
-| M07 교외 생활도로 | L03 | [전체 경로](demo/extended/M07.png) |
-| M08 산지 곡선 | L09 | [전체 경로](demo/extended/M08.png) |
-| M09 복합 교통 회랑 | L15 | [전체 경로](demo/extended/M09.png) |
-| M10 복합 장거리 | DEMO_LONG | [전체 경로](demo/extended/M10.png) |
-
-DEMO_LONG 1×의 [87초 Follow·DR](demo/extended/long-follow-dr.png), [96초 Follow·마지막 확인 위치](demo/extended/long-follow-limit.png), [완료 결과 패널](demo/extended/long-results.png). 빠른 회귀 S07의 [DR 중단 화면](demo/extended/dr-limit.png)도 확인할 수 있다. 기존 [15초 DEMO 시작](demo/ready.png)과 [결과](demo/results.png)는 v1 화면 기록이다.
+[장시간 합성 주행 정량 평가](extended-evaluation-report.md) · [합성 지도와 시나리오 설계 이력](map-and-scenarios.md)

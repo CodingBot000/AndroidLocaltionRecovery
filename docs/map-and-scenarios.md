@@ -36,6 +36,6 @@ python3 -B tools/extended/check_terrain.py
 ./gradlew :core:simulation:run --args='fixtures/extended build/reports/extended.json build/reports/extended.md'
 ```
 
-[장시간 정량 평가](extended-evaluation-report.md) · [전체 JSON](extended-evaluation-results.json) · [실행 화면](demo.md)
+[장시간 정량 평가](extended-evaluation-report.md) · [전체 JSON](extended-evaluation-results.json) · [합성 지도 개정 전후 화면](map-visual-verification.md)
 
 [지도 디자인과 공간 데이터 규칙](map-design.md)
