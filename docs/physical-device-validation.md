@@ -2,12 +2,29 @@
 
 [README](../README.md) · [통합 검증](verification.md) · [성능](refactor-performance.md)
 
-## 최신 확인 범위 (2026-11-26)
+## 기능 검증 요약
+
+| 실행 범위 | 확인한 기능 |
+|---|---|
+| SM-G975N · Android 12/API 31 · 최종 제품 `ce617de` | O10 1× 180초×10회 주행·Reset과 유휴 관측, 지도 전환·재생 20회, Activity 재생성 4회, Live 시작·종료 20회. 역순 내구에서도 기능 단언 통과. [내구·전환·서비스](recovery-ui-physical-g8.md) |
+| API 26·31·33·34·36 에뮬레이터 | 위치 권한·서비스 수명, 오프라인 재생 및 API 26·48MiB 저메모리 조건의 회귀. [플랫폼 검증](verification.md#최신-구현-검증-요약) |
+
+기능 시험과 성능·실제 GPS 수신의 판정은 별개다. 아래는 빌드와 환경별 상세 결과다.
+
+## PR #9 실기기 성능과 내구 (2026-11-27)
+
+SM-G975N에서 `a732af2`와 `ce617de`의 원본 Macrobenchmark를 시나리오별 각 9회 비교했다. 지도 전환과 주행은 조사 기준 이내였다. 콜드 TTFD 차이는 본 시험 +30.7%, 첫 재시험 −4.8%, 최종 재시험 +9.0%였다. 최종 재시험의 인접 비교에서 차이의 방향이 갈렸으며 지속적인 후보 고유 회귀는 확인하지 못했다. G7은 **INCONCLUSIVE**로 종료했다. [G7 본 시험](recovery-ui-physical-g7.md) · [G7 최종 재시험과 복원](recovery-ui-physical-g7-final-cold.md)
+
+G8 최초 시험은 A/C 각각 독립 내구 실행 1회, 지도 전환·재생 20회 및 Live 시작·종료 20회를 통과했다. 역순 재시험은 빌드별 독립 내구 실행 1회와 유휴 600초까지 완료했다. 역순 Native PSS 완료 중앙값과 최대값은 +10.53%와 +14.05%였다. 두 내구 비교에서 반복된 후보 Native Heap PSS 증가를 잔여 위험으로 기록하고 **INCONCLUSIVE**로 종료했다. [G8 최초](recovery-ui-physical-g8.md) · [G8 최종 재시험](recovery-ui-physical-g8-retest.md)
+
+G9은 A/C의 Live·직접 GPS 무수신과 대기 UI를 확인했다. A는 303.979초 화면 OFF 동안 세션을 유지했다. 잠금 해제가 필요한 A 복귀와 C 수명은 BLOCKED였고 G9 종합 판정은 **INCONCLUSIVE**다. [G9 GPS·서비스](recovery-ui-physical-g9.md) · [UI 후보 게이트](recovery-ui-validation.md)
+
+## 기존 확인 범위 (2026-11-25–26)
 
 | 환경 | 확인한 검증 | 결과·근거 |
 |---|---|---|
-| SM-G975N · Android 12 / API 31 | 실내 fresh GPS 수신, 직접 provider 대조, FGS·listener 시작·정지 20회 | 수신 및 해제 확인; 이전 120초 무수신 원인은 미확정 · [실기기 GPS](real-device-final-validation.md) |
-| 같은 실기기 | O10 콜드 기동, 지도 전환, 주행·카메라 Macrobenchmark | 기준 A 및 후보 B 시나리오별 9회; 후보 기각 · [성능 RCA](rendering-memory-rca.md) |
+| SM-G975N · Android 12 / API 31 | 실내 fresh GPS 수신, 직접 provider 대조, FGS·listener 시작·정지 20회 | `d0b3822` 제품에서 수신 및 해제 확인. 이전 120초 무수신 원인은 미확정 · [실기기 GPS](real-device-final-validation.md) |
+| 같은 실기기 | O10 콜드 기동, 지도 전환, 주행·카메라 Macrobenchmark | 기준 `a067a97` 및 당시 후보 시나리오별 9회. 그 후보는 기각했다. [성능 RCA](rendering-memory-rca.md) |
 | 같은 실기기 | O10 1× 180초 × 10회, 지도 전환·재생 및 Live 각각 20회 | A/B 각각 통과; 반복 PSS 증가 원인은 미확정 · [메모리·Live](rendering-memory-rca.md) |
 | API 26·31·33·34·36 에뮬레이터 | 위치 권한·서비스 생명주기·오프라인 계측, API 26·48MiB | 환경별 결과는 [통합 검증](verification.md) 참조 |
 | SM-S908N · Android 16 / API 36 | 이전 합성 지도 버전의 기동·프레임·내구 계측 | 아래 과거 측정 이력; 최신 OSM 버전과 직접 비교하지 않음 |

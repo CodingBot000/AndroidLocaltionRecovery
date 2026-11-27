@@ -15,7 +15,7 @@ SCENARIOS = ("coldO10", "switchO10ToO07", "rideO10")
 
 
 def distribution(values):
-    if not values or any(not math.isfinite(value) for value in values):
+    if not values or any(type(value) not in (int, float) or not math.isfinite(value) for value in values):
         raise ValueError("A distribution requires finite samples")
     ordered = sorted(values)
     return {
@@ -31,12 +31,17 @@ def distribution(values):
 def read_set(folder):
     source, = folder.glob("*benchmarkData.json")
     raw = source.read_bytes()
-    cases = {case["name"]: case for case in json.loads(raw)["benchmarks"]}
+    benchmarks = json.loads(raw)["benchmarks"]
+    cases = {case["name"]: case for case in benchmarks}
+    if len(cases) != len(benchmarks):
+        raise ValueError(f"{source}: duplicate benchmark scenario")
     if not cases or cases.keys() - set(SCENARIOS):
         raise ValueError("Only original RefactorMapBenchmark cases are supported")
     result = {}
     for name, case in cases.items():
         count = case["repeatIterations"]
+        if type(count) is not int or count <= 0:
+            raise ValueError(f"{name}: invalid repeat count")
         if name == "coldO10":
             result[name] = {key: case["metrics"][key]["runs"] for key in STARTUP_METRICS}
         else:
@@ -54,6 +59,8 @@ def read_set(folder):
 
 def summarize(folders):
     sets = [read_set(folder) for folder in folders]
+    if len({item["benchmarkResultSha256"] for item in sets}) != len(sets):
+        raise ValueError("Duplicate benchmark result supplied")
     summary = {}
     for name in SCENARIOS:
         scenarios = [item["scenarios"][name] for item in sets if name in item["scenarios"]]

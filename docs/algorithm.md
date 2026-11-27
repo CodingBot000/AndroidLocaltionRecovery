@@ -29,6 +29,8 @@ flowchart TD
 | 재획득 | 시간·이동 조건을 만족하는 연속 후보 3건 |
 | 이탈·복귀 | 신뢰 가능한 채택 관측 3건 |
 
+**실제 동작 확인:** 남산 터널 OL07에서 신호 손실 후 DR을 적용하고, 마지막 채택 Fix로부터 15초에 추정을 중단하며, 연속 후보가 충족된 시점에 위치를 재획득한다. [54초 추정](demo/recovery-ui/ol07-estimating.png) · [63초 중단](demo/recovery-ui/ol07-last-known.png) · [71초 후보](demo/recovery-ui/ol07-recovering.png) · [73초 복구](demo/recovery-ui/ol07-recovered.png). 가상 입력의 독립 평가 84개와 로딩 오류 3개는 [검증 요약](verification.md#최신-구현-검증-요약)에 연결한다.
+
 기본 가상 재생과 Live 입력 정책은 구분한다([Live 위치](live-location.md)). 아래는 판정 세부 계약이다.
 
 ## 검증과 매칭

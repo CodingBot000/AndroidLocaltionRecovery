@@ -3,11 +3,17 @@ package lab.recovery.app
 import lab.recovery.feature.*
 
 import android.content.pm.ActivityInfo
+import android.os.SystemClock
+import android.util.Log
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.getBoundsInRoot
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performSemanticsAction
@@ -20,6 +26,7 @@ import lab.recovery.simulation.ScenarioRepository
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.runBlocking
 import lab.recovery.location.PositionSource
@@ -55,14 +62,125 @@ class RecoveryInstrumentedTest {
         rule.onNodeWithTag(tag).performClick()
     }
 
+    @Test fun featuredMenuOpensTheExistingScenarios() {
+        val model = model()
+        ready(model, "ODEMO_LONG")
+        rule.waitUntil(10_000) { model.state.value.choices.any { it.id == "OL07" } }
+        for (id in listOf("OL07", "OL02", "OL10", "OL13", "ODEMO_LONG")) {
+            val previous = model.state.value.runId
+            click("featured-menu")
+            rule.onNodeWithTag("featured-$id").performClick()
+            ready(model, id)
+            assertTrue(model.state.value.runId > previous)
+            assertEquals(0L, model.state.value.snapshot.nowMs)
+            assertTrue(model.state.value.logs.isEmpty())
+        }
+    }
+
+    @Test fun featuredReplayAndNightControlsStayReachableOnSmallScreens() {
+        val model = model()
+        rule.waitUntil(10_000) { model.state.value.choices.any { it.id == "OL07" } }
+        click("featured-menu")
+        rule.onNodeWithTag("featured-OL07").performClick()
+        rule.waitUntil(10_000) { model.state.value.scenario?.id == "OL07" && model.state.value.playback == Playback.READY }
+        click("map-theme")
+        scroll("tracking-map")
+        rule.onNodeWithTag("tracking-map").assertIsDisplayed()
+        rule.onNodeWithTag("camera-mode").assertIsDisplayed()
+        capture("small-ko-night")
+        click("step")
+        rule.waitUntil(5_000) { model.state.value.snapshot.lastAcceptedAtMs != null }
+        scroll("play-pause")
+        rule.onNodeWithTag("play-pause").assertIsDisplayed()
+        click("map-legend")
+        capture("small-ko-legend")
+        rule.onNodeWithTag("legend-close").assertIsDisplayed().performClick()
+        click("speed-button")
+        rule.onNodeWithTag("speed-slider").assertIsDisplayed()
+        capture("small-ko-speed")
+        rule.onNodeWithTag("speed-five-times").assertIsDisplayed().performClick()
+        rule.waitUntil(5_000) { model.state.value.speed == 5f }
+        rule.onNodeWithTag("speed-slider").assertDoesNotExist()
+    }
+
+    @Test fun featuredTunnelAtFiveTimesKeepsEvaluationAndClearsResultsOnReset() {
+        val model = model()
+        ready(model, "ODEMO_LONG")
+        rule.waitUntil(10_000) { model.state.value.choices.any { it.id == "OL07" } }
+        click("featured-menu")
+        rule.onNodeWithTag("featured-OL07").performClick()
+        ready(model, "OL07")
+        val scenario = checkNotNull(model.state.value.scenario)
+        val expected = runBlocking { playToEnd(ReplaySession(scenario)) }
+        val locale = rule.activity.resources.configuration.locales[0].language
+        val description = checkNotNull(model.state.value.selected.catalog).description.forLanguage(locale)
+        val descriptionNode = rule.onNodeWithTag("scenario-description").assertTextEquals(description.substringBefore(" · "))
+        descriptionNode.performClick().assertTextEquals(description).performClick()
+        for (tag in listOf("signal", "map-status", "route-status", "recent-decision-heading", "tracking-map", "truth-toggle",
+            "map-legend", "speed-button", "play-pause", "step", "reset")) {
+            val node = rule.onNodeWithTag(tag).assertIsDisplayed()
+            val clipped = node.getBoundsInRoot()
+            val measured = node.getUnclippedBoundsInRoot()
+            assertTrue("$tag is fully visible on the first screen: $clipped of $measured",
+                clipped.bottom - clipped.top >= measured.bottom - measured.top - 1.dp &&
+                    clipped.right - clipped.left >= measured.right - measured.left - 1.dp)
+        }
+        rule.onNodeWithTag("recent-decision-heading").assertTextEquals(
+            rule.activity.getString(lab.recovery.feature.R.string.latest_significant_event),
+        )
+        rule.onNodeWithTag("map-legend").performClick()
+        rule.onNodeWithTag("legend-close").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("speed-button").performClick()
+        rule.onNodeWithTag("speed-five-times").assertIsDisplayed().performClick()
+        rule.waitUntil(5_000) { model.state.value.speed == 5f }
+        val start = SystemClock.elapsedRealtime()
+        rule.onNodeWithTag("play-pause").assertIsEnabled().performClick()
+        rule.waitUntil(scenario.durationMs / 5 + 15_000) { model.state.value.evaluation != null }
+        Log.i("RecoveryUiVerification", "OL07 five_times_click_to_evaluation_ms=${SystemClock.elapsedRealtime() - start}")
+        assertEquals(expected, model.state.value.evaluation)
+        click("open-results")
+        rule.onNodeWithText(rule.activity.getString(lab.recovery.feature.R.string.osm_close)).assertIsDisplayed().performClick()
+        val completed = model.state.value.runId
+        click("reset")
+        ready(model, "OL07")
+        assertTrue(model.state.value.runId > completed)
+        assertNull(model.state.value.evaluation)
+        rule.onNodeWithTag("open-results").assertDoesNotExist()
+        rule.onNodeWithTag("recent-decision-code").assertDoesNotExist()
+    }
+
+    @Test fun featuredTunnelAtNormalSpeedMatchesIndependentEvaluation() {
+        val model = model()
+        ready(model, "ODEMO_LONG")
+        rule.waitUntil(10_000) { model.state.value.choices.any { it.id == "OL07" } }
+        click("featured-menu")
+        rule.onNodeWithTag("featured-OL07").performClick()
+        ready(model, "OL07")
+        assertEquals(1f, model.state.value.speed, 0f)
+        val scenario = checkNotNull(model.state.value.scenario)
+        val expected = runBlocking { playToEnd(ReplaySession(scenario)) }
+        val start = SystemClock.elapsedRealtime()
+        click("play-pause")
+        rule.waitUntil(scenario.durationMs + 15_000) { model.state.value.evaluation != null }
+        Log.i("RecoveryUiVerification", "OL07 normal_speed_click_to_evaluation_ms=${SystemClock.elapsedRealtime() - start}")
+        assertEquals(expected, model.state.value.evaluation)
+    }
+
     private fun select(id: String) {
         click("scenario-menu")
         rule.onNodeWithTag("scenario-$id").performScrollTo().performClick()
     }
     private fun stepTo(model: LabViewModel, time: Long) {
         val first = if (model.state.value.playback == Playback.READY) 0 else model.state.value.snapshot.nowMs + 200
-        for (tick in first..time step 200) model.send(UiIntent.Step)
-        rule.waitUntil(10_000) { model.state.value.snapshot.nowMs == time }
+        // Render the boundary after the real step queue has reached it.
+        rule.mainClock.autoAdvance = false
+        try {
+            for (tick in first..time step 200) model.send(UiIntent.Step)
+            rule.waitUntil(10_000) { model.state.value.snapshot.nowMs == time }
+        } finally {
+            rule.mainClock.autoAdvance = true
+        }
+        rule.waitForIdle()
     }
 
     @Test fun legacyDemoCompletesAndMatchesIndependentJvmReplay() {
@@ -117,16 +235,19 @@ class RecoveryInstrumentedTest {
         readySyntheticDemo(model)
         select("DEMO")
         ready(model, "DEMO")
-        setSpeed(model, 1.5f)
+        click("speed-button")
+        moveSpeedSlider(model, 1.5f)
         rule.onNodeWithTag("speed-value").assertTextEquals("1.5×")
-        setSpeed(model, 0.5f)
+        moveSpeedSlider(model, 0.5f)
         rule.onNodeWithTag("speed-value").assertTextEquals("0.5×")
         rule.onNodeWithTag("speed-slider").performTouchInput {
-            swipeRight(startX = width * 0.03f, endX = width * 0.97f, durationMillis = 550)
+            swipeRight(startX = width * 0.10f, endX = width * 0.99f, durationMillis = 550)
         }
-        rule.waitForIdle()
+        rule.waitUntil(5_000) { model.state.value.speed == 5f }
         assertEquals(5f, model.state.value.speed, 0f)
         rule.onNodeWithTag("speed-value").assertTextEquals("5×")
+        rule.onNodeWithTag("speed-close").performClick()
+        rule.onNodeWithTag("speed-slider").assertDoesNotExist()
         assertEquals(0L, model.state.value.snapshot.nowMs)
     }
 
@@ -205,7 +326,12 @@ class RecoveryInstrumentedTest {
     }
 
     private fun setSpeed(model: LabViewModel, speed: Float) {
-        rule.onNodeWithTag("lab-screen").performScrollToNode(hasTestTag("speed-slider"))
+        click("speed-button")
+        moveSpeedSlider(model, speed)
+        rule.onNodeWithTag("speed-close").performClick()
+    }
+
+    private fun moveSpeedSlider(model: LabViewModel, speed: Float) {
         rule.onNodeWithTag("speed-slider").performSemanticsAction(SemanticsActions.SetProgress) { set ->
             assertTrue(set(speed))
         }

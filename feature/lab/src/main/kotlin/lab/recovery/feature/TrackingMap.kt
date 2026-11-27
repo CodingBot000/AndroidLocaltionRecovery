@@ -1,23 +1,40 @@
 package lab.recovery.feature
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Surface
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import lab.recovery.location.PositionSource
+import lab.recovery.location.DecisionEvent
+import lab.recovery.location.LocationObservation
+import lab.recovery.location.ObservationDecision
 import lab.recovery.location.Reason
 import lab.recovery.map.MapVisualData
 import lab.recovery.uimap.MapMarker
@@ -25,15 +42,18 @@ import lab.recovery.uimap.MapCredits
 import lab.recovery.uimap.MapOverlay
 import lab.recovery.uimap.MapScene
 import lab.recovery.uimap.MapStrings
+import lab.recovery.uimap.MapSymbol
 import lab.recovery.uimap.MapTrail
 import lab.recovery.uimap.MarkerKind
 import lab.recovery.uimap.RoadMap
+import lab.recovery.uimap.mapLegendBackground
 
 @Composable
 internal fun TrackingMap(
-    state: UiState, modifier: Modifier, dark: Boolean, optimized: Boolean,
+    ui: State<UiState>, modifier: Modifier, dark: Boolean, optimized: Boolean,
     onMapReady: (Long) -> Unit,
 ) {
+    val state = ui.value
     val scenario = state.scenario
     val source = scenario?.map?.osm
     var sourceOpen by remember(scenario) { mutableStateOf(false) }
@@ -41,9 +61,8 @@ internal fun TrackingMap(
         scenario?.let { MapScene(it.roads.network, it.roads.route, it.map?.visual ?: MapVisualData(), source?.bounds, it.map?.checksum) }
     }
     val snapshot = state.snapshot
-    val raw = snapshot.lastObservation?.takeIf {
-        it.point.finite && snapshot.nowMs - it.receivedAtMs <= 1200
-    }
+    val raw = snapshot.recentObservation()?.takeIf { it.point.finite }
+    val rejected = remember(state.logs, raw) { raw?.let(state.logs::rejects) == true }
     val trails = remember(state.trails) {
         state.trails.map { MapTrail(it.points, it.source == PositionSource.DEAD_RECKONED) }
     }
@@ -65,6 +84,7 @@ internal fun TrackingMap(
         lastKnown = snapshot.acceptedPosition,
         truth = if (state.showTruth) scenario?.truthAt(snapshot.nowMs)?.position else null,
         trails = trails,
+        rawRejected = rejected,
     )
     val strings = MapStrings(stringResource(if (source == null) R.string.synthetic_map else R.string.osm_map), stringResource(R.string.camera_follow),
         stringResource(R.string.camera_overview), stringResource(R.string.camera_free),
@@ -86,17 +106,59 @@ internal fun TrackingMap(
     }
 }
 
+internal fun List<DecisionEvent>.rejects(observation: LocationObservation): Boolean =
+    lastOrNull { it.observation == observation && it.decision != null }?.decision == ObservationDecision.REJECTED
+
 @Composable
-internal fun MapLegend(truthEnabled: Boolean, toggle: () -> Unit) {
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(9.dp), itemVerticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 1.dp)) {
-        TextButton(onClick = toggle, modifier = Modifier.testTag("truth-toggle")) {
-            Text(if (truthEnabled) stringResource(R.string.legend_truth) else stringResource(R.string.legend_truth_off), color = if (truthEnabled) Sky else Muted,
+@OptIn(ExperimentalComposeUiApi::class)
+internal fun MapLegend(truthEnabled: Boolean, dark: Boolean, playback: Playback, toggle: () -> Unit) {
+    var details by remember { mutableStateOf(false) }
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        TextButton(onClick = { details = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("map-legend")) {
+            Text(stringResource(R.string.legend_details))
+        }
+        Text(stringResource(playback.labelResource()), color = Muted, style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.testTag("playback-state"))
+        TextButton(onClick = toggle, modifier = Modifier.heightIn(min = 48.dp).testTag("truth-toggle").semantics { selected = truthEnabled }) {
+            LegendItem(MapSymbol.TRUTH, dark, if (truthEnabled) R.string.truth_visible else R.string.truth_hidden)
+        }
+    }
+    if (details) AlertDialog(
+        onDismissRequest = { details = false },
+        modifier = Modifier.semantics { testTagsAsResourceId = true },
+        title = { Text(stringResource(R.string.legend_details)) },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                MapSymbol.entries.forEach { LegendItem(it, dark) }
+                Text(stringResource(R.string.legend_explanation), style = MaterialTheme.typography.bodySmall)
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { details = false }, modifier = Modifier.testTag("legend-close")) { Text(stringResource(R.string.osm_close)) }
+        },
+    )
+}
+
+@Composable
+private fun LegendItem(symbol: MapSymbol, dark: Boolean, @StringRes label: Int = symbol.labelResource()) {
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Surface(color = mapLegendBackground(dark), shape = RoundedCornerShape(4.dp)) {
+            Text(symbol.glyph, color = symbol.color(dark), modifier = Modifier.padding(horizontal = 4.dp),
                 style = MaterialTheme.typography.labelSmall)
         }
-        Text(stringResource(R.string.legend_raw), color = Coral, style = MaterialTheme.typography.labelSmall)
-        Text(stringResource(R.string.legend_fix), color = Mint, style = MaterialTheme.typography.labelSmall)
-        Text(stringResource(R.string.legend_dr), color = Amber, style = MaterialTheme.typography.labelSmall)
-        Text(stringResource(R.string.legend_last), color = Muted, style = MaterialTheme.typography.labelSmall)
+        Text(stringResource(label), style = MaterialTheme.typography.labelSmall)
     }
+}
+
+@StringRes
+private fun MapSymbol.labelResource(): Int = when (this) {
+    MapSymbol.FIX -> R.string.map_symbol_fix
+    MapSymbol.GPS -> R.string.map_symbol_gps
+    MapSymbol.REJECTED -> R.string.map_symbol_rejected
+    MapSymbol.DR -> R.string.map_symbol_dr
+    MapSymbol.LAST -> R.string.map_symbol_last
+    MapSymbol.TRUTH -> R.string.map_symbol_truth
+    MapSymbol.PLAN -> R.string.map_symbol_plan
+    MapSymbol.TRAIL -> R.string.map_symbol_trail
+    MapSymbol.OUTSIDE -> R.string.map_symbol_outside
 }

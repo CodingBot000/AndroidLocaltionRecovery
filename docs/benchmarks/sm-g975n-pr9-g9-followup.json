@@ -1,0 +1,142 @@
+{
+  "dateKst": "2026-11-27",
+  "device": "SM-G975N, Exynos 9820, Android 12/API 31, ARM64, USB",
+  "sourceCommits": {
+    "A": "a732af2dddfb86514fbfa76a6d7971f31e8d23da",
+    "C": "ce617de21ffbf5485564c9d7bc589a3b6085c02c"
+  },
+  "priorPrHead": "1ff8bf8e67243e9157b58dd8a0eb970a3766b54b",
+  "priorAttemptEvidence": "sm-g975n-pr9-g9.json",
+  "startingDeviceState": {
+    "homeConfirmed": true,
+    "keyguardShowing": false,
+    "secureKeyguard": false
+  },
+  "previousHomeRestoration": {
+    "confirmedByAdbAfterUserUnlock": true
+  },
+  "artifactSha256": {
+    "A": {
+      "instrumentation-only.patch": "7d5c3c54989d536cbd0107814273f2f2a6fe877edf8754cf2f9ced1591d2e5d4",
+      "live-debug-androidTest.apk": "0298088032c9df686fd3884d98ab14ef22c19df7f6b401a62ac4cb1814b03ec1",
+      "live-debug.apk": "03d5609b364ebc9ccbc1bce69caf600c7eb8f2d68cdbe373787df10b1ebed362"
+    },
+    "C": {
+      "instrumentation-only.patch": "8bf18e4ed3b3589d53864e3c7d5e2934375f9fd5e6f643d84b1debd1838d5577",
+      "live-debug-androidTest.apk": "04e3047c63606d1de547f15a40b29c4cc08bca8967eecb5c3bcd396963b23dd3",
+      "live-debug.apk": "2fdc390a26f6877c237c36add65c1ffa02181029cc602820897e4ab3280af294"
+    }
+  },
+  "measurementContracts": {
+    "freshTimeoutMs": 120000,
+    "screenOffMinimumMs": 300000,
+    "manualUnlockTimeoutMs": 90000
+  },
+  "results": {
+    "A": [
+      {
+        "mode": "lifecycle",
+        "attempt": "lifecycle-resume",
+        "hostExitCode": 1,
+        "evidence": {
+          "activityRecreation": {
+            "g9Recreated": 3,
+            "sameToken": true,
+            "fgs": true,
+            "listener": true
+          },
+          "screenOffStarted": {
+            "g9ScreenOffStarted": true
+          },
+          "screenOff": {
+            "screenOffMs": 303560,
+            "callbacks": 0
+          },
+          "manualUnlockRequired": {
+            "unlockRequired": true
+          }
+        },
+        "lifecycleJUnit": {
+          "junitPassed": false,
+          "wallSeconds": 403.72,
+          "manualUnlockTimedOut": true
+        },
+        "lifecycle-release": {
+          "zero": true
+        },
+        "release-before-permission-restore": {
+          "zero": true
+        },
+        "permissionsRestored": true
+      }
+    ],
+    "C": []
+  },
+  "restoration": {
+    "apkBytesMatch": {
+      "lab.recovery.app": true,
+      "lab.recovery.app.test": true,
+      "lab.recovery.live": true,
+      "lab.recovery.live.test": true,
+      "lab.recovery.app.benchmark": true,
+      "lab.recovery.benchmark": true
+    },
+    "reopenedThenBackgroundKilledForStoppedBit": [],
+    "existingDataInodesMatch": {
+      "lab.recovery.app": true,
+      "lab.recovery.app.test": true,
+      "lab.recovery.live": true,
+      "lab.recovery.live.test": true,
+      "lab.recovery.app.benchmark": true,
+      "lab.recovery.benchmark": true
+    },
+    "stoppedBitsMatch": {
+      "lab.recovery.app": true,
+      "lab.recovery.app.test": true,
+      "lab.recovery.live": true,
+      "lab.recovery.live.test": true,
+      "lab.recovery.app.benchmark": true,
+      "lab.recovery.benchmark": true
+    },
+    "trackedSystemSettingsMatch": {
+      "system": true,
+      "global": true
+    },
+    "displaySizeMatch": true,
+    "displayDensityMatch": true,
+    "locationSwitchMatch": true,
+    "locationPermissionAndFlagsMatch": true,
+    "existingLiveMarkerBytesMatch": true,
+    "mediaFileManifestsMatch": {
+      "lab.recovery.benchmark": true
+    },
+    "keyguardShowing": true,
+    "screenAwake": true,
+    "homeRestored": false,
+    "testDirectoriesVerifiedAndRemoved": {
+      "A/lifecycle-resume": 12
+    },
+    "secureRuntimeFlagMatchesUnlockedPreflight": false,
+    "keyguardRuntimeFlagsMatchUnlockedPreflight": false,
+    "securitySettingsChangedByTest": false
+  },
+  "priorGates": {
+    "G3": "INCONCLUSIVE",
+    "G7": "INCONCLUSIVE",
+    "G8": "INCONCLUSIVE"
+  },
+  "gateG9": "INCONCLUSIVE",
+  "coverage": {
+    "AActivityRecreationHomeAndScreenOff": "PASS",
+    "AReturnAndUiStop": "BLOCKED_MANUAL_UNLOCK_TIMEOUT",
+    "CLifecycle": "BLOCKED_LOCKED_AT_PREFLIGHT",
+    "additionalFreshGpsAndDirectProvider": {
+      "A": "BLOCKED_LOCKED_DEVICE",
+      "C": "BLOCKED_LOCKED_DEVICE"
+    }
+  },
+  "reportedKeyguardAtWake": {
+    "showing": true,
+    "secure": true
+  }
+}

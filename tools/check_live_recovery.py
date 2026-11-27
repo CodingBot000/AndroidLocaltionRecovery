@@ -154,8 +154,14 @@ def check_location_policy():
     try:
         shell("cmd", "location", "set-location-enabled", "false")
         wait_foreground(False)
+
+        def location_disabled():
+            if find(text="No location access") is not None:
+                click(text="Close")
+            return find(text="Location disabled")
+
         try:
-            node(text="Location disabled")
+            await_condition(location_disabled, "Missing app location-disabled status")
         except AssertionError as error:
             visible = [item.get("text", "") for item in window() if item.get("text")]
             raise AssertionError(f"Location switch UI: {visible}") from error

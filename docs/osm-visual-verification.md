@@ -2,7 +2,9 @@
 
 [README](../README.md) · [실행 가이드](demo.md) · [렌더링 설계](korea-map-design.md)
 
-## 대표 화면 (성능 리팩터링 이후)
+## 성능 리팩터링 단계의 지도 화면
+
+이 갤러리는 위치 복구 UI 개편 전에 확인한 지도 표현과 축척을 설명한다. 최종 UI 후보 `ce617de`의 정상 추적·추정·중단·재획득·복구 및 지도 범례는 별도 시연에서 확인할 수 있다. [OL07 실행 화면](demo.md#ol07-시연)
 
 <p align="center">
   <a href="demo/refactor/O10-mid.png"><img src="demo/refactor/O10-mid.png" width="210" alt="성수동 O10 Mid"></a>

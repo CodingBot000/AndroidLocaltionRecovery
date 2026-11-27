@@ -2,16 +2,7 @@
 
 [README](../README.md) · [위치 알고리즘](algorithm.md) · [지도 렌더링](korea-map-design.md) · [Live 위치](live-location.md) · [HTTP 실험](network-reliability.md)
 
-## 설계 의사결정
-
-| 기술적 과제 | 선택한 구조 | 효과 및 확인 방법 |
-|---|---|---|
-| 위치 처리와 Android UI의 결합 | 순수 Kotlin 코어 / Compose 표현 계층 / Android 위치 어댑터 | JVM에서 결정적 위치 평가와 모듈 의존성 검사 |
-| 빠른 지도 전환과 재생 취소 | 단일 명령 큐, 실행 ID 및 generation, 작업 Dispatcher | 늦은 결과 차단, Reset·Activity 재생성 계측 |
-| 대형 도로망의 처리 비용 | 원본 도로와 표현 데이터를 분리하고 Spatial Grid·LOD·가시 Path 캐시 사용 | 매칭 판정 동등성, Macrobenchmark와 Perfetto |
-| 오프라인·실제 GPS·HTTP 실험의 격리 | 앱 2개와 독립 JVM HTTP 모듈 | 권한·APK·fixture 검사 및 실제 리스너 해제 |
-
-[성능 비교](refactor-performance.md) · [플랫폼 검증](verification.md) · [전체 문서 안내](index.md)
+위치 판단을 순수 Kotlin 엔진에 두고 Android 플랫폼과 Compose 표현 계층을 독립적으로 교체·검증할 수 있도록 설계했다. 기본 재생 앱·Live 위치 앱·HTTP 실험의 실행 경계를 분리하고 Gradle에서 선언 의존성을 검사한다.
 
 ## 전체 9개 모듈
 
@@ -46,6 +37,17 @@ flowchart TD
     R -. 테스트 fixture .-> S
     Q -. 대상 APK .-> A
 ```
+
+## 설계 의사결정
+
+| 기술적 과제 | 선택한 구조 | 효과 및 확인 방법 |
+|---|---|---|
+| 위치 처리와 Android UI의 결합 | 순수 Kotlin 코어 / Compose 표현 계층 / Android 위치 어댑터 | JVM에서 결정적 위치 평가와 모듈 의존성 검사 |
+| 빠른 지도 전환과 재생 취소 | 단일 명령 큐, 실행 ID 및 generation, 작업 Dispatcher | 늦은 결과 차단, Reset·Activity 재생성 계측 |
+| 대형 도로망의 처리 비용 | 원본 도로와 표현 데이터를 분리하고 Spatial Grid·LOD·가시 Path 캐시 사용 | 매칭 판정 동등성, Macrobenchmark와 Perfetto |
+| 오프라인·실제 GPS·HTTP 실험의 격리 | 앱 2개와 독립 JVM HTTP 모듈 | 권한·APK·fixture 검사 및 실제 리스너 해제 |
+
+[성능 비교](refactor-performance.md) · [플랫폼 검증](verification.md) · [전체 문서 안내](index.md)
 
 ## 설계 경계
 
@@ -82,6 +84,8 @@ flowchart LR
 - `ReplaySession`이 가상 시각별 관측·Tick·종료를 결정적으로 처리한다. 모든 이벤트는 바로 평가기에 기록된다. `ReplayController`는 단일 명령 큐와 현재 실행 ID로 데이터 로딩, 엔진, 완료 결과를 조율한다. 무거운 단계에는 IO·작업 Dispatcher를 사용한다.
 - 재생 deadline은 단조 시계와 하나의 가상 시간 기준점에서 계산한다. Pause는 가상 진행량을 동결하고 배속 변경은 변경 시각까지 진행된 양을 반영한다. 지연 발생 시 최대 12개 가상 시각을 한 차례 처리한 뒤 다음 명령을 받을 수 있다. 256칸 입력 큐가 가득 차면 화면에 재시도 상태를 표시한다.
 - 화면 로그는 500건, 표시 이력은 출처별 1,000개다. 이력은 추정 시작·중단, 위치 거부·재정합, 출처 변경에서 끊긴다. 세션 전환은 이전 timer generation과 실행 ID를 무효화한다. 세로 Activity 재생성은 같은 ViewModel을 사용하고, 제거 시 컨트롤러 scope를 취소한다. 기존 백그라운드 동작에 따라 ViewModel 생존 동안 재생을 이어간다.
+- `DriveHud`는 엔진 snapshot과 `ReplaySession`에 전달된 동일 설정으로 Fix 경과, 활성 DR 상한과 재획득 분모를 읽는다. 주요 판정 요약은 현재 실행의 제한된 로그에서 한 건을 선택한다. `RunResults`는 완료한 실행의 `Evaluation` 분모와 paired 오차를 사용한다. 지도 마커와 범례는 `ui:map`의 `MapSymbol` 색상을 공유한다. [표시와 검증 근거](recovery-ui-validation.md)
+- 배속 대화상자의 슬라이더와 5× 바로 선택은 같은 `PlaybackSpeeds` 범위와 `UiIntent.Speed`를 사용한다. 범례 창은 현재 지도 테마를 읽고 Truth 토글은 기존 세션 화면 상태를 사용한다. [실행과 조작](demo.md#ol07-시연)
 
 ## 지도
 

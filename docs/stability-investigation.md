@@ -6,8 +6,8 @@
 
 | 사례 | 판정 범위 | 결과 |
 |---|---|---|
-| API 26·48MiB 지도 OOM 및 OS 메모리 종료 | 에뮬레이터의 동일 힙 제한·반복 실행 | 원인에 대응한 수정 및 회귀 통과 |
-| Live 계측 Compose 종료 크래시 | 원격 API 36 계측 및 로컬 대조 | 테스트 환경의 dispatcher·UI 준비 조건 수정 |
+| API 26·48MiB 지도 OOM 및 OS 메모리 종료 | 에뮬레이터의 동일 힙 제한·반복 실행 | Streaming parsing·Software Canvas 적용, Native Heap PSS 최대 관측값 336,244→15,834KiB(95.3% 감소, 각 13·12개 표본), 기능 회귀 통과 |
+| Live 계측 Compose 종료 크래시 | 원격 API 36 계측 및 로컬 대조 | 최초 WrongThread와 후속 SlotTable 예외 분리, 테스트 dispatcher·UI 준비 조건 수정, 로컬 원본 계측 3개×5회 통과 |
 | ANR / Crash 진단 | Debug 전용 장애 하네스 | OS 종료 이력 및 스레드 관측 확인 |
 | Live 자원 해제 및 늦은 HTTP 응답 | 플랫폼 계측·독립 JVM HTTP 실험 | 등록·해제, 세션/요청 세대, 결함 주입으로 검증 |
 

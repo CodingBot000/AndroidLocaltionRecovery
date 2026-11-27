@@ -17,6 +17,7 @@ import lab.recovery.map.Point2D
 import lab.recovery.map.RoadClass
 import lab.recovery.map.RoadStructure
 import kotlin.math.hypot
+import kotlin.math.atan2
 
 internal fun Projection.offset(point: Point2D): Offset = screen(point).let { Offset(it.x.toFloat(), it.y.toFloat()) }
 
@@ -189,25 +190,21 @@ internal fun DrawScope.drawOverlay(
         }
     }
     val raw = overlay.raw?.let(projection::offset)
-    val rawMarker = raw?.let { at ->
-        val padding = 8.dp.toPx().coerceAtMost(size.minDimension / 2)
-        Offset(at.x.coerceIn(padding, size.width - padding), at.y.coerceIn(padding, size.height - padding))
-    }
+    val rawMarker = raw?.let { rawPlacement(it, size, 10.dp.toPx()) }
+    val rawSymbol = if (overlay.rawRejected) MapSymbol.REJECTED else MapSymbol.GPS
     raw?.let { at ->
         overlay.accuracyMeters?.let { meters ->
             val radius = (meters * projection.scale).toFloat()
-            if (at == rawMarker && radius.isFinite() && radius >= 1f) {
-                drawCircle(style.raw.copy(alpha = .12f), radius.coerceAtMost(size.minDimension * .25f), at)
+            if (rawMarker?.outside == false && radius.isFinite() && radius >= 1f) {
+                drawCircle(style.symbolColor(rawSymbol).copy(alpha = .12f), radius.coerceAtMost(size.minDimension * .25f), at)
             }
         }
     }
 
     val vehicle = overlay.vehicle
-    if (vehicle?.kind == MarkerKind.FIX) {
-        drawVehicle(projection.offset(vehicle.point), vehicle.heading, style)
-    }
+    val vehicleOffset = vehicle?.let { projection.offset(it.point) }
+    fun overlapsVehicle(point: Offset) = markerOverlaps(vehicleOffset, point, 12.dp.toPx())
 
-    // Keep diagnostic symbols above the direction glyph, including when several fixes coincide.
     if (vehicle?.kind == MarkerKind.LAST_KNOWN) {
         drawLastKnown(projection.offset(vehicle.point), style, current = true)
     } else {
@@ -217,28 +214,59 @@ internal fun DrawScope.drawOverlay(
     }
     overlay.truth?.let {
         val at = projection.offset(it)
-        val radius = 7.dp.toPx()
+        val radius = if (overlapsVehicle(at)) 15.dp.toPx() else 7.dp.toPx()
         val corner = at - Offset(radius, radius)
         val dimensions = Size(radius * 2, radius * 2)
         drawRect(style.labelHalo, corner, dimensions, style = Stroke(4.dp.toPx()))
         drawRect(style.truth, corner, dimensions, style = Stroke(2.dp.toPx()))
     }
-    rawMarker?.let { drawRawCross(it, style) }
-    vehicle?.let { marker ->
-        val at = projection.offset(marker.point)
-        when (marker.kind) {
-            MarkerKind.FIX -> {
-                drawCircle(style.labelHalo, 3.dp.toPx(), at)
-                drawCircle(style.driven, 1.9.dp.toPx(), at)
-            }
-            MarkerKind.ESTIMATE -> drawEstimate(at, style)
+    rawMarker?.let { placement ->
+        val at = placement.center
+        if (placement.outside) {
+            drawOffscreenObservation(at, raw - at, style)
+        } else if (rawSymbol == MapSymbol.REJECTED) {
+            drawRawCross(at, style, overlapsVehicle(at))
+        } else {
+            val radius = if (overlapsVehicle(at)) 14.dp.toPx() else 5.dp.toPx()
+            drawCircle(style.labelHalo, radius, at, style = Stroke(4.dp.toPx()))
+            drawCircle(style.symbolColor(rawSymbol), radius, at, style = Stroke(2.dp.toPx()))
+        }
+    }
+    if (vehicle != null && vehicleOffset != null) {
+        when (vehicle.kind) {
+            MarkerKind.FIX -> drawVehicle(vehicleOffset, vehicle.heading, style)
+            MarkerKind.ESTIMATE -> drawEstimate(vehicleOffset, style)
             MarkerKind.LAST_KNOWN -> Unit
         }
     }
 }
 
-private fun DrawScope.drawRawCross(at: Offset, style: MapStyle) {
-    val radius = 5.dp.toPx()
+internal data class RawPlacement(val center: Offset, val outside: Boolean)
+
+internal fun markerOverlaps(primary: Offset?, secondary: Offset, radius: Float): Boolean =
+    primary != null && (primary - secondary).getDistanceSquared() < radius * radius
+
+internal fun rawPlacement(at: Offset, viewport: Size, margin: Float): RawPlacement {
+    if (at.x in 0f..viewport.width && at.y in 0f..viewport.height) return RawPlacement(at, outside = false)
+    val pad = margin.coerceAtMost(viewport.minDimension / 2)
+    return RawPlacement(Offset(at.x.coerceIn(pad, viewport.width - pad), at.y.coerceIn(pad, viewport.height - pad)),
+        outside = true)
+}
+
+private fun DrawScope.drawOffscreenObservation(at: Offset, toward: Offset, style: MapStyle) {
+    val angle = Math.toDegrees(atan2(toward.y.toDouble(), toward.x.toDouble())).toFloat()
+    rotate(angle, at) {
+        val tip = at + Offset(4.dp.toPx(), 0f)
+        for (direction in -1..1 step 2) {
+            val tail = at + Offset(-3.dp.toPx(), direction * 5.dp.toPx())
+            drawLine(style.labelHalo, tail, tip, 5.dp.toPx(), StrokeCap.Round)
+            drawLine(style.symbolColor(MapSymbol.OUTSIDE), tail, tip, 2.5.dp.toPx(), StrokeCap.Round)
+        }
+    }
+}
+
+private fun DrawScope.drawRawCross(at: Offset, style: MapStyle, overlapsVehicle: Boolean) {
+    val radius = if (overlapsVehicle) 12.dp.toPx() else 5.dp.toPx()
     val descending = Offset(radius, radius)
     val ascending = Offset(radius, -radius)
     fun stroke(color: Color, width: Float) {
@@ -277,7 +305,7 @@ private fun DrawScope.drawVehicle(at: Offset, heading: Double?, style: MapStyle)
     val r = 12.dp.toPx()
     if (heading == null) {
         drawCircle(style.routeHalo, r, at)
-        drawCircle(style.route, r * .74f, at)
+        drawCircle(style.symbolColor(MapSymbol.FIX), r * .74f, at)
         return
     }
     rotate(heading.toFloat(), at) {
@@ -289,6 +317,6 @@ private fun DrawScope.drawVehicle(at: Offset, heading: Double?, style: MapStyle)
             close()
         }
         drawPath(arrow, style.routeHalo, style = Stroke(5.dp.toPx(), join = StrokeJoin.Round))
-        drawPath(arrow, style.route)
+        drawPath(arrow, style.symbolColor(MapSymbol.FIX))
     }
 }
