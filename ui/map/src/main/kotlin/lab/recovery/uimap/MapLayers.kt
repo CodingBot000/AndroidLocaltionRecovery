@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.unit.dp
 import lab.recovery.map.LandUse
@@ -170,7 +171,7 @@ private fun DrawScope.drawPortal(at: Offset, toward: Offset, style: MapStyle) {
 
 internal fun DrawScope.drawOverlay(
     overlay: MapOverlay, projection: Projection, style: MapStyle,
-    paths: OverlayPathCache, strokes: MapStrokeCache,
+    paths: OverlayPathCache, strokes: MapStrokeCache, truthStroke: Stroke,
 ) {
     if (overlay.trails.isNotEmpty()) {
         val scale = projection.scale.toFloat()
@@ -214,19 +215,13 @@ internal fun DrawScope.drawOverlay(
     }
     overlay.truth?.let {
         val at = projection.offset(it)
-        val radius = if (overlapsVehicle(at)) 15.dp.toPx() else 7.dp.toPx()
-        val corner = at - Offset(radius, radius)
-        val dimensions = Size(radius * 2, radius * 2)
-        drawRect(style.labelHalo, corner, dimensions, style = Stroke(4.dp.toPx()))
-        drawRect(style.truth, corner, dimensions, style = Stroke(2.dp.toPx()))
+        drawTruthMarker(at, style, overlapsVehicle(at), truthStroke)
     }
     rawMarker?.let { placement ->
         val at = placement.center
         if (placement.outside) {
             drawOffscreenObservation(at, raw - at, style)
-        } else if (rawSymbol == MapSymbol.REJECTED) {
-            drawRawCross(at, style, overlapsVehicle(at))
-        } else {
+        } else if (rawSymbol == MapSymbol.GPS) {
             val radius = if (overlapsVehicle(at)) 14.dp.toPx() else 5.dp.toPx()
             drawCircle(style.labelHalo, radius, at, style = Stroke(4.dp.toPx()))
             drawCircle(style.symbolColor(rawSymbol), radius, at, style = Stroke(2.dp.toPx()))
@@ -239,6 +234,15 @@ internal fun DrawScope.drawOverlay(
             MarkerKind.LAST_KNOWN -> Unit
         }
     }
+    // Keep the cross legible when the vehicle and the rejected observation overlap.
+    if (rawSymbol == MapSymbol.REJECTED && rawMarker?.outside == false) {
+        drawRawCross(rawMarker.center, style, overlapsVehicle(rawMarker.center))
+    }
+}
+
+internal fun DrawScope.drawTruthMarker(at: Offset, style: MapStyle, overlapsVehicle: Boolean, stroke: Stroke) {
+    val radius = if (overlapsVehicle) 15.dp.toPx() else 7.dp.toPx()
+    drawRect(style.symbolColor(MapSymbol.TRUTH), at - Offset(radius, radius), Size(radius * 2, radius * 2), style = stroke)
 }
 
 internal data class RawPlacement(val center: Offset, val outside: Boolean)
@@ -265,7 +269,7 @@ private fun DrawScope.drawOffscreenObservation(at: Offset, toward: Offset, style
     }
 }
 
-private fun DrawScope.drawRawCross(at: Offset, style: MapStyle, overlapsVehicle: Boolean) {
+internal fun DrawScope.drawRawCross(at: Offset, style: MapStyle, overlapsVehicle: Boolean) {
     val radius = if (overlapsVehicle) 12.dp.toPx() else 5.dp.toPx()
     val descending = Offset(radius, radius)
     val ascending = Offset(radius, -radius)
@@ -273,8 +277,10 @@ private fun DrawScope.drawRawCross(at: Offset, style: MapStyle, overlapsVehicle:
         drawLine(color, at - descending, at + descending, width, StrokeCap.Round)
         drawLine(color, at - ascending, at + ascending, width, StrokeCap.Round)
     }
-    stroke(style.labelHalo, 4.dp.toPx())
-    stroke(style.raw, 2.dp.toPx())
+    scale(.7f, pivot = at) {
+        stroke(style.labelHalo, 4.dp.toPx())
+        stroke(style.symbolColor(MapSymbol.REJECTED), 2.dp.toPx())
+    }
 }
 
 private fun DrawScope.drawLastKnown(at: Offset, style: MapStyle, current: Boolean) {
@@ -301,14 +307,17 @@ private fun DrawScope.drawEstimate(at: Offset, style: MapStyle) {
     drawPath(diamond, style.estimate, style = Stroke(2.5.dp.toPx(), join = StrokeJoin.Round))
 }
 
-private fun DrawScope.drawVehicle(at: Offset, heading: Double?, style: MapStyle) {
+internal fun DrawScope.drawVehicle(at: Offset, heading: Double?, style: MapStyle) {
     val r = 12.dp.toPx()
     if (heading == null) {
         drawCircle(style.routeHalo, r, at)
         drawCircle(style.symbolColor(MapSymbol.FIX), r * .74f, at)
         return
     }
-    rotate(heading.toFloat(), at) {
+    withTransform({
+        rotate(heading.toFloat(), at)
+        scale(1.3f, 1.3f, at)
+    }) {
         val arrow = Path().apply {
             moveTo(at.x, at.y - r)
             lineTo(at.x + r * .76f, at.y + r * .62f)

@@ -39,6 +39,7 @@ import lab.recovery.location.Reason
 import lab.recovery.map.MapVisualData
 import lab.recovery.uimap.MapMarker
 import lab.recovery.uimap.MapCredits
+import lab.recovery.uimap.MapLegendMarker
 import lab.recovery.uimap.MapOverlay
 import lab.recovery.uimap.MapScene
 import lab.recovery.uimap.MapStrings
@@ -143,8 +144,7 @@ internal fun MapLegend(truthEnabled: Boolean, dark: Boolean, playback: Playback,
 private fun LegendItem(symbol: MapSymbol, dark: Boolean, @StringRes label: Int = symbol.labelResource()) {
     Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
         Surface(color = mapLegendBackground(dark), shape = RoundedCornerShape(4.dp)) {
-            Text(symbol.glyph, color = symbol.color(dark), modifier = Modifier.padding(horizontal = 4.dp),
-                style = MaterialTheme.typography.labelSmall)
+            MapLegendMarker(symbol, dark)
         }
         Text(stringResource(label), style = MaterialTheme.typography.labelSmall)
     }
