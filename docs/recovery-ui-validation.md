@@ -43,9 +43,11 @@ API 33의 첫 오프라인 실행과 표시 대기만 추가한 재실행에서�
 
 2026-11-26의 UI 후속 작업에서는 단말이 없어 F5가 BLOCKED였다. 2026-11-27 연결된 SM-G975N에서 G7을 실행했다. 같은 실기기의 지도 준비는 675.4→675.0ms, 주행 Overrun P95는 101.4→102.0ms였다. 콜드 TTFD는 본 측정 1,465.6→1,915.0ms, 독립 재시험 2,113.2→2,011.0ms로 방향이 달랐다. G7 성능 수용은 **INCONCLUSIVE**다. [G7 결과와 복원](recovery-ui-physical-g7.md)
 
+G7 최종 콜드 재시험 A→C→C→A에서 TTID는 709.2→613.4ms, TTFD는 1,670.6→1,821.5ms였다. 최종 TTFD +9.0%는 조사 기준 이내였고 인접 비교 두 쌍의 차이 방향은 갈렸다. 후보 고유의 지속 회귀와 지연 원인을 확인하지 못해 **INCONCLUSIVE**로 G7을 종료했다. [최종 콜드 측정·trace·복원](recovery-ui-physical-g7-final-cold.md)
+
 같은 단말에서 G8 독립 내구를 빌드별 한 번씩 실행했다. A/C 모두 O10 180초×10회와 Reset·유휴 표본, O01/O10 전환·재생 20회, Activity 재생성 및 Live 시작·종료 20회를 통과했다. 유휴 120초 전체 PSS는 384,256→380,640KiB, Native PSS는 103,730→114,467KiB였다. Native PSS가 조사 기준을 넘어 G8 수용은 **INCONCLUSIVE**다. [G8 결과와 복원](recovery-ui-physical-g8.md)
 
-C→A 역순에서 빌드별 독립 내구 한 번과 Reset 뒤 60·120·300·600초 유휴 표본을 추가했다. 유휴 Native PSS 격차는 +7.40%였고 완료 중앙값과 최대값은 +10.53%와 +14.05%였다. Native PSS 완료 기울기가 후보에서 더 큰 현상은 두 시험에서 관측됐다. G8 최종 판정은 **INCONCLUSIVE**다. [G8 최종 재시험·진단·복원](recovery-ui-physical-g8-retest.md)
+C→A 역순에서 빌드별 독립 내구 한 번과 Reset 뒤 60·120·300·600초 유휴 표본을 추가했다. 유휴 Native PSS 격차는 +7.40%였고 완료 중앙값과 최대값은 +10.53%와 +14.05%였다. 두 시험에서 반복된 후보의 더 큰 Native Heap PSS 완료 기울기는 원인 미확정의 잔여 위험이다. G8은 **INCONCLUSIVE**로 내구 검증을 종료했다. [G8 최종 재시험·진단·복원](recovery-ui-physical-g8-retest.md)
 
 G9에서는 A/C 실제 GPS의 120초 smoke와 실패 대조를 실행했다. Live와 직접 GPS 요청 모두 위성·fix가 관측되지 않았다. 대기 UI와 FGS·리스너 해제는 확인했다. A의 Activity 재생성 3회와 화면 OFF 303.979초는 세션을 유지했다. Wake 뒤 수동 잠금 해제가 이뤄지지 않아 A의 복귀와 C의 수명은 BLOCKED였다. G9 판정은 **INCONCLUSIVE**다. [G9 결과와 복원](recovery-ui-physical-g9.md) · [실기기 범위와 이력](physical-device-validation.md)
 
@@ -81,8 +83,8 @@ README에는 정상·추정·복구 세 장과 추정 중단 링크를 배치했
 | G4 화면 정보 및 조작 | PASS | OL07 상태별 캡처의 첫 화면 컨트롤과 실제 5× 선택을 확인했다. |
 | G5 기능·엔진 동등성 | PASS | 단위 83개, 평가 JSON 5종 동일, 앱 UI·지도·카메라·재생·Live 계측 및 APK 검사. |
 | G6 OS·접근성 | PASS | API 26·48MiB와 31/33/34/36, 한·영 및 글꼴 130%, 실제 TalkBack. |
-| G7 실기기 성능 | INCONCLUSIVE | A/C 원본 9회씩, 콜드 재시험 6회씩. 주행 악화는 재현되지 않았고 콜드 본 시험과 재시험의 방향이 달랐다. [실기기 G7](recovery-ui-physical-g7.md) |
-| G8 실기기 메모리·내구 | INCONCLUSIVE | A→C와 C→A에서 빌드별 각 독립 실행 1회. 최초 유휴 120초 Native PSS +10.35%, 재시험 최대 +14.05%·완료 중앙값 +10.53%. [최초 G8](recovery-ui-physical-g8.md) · [최종 G8](recovery-ui-physical-g8-retest.md) |
+| G7 실기기 성능 | INCONCLUSIVE | 원본 각 9회, 콜드 재시험 두 차례에서 각 6회. 최종 콜드 TTFD +9.0%, 인접 쌍의 차이 방향이 갈렸다. [최초 G7](recovery-ui-physical-g7.md) · [최종 G7](recovery-ui-physical-g7-final-cold.md) |
+| G8 실기기 메모리·내구 | INCONCLUSIVE | A→C와 C→A에서 빌드별 각 독립 실행 1회. 반복된 후보 Native Heap PSS 증가를 잔여 위험으로 기록하고 종료했다. [최초 G8](recovery-ui-physical-g8.md) · [최종 G8](recovery-ui-physical-g8-retest.md) |
 | G9 실제 GPS·서비스 | INCONCLUSIVE | A/C의 기존 Live·직접 GPS 무수신, 대기 UI와 해제 확인. A 화면 OFF 유지 재시험 통과, 잠금 후 복귀·C 수명·추가 GPS BLOCKED. [최초 G9](recovery-ui-physical-g9.md) · [재시험](recovery-ui-physical-g9-followup.md) |
 | G10 공개 자료 | PASS | 최종 원본 PNG, 이전 이력, 상대 링크 및 개인정보 노출 검사. |
 | G11 최종 원격 CI | [최종 head 판정](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) | PR과 push의 `build-and-test`·`live-api36`. |

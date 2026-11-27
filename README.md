@@ -111,7 +111,7 @@ ANR·Crash는 진단용 하네스와 계측 환경의 재현 사례이며 상용
 | 독립 위치 평가 | 합성·장시간·OSM·고난도 84개 및 로딩 오류 3개 통과 |
 | Android 플랫폼 계측 | API 26·31·33·34·36 에뮬레이터, 권한·서비스 생명주기 및 접근성 검증 |
 | 실기기 검증 이력 | 2026-11-25–26의 SM-G975N Android 12에서 fresh GPS 수신, Live 20회 시작·해제, O10 1× 재생 30분 및 성능을 측정했다. [빌드별 범위](docs/physical-device-validation.md) |
-| 현재 UI 후보의 실기기 | SM-G975N에서 원본 성능 시험과 빌드별 30분 내구를 A→C와 C→A 두 순서로 실행했다. 기동과 Native PSS의 수용 판정은 INCONCLUSIVE다. [G7 성능](docs/recovery-ui-physical-g7.md) · [G8 최초](docs/recovery-ui-physical-g8.md) · [G8 최종 재시험](docs/recovery-ui-physical-g8-retest.md) |
+| 현재 UI 후보의 실기기 | SM-G975N에서 최종 콜드 기동 재시험의 후보 TTFD는 +9.0%였다. 두 내구 비교에서 후보 Native Heap PSS 완료 기울기가 더 컸다. G7·G8은 INCONCLUSIVE로 종료했다. [G7 최종](docs/recovery-ui-physical-g7-final-cold.md) · [G8 잔여 위험](docs/recovery-ui-physical-g8-retest.md#판정과-복원) |
 | 현재 UI 후보의 실제 위치 | A/C에서 Live 및 직접 GPS 요청을 관찰했다. fresh fix가 없었고 잠금 복귀 검증이 남아 G9는 INCONCLUSIVE다. [G9 GPS·서비스](docs/recovery-ui-physical-g9.md) |
 | GitHub Actions | 모듈 경계·단위 테스트·Lint·Debug/unsigned Release APK·fixture·평가와 API 36 Live 계측 |
 
