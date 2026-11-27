@@ -15,12 +15,16 @@ class ObservationPlacementTest {
         assertFalse(markerOverlaps(visible, Offset(44f, 20f), 12f))
     }
 
-    @Test fun legendUsesTheRendererPaletteForEachThemeAndDistinguishesRawAndRejected() {
+    @Test fun legendSharesMarkerColorsAndSeparatesTheVehicleFromTheTrail() {
         for ((dark, style) in listOf(false to MapStyle.Day, true to MapStyle.Night)) {
             for (symbol in MapSymbol.entries) assertEquals(style.symbolColor(symbol), symbol.color(dark))
             assertNotEquals(MapSymbol.GPS.glyph, MapSymbol.REJECTED.glyph)
             assertNotEquals(MapSymbol.GPS.color(dark), MapSymbol.REJECTED.color(dark))
-            assertEquals(style.truth, MapSymbol.TRUTH.color(dark))
+            val vehicle = MapSymbol.FIX.color(dark)
+            assertTrue(vehicle.green > vehicle.red && vehicle.green > vehicle.blue)
+            assertEquals(style.driven, MapSymbol.TRAIL.color(dark))
+            assertNotEquals(vehicle, MapSymbol.TRAIL.color(dark))
+            assertEquals(style.truth.copy(alpha = .5f), MapSymbol.TRUTH.color(dark))
         }
     }
 }

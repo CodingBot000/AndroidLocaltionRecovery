@@ -150,6 +150,7 @@ fun RoadMap(
     val strokes = remember { MapStrokeCache() }
     val trailPaths = remember(runId) { OverlayPathCache() }
     val trailStrokes = remember { MapStrokeCache() }
+    val truthMarkerStroke = rememberTruthMarkerStroke()
     val shape = RoundedCornerShape(14.dp)
     val border = style.muted.copy(alpha = .32f)
     val hasTunnel = remember(geometry, credits != null) {
@@ -172,7 +173,7 @@ fun RoadMap(
             if (softwareMap == null) drawMap(data, camera, style, detail, strokes)
             else softwareMap.draw(this, data, camera, style, detail, strokes)
             if (!optimized) {
-                drawOverlay(latest, camera, style, trailPaths, trailStrokes)
+                drawOverlay(latest, camera, style, trailPaths, trailStrokes, truthMarkerStroke)
                 val occupied = listOf(modeBounds, controlsBounds, creditBounds, tunnelBounds)
                 drawMapLabels(data, camera, detail, style, latest, occupied, labelCache)
             }
@@ -181,7 +182,7 @@ fun RoadMap(
             val data = geometry ?: return@Canvas
             if (viewport.width < 1 || viewport.height < 1) return@Canvas
             val camera = projection(data)
-            drawOverlay(latest, camera, style, trailPaths, trailStrokes)
+            drawOverlay(latest, camera, style, trailPaths, trailStrokes, truthMarkerStroke)
         }
         if (optimized) Canvas(Modifier.matchParentSize()) {
             val data = geometry ?: return@Canvas
