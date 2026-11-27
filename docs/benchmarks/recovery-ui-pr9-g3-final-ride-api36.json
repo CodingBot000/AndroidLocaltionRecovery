@@ -1,0 +1,5553 @@
+{
+  "dateKst": "2026-11-27",
+  "priorPrHead": "cceeea69c6eaa228050d7c075949630525985b81",
+  "sourceCommits": {
+    "A": "a732af2dddfb86514fbfa76a6d7971f31e8d23da",
+    "C": "ce617de21ffbf5485564c9d7bc589a3b6085c02c"
+  },
+  "benchmark": "RefactorMapBenchmark#rideO10",
+  "compilationMode": "CompilationMode.None()",
+  "suppressedBenchmarkErrors": [
+    "EMULATOR"
+  ],
+  "rawAggregation": "Nearest rank for P95. All original benchmark frames within each build in this retest.",
+  "order": [
+    "A9",
+    "C9",
+    "C10",
+    "A10"
+  ],
+  "repetitionsPerBuild": 6,
+  "excludedSets": [],
+  "aggregates": {
+    "A": {
+      "frameDurationCpuMs": {
+        "n": 305,
+        "min": 6.5635,
+        "median": 182.895334,
+        "max": 520.680542,
+        "p50": 182.895334,
+        "p90": 362.257084,
+        "p95": 365.84725,
+        "p99": 421.013
+      },
+      "frameOverrunMs": {
+        "n": 305,
+        "min": -8.599613,
+        "median": 199.840625,
+        "max": 689.58178,
+        "p50": 199.840625,
+        "p90": 514.105802,
+        "p95": 520.489228,
+        "p99": 567.81053
+      }
+    },
+    "C": {
+      "frameDurationCpuMs": {
+        "n": 315,
+        "min": 6.996583,
+        "median": 237.247042,
+        "max": 464.950542,
+        "p50": 237.247042,
+        "p90": 361.023333,
+        "p95": 365.833917,
+        "p99": 373.467167
+      },
+      "frameOverrunMs": {
+        "n": 315,
+        "min": -9.277617,
+        "median": 238.155881,
+        "max": 695.401985,
+        "p50": 238.155881,
+        "p90": 514.762503,
+        "p95": 521.449583,
+        "p99": 535.620102
+      }
+    }
+  },
+  "candidateVsBaseline": {
+    "frameDurationCpuMs": {
+      "A": 365.84725,
+      "C": 365.833917,
+      "deltaMs": -0.013332999999988715,
+      "deltaPercent": -0.003644417171366765
+    },
+    "frameOverrunMs": {
+      "A": 520.489228,
+      "C": 521.449583,
+      "deltaMs": 0.9603549999999359,
+      "deltaPercent": 0.18451006252140356
+    }
+  },
+  "perSet": {
+    "A9": {
+      "before": {
+        "guest": {
+          "sdk": 36,
+          "abi": "arm64-v8a",
+          "fingerprint": "google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.D1/13818094:user/release-keys",
+          "dimensions": "Physical size: 1080x2400",
+          "density": "Physical density: 420",
+          "refreshHz": [
+            60.0
+          ],
+          "localeKoKr": true,
+          "acPowered": true,
+          "batteryPct": 100,
+          "batteryEmulationC": 25.0,
+          "thermalStatus": 0,
+          "surfaceFlingerSwiftShader": true,
+          "settings": {
+            "font_scale": "1.0",
+            "window_animation_scale": "0.0",
+            "transition_animation_scale": "0.0",
+            "animator_duration_scale": "0.0",
+            "airplane_mode_on": "0",
+            "wifi_on": "1"
+          }
+        },
+        "hostPreflight": [
+          {
+            "utc": "2026-11-27T09:07:36.391+00:00",
+            "loadAverage": [
+              2.53466796875,
+              3.0224609375,
+              2.443359375
+            ],
+            "cpuIdlePct": 89.99058675870725,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 12.4,
+              "Existing macOS virtual machine service": 20.9,
+              "Interactive desktop applications": 34.599999999999994,
+              "System indexing or backup": 0.1,
+              "WindowServer": 29.3
+            }
+          },
+          {
+            "utc": "2026-11-27T09:07:38.451+00:00",
+            "loadAverage": [
+              2.41162109375,
+              2.98876953125,
+              2.4345703125
+            ],
+            "cpuIdlePct": 90.53724053724054,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 11.9,
+              "Existing macOS virtual machine service": 15.1,
+              "Interactive desktop applications": 25.400000000000006,
+              "System indexing or backup": 0.0,
+              "WindowServer": 15.3
+            }
+          },
+          {
+            "utc": "2026-11-27T09:07:40.510+00:00",
+            "loadAverage": [
+              2.41162109375,
+              2.98876953125,
+              2.4345703125
+            ],
+            "cpuIdlePct": 91.64888753428832,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 8.6,
+              "Existing macOS virtual machine service": 16.0,
+              "Interactive desktop applications": 36.599999999999994,
+              "System indexing or backup": 0.0,
+              "WindowServer": 39.6
+            }
+          }
+        ],
+        "host": {
+          "memoryPressure": "The system has 68719476736 (4194304 pages with a page size of 16384).\nSystem-wide memory free percentage: 48%",
+          "pressureLevel": 1,
+          "swapUsage": "total = 2048.00M  used = 1272.62M  free = 775.38M  (encrypted)",
+          "logicalCpuCount": 16,
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "processSnapshot": [
+            1,
+            [],
+            {
+              "Android Emulator": 7.7,
+              "Existing macOS virtual machine service": 15.5,
+              "Interactive desktop applications": 39.5,
+              "System indexing or backup": 0.0,
+              "WindowServer": 39.7
+            }
+          ],
+          "hardware": "Mac16,6",
+          "macOS": "26.5.1"
+        },
+        "apkSha256": {
+          "target": "fb1fdc7d464cf47c8cb0011a9d2a659dfd43eb2de2b40bdc077d2fb16d8f4f76",
+          "harness": "0ee2174794b53a278c4f99131f4a3fa39b58d65a9011a07a144f9cff2544e4f2"
+        }
+      },
+      "after": {
+        "guest": {
+          "sdk": 36,
+          "abi": "arm64-v8a",
+          "fingerprint": "google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.D1/13818094:user/release-keys",
+          "dimensions": "Physical size: 1080x2400",
+          "density": "Physical density: 420",
+          "refreshHz": [
+            60.0
+          ],
+          "localeKoKr": true,
+          "acPowered": true,
+          "batteryPct": 100,
+          "batteryEmulationC": 25.0,
+          "thermalStatus": 0,
+          "surfaceFlingerSwiftShader": true,
+          "settings": {
+            "font_scale": "1.0",
+            "window_animation_scale": "0.0",
+            "transition_animation_scale": "0.0",
+            "animator_duration_scale": "0.0",
+            "airplane_mode_on": "0",
+            "wifi_on": "1"
+          }
+        },
+        "host": {
+          "memoryPressure": "The system has 68719476736 (4194304 pages with a page size of 16384).\nSystem-wide memory free percentage: 47%",
+          "pressureLevel": 1,
+          "swapUsage": "total = 2048.00M  used = 1272.62M  free = 775.38M  (encrypted)",
+          "logicalCpuCount": 16,
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "processSnapshot": [
+            1,
+            [],
+            {
+              "Android Emulator": 167.6,
+              "Existing macOS virtual machine service": 24.9,
+              "Interactive desktop applications": 18.6,
+              "System indexing or backup": 0.0,
+              "WindowServer": 27.6
+            }
+          ],
+          "hardware": "Mac16,6",
+          "macOS": "26.5.1"
+        }
+      },
+      "validity": {
+        "traceCount": 3,
+        "testRunnerExit": 0,
+        "reasons": [],
+        "environmentComparisonEligible": true,
+        "runWasRetained": true
+      },
+      "originalBenchmarkDataSha256": "ec688b27820c7057862e98e5fc31414fa4013cc40541a5ca6a42d3a02503f946",
+      "benchmarkWindowHostSamples": [
+        {
+          "utc": "2026-11-27T09:07:44.612+00:00",
+          "loadAverage": [
+            3.89990234375,
+            3.28759765625,
+            2.54296875
+          ],
+          "cpuIdlePct": 63.66513688874822,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 893.3,
+            "Existing macOS virtual machine service": 9.6,
+            "Interactive desktop applications": 90.8,
+            "System indexing or backup": 0.0,
+            "WindowServer": 34.7
+          }
+        },
+        {
+          "utc": "2026-11-27T09:07:48.657+00:00",
+          "loadAverage": [
+            5.42919921875,
+            3.61474609375,
+            2.66259765625
+          ],
+          "cpuIdlePct": 34.37995559784332,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1157.5,
+            "Existing macOS virtual machine service": 10.1,
+            "Interactive desktop applications": 11.8,
+            "System indexing or backup": 0.0,
+            "WindowServer": 20.1
+          }
+        },
+        {
+          "utc": "2026-11-27T09:07:52.701+00:00",
+          "loadAverage": [
+            6.755859375,
+            3.919921875,
+            2.77587890625
+          ],
+          "cpuIdlePct": 31.151707704527404,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1223.6,
+            "Existing macOS virtual machine service": 8.1,
+            "Interactive desktop applications": 12.0,
+            "System indexing or backup": 0.0,
+            "WindowServer": 25.4
+          }
+        },
+        {
+          "utc": "2026-11-27T09:07:56.744+00:00",
+          "loadAverage": [
+            6.755859375,
+            3.919921875,
+            2.77587890625
+          ],
+          "cpuIdlePct": 45.011820330969265,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 794.9,
+            "Existing macOS virtual machine service": 12.7,
+            "Interactive desktop applications": 9.899999999999999,
+            "System indexing or backup": 0.0,
+            "WindowServer": 16.7
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:00.788+00:00",
+          "loadAverage": [
+            6.294921875,
+            3.87109375,
+            2.76513671875
+          ],
+          "cpuIdlePct": 35.40973212870502,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 971.7,
+            "Existing macOS virtual machine service": 11.1,
+            "Interactive desktop applications": 10.299999999999999,
+            "System indexing or backup": 0.0,
+            "WindowServer": 22.2
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:04.831+00:00",
+          "loadAverage": [
+            6.83154296875,
+            4.0224609375,
+            2.82470703125
+          ],
+          "cpuIdlePct": 31.313451776649746,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 612.7,
+            "Existing macOS virtual machine service": 9.7,
+            "Interactive desktop applications": 9.299999999999999,
+            "System indexing or backup": 0.0,
+            "WindowServer": 20.6
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:08.872+00:00",
+          "loadAverage": [
+            6.4443359375,
+            3.98876953125,
+            2.81982421875
+          ],
+          "cpuIdlePct": 45.41429475015813,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 614.7,
+            "Existing macOS virtual machine service": 10.3,
+            "Interactive desktop applications": 33.0,
+            "System indexing or backup": 0.0,
+            "WindowServer": 19.7
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:12.917+00:00",
+          "loadAverage": [
+            7.20947265625,
+            4.18798828125,
+            2.89697265625
+          ],
+          "cpuIdlePct": 36.47189583994919,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 990.2,
+            "Existing macOS virtual machine service": 10.0,
+            "Interactive desktop applications": 11.0,
+            "System indexing or backup": 0.0,
+            "WindowServer": 23.7
+          }
+        }
+      ],
+      "observedHostDuringRunner": {
+        "windows": 8,
+        "cpuIdlePct": {
+          "n": 8,
+          "min": 31.151707704527404,
+          "median": 35.94081398432711,
+          "max": 63.66513688874822,
+          "p50": 35.40973212870502,
+          "p90": 63.66513688874822,
+          "p95": 63.66513688874822,
+          "p99": 63.66513688874822
+        },
+        "loadAvg1": {
+          "n": 8,
+          "min": 3.89990234375,
+          "median": 6.60009765625,
+          "max": 7.20947265625,
+          "p50": 6.4443359375,
+          "p90": 7.20947265625,
+          "p95": 7.20947265625,
+          "p99": 7.20947265625
+        },
+        "memoryPressureLevels": [
+          1
+        ],
+        "androidEmulatorCounts": [
+          1
+        ],
+        "forbiddenConcurrency": [],
+        "backgroundProcessCategoryPeaksPctOfOneCore": {
+          "Android Emulator": 1223.6,
+          "Existing macOS virtual machine service": 12.7,
+          "Interactive desktop applications": 90.8,
+          "System indexing or backup": 0.0,
+          "WindowServer": 34.7
+        }
+      },
+      "frames": {
+        "frameDurationCpuMs": {
+          "n": 150,
+          "min": 6.5635,
+          "median": 151.6543335,
+          "max": 520.680542,
+          "p50": 151.554,
+          "p90": 362.732541,
+          "p95": 372.554917,
+          "p99": 519.09675
+        },
+        "frameOverrunMs": {
+          "n": 150,
+          "min": -8.204,
+          "median": 170.76932499999998,
+          "max": 574.683028,
+          "p50": 166.180306,
+          "p90": 507.57486,
+          "p95": 517.256347,
+          "p99": 567.81053
+        }
+      },
+      "threadStatsAndDeadlineTotals": {
+        "UI": {
+          "runningMs": {
+            "n": 3,
+            "min": 372.186416,
+            "median": 385.96541,
+            "max": 387.980877,
+            "p50": 385.96541,
+            "p90": 387.980877,
+            "p95": 387.980877,
+            "p99": 387.980877
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 24.720423,
+            "median": 29.783419,
+            "max": 30.701952,
+            "p50": 29.783419,
+            "p90": 30.701952,
+            "p95": 30.701952,
+            "p99": 30.701952
+          }
+        },
+        "RenderThread": {
+          "runningMs": {
+            "n": 3,
+            "min": 5058.679958,
+            "median": 5326.837198,
+            "max": 5528.388588,
+            "p50": 5326.837198,
+            "p90": 5528.388588,
+            "p95": 5528.388588,
+            "p99": 5528.388588
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 34.937963,
+            "median": 37.143802,
+            "max": 49.301835,
+            "p50": 37.143802,
+            "p90": 49.301835,
+            "p95": 49.301835,
+            "p99": 49.301835
+          }
+        },
+        "JIT": {
+          "runningMs": {
+            "n": 3,
+            "min": 86.909036,
+            "median": 88.785708,
+            "max": 90.363713,
+            "p50": 88.785708,
+            "p90": 90.363713,
+            "p95": 90.363713,
+            "p99": 90.363713
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 23.534254,
+            "median": 31.062245,
+            "max": 36.652585,
+            "p50": 31.062245,
+            "p90": 36.652585,
+            "p95": 36.652585,
+            "p99": 36.652585
+          }
+        },
+        "worker": {
+          "runningMs": {
+            "n": 3,
+            "min": 5.517416,
+            "median": 5.617668,
+            "max": 5.866748,
+            "p50": 5.617668,
+            "p90": 5.866748,
+            "p95": 5.866748,
+            "p99": 5.866748
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 3.159831,
+            "median": 3.50971,
+            "max": 4.967833,
+            "p50": 3.50971,
+            "p90": 4.967833,
+            "p95": 4.967833,
+            "p99": 4.967833
+          }
+        },
+        "measureBlockMs": {
+          "n": 3,
+          "min": 8119.973838,
+          "median": 8126.829962,
+          "max": 8136.975921,
+          "p50": 8126.829962,
+          "p90": 8136.975921,
+          "p95": 8136.975921,
+          "p99": 8136.975921
+        },
+        "actualSurfaceTokens": 151,
+        "appDeadlineMissTags": 112,
+        "uniquelyPairedTokens": 151,
+        "pairedPositiveOverrun": 116,
+        "unpairedTokens": 0,
+        "droppedPresentTokens": 0
+      },
+      "iterations": [
+        {
+          "repeat": 1,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              35.792875,
+              207.676251,
+              362.434542,
+              266.814459,
+              211.215958,
+              257.158542,
+              257.296167,
+              220.237916,
+              151.554,
+              84.570041,
+              20.217166,
+              13.327209,
+              14.435167,
+              14.297041,
+              12.560083,
+              12.193084,
+              11.908875,
+              13.204792,
+              142.955542,
+              147.164958,
+              255.355166,
+              403.897876,
+              368.194834,
+              364.278666,
+              346.035125,
+              344.820125,
+              350.417459,
+              375.038084,
+              369.376042,
+              249.320334,
+              130.512542,
+              121.247167,
+              161.850625,
+              122.119834,
+              122.374167,
+              109.016041,
+              6.5635,
+              7.850708,
+              9.009375,
+              8.369,
+              18.330458,
+              181.88125,
+              326.671501,
+              358.459625,
+              359.728,
+              349.930167,
+              420.923084,
+              342.219626,
+              269.708208,
+              328.905208
+            ],
+            "frameOverrunMs": [
+              19.670067,
+              192.053443,
+              346.342486,
+              409.030278,
+              374.80191,
+              242.390796,
+              241.344551,
+              205.40689,
+              137.706316,
+              69.662365,
+              3.973873,
+              -2.868452,
+              -1.597735,
+              -0.797561,
+              -2.433261,
+              -4.099044,
+              -3.961078,
+              -1.616029,
+              127.121897,
+              131.197481,
+              332.746107,
+              418.757403,
+              567.81053,
+              516.692914,
+              331.191095,
+              499.485644,
+              507.57486,
+              358.760617,
+              522.007909,
+              408.476041,
+              286.333799,
+              163.999181,
+              199.100392,
+              153.745103,
+              188.877106,
+              92.917027,
+              -7.516506,
+              -7.243123,
+              -7.087906,
+              -7.881399,
+              3.098647,
+              165.883814,
+              310.462108,
+              474.487275,
+              520.601864,
+              333.844212,
+              404.816427,
+              326.627852,
+              253.461736,
+              313.776825
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 50,
+              "min": 6.5635,
+              "median": 194.7787505,
+              "max": 420.923084,
+              "p50": 181.88125,
+              "p90": 364.278666,
+              "p95": 375.038084,
+              "p99": 420.923084
+            },
+            "frameOverrunMs": {
+              "n": 50,
+              "min": -7.881399,
+              "median": 202.25364100000002,
+              "max": 567.81053,
+              "p50": 199.100392,
+              "p90": 499.485644,
+              "p95": 520.601864,
+              "p99": 567.81053
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter000",
+            "sha256": "b702efc7ed7f8a3da1a0bc4ad8943e63658e91c18c22d28365af2b44947a0556",
+            "measureBlockMs": 8136.975921,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 90.363713,
+                "runnableMs": 36.652585
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 5528.388588,
+                "runnableMs": 49.301835
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 385.96541,
+                "runnableMs": 24.720423
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.617668,
+                "runnableMs": 3.159831
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 114,
+                "inclusiveMs": 10.947339
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 151,
+                "inclusiveMs": 72.164629
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 50,
+              "appDeadlineMisses": 37
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 50,
+              "appDeadlineMissTags": 37,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 50,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 39,
+              "pairedAppOverrunMs": {
+                "n": 50,
+                "min": -8.09019,
+                "median": 202.1862665,
+                "max": 567.791071,
+                "p50": 199.100392,
+                "p90": 499.485644,
+                "p95": 520.401114,
+                "p99": 567.791071
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 2.8845677375793457,
+              "endSecondsFromRunner": 11.021543741226196
+            },
+            "alignedHostSamples": {
+              "windows": 3,
+              "cpuIdlePct": {
+                "n": 3,
+                "min": 31.151707704527404,
+                "median": 34.37995559784332,
+                "max": 63.66513688874822,
+                "p50": 34.37995559784332,
+                "p90": 63.66513688874822,
+                "p95": 63.66513688874822,
+                "p99": 63.66513688874822
+              },
+              "loadAvg1": {
+                "n": 3,
+                "min": 3.89990234375,
+                "median": 5.42919921875,
+                "max": 6.755859375,
+                "p50": 5.42919921875,
+                "p90": 6.755859375,
+                "p95": 6.755859375,
+                "p99": 6.755859375
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 1223.6,
+                "Existing macOS virtual machine service": 10.1,
+                "Interactive desktop applications": 90.8,
+                "System indexing or backup": 0.0,
+                "WindowServer": 34.7
+              }
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              24.258666,
+              137.445333,
+              219.995208,
+              265.35,
+              265.822792,
+              250.922041,
+              215.8825,
+              145.280001,
+              75.954417,
+              12.363542,
+              12.258583,
+              12.970583,
+              12.131917,
+              13.581667,
+              13.186875,
+              11.859167,
+              13.425416,
+              11.847792,
+              12.979625,
+              7.338,
+              299.750459,
+              347.578667,
+              440.495792,
+              362.732541,
+              275.257875,
+              356.395292,
+              361.236834,
+              365.84725,
+              361.616709,
+              236.1995,
+              122.658459,
+              123.925667,
+              122.132541,
+              121.47,
+              121.106125,
+              103.2615,
+              75.7265,
+              7.829042,
+              8.025625,
+              7.740375,
+              20.015583,
+              182.3185,
+              337.173876,
+              372.554917,
+              362.926875,
+              351.295666,
+              346.743542,
+              344.211834,
+              356.553125,
+              334.229708
+            ],
+            "frameOverrunMs": [
+              8.314559,
+              121.383143,
+              203.697812,
+              320.195438,
+              369.826274,
+              235.508743,
+              199.840625,
+              129.404217,
+              59.601141,
+              -3.482476,
+              -3.863926,
+              -3.21596,
+              -4.029826,
+              -2.637235,
+              0.693733,
+              -4.51376,
+              0.334623,
+              -4.119536,
+              -3.120903,
+              111.282228,
+              283.847355,
+              331.405777,
+              574.683028,
+              511.156826,
+              259.245718,
+              510.810514,
+              515.283897,
+              349.849987,
+              508.518155,
+              403.076703,
+              264.942169,
+              160.664176,
+              154.792512,
+              149.77539,
+              159.932559,
+              86.899273,
+              61.022069,
+              -8.14234,
+              -7.906539,
+              46.364719,
+              3.761972,
+              166.180306,
+              320.9251,
+              488.862724,
+              536.652897,
+              334.986412,
+              330.392712,
+              327.968303,
+              340.211851,
+              318.12165
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 50,
+              "min": 7.338,
+              "median": 141.362667,
+              "max": 440.495792,
+              "p50": 137.445333,
+              "p90": 361.616709,
+              "p95": 365.84725,
+              "p99": 440.495792
+            },
+            "frameOverrunMs": {
+              "n": 50,
+              "min": -8.14234,
+              "median": 163.42224099999999,
+              "max": 574.683028,
+              "p50": 160.664176,
+              "p90": 508.518155,
+              "p95": 515.283897,
+              "p99": 574.683028
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter001",
+            "sha256": "fe8bca29b01bc112a74107f96d8c5443f6482ebf1a7d1f52e7dccc25abfa5438",
+            "measureBlockMs": 8119.973838,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 86.909036,
+                "runnableMs": 23.534254
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 5326.837198,
+                "runnableMs": 37.143802
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 372.186416,
+                "runnableMs": 30.701952
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.866748,
+                "runnableMs": 3.50971
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 114,
+                "inclusiveMs": 9.597043
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 151,
+                "inclusiveMs": 70.553535
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 51,
+              "appDeadlineMisses": 41
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 51,
+              "appDeadlineMissTags": 41,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 51,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 41,
+              "pairedAppOverrunMs": {
+                "n": 51,
+                "min": -8.171006,
+                "median": 160.664176,
+                "max": 574.637944,
+                "p50": 160.664176,
+                "p90": 508.518155,
+                "p95": 515.283897,
+                "p99": 574.637944
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 14.041757822036743,
+              "endSecondsFromRunner": 22.161731719970703
+            },
+            "alignedHostSamples": {
+              "windows": 3,
+              "cpuIdlePct": {
+                "n": 3,
+                "min": 31.313451776649746,
+                "median": 35.40973212870502,
+                "max": 45.011820330969265,
+                "p50": 35.40973212870502,
+                "p90": 45.011820330969265,
+                "p95": 45.011820330969265,
+                "p99": 45.011820330969265
+              },
+              "loadAvg1": {
+                "n": 3,
+                "min": 6.294921875,
+                "median": 6.755859375,
+                "max": 6.83154296875,
+                "p50": 6.755859375,
+                "p90": 6.83154296875,
+                "p95": 6.83154296875,
+                "p99": 6.83154296875
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 971.7,
+                "Existing macOS virtual machine service": 12.7,
+                "Interactive desktop applications": 10.299999999999999,
+                "System indexing or backup": 0.0,
+                "WindowServer": 22.2
+              }
+            }
+          }
+        },
+        {
+          "repeat": 3,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              26.249209,
+              140.291667,
+              237.021584,
+              262.081292,
+              265.765792,
+              254.063375,
+              220.194334,
+              151.754667,
+              66.173125,
+              13.175709,
+              12.117084,
+              12.731959,
+              13.087667,
+              14.472,
+              12.245458,
+              14.080125,
+              12.24425,
+              12.478125,
+              13.081417,
+              25.7475,
+              191.596417,
+              340.753375,
+              364.74575,
+              363.03475,
+              352.994375,
+              348.225417,
+              519.09675,
+              520.680542,
+              250.29275,
+              72.166625,
+              71.839291,
+              122.805583,
+              120.375375,
+              121.671417,
+              107.536333,
+              52.398834,
+              8.26775,
+              8.193292,
+              7.996584,
+              7.71675,
+              17.575625,
+              181.579542,
+              325.983292,
+              357.511709,
+              357.041125,
+              346.16175,
+              341.326167,
+              357.732958,
+              351.8855,
+              421.013
+            ],
+            "frameOverrunMs": [
+              9.994133,
+              124.085966,
+              220.934552,
+              336.367136,
+              370.28239,
+              237.856359,
+              203.752699,
+              135.27654,
+              49.874049,
+              -2.781401,
+              -4.173477,
+              -3.626302,
+              -2.205419,
+              -1.84137,
+              -4.164487,
+              -1.801644,
+              -4.102262,
+              -3.718545,
+              -2.891579,
+              9.531885,
+              175.358344,
+              324.986096,
+              490.416263,
+              521.936978,
+              336.814909,
+              332.470208,
+              508.862341,
+              509.654265,
+              555.341807,
+              231.585986,
+              111.52516,
+              107.235872,
+              151.927123,
+              146.307459,
+              91.275797,
+              36.283635,
+              -7.544398,
+              -7.801265,
+              -8.034132,
+              -8.204,
+              1.856839,
+              165.227006,
+              309.863007,
+              472.835425,
+              517.256347,
+              330.192945,
+              325.530328,
+              341.629543,
+              335.857424,
+              404.694224
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 50,
+              "min": 7.71675,
+              "median": 131.548625,
+              "max": 520.680542,
+              "p50": 122.805583,
+              "p90": 357.732958,
+              "p95": 421.013,
+              "p99": 520.680542
+            },
+            "frameOverrunMs": {
+              "n": 50,
+              "min": -8.204,
+              "median": 149.117291,
+              "max": 555.341807,
+              "p50": 146.307459,
+              "p90": 490.416263,
+              "p95": 517.256347,
+              "p99": 555.341807
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter002",
+            "sha256": "74979f53c92ea379f3353d37fe0e310db6a211a0ad59e0e81eb394c00bb69ee8",
+            "measureBlockMs": 8126.829962,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 88.785708,
+                "runnableMs": 31.062245
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 5058.679958,
+                "runnableMs": 34.937963
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 387.980877,
+                "runnableMs": 29.783419
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.517416,
+                "runnableMs": 4.967833
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 117,
+                "inclusiveMs": 11.557543
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 155,
+                "inclusiveMs": 72.263662
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 50,
+              "appDeadlineMisses": 34
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 50,
+              "appDeadlineMissTags": 34,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 50,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 36,
+              "pairedAppOverrunMs": {
+                "n": 50,
+                "min": -8.322499,
+                "median": 149.0504365,
+                "max": 521.928811,
+                "p50": 146.307459,
+                "p90": 490.234597,
+                "p95": 509.654265,
+                "p99": 521.928811
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 25.128139972686768,
+              "endSecondsFromRunner": 33.25496983528137
+            },
+            "alignedHostSamples": {
+              "windows": 2,
+              "cpuIdlePct": {
+                "n": 2,
+                "min": 36.47189583994919,
+                "median": 40.94309529505366,
+                "max": 45.41429475015813,
+                "p50": 36.47189583994919,
+                "p90": 45.41429475015813,
+                "p95": 45.41429475015813,
+                "p99": 45.41429475015813
+              },
+              "loadAvg1": {
+                "n": 2,
+                "min": 6.4443359375,
+                "median": 6.826904296875,
+                "max": 7.20947265625,
+                "p50": 6.4443359375,
+                "p90": 7.20947265625,
+                "p95": 7.20947265625,
+                "p99": 7.20947265625
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 990.2,
+                "Existing macOS virtual machine service": 10.3,
+                "Interactive desktop applications": 33.0,
+                "System indexing or backup": 0.0,
+                "WindowServer": 23.7
+              }
+            }
+          }
+        }
+      ]
+    },
+    "C9": {
+      "before": {
+        "guest": {
+          "sdk": 36,
+          "abi": "arm64-v8a",
+          "fingerprint": "google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.D1/13818094:user/release-keys",
+          "dimensions": "Physical size: 1080x2400",
+          "density": "Physical density: 420",
+          "refreshHz": [
+            60.0
+          ],
+          "localeKoKr": true,
+          "acPowered": true,
+          "batteryPct": 100,
+          "batteryEmulationC": 25.0,
+          "thermalStatus": 0,
+          "surfaceFlingerSwiftShader": true,
+          "settings": {
+            "font_scale": "1.0",
+            "window_animation_scale": "0.0",
+            "transition_animation_scale": "0.0",
+            "animator_duration_scale": "0.0",
+            "airplane_mode_on": "0",
+            "wifi_on": "1"
+          }
+        },
+        "hostPreflight": [
+          {
+            "utc": "2026-11-27T09:08:23.492+00:00",
+            "loadAverage": [
+              6.48828125,
+              4.1318359375,
+              2.89208984375
+            ],
+            "cpuIdlePct": 92.36784485455114,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 10.0,
+              "Existing macOS virtual machine service": 16.0,
+              "Interactive desktop applications": 36.7,
+              "System indexing or backup": 0.0,
+              "WindowServer": 31.1
+            }
+          },
+          {
+            "utc": "2026-11-27T09:08:25.550+00:00",
+            "loadAverage": [
+              6.48828125,
+              4.1318359375,
+              2.89208984375
+            ],
+            "cpuIdlePct": 92.59597806215722,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 12.2,
+              "Existing macOS virtual machine service": 18.5,
+              "Interactive desktop applications": 26.5,
+              "System indexing or backup": 0.0,
+              "WindowServer": 17.4
+            }
+          },
+          {
+            "utc": "2026-11-27T09:08:27.610+00:00",
+            "loadAverage": [
+              6.48828125,
+              4.1318359375,
+              2.89208984375
+            ],
+            "cpuIdlePct": 89.38700823421775,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 11.7,
+              "Existing macOS virtual machine service": 14.8,
+              "Interactive desktop applications": 92.7,
+              "System indexing or backup": 0.0,
+              "WindowServer": 26.7
+            }
+          }
+        ],
+        "host": {
+          "memoryPressure": "The system has 68719476736 (4194304 pages with a page size of 16384).\nSystem-wide memory free percentage: 48%",
+          "pressureLevel": 1,
+          "swapUsage": "total = 2048.00M  used = 1272.62M  free = 775.38M  (encrypted)",
+          "logicalCpuCount": 16,
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "processSnapshot": [
+            1,
+            [],
+            {
+              "Android Emulator": 11.7,
+              "Existing macOS virtual machine service": 14.8,
+              "Interactive desktop applications": 92.7,
+              "System indexing or backup": 0.0,
+              "WindowServer": 26.7
+            }
+          ],
+          "hardware": "Mac16,6",
+          "macOS": "26.5.1"
+        },
+        "apkSha256": {
+          "target": "fa73ac812fb4e28d52a9974bd31dab9ac9c5d15136df08da0d945c109e1ad474",
+          "harness": "0ee2174794b53a278c4f99131f4a3fa39b58d65a9011a07a144f9cff2544e4f2"
+        }
+      },
+      "after": {
+        "guest": {
+          "sdk": 36,
+          "abi": "arm64-v8a",
+          "fingerprint": "google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.D1/13818094:user/release-keys",
+          "dimensions": "Physical size: 1080x2400",
+          "density": "Physical density: 420",
+          "refreshHz": [
+            60.0
+          ],
+          "localeKoKr": true,
+          "acPowered": true,
+          "batteryPct": 100,
+          "batteryEmulationC": 25.0,
+          "thermalStatus": 0,
+          "surfaceFlingerSwiftShader": true,
+          "settings": {
+            "font_scale": "1.0",
+            "window_animation_scale": "0.0",
+            "transition_animation_scale": "0.0",
+            "animator_duration_scale": "0.0",
+            "airplane_mode_on": "0",
+            "wifi_on": "1"
+          }
+        },
+        "host": {
+          "memoryPressure": "The system has 68719476736 (4194304 pages with a page size of 16384).\nSystem-wide memory free percentage: 48%",
+          "pressureLevel": 1,
+          "swapUsage": "total = 2048.00M  used = 1272.62M  free = 775.38M  (encrypted)",
+          "logicalCpuCount": 16,
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "processSnapshot": [
+            1,
+            [],
+            {
+              "Android Emulator": 187.1,
+              "Existing macOS virtual machine service": 42.4,
+              "Interactive desktop applications": 9.1,
+              "System indexing or backup": 0.0,
+              "WindowServer": 21.6
+            }
+          ],
+          "hardware": "Mac16,6",
+          "macOS": "26.5.1"
+        }
+      },
+      "validity": {
+        "traceCount": 3,
+        "testRunnerExit": 0,
+        "reasons": [],
+        "environmentComparisonEligible": true,
+        "runWasRetained": true
+      },
+      "originalBenchmarkDataSha256": "d6a10b03c8465a814a51c2ddf5a1ff038ac53eff7b6cdde9e57bf68b4e2a8d23",
+      "benchmarkWindowHostSamples": [
+        {
+          "utc": "2026-11-27T09:08:31.720+00:00",
+          "loadAverage": [
+            6.28857421875,
+            4.12939453125,
+            2.8984375
+          ],
+          "cpuIdlePct": 54.812113524655146,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1064.7,
+            "Existing macOS virtual machine service": 14.0,
+            "Interactive desktop applications": 50.5,
+            "System indexing or backup": 0.0,
+            "WindowServer": 28.4
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:35.763+00:00",
+          "loadAverage": [
+            6.02490234375,
+            4.1103515625,
+            2.89892578125
+          ],
+          "cpuIdlePct": 33.97030953885029,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1109.9,
+            "Existing macOS virtual machine service": 16.4,
+            "Interactive desktop applications": 28.900000000000002,
+            "System indexing or backup": 0.0,
+            "WindowServer": 30.7
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:39.804+00:00",
+          "loadAverage": [
+            7.0634765625,
+            4.357421875,
+            2.9931640625
+          ],
+          "cpuIdlePct": 23.957167971871502,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1125.3,
+            "Existing macOS virtual machine service": 10.6,
+            "Interactive desktop applications": 11.299999999999999,
+            "System indexing or backup": 0.0,
+            "WindowServer": 23.0
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:43.846+00:00",
+          "loadAverage": [
+            7.77880859375,
+            4.55029296875,
+            3.0693359375
+          ],
+          "cpuIdlePct": 40.630417651694245,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 917.3,
+            "Existing macOS virtual machine service": 8.5,
+            "Interactive desktop applications": 13.4,
+            "System indexing or backup": 0.0,
+            "WindowServer": 19.3
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:47.886+00:00",
+          "loadAverage": [
+            8.75732421875,
+            4.806640625,
+            3.16845703125
+          ],
+          "cpuIdlePct": 37.41669311329736,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1058.1,
+            "Existing macOS virtual machine service": 9.3,
+            "Interactive desktop applications": 69.40000000000002,
+            "System indexing or backup": 0.1,
+            "WindowServer": 53.8
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:51.929+00:00",
+          "loadAverage": [
+            8.75732421875,
+            4.806640625,
+            3.16845703125
+          ],
+          "cpuIdlePct": 24.417491222470474,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1119.2,
+            "Existing macOS virtual machine service": 16.6,
+            "Interactive desktop applications": 10.400000000000002,
+            "System indexing or backup": 0.0,
+            "WindowServer": 19.5
+          }
+        },
+        {
+          "utc": "2026-11-27T09:08:55.970+00:00",
+          "loadAverage": [
+            9.7373046875,
+            5.0751953125,
+            3.2724609375
+          ],
+          "cpuIdlePct": 39.04596430263781,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1046.4,
+            "Existing macOS virtual machine service": 8.7,
+            "Interactive desktop applications": 14.599999999999998,
+            "System indexing or backup": 0.0,
+            "WindowServer": 26.3
+          }
+        },
+        {
+          "utc": "2026-11-27T09:09:00.015+00:00",
+          "loadAverage": [
+            9.11767578125,
+            5.02392578125,
+            3.2646484375
+          ],
+          "cpuIdlePct": 37.12157235695039,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1017.1,
+            "Existing macOS virtual machine service": 8.8,
+            "Interactive desktop applications": 188.6,
+            "System indexing or backup": 0.0,
+            "WindowServer": 18.9
+          }
+        },
+        {
+          "utc": "2026-11-27T09:09:04.055+00:00",
+          "loadAverage": [
+            9.90869140625,
+            5.255859375,
+            3.3564453125
+          ],
+          "cpuIdlePct": 27.391373547668312,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1099.1,
+            "Existing macOS virtual machine service": 8.4,
+            "Interactive desktop applications": 17.000000000000004,
+            "System indexing or backup": 0.0,
+            "WindowServer": 26.0
+          }
+        }
+      ],
+      "observedHostDuringRunner": {
+        "windows": 9,
+        "cpuIdlePct": {
+          "n": 9,
+          "min": 23.957167971871502,
+          "median": 37.12157235695039,
+          "max": 54.812113524655146,
+          "p50": 37.12157235695039,
+          "p90": 54.812113524655146,
+          "p95": 54.812113524655146,
+          "p99": 54.812113524655146
+        },
+        "loadAvg1": {
+          "n": 9,
+          "min": 6.02490234375,
+          "median": 8.75732421875,
+          "max": 9.90869140625,
+          "p50": 8.75732421875,
+          "p90": 9.90869140625,
+          "p95": 9.90869140625,
+          "p99": 9.90869140625
+        },
+        "memoryPressureLevels": [
+          1
+        ],
+        "androidEmulatorCounts": [
+          1
+        ],
+        "forbiddenConcurrency": [],
+        "backgroundProcessCategoryPeaksPctOfOneCore": {
+          "Android Emulator": 1125.3,
+          "Existing macOS virtual machine service": 16.6,
+          "Interactive desktop applications": 188.6,
+          "System indexing or backup": 0.1,
+          "WindowServer": 53.8
+        }
+      },
+      "frames": {
+        "frameDurationCpuMs": {
+          "n": 160,
+          "min": 6.996583,
+          "median": 232.4009375,
+          "max": 464.950542,
+          "p50": 230.70675,
+          "p90": 363.879042,
+          "p95": 369.63825,
+          "p99": 374.773167
+        },
+        "frameOverrunMs": {
+          "n": 160,
+          "min": -8.719278,
+          "median": 241.87172800000002,
+          "max": 695.401985,
+          "p50": 241.213682,
+          "p90": 520.272929,
+          "p95": 525.171333,
+          "p99": 689.908353
+        }
+      },
+      "threadStatsAndDeadlineTotals": {
+        "UI": {
+          "runningMs": {
+            "n": 3,
+            "min": 396.348199,
+            "median": 415.001503,
+            "max": 471.147206,
+            "p50": 415.001503,
+            "p90": 471.147206,
+            "p95": 471.147206,
+            "p99": 471.147206
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 27.588128,
+            "median": 33.157889,
+            "max": 35.021802,
+            "p50": 33.157889,
+            "p90": 35.021802,
+            "p95": 35.021802,
+            "p99": 35.021802
+          }
+        },
+        "RenderThread": {
+          "runningMs": {
+            "n": 3,
+            "min": 5632.167588,
+            "median": 6111.417585,
+            "max": 7484.636736,
+            "p50": 6111.417585,
+            "p90": 7484.636736,
+            "p95": 7484.636736,
+            "p99": 7484.636736
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 16.634419,
+            "median": 22.864084,
+            "max": 46.233185,
+            "p50": 22.864084,
+            "p90": 46.233185,
+            "p95": 46.233185,
+            "p99": 46.233185
+          }
+        },
+        "JIT": {
+          "runningMs": {
+            "n": 3,
+            "min": 92.500424,
+            "median": 96.619336,
+            "max": 103.865164,
+            "p50": 96.619336,
+            "p90": 103.865164,
+            "p95": 103.865164,
+            "p99": 103.865164
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 23.53912,
+            "median": 27.43496,
+            "max": 28.290706,
+            "p50": 27.43496,
+            "p90": 28.290706,
+            "p95": 28.290706,
+            "p99": 28.290706
+          }
+        },
+        "worker": {
+          "runningMs": {
+            "n": 3,
+            "min": 5.71183,
+            "median": 5.894587,
+            "max": 5.952838,
+            "p50": 5.894587,
+            "p90": 5.952838,
+            "p95": 5.952838,
+            "p99": 5.952838
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 2.670707,
+            "median": 2.910626,
+            "max": 45.051243,
+            "p50": 2.910626,
+            "p90": 45.051243,
+            "p95": 45.051243,
+            "p99": 45.051243
+          }
+        },
+        "measureBlockMs": {
+          "n": 3,
+          "min": 8097.069712,
+          "median": 8618.163921,
+          "max": 9603.187297,
+          "p50": 8618.163921,
+          "p90": 9603.187297,
+          "p95": 9603.187297,
+          "p99": 9603.187297
+        },
+        "actualSurfaceTokens": 161,
+        "appDeadlineMissTags": 130,
+        "uniquelyPairedTokens": 161,
+        "pairedPositiveOverrun": 132,
+        "unpairedTokens": 0,
+        "droppedPresentTokens": 0
+      },
+      "iterations": [
+        {
+          "repeat": 1,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              142.250667,
+              146.216,
+              128.192042,
+              242.568001,
+              258.822458,
+              257.253875,
+              207.707459,
+              139.024125,
+              117.674667,
+              49.119,
+              12.098208,
+              13.147459,
+              13.381709,
+              15.323709,
+              12.708333,
+              12.996083,
+              11.975,
+              14.72225,
+              151.986417,
+              176.7045,
+              240.506333,
+              366.667958,
+              367.317375,
+              373.668458,
+              373.080208,
+              366.238417,
+              370.748,
+              369.63825,
+              361.838542,
+              359.938791,
+              359.359,
+              358.591292,
+              362.206375,
+              364.748125,
+              363.007833,
+              359.499625,
+              353.506,
+              351.854126,
+              349.524917,
+              348.940083,
+              350.568167,
+              354.376834,
+              348.214167,
+              237.435459,
+              121.045375,
+              122.90675,
+              122.546708,
+              121.167667,
+              116.132834,
+              25.986333,
+              15.762292,
+              170.884625,
+              311.250792,
+              346.615625,
+              345.6175,
+              344.662917,
+              336.439792
+            ],
+            "frameOverrunMs": [
+              132.511872,
+              130.000957,
+              111.910046,
+              228.171172,
+              242.696051,
+              241.213682,
+              192.028647,
+              123.073739,
+              101.441956,
+              32.714755,
+              -3.359945,
+              -0.807895,
+              -2.750221,
+              -0.660171,
+              -3.342788,
+              -2.786113,
+              -3.166105,
+              -0.953306,
+              135.89512,
+              160.402996,
+              327.295622,
+              393.997751,
+              528.220254,
+              534.826594,
+              535.620102,
+              536.943109,
+              525.200492,
+              525.171333,
+              522.313757,
+              520.300139,
+              516.767105,
+              513.792154,
+              511.251836,
+              512.489052,
+              509.243851,
+              523.603107,
+              337.380039,
+              336.007672,
+              333.294971,
+              332.659144,
+              334.345485,
+              338.286826,
+              332.585708,
+              376.047543,
+              270.794174,
+              149.320347,
+              160.854475,
+              155.217645,
+              99.922233,
+              10.184155,
+              -0.50463,
+              154.742662,
+              295.223205,
+              451.661456,
+              491.185086,
+              496.690135,
+              320.137816
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 57,
+              "min": 11.975,
+              "median": 257.253875,
+              "max": 373.668458,
+              "p50": 257.253875,
+              "p90": 366.667958,
+              "p95": 370.748,
+              "p99": 373.668458
+            },
+            "frameOverrunMs": {
+              "n": 57,
+              "min": -3.359945,
+              "median": 295.223205,
+              "max": 536.943109,
+              "p50": 295.223205,
+              "p90": 525.171333,
+              "p95": 534.826594,
+              "p99": 536.943109
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter000",
+            "sha256": "ccaf2fef6b97ad48946780e2c360ab2234f920e60df020e5344273e85d04ee34",
+            "measureBlockMs": 9603.187297,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 103.865164,
+                "runnableMs": 27.43496
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 7484.636736,
+                "runnableMs": 46.233185
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 471.147206,
+                "runnableMs": 35.021802
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.952838,
+                "runnableMs": 2.670707
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 146,
+                "inclusiveMs": 12.863954
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 194,
+                "inclusiveMs": 101.636695
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 58,
+              "appDeadlineMisses": 48
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 58,
+              "appDeadlineMissTags": 48,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 58,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 49,
+              "pairedAppOverrunMs": {
+                "n": 58,
+                "min": -3.359945,
+                "median": 307.6624475,
+                "max": 536.943109,
+                "p50": 295.223205,
+                "p90": 525.171333,
+                "p95": 534.596094,
+                "p99": 536.943109
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 2.4668140411376953,
+              "endSecondsFromRunner": 12.070001602172852
+            },
+            "alignedHostSamples": {
+              "windows": 4,
+              "cpuIdlePct": {
+                "n": 4,
+                "min": 23.957167971871502,
+                "median": 37.300363595272266,
+                "max": 54.812113524655146,
+                "p50": 33.97030953885029,
+                "p90": 54.812113524655146,
+                "p95": 54.812113524655146,
+                "p99": 54.812113524655146
+              },
+              "loadAvg1": {
+                "n": 4,
+                "min": 6.02490234375,
+                "median": 6.676025390625,
+                "max": 7.77880859375,
+                "p50": 6.28857421875,
+                "p90": 7.77880859375,
+                "p95": 7.77880859375,
+                "p99": 7.77880859375
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 1125.3,
+                "Existing macOS virtual machine service": 16.4,
+                "Interactive desktop applications": 50.5,
+                "System indexing or backup": 0.0,
+                "WindowServer": 30.7
+              }
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              81.270209,
+              147.053625,
+              127.983542,
+              242.720333,
+              258.744334,
+              255.53425,
+              203.594584,
+              136.275041,
+              70.597125,
+              12.632208,
+              13.840459,
+              12.832417,
+              14.048292,
+              15.729958,
+              13.3475,
+              12.941084,
+              12.809583,
+              12.482,
+              19.944458,
+              8.4185,
+              139.178083,
+              198.921875,
+              358.831209,
+              358.708667,
+              363.518375,
+              364.8115,
+              366.149334,
+              361.651876,
+              360.248875,
+              359.714083,
+              360.870459,
+              363.879042,
+              361.268,
+              360.782084,
+              363.689584,
+              369.990875,
+              374.773167,
+              360.629292,
+              234.095125,
+              158.095625,
+              119.645708,
+              83.681333,
+              109.531458,
+              6.996583,
+              15.287584,
+              180.473292,
+              328.361042,
+              358.048375,
+              355.419333,
+              354.767042,
+              337.026667,
+              346.320542
+            ],
+            "frameOverrunMs": [
+              66.88947,
+              130.870679,
+              111.87356,
+              227.160602,
+              242.529774,
+              239.663154,
+              187.752995,
+              120.23292,
+              54.820053,
+              -2.655064,
+              0.211319,
+              -2.995214,
+              -1.985915,
+              3.260635,
+              -1.781357,
+              -2.903599,
+              -3.216383,
+              -3.298542,
+              3.649884,
+              -7.82711,
+              123.005849,
+              286.708182,
+              348.956729,
+              513.022105,
+              512.996154,
+              349.143543,
+              514.762503,
+              513.041635,
+              510.70135,
+              508.165316,
+              506.994116,
+              524.172789,
+              520.391546,
+              520.272929,
+              689.908353,
+              695.401985,
+              529.655034,
+              521.449583,
+              397.865924,
+              314.319931,
+              151.582397,
+              148.325733,
+              93.601779,
+              -8.56563,
+              -0.730207,
+              164.259628,
+              312.145837,
+              472.658254,
+              517.80776,
+              511.090143,
+              321.074407,
+              330.126164
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 52,
+              "min": 6.996583,
+              "median": 218.8448545,
+              "max": 374.773167,
+              "p50": 203.594584,
+              "p90": 363.689584,
+              "p95": 366.149334,
+              "p99": 374.773167
+            },
+            "frameOverrunMs": {
+              "n": 52,
+              "min": -8.56563,
+              "median": 241.096464,
+              "max": 695.401985,
+              "p50": 239.663154,
+              "p90": 520.391546,
+              "p95": 529.655034,
+              "p99": 695.401985
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter001",
+            "sha256": "2f75bdbb614aee4346a8b786bbb6e00894ebf597f0440fbcbf9800731fbea5c1",
+            "measureBlockMs": 8618.163921,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 96.619336,
+                "runnableMs": 28.290706
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 6111.417585,
+                "runnableMs": 16.634419
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 415.001503,
+                "runnableMs": 27.588128
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.71183,
+                "runnableMs": 2.910626
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 131,
+                "inclusiveMs": 12.033294
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 174,
+                "inclusiveMs": 81.796741
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 52,
+              "appDeadlineMisses": 41
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 52,
+              "appDeadlineMissTags": 41,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 52,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 41,
+              "pairedAppOverrunMs": {
+                "n": 52,
+                "min": -8.581046,
+                "median": 241.093693,
+                "max": 695.401985,
+                "p50": 239.657612,
+                "p90": 520.391546,
+                "p95": 529.655034,
+                "p99": 695.401985
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 15.164623737335205,
+              "endSecondsFromRunner": 23.782787561416626
+            },
+            "alignedHostSamples": {
+              "windows": 3,
+              "cpuIdlePct": {
+                "n": 3,
+                "min": 24.417491222470474,
+                "median": 37.41669311329736,
+                "max": 40.630417651694245,
+                "p50": 37.41669311329736,
+                "p90": 40.630417651694245,
+                "p95": 40.630417651694245,
+                "p99": 40.630417651694245
+              },
+              "loadAvg1": {
+                "n": 3,
+                "min": 7.77880859375,
+                "median": 8.75732421875,
+                "max": 8.75732421875,
+                "p50": 8.75732421875,
+                "p90": 8.75732421875,
+                "p95": 8.75732421875,
+                "p99": 8.75732421875
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 1119.2,
+                "Existing macOS virtual machine service": 16.6,
+                "Interactive desktop applications": 69.40000000000002,
+                "System indexing or backup": 0.1,
+                "WindowServer": 53.8
+              }
+            }
+          }
+        },
+        {
+          "repeat": 3,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              31.501875,
+              147.70625,
+              230.70675,
+              264.603833,
+              263.186,
+              262.387167,
+              227.508583,
+              154.930333,
+              89.817709,
+              13.540375,
+              13.781917,
+              13.199667,
+              12.472375,
+              73.950084,
+              12.688708,
+              12.82275,
+              13.743667,
+              15.024875,
+              16.873583,
+              7.286042,
+              136.934542,
+              300.797792,
+              464.950542,
+              373.467167,
+              256.799042,
+              355.524417,
+              353.650958,
+              351.622,
+              347.628792,
+              353.217042,
+              365.8465,
+              369.809459,
+              237.247042,
+              121.5285,
+              123.184292,
+              163.976167,
+              123.227416,
+              127.719333,
+              112.659916,
+              41.344875,
+              7.7035,
+              11.154792,
+              68.153958,
+              229.354084,
+              336.910166,
+              349.56,
+              354.280833,
+              355.270208,
+              350.697916,
+              329.810001,
+              292.86225
+            ],
+            "frameOverrunMs": [
+              16.073021,
+              131.38773,
+              214.845815,
+              329.512732,
+              378.308944,
+              246.475705,
+              211.17767,
+              142.79172,
+              73.604978,
+              -2.311722,
+              -2.05888,
+              -3.02658,
+              -3.691323,
+              59.746103,
+              -3.75489,
+              -3.534465,
+              -1.527248,
+              -0.995783,
+              2.752726,
+              112.962441,
+              120.91615,
+              284.768942,
+              448.851406,
+              508.453198,
+              522.750538,
+              339.52597,
+              337.591643,
+              335.606818,
+              332.810159,
+              515.351416,
+              349.654382,
+              510.071424,
+              403.843889,
+              265.281481,
+              160.780529,
+              197.07274,
+              207.517368,
+              208.909536,
+              97.000875,
+              25.130214,
+              -8.719278,
+              49.720813,
+              52.08048,
+              213.316065,
+              321.016942,
+              479.875027,
+              509.242533,
+              339.203422,
+              335.335637,
+              313.913229,
+              276.54032
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 51,
+              "min": 7.286042,
+              "median": 163.976167,
+              "max": 464.950542,
+              "p50": 163.976167,
+              "p90": 355.270208,
+              "p95": 369.809459,
+              "p99": 464.950542
+            },
+            "frameOverrunMs": {
+              "n": 51,
+              "min": -8.719278,
+              "median": 211.17767,
+              "max": 522.750538,
+              "p50": 211.17767,
+              "p90": 479.875027,
+              "p95": 510.071424,
+              "p99": 522.750538
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter002",
+            "sha256": "9adbad1039658e72ad3edc1575008605895a271f9094992b13dd99e737901d3a",
+            "measureBlockMs": 8097.069712,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 92.500424,
+                "runnableMs": 23.53912
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 5632.167588,
+                "runnableMs": 22.864084
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 396.348199,
+                "runnableMs": 33.157889
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.894587,
+                "runnableMs": 45.051243
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 114,
+                "inclusiveMs": 10.383421
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 151,
+                "inclusiveMs": 73.616746
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 51,
+              "appDeadlineMisses": 41
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 51,
+              "appDeadlineMissTags": 41,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 51,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 42,
+              "pairedAppOverrunMs": {
+                "n": 51,
+                "min": -8.932528,
+                "median": 211.141712,
+                "max": 522.750538,
+                "p50": 211.141712,
+                "p90": 479.875027,
+                "p95": 510.071424,
+                "p99": 522.750538
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 26.725785493850708,
+              "endSecondsFromRunner": 34.82285499572754
+            },
+            "alignedHostSamples": {
+              "windows": 3,
+              "cpuIdlePct": {
+                "n": 3,
+                "min": 27.391373547668312,
+                "median": 37.12157235695039,
+                "max": 39.04596430263781,
+                "p50": 37.12157235695039,
+                "p90": 39.04596430263781,
+                "p95": 39.04596430263781,
+                "p99": 39.04596430263781
+              },
+              "loadAvg1": {
+                "n": 3,
+                "min": 9.11767578125,
+                "median": 9.7373046875,
+                "max": 9.90869140625,
+                "p50": 9.7373046875,
+                "p90": 9.90869140625,
+                "p95": 9.90869140625,
+                "p99": 9.90869140625
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 1099.1,
+                "Existing macOS virtual machine service": 8.8,
+                "Interactive desktop applications": 188.6,
+                "System indexing or backup": 0.0,
+                "WindowServer": 26.3
+              }
+            }
+          }
+        }
+      ]
+    },
+    "C10": {
+      "before": {
+        "guest": {
+          "sdk": 36,
+          "abi": "arm64-v8a",
+          "fingerprint": "google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.D1/13818094:user/release-keys",
+          "dimensions": "Physical size: 1080x2400",
+          "density": "Physical density: 420",
+          "refreshHz": [
+            60.0
+          ],
+          "localeKoKr": true,
+          "acPowered": true,
+          "batteryPct": 100,
+          "batteryEmulationC": 25.0,
+          "thermalStatus": 0,
+          "surfaceFlingerSwiftShader": true,
+          "settings": {
+            "font_scale": "1.0",
+            "window_animation_scale": "0.0",
+            "transition_animation_scale": "0.0",
+            "animator_duration_scale": "0.0",
+            "airplane_mode_on": "0",
+            "wifi_on": "1"
+          }
+        },
+        "hostPreflight": [
+          {
+            "utc": "2026-11-27T09:09:11.943+00:00",
+            "loadAverage": [
+              9.27490234375,
+              5.20166015625,
+              3.34814453125
+            ],
+            "cpuIdlePct": 92.01877934272301,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 10.7,
+              "Existing macOS virtual machine service": 23.6,
+              "Interactive desktop applications": 29.000000000000004,
+              "System indexing or backup": 0.0,
+              "WindowServer": 17.0
+            }
+          },
+          {
+            "utc": "2026-11-27T09:09:13.988+00:00",
+            "loadAverage": [
+              8.61181640625,
+              5.1318359375,
+              3.333984375
+            ],
+            "cpuIdlePct": 91.95472621596818,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 14.2,
+              "Existing macOS virtual machine service": 14.7,
+              "Interactive desktop applications": 48.1,
+              "System indexing or backup": 0.0,
+              "WindowServer": 42.2
+            }
+          },
+          {
+            "utc": "2026-11-27T09:09:16.047+00:00",
+            "loadAverage": [
+              8.61181640625,
+              5.1318359375,
+              3.333984375
+            ],
+            "cpuIdlePct": 90.37990196078431,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 8.7,
+              "Existing macOS virtual machine service": 14.9,
+              "Interactive desktop applications": 39.000000000000014,
+              "System indexing or backup": 0.0,
+              "WindowServer": 31.9
+            }
+          }
+        ],
+        "host": {
+          "memoryPressure": "The system has 68719476736 (4194304 pages with a page size of 16384).\nSystem-wide memory free percentage: 47%",
+          "pressureLevel": 1,
+          "swapUsage": "total = 2048.00M  used = 1272.62M  free = 775.38M  (encrypted)",
+          "logicalCpuCount": 16,
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "processSnapshot": [
+            1,
+            [],
+            {
+              "Android Emulator": 8.5,
+              "Existing macOS virtual machine service": 12.5,
+              "Interactive desktop applications": 36.300000000000004,
+              "System indexing or backup": 0.0,
+              "WindowServer": 31.4
+            }
+          ],
+          "hardware": "Mac16,6",
+          "macOS": "26.5.1"
+        },
+        "apkSha256": {
+          "target": "fa73ac812fb4e28d52a9974bd31dab9ac9c5d15136df08da0d945c109e1ad474",
+          "harness": "0ee2174794b53a278c4f99131f4a3fa39b58d65a9011a07a144f9cff2544e4f2"
+        }
+      },
+      "after": {
+        "guest": {
+          "sdk": 36,
+          "abi": "arm64-v8a",
+          "fingerprint": "google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.D1/13818094:user/release-keys",
+          "dimensions": "Physical size: 1080x2400",
+          "density": "Physical density: 420",
+          "refreshHz": [
+            60.0
+          ],
+          "localeKoKr": true,
+          "acPowered": true,
+          "batteryPct": 100,
+          "batteryEmulationC": 25.0,
+          "thermalStatus": 0,
+          "surfaceFlingerSwiftShader": true,
+          "settings": {
+            "font_scale": "1.0",
+            "window_animation_scale": "0.0",
+            "transition_animation_scale": "0.0",
+            "animator_duration_scale": "0.0",
+            "airplane_mode_on": "0",
+            "wifi_on": "1"
+          }
+        },
+        "host": {
+          "memoryPressure": "The system has 68719476736 (4194304 pages with a page size of 16384).\nSystem-wide memory free percentage: 47%",
+          "pressureLevel": 1,
+          "swapUsage": "total = 2048.00M  used = 1272.62M  free = 775.38M  (encrypted)",
+          "logicalCpuCount": 16,
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "processSnapshot": [
+            1,
+            [],
+            {
+              "Android Emulator": 196.8,
+              "Existing macOS virtual machine service": 9.7,
+              "Interactive desktop applications": 6.8,
+              "System indexing or backup": 0.0,
+              "WindowServer": 16.0
+            }
+          ],
+          "hardware": "Mac16,6",
+          "macOS": "26.5.1"
+        }
+      },
+      "validity": {
+        "traceCount": 3,
+        "testRunnerExit": 0,
+        "reasons": [],
+        "environmentComparisonEligible": true,
+        "runWasRetained": true
+      },
+      "originalBenchmarkDataSha256": "a3501401f7567b54e1e099435c3c936c43ed8ef50501ca9d35bd5d5d5107ac44",
+      "benchmarkWindowHostSamples": [
+        {
+          "utc": "2026-11-27T09:09:20.150+00:00",
+          "loadAverage": [
+            9.283203125,
+            5.32861328125,
+            3.41357421875
+          ],
+          "cpuIdlePct": 53.222486144101346,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1038.0,
+            "Existing macOS virtual machine service": 10.8,
+            "Interactive desktop applications": 97.80000000000001,
+            "System indexing or backup": 0.0,
+            "WindowServer": 54.7
+          }
+        },
+        {
+          "utc": "2026-11-27T09:09:24.222+00:00",
+          "loadAverage": [
+            8.85986328125,
+            5.30615234375,
+            3.4169921875
+          ],
+          "cpuIdlePct": 32.22786417010473,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1141.2,
+            "Existing macOS virtual machine service": 9.6,
+            "Interactive desktop applications": 16.299999999999997,
+            "System indexing or backup": 0.0,
+            "WindowServer": 38.0
+          }
+        },
+        {
+          "utc": "2026-11-27T09:09:28.266+00:00",
+          "loadAverage": [
+            9.59130859375,
+            5.5166015625,
+            3.501953125
+          ],
+          "cpuIdlePct": 29.74893415442918,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 853.0,
+            "Existing macOS virtual machine service": 10.0,
+            "Interactive desktop applications": 17.400000000000002,
+            "System indexing or backup": 0.0,
+            "WindowServer": 28.9
+          }
+        },
+        {
+          "utc": "2026-11-27T09:09:32.306+00:00",
+          "loadAverage": [
+            9.59130859375,
+            5.5166015625,
+            3.501953125
+          ],
+          "cpuIdlePct": 46.614048934490924,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 612.3,
+            "Existing macOS virtual machine service": 13.4,
+            "Interactive desktop applications": 5.2,
+            "System indexing or backup": 0.0,
+            "WindowServer": 14.2
+          }
+        },
+        {
+          "utc": "2026-11-27T09:09:36.348+00:00",
+          "loadAverage": [
+            8.9833984375,
+            5.4580078125,
+            3.49267578125
+          ],
+          "cpuIdlePct": 37.587523870146406,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 515.4,
+            "Existing macOS virtual machine service": 9.6,
+            "Interactive desktop applications": 7.9,
+            "System indexing or backup": 0.0,
+            "WindowServer": 14.1
+          }
+        },
+        {
+          "utc": "2026-11-27T09:09:40.390+00:00",
+          "loadAverage": [
+            9.3046875,
+            5.5830078125,
+            3.54833984375
+          ],
+          "cpuIdlePct": 29.679059421671433,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1029.0,
+            "Existing macOS virtual machine service": 8.9,
+            "Interactive desktop applications": 6.0,
+            "System indexing or backup": 0.0,
+            "WindowServer": 16.1
+          }
+        },
+        {
+          "utc": "2026-11-27T09:09:44.428+00:00",
+          "loadAverage": [
+            8.8798828125,
+            5.556640625,
+            3.55078125
+          ],
+          "cpuIdlePct": 47.87149865485045,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 816.0,
+            "Existing macOS virtual machine service": 10.6,
+            "Interactive desktop applications": 9.0,
+            "System indexing or backup": 0.0,
+            "WindowServer": 16.1
+          }
+        },
+        {
+          "utc": "2026-11-27T09:09:48.473+00:00",
+          "loadAverage": [
+            10.09033203125,
+            5.86279296875,
+            3.67041015625
+          ],
+          "cpuIdlePct": 24.676155445386215,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1017.4,
+            "Existing macOS virtual machine service": 9.4,
+            "Interactive desktop applications": 7.399999999999999,
+            "System indexing or backup": 0.0,
+            "WindowServer": 15.6
+          }
+        }
+      ],
+      "observedHostDuringRunner": {
+        "windows": 8,
+        "cpuIdlePct": {
+          "n": 8,
+          "min": 24.676155445386215,
+          "median": 34.90769402012557,
+          "max": 53.222486144101346,
+          "p50": 32.22786417010473,
+          "p90": 53.222486144101346,
+          "p95": 53.222486144101346,
+          "p99": 53.222486144101346
+        },
+        "loadAvg1": {
+          "n": 8,
+          "min": 8.85986328125,
+          "median": 9.2939453125,
+          "max": 10.09033203125,
+          "p50": 9.283203125,
+          "p90": 10.09033203125,
+          "p95": 10.09033203125,
+          "p99": 10.09033203125
+        },
+        "memoryPressureLevels": [
+          1
+        ],
+        "androidEmulatorCounts": [
+          1
+        ],
+        "forbiddenConcurrency": [],
+        "backgroundProcessCategoryPeaksPctOfOneCore": {
+          "Android Emulator": 1141.2,
+          "Existing macOS virtual machine service": 13.4,
+          "Interactive desktop applications": 97.80000000000001,
+          "System indexing or backup": 0.0,
+          "WindowServer": 54.7
+        }
+      },
+      "frames": {
+        "frameDurationCpuMs": {
+          "n": 155,
+          "min": 7.051375,
+          "median": 238.082459,
+          "max": 372.364583,
+          "p50": 238.082459,
+          "p90": 359.479375,
+          "p95": 361.023333,
+          "p99": 365.833917
+        },
+        "frameOverrunMs": {
+          "n": 155,
+          "min": -9.277617,
+          "median": 231.994917,
+          "max": 522.847387,
+          "p50": 231.994917,
+          "p90": 510.97018,
+          "p95": 516.830027,
+          "p99": 522.107586
+        }
+      },
+      "threadStatsAndDeadlineTotals": {
+        "UI": {
+          "runningMs": {
+            "n": 3,
+            "min": 392.994321,
+            "median": 395.968739,
+            "max": 408.337447,
+            "p50": 395.968739,
+            "p90": 408.337447,
+            "p95": 408.337447,
+            "p99": 408.337447
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 23.556338,
+            "median": 27.80767,
+            "max": 36.793509,
+            "p50": 27.80767,
+            "p90": 36.793509,
+            "p95": 36.793509,
+            "p99": 36.793509
+          }
+        },
+        "RenderThread": {
+          "runningMs": {
+            "n": 3,
+            "min": 5470.308525,
+            "median": 5893.27165,
+            "max": 6294.337585,
+            "p50": 5893.27165,
+            "p90": 6294.337585,
+            "p95": 6294.337585,
+            "p99": 6294.337585
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 22.601479,
+            "median": 26.945124,
+            "max": 40.573017,
+            "p50": 26.945124,
+            "p90": 40.573017,
+            "p95": 40.573017,
+            "p99": 40.573017
+          }
+        },
+        "JIT": {
+          "runningMs": {
+            "n": 3,
+            "min": 88.271209,
+            "median": 91.60733,
+            "max": 92.356537,
+            "p50": 91.60733,
+            "p90": 92.356537,
+            "p95": 92.356537,
+            "p99": 92.356537
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 18.192345,
+            "median": 24.99979,
+            "max": 143.196328,
+            "p50": 24.99979,
+            "p90": 143.196328,
+            "p95": 143.196328,
+            "p99": 143.196328
+          }
+        },
+        "worker": {
+          "runningMs": {
+            "n": 3,
+            "min": 5.3355,
+            "median": 5.673541,
+            "max": 6.090002,
+            "p50": 5.673541,
+            "p90": 6.090002,
+            "p95": 6.090002,
+            "p99": 6.090002
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 3.253626,
+            "median": 3.340832,
+            "max": 4.38729,
+            "p50": 3.340832,
+            "p90": 4.38729,
+            "p95": 4.38729,
+            "p99": 4.38729
+          }
+        },
+        "measureBlockMs": {
+          "n": 3,
+          "min": 8114.566587,
+          "median": 8231.290921,
+          "max": 8370.938171,
+          "p50": 8231.290921,
+          "p90": 8370.938171,
+          "p95": 8370.938171,
+          "p99": 8370.938171
+        },
+        "actualSurfaceTokens": 155,
+        "appDeadlineMissTags": 127,
+        "uniquelyPairedTokens": 155,
+        "pairedPositiveOverrun": 127,
+        "unpairedTokens": 0,
+        "droppedPresentTokens": 0
+      },
+      "iterations": [
+        {
+          "repeat": 1,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              34.476542,
+              148.085208,
+              247.963334,
+              246.997625,
+              271.771583,
+              273.830708,
+              266.007917,
+              267.810083,
+              255.672875,
+              238.082459,
+              170.748083,
+              103.325292,
+              41.419833,
+              13.640042,
+              18.157167,
+              14.027458,
+              13.550417,
+              13.307334,
+              12.583625,
+              16.6675,
+              8.735708,
+              139.701458,
+              302.229709,
+              349.662917,
+              358.29725,
+              360.475708,
+              358.44675,
+              357.769917,
+              354.351292,
+              357.787416,
+              344.812917,
+              364.436875,
+              241.615209,
+              126.333417,
+              123.288583,
+              124.326708,
+              126.177833,
+              122.845625,
+              109.744667,
+              21.594125,
+              9.183167,
+              9.218709,
+              16.787833,
+              180.023417,
+              324.625083,
+              358.505667,
+              357.481083,
+              343.29875,
+              340.047667,
+              351.433417,
+              344.215,
+              322.009
+            ],
+            "frameOverrunMs": [
+              18.206456,
+              133.324498,
+              231.994917,
+              230.825922,
+              354.076547,
+              388.485385,
+              371.192183,
+              373.976771,
+              239.623241,
+              221.72658,
+              154.394171,
+              87.671804,
+              25.266062,
+              -1.59743,
+              2.293412,
+              1.397878,
+              -2.012905,
+              -2.259772,
+              -3.063556,
+              1.505286,
+              115.153583,
+              123.616042,
+              286.282251,
+              333.445048,
+              494.871508,
+              510.97018,
+              342.215403,
+              341.431911,
+              338.356793,
+              512.171926,
+              329.665767,
+              490.973185,
+              405.024316,
+              284.439573,
+              162.195914,
+              159.767458,
+              156.142794,
+              166.775004,
+              93.545343,
+              5.283182,
+              -6.868267,
+              -4.815009,
+              0.48316,
+              163.657536,
+              308.234663,
+              472.295163,
+              516.163461,
+              327.137933,
+              323.736108,
+              335.26824,
+              328.301956,
+              305.677964
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 52,
+              "min": 8.735708,
+              "median": 239.848834,
+              "max": 364.436875,
+              "p50": 238.082459,
+              "p90": 357.787416,
+              "p95": 358.505667,
+              "p99": 364.436875
+            },
+            "frameOverrunMs": {
+              "n": 52,
+              "min": -6.868267,
+              "median": 231.4104195,
+              "max": 516.163461,
+              "p50": 230.825922,
+              "p90": 472.295163,
+              "p95": 510.97018,
+              "p99": 516.163461
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter000",
+            "sha256": "2c334c3be716ee28d9e0be8a10674803f83441f2d32e2a1e0c6d79d84c3763f7",
+            "measureBlockMs": 8370.938171,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 92.356537,
+                "runnableMs": 18.192345
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 5893.27165,
+                "runnableMs": 40.573017
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 408.337447,
+                "runnableMs": 27.80767
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.673541,
+                "runnableMs": 3.253626
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 117,
+                "inclusiveMs": 11.087418
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 155,
+                "inclusiveMs": 75.376043
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 52,
+              "appDeadlineMisses": 46
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 52,
+              "appDeadlineMissTags": 46,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 52,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 46,
+              "pairedAppOverrunMs": {
+                "n": 52,
+                "min": -7.044601,
+                "median": 231.32600250000002,
+                "max": 516.146086,
+                "p50": 230.825922,
+                "p90": 472.111206,
+                "p95": 510.814723,
+                "p99": 516.146086
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 2.1556270122528076,
+              "endSecondsFromRunner": 10.526565074920654
+            },
+            "alignedHostSamples": {
+              "windows": 3,
+              "cpuIdlePct": {
+                "n": 3,
+                "min": 29.74893415442918,
+                "median": 32.22786417010473,
+                "max": 53.222486144101346,
+                "p50": 32.22786417010473,
+                "p90": 53.222486144101346,
+                "p95": 53.222486144101346,
+                "p99": 53.222486144101346
+              },
+              "loadAvg1": {
+                "n": 3,
+                "min": 8.85986328125,
+                "median": 9.283203125,
+                "max": 9.59130859375,
+                "p50": 9.283203125,
+                "p90": 9.59130859375,
+                "p95": 9.59130859375,
+                "p99": 9.59130859375
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 1141.2,
+                "Existing macOS virtual machine service": 10.8,
+                "Interactive desktop applications": 97.80000000000001,
+                "System indexing or backup": 0.0,
+                "WindowServer": 54.7
+              }
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              29.35175,
+              142.960209,
+              241.042542,
+              263.387792,
+              264.343334,
+              254.457625,
+              202.063916,
+              152.137126,
+              68.280125,
+              18.821709,
+              12.7035,
+              13.270958,
+              12.553833,
+              15.755417,
+              12.880833,
+              11.893875,
+              13.1425,
+              13.18975,
+              15.2395,
+              7.828959,
+              137.264208,
+              300.441333,
+              346.741917,
+              358.953125,
+              360.080583,
+              355.149,
+              353.097459,
+              348.944667,
+              349.377792,
+              337.252958,
+              365.652042,
+              239.921001,
+              121.082916,
+              121.311542,
+              119.345375,
+              119.654791,
+              120.762792,
+              107.199,
+              57.461166,
+              8.198375,
+              9.2395,
+              16.854125,
+              178.299125,
+              302.763626,
+              357.876708,
+              359.893791,
+              345.825208,
+              341.214083,
+              355.676708,
+              333.999041,
+              310.950834
+            ],
+            "frameOverrunMs": [
+              13.828739,
+              126.631573,
+              225.100949,
+              340.18595,
+              373.140662,
+              238.155881,
+              186.051388,
+              137.390855,
+              52.869696,
+              2.837954,
+              -3.655579,
+              -2.535196,
+              -3.680105,
+              -0.498096,
+              -3.450672,
+              -4.429748,
+              -2.547864,
+              -2.895356,
+              -0.543556,
+              -8.381633,
+              121.55695,
+              284.373743,
+              330.610082,
+              493.513083,
+              507.799923,
+              339.165728,
+              337.019695,
+              332.755077,
+              334.095751,
+              321.150675,
+              484.79676,
+              394.642307,
+              272.951356,
+              149.662113,
+              159.902073,
+              153.898618,
+              148.192663,
+              91.016126,
+              41.674548,
+              -8.086443,
+              -6.942893,
+              0.660319,
+              162.443736,
+              290.798613,
+              453.783864,
+              517.853202,
+              330.338508,
+              325.141016,
+              340.777106,
+              317.729738,
+              294.689747
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 51,
+              "min": 7.828959,
+              "median": 152.137126,
+              "max": 365.652042,
+              "p50": 152.137126,
+              "p90": 355.676708,
+              "p95": 359.893791,
+              "p99": 365.652042
+            },
+            "frameOverrunMs": {
+              "n": 51,
+              "min": -8.381633,
+              "median": 162.443736,
+              "max": 517.853202,
+              "p50": 162.443736,
+              "p90": 394.642307,
+              "p95": 493.513083,
+              "p99": 517.853202
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter001",
+            "sha256": "cceb6f8b769cfe74d99d6bbed7a6663ea835ad195eb45d2dee25d215165ff1e3",
+            "measureBlockMs": 8114.566587,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 88.271209,
+                "runnableMs": 24.99979
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 5470.308525,
+                "runnableMs": 22.601479
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 392.994321,
+                "runnableMs": 36.793509
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 6.090002,
+                "runnableMs": 3.340832
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 117,
+                "inclusiveMs": 9.766873
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 155,
+                "inclusiveMs": 71.295824
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 51,
+              "appDeadlineMisses": 39
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 51,
+              "appDeadlineMissTags": 39,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 51,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 39,
+              "pairedAppOverrunMs": {
+                "n": 51,
+                "min": -8.381633,
+                "median": 162.287403,
+                "max": 517.853202,
+                "p50": 162.287403,
+                "p90": 394.529641,
+                "p95": 493.513083,
+                "p99": 517.853202
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 13.520837545394897,
+              "endSecondsFromRunner": 21.635404348373413
+            },
+            "alignedHostSamples": {
+              "windows": 3,
+              "cpuIdlePct": {
+                "n": 3,
+                "min": 29.679059421671433,
+                "median": 37.587523870146406,
+                "max": 46.614048934490924,
+                "p50": 37.587523870146406,
+                "p90": 46.614048934490924,
+                "p95": 46.614048934490924,
+                "p99": 46.614048934490924
+              },
+              "loadAvg1": {
+                "n": 3,
+                "min": 8.9833984375,
+                "median": 9.3046875,
+                "max": 9.59130859375,
+                "p50": 9.3046875,
+                "p90": 9.59130859375,
+                "p95": 9.59130859375,
+                "p99": 9.59130859375
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 1029.0,
+                "Existing macOS virtual machine service": 13.4,
+                "Interactive desktop applications": 7.9,
+                "System indexing or backup": 0.0,
+                "WindowServer": 16.1
+              }
+            }
+          }
+        },
+        {
+          "repeat": 3,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              29.780625,
+              148.446042,
+              262.726417,
+              243.148792,
+              262.50025,
+              262.2705,
+              261.287042,
+              262.243083,
+              250.246376,
+              217.061292,
+              129.730625,
+              76.563666,
+              13.349958,
+              13.067667,
+              15.00475,
+              13.05475,
+              12.904,
+              13.595334,
+              11.825125,
+              15.536459,
+              9.043209,
+              139.5025,
+              303.563292,
+              350.442,
+              360.343333,
+              361.667375,
+              359.365792,
+              360.851667,
+              359.479375,
+              361.171625,
+              358.984,
+              355.849416,
+              357.068875,
+              358.173042,
+              360.269541,
+              360.213208,
+              357.309834,
+              362.378542,
+              372.364583,
+              365.833917,
+              237.96825,
+              121.278376,
+              121.693792,
+              121.834542,
+              121.610917,
+              117.004458,
+              7.051375,
+              17.823458,
+              178.106583,
+              328.445334,
+              361.023333,
+              353.464458
+            ],
+            "frameOverrunMs": [
+              15.955849,
+              133.448058,
+              246.5361,
+              227.056815,
+              342.635191,
+              373.006486,
+              371.506617,
+              369.543205,
+              234.099716,
+              200.772306,
+              113.850814,
+              60.483531,
+              -2.739962,
+              -2.324994,
+              -1.355862,
+              -3.304228,
+              -2.790012,
+              -1.664628,
+              -4.151996,
+              -0.551446,
+              -7.094023,
+              123.512894,
+              287.464145,
+              334.146858,
+              498.21165,
+              512.859074,
+              345.081672,
+              508.165714,
+              522.847387,
+              521.047395,
+              516.830027,
+              512.240868,
+              508.98875,
+              505.478591,
+              520.827431,
+              517.121647,
+              513.388196,
+              516.203329,
+              522.107586,
+              517.390218,
+              394.795892,
+              272.975275,
+              150.655074,
+              162.389701,
+              156.360621,
+              101.159375,
+              -9.277617,
+              1.86697,
+              161.973762,
+              312.901306,
+              473.130139,
+              516.78977
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 52,
+              "min": 7.051375,
+              "median": 255.766709,
+              "max": 372.364583,
+              "p50": 250.246376,
+              "p90": 361.023333,
+              "p95": 362.378542,
+              "p99": 372.364583
+            },
+            "frameOverrunMs": {
+              "n": 52,
+              "min": -9.277617,
+              "median": 280.21970999999996,
+              "max": 522.847387,
+              "p50": 272.975275,
+              "p90": 517.121647,
+              "p95": 521.047395,
+              "p99": 522.847387
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter002",
+            "sha256": "b818bbb006c22e1e57746e9ce8c478d42928ae6f4586ea5f5229bcb7dbbb7f23",
+            "measureBlockMs": 8231.290921,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 91.60733,
+                "runnableMs": 143.196328
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 6294.337585,
+                "runnableMs": 26.945124
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 395.968739,
+                "runnableMs": 23.556338
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.3355,
+                "runnableMs": 4.38729
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 128,
+                "inclusiveMs": 10.111956
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 170,
+                "inclusiveMs": 77.413083
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 52,
+              "appDeadlineMisses": 42
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 52,
+              "appDeadlineMissTags": 42,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 52,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 42,
+              "pairedAppOverrunMs": {
+                "n": 52,
+                "min": -9.294951,
+                "median": 280.21970999999996,
+                "max": 522.682013,
+                "p50": 272.975275,
+                "p90": 517.080189,
+                "p95": 521.015228,
+                "p99": 522.682013
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 24.480491876602173,
+              "endSecondsFromRunner": 32.71178317070007
+            },
+            "alignedHostSamples": {
+              "windows": 2,
+              "cpuIdlePct": {
+                "n": 2,
+                "min": 24.676155445386215,
+                "median": 36.27382705011833,
+                "max": 47.87149865485045,
+                "p50": 24.676155445386215,
+                "p90": 47.87149865485045,
+                "p95": 47.87149865485045,
+                "p99": 47.87149865485045
+              },
+              "loadAvg1": {
+                "n": 2,
+                "min": 8.8798828125,
+                "median": 9.485107421875,
+                "max": 10.09033203125,
+                "p50": 8.8798828125,
+                "p90": 10.09033203125,
+                "p95": 10.09033203125,
+                "p99": 10.09033203125
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 1017.4,
+                "Existing macOS virtual machine service": 10.6,
+                "Interactive desktop applications": 9.0,
+                "System indexing or backup": 0.0,
+                "WindowServer": 16.1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "A10": {
+      "before": {
+        "guest": {
+          "sdk": 36,
+          "abi": "arm64-v8a",
+          "fingerprint": "google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.D1/13818094:user/release-keys",
+          "dimensions": "Physical size: 1080x2400",
+          "density": "Physical density: 420",
+          "refreshHz": [
+            60.0
+          ],
+          "localeKoKr": true,
+          "acPowered": true,
+          "batteryPct": 100,
+          "batteryEmulationC": 25.0,
+          "thermalStatus": 0,
+          "surfaceFlingerSwiftShader": true,
+          "settings": {
+            "font_scale": "1.0",
+            "window_animation_scale": "0.0",
+            "transition_animation_scale": "0.0",
+            "animator_duration_scale": "0.0",
+            "airplane_mode_on": "0",
+            "wifi_on": "1"
+          }
+        },
+        "hostPreflight": [
+          {
+            "utc": "2026-11-27T09:09:58.216+00:00",
+            "loadAverage": [
+              8.9072265625,
+              5.7509765625,
+              3.65576171875
+            ],
+            "cpuIdlePct": 93.67959949937422,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 13.6,
+              "Existing macOS virtual machine service": 21.4,
+              "Interactive desktop applications": 21.5,
+              "System indexing or backup": 0.0,
+              "WindowServer": 11.7
+            }
+          },
+          {
+            "utc": "2026-11-27T09:10:00.268+00:00",
+            "loadAverage": [
+              8.9072265625,
+              5.7509765625,
+              3.65576171875
+            ],
+            "cpuIdlePct": 93.0665852168601,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 17.3,
+              "Existing macOS virtual machine service": 19.6,
+              "Interactive desktop applications": 14.899999999999999,
+              "Other active process": 44.5,
+              "System indexing or backup": 0.0,
+              "WindowServer": 15.4
+            }
+          },
+          {
+            "utc": "2026-11-27T09:10:02.330+00:00",
+            "loadAverage": [
+              8.9072265625,
+              5.7509765625,
+              3.65576171875
+            ],
+            "cpuIdlePct": 92.6829268292683,
+            "memoryPressureLevel": 1,
+            "androidEmulatorCount": 1,
+            "forbiddenConcurrency": [],
+            "processGroupCpuPctOfOneCore": {
+              "Android Emulator": 12.4,
+              "Existing macOS virtual machine service": 25.7,
+              "Interactive desktop applications": 18.900000000000006,
+              "System indexing or backup": 0.0,
+              "WindowServer": 12.6
+            }
+          }
+        ],
+        "host": {
+          "memoryPressure": "The system has 68719476736 (4194304 pages with a page size of 16384).\nSystem-wide memory free percentage: 47%",
+          "pressureLevel": 1,
+          "swapUsage": "total = 2048.00M  used = 1272.62M  free = 775.38M  (encrypted)",
+          "logicalCpuCount": 16,
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "processSnapshot": [
+            1,
+            [],
+            {
+              "Android Emulator": 11.0,
+              "Existing macOS virtual machine service": 21.6,
+              "Interactive desktop applications": 19.3,
+              "System indexing or backup": 0.0,
+              "WindowServer": 14.9
+            }
+          ],
+          "hardware": "Mac16,6",
+          "macOS": "26.5.1"
+        },
+        "apkSha256": {
+          "target": "fb1fdc7d464cf47c8cb0011a9d2a659dfd43eb2de2b40bdc077d2fb16d8f4f76",
+          "harness": "0ee2174794b53a278c4f99131f4a3fa39b58d65a9011a07a144f9cff2544e4f2"
+        }
+      },
+      "after": {
+        "guest": {
+          "sdk": 36,
+          "abi": "arm64-v8a",
+          "fingerprint": "google/sdk_gphone64_arm64/emu64a:16/BE2A.250530.026.D1/13818094:user/release-keys",
+          "dimensions": "Physical size: 1080x2400",
+          "density": "Physical density: 420",
+          "refreshHz": [
+            60.0
+          ],
+          "localeKoKr": true,
+          "acPowered": true,
+          "batteryPct": 100,
+          "batteryEmulationC": 25.0,
+          "thermalStatus": 0,
+          "surfaceFlingerSwiftShader": true,
+          "settings": {
+            "font_scale": "1.0",
+            "window_animation_scale": "0.0",
+            "transition_animation_scale": "0.0",
+            "animator_duration_scale": "0.0",
+            "airplane_mode_on": "0",
+            "wifi_on": "1"
+          }
+        },
+        "host": {
+          "memoryPressure": "The system has 68719476736 (4194304 pages with a page size of 16384).\nSystem-wide memory free percentage: 46%",
+          "pressureLevel": 1,
+          "swapUsage": "total = 2048.00M  used = 1272.62M  free = 775.38M  (encrypted)",
+          "logicalCpuCount": 16,
+          "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+          "processSnapshot": [
+            1,
+            [],
+            {
+              "Android Emulator": 231.4,
+              "Existing macOS virtual machine service": 18.1,
+              "Interactive desktop applications": 5.300000000000001,
+              "System indexing or backup": 0.0,
+              "WindowServer": 14.3
+            }
+          ],
+          "hardware": "Mac16,6",
+          "macOS": "26.5.1"
+        }
+      },
+      "validity": {
+        "traceCount": 3,
+        "testRunnerExit": 0,
+        "reasons": [],
+        "environmentComparisonEligible": true,
+        "runWasRetained": true
+      },
+      "originalBenchmarkDataSha256": "22c4297589c80a2e7c7ccd8d38393e50094cc7409677c07af3c72eb6a79616a9",
+      "benchmarkWindowHostSamples": [
+        {
+          "utc": "2026-11-27T09:10:06.429+00:00",
+          "loadAverage": [
+            8.43408203125,
+            5.705078125,
+            3.65185546875
+          ],
+          "cpuIdlePct": 56.447264076130054,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1053.1,
+            "Existing macOS virtual machine service": 11.3,
+            "Interactive desktop applications": 9.8,
+            "System indexing or backup": 0.0,
+            "WindowServer": 17.2
+          }
+        },
+        {
+          "utc": "2026-11-27T09:10:10.473+00:00",
+          "loadAverage": [
+            8.79931640625,
+            5.826171875,
+            3.70654296875
+          ],
+          "cpuIdlePct": 37.59936406995231,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1131.3,
+            "Existing macOS virtual machine service": 10.3,
+            "Interactive desktop applications": 6.8,
+            "System indexing or backup": 0.0,
+            "WindowServer": 16.5
+          }
+        },
+        {
+          "utc": "2026-11-27T09:10:14.515+00:00",
+          "loadAverage": [
+            8.49462890625,
+            5.81201171875,
+            3.7138671875
+          ],
+          "cpuIdlePct": 30.929308975377282,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 774.9,
+            "Existing macOS virtual machine service": 11.3,
+            "Interactive desktop applications": 12.9,
+            "System indexing or backup": 0.0,
+            "WindowServer": 14.7
+          }
+        },
+        {
+          "utc": "2026-11-27T09:10:18.565+00:00",
+          "loadAverage": [
+            7.97412109375,
+            5.74853515625,
+            3.70361328125
+          ],
+          "cpuIdlePct": 44.255587031790995,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 693.0,
+            "Existing macOS virtual machine service": 12.8,
+            "Interactive desktop applications": 5.9,
+            "System indexing or backup": 0.0,
+            "WindowServer": 15.6
+          }
+        },
+        {
+          "utc": "2026-11-27T09:10:22.614+00:00",
+          "loadAverage": [
+            7.97412109375,
+            5.74853515625,
+            3.70361328125
+          ],
+          "cpuIdlePct": 31.356336460486563,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 1094.1,
+            "Existing macOS virtual machine service": 15.8,
+            "Interactive desktop applications": 13.100000000000001,
+            "System indexing or backup": 0.0,
+            "WindowServer": 13.9
+          }
+        },
+        {
+          "utc": "2026-11-27T09:10:26.665+00:00",
+          "loadAverage": [
+            8.53662109375,
+            5.90185546875,
+            3.76953125
+          ],
+          "cpuIdlePct": 28.05458584576325,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 573.6,
+            "Existing macOS virtual machine service": 12.6,
+            "Interactive desktop applications": 43.3,
+            "System indexing or backup": 0.0,
+            "WindowServer": 48.3
+          }
+        },
+        {
+          "utc": "2026-11-27T09:10:30.713+00:00",
+          "loadAverage": [
+            8.0927734375,
+            5.853515625,
+            3.7646484375
+          ],
+          "cpuIdlePct": 44.63383838383838,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 595.2,
+            "Existing macOS virtual machine service": 15.1,
+            "Interactive desktop applications": 14.3,
+            "System indexing or backup": 0.0,
+            "WindowServer": 26.9
+          }
+        },
+        {
+          "utc": "2026-11-27T09:10:34.756+00:00",
+          "loadAverage": [
+            8.6455078125,
+            6.0048828125,
+            3.830078125
+          ],
+          "cpuIdlePct": 26.669854933843457,
+          "memoryPressureLevel": 1,
+          "androidEmulatorCount": 1,
+          "forbiddenConcurrency": [],
+          "processGroupCpuPctOfOneCore": {
+            "Android Emulator": 908.4,
+            "Existing macOS virtual machine service": 11.4,
+            "Interactive desktop applications": 11.799999999999999,
+            "System indexing or backup": 0.0,
+            "WindowServer": 28.2
+          }
+        }
+      ],
+      "observedHostDuringRunner": {
+        "windows": 8,
+        "cpuIdlePct": {
+          "n": 8,
+          "min": 26.669854933843457,
+          "median": 34.47785026521944,
+          "max": 56.447264076130054,
+          "p50": 31.356336460486563,
+          "p90": 56.447264076130054,
+          "p95": 56.447264076130054,
+          "p99": 56.447264076130054
+        },
+        "loadAvg1": {
+          "n": 8,
+          "min": 7.97412109375,
+          "median": 8.46435546875,
+          "max": 8.79931640625,
+          "p50": 8.43408203125,
+          "p90": 8.79931640625,
+          "p95": 8.79931640625,
+          "p99": 8.79931640625
+        },
+        "memoryPressureLevels": [
+          1
+        ],
+        "androidEmulatorCounts": [
+          1
+        ],
+        "forbiddenConcurrency": [],
+        "backgroundProcessCategoryPeaksPctOfOneCore": {
+          "Android Emulator": 1131.3,
+          "Existing macOS virtual machine service": 15.8,
+          "Interactive desktop applications": 43.3,
+          "System indexing or backup": 0.0,
+          "WindowServer": 48.3
+        }
+      },
+      "frames": {
+        "frameDurationCpuMs": {
+          "n": 155,
+          "min": 7.099375,
+          "median": 220.389584,
+          "max": 370.989792,
+          "p50": 220.389584,
+          "p90": 361.979583,
+          "p95": 363.448709,
+          "p99": 369.02425
+        },
+        "frameOverrunMs": {
+          "n": 155,
+          "min": -8.599613,
+          "median": 224.878163,
+          "max": 689.58178,
+          "p50": 224.878163,
+          "p90": 516.891155,
+          "p95": 520.866348,
+          "p99": 688.071397
+        }
+      },
+      "threadStatsAndDeadlineTotals": {
+        "UI": {
+          "runningMs": {
+            "n": 3,
+            "min": 383.914509,
+            "median": 388.309246,
+            "max": 393.461306,
+            "p50": 388.309246,
+            "p90": 393.461306,
+            "p95": 393.461306,
+            "p99": 393.461306
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 32.81061,
+            "median": 34.212784,
+            "max": 37.991748,
+            "p50": 34.212784,
+            "p90": 37.991748,
+            "p95": 37.991748,
+            "p99": 37.991748
+          }
+        },
+        "RenderThread": {
+          "runningMs": {
+            "n": 3,
+            "min": 5277.608748,
+            "median": 5814.939013,
+            "max": 6508.052705,
+            "p50": 5814.939013,
+            "p90": 6508.052705,
+            "p95": 6508.052705,
+            "p99": 6508.052705
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 24.069339,
+            "median": 43.036158,
+            "max": 43.821173,
+            "p50": 43.036158,
+            "p90": 43.821173,
+            "p95": 43.821173,
+            "p99": 43.821173
+          }
+        },
+        "JIT": {
+          "runningMs": {
+            "n": 3,
+            "min": 88.550415,
+            "median": 90.979329,
+            "max": 94.747046,
+            "p50": 90.979329,
+            "p90": 94.747046,
+            "p95": 94.747046,
+            "p99": 94.747046
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 16.416544,
+            "median": 22.354375,
+            "max": 28.860124,
+            "p50": 22.354375,
+            "p90": 28.860124,
+            "p95": 28.860124,
+            "p99": 28.860124
+          }
+        },
+        "worker": {
+          "runningMs": {
+            "n": 3,
+            "min": 5.238792,
+            "median": 5.428126,
+            "max": 6.190835,
+            "p50": 5.428126,
+            "p90": 6.190835,
+            "p95": 6.190835,
+            "p99": 6.190835
+          },
+          "runnableMs": {
+            "n": 3,
+            "min": 3.235082,
+            "median": 3.308538,
+            "max": 9.055453,
+            "p50": 3.308538,
+            "p90": 9.055453,
+            "p95": 9.055453,
+            "p99": 9.055453
+          }
+        },
+        "measureBlockMs": {
+          "n": 3,
+          "min": 8140.907671,
+          "median": 8216.181837,
+          "max": 8830.040005,
+          "p50": 8216.181837,
+          "p90": 8830.040005,
+          "p95": 8830.040005,
+          "p99": 8830.040005
+        },
+        "actualSurfaceTokens": 155,
+        "appDeadlineMissTags": 119,
+        "uniquelyPairedTokens": 155,
+        "pairedPositiveOverrun": 120,
+        "unpairedTokens": 0,
+        "droppedPresentTokens": 0
+      },
+      "iterations": [
+        {
+          "repeat": 1,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              26.024875,
+              140.816833,
+              241.166709,
+              265.195417,
+              263.614916,
+              253.263875,
+              221.085375,
+              156.260541,
+              69.319459,
+              17.365583,
+              14.690333,
+              15.030625,
+              12.076042,
+              14.418083,
+              13.067584,
+              12.761666,
+              12.389833,
+              12.428208,
+              13.717083,
+              8.075792,
+              135.533958,
+              298.733458,
+              345.555,
+              361.543166,
+              362.207125,
+              356.934209,
+              355.275792,
+              361.084167,
+              366.14325,
+              362.491626,
+              238.022708,
+              123.523,
+              123.040625,
+              121.314958,
+              121.403375,
+              160.865583,
+              153.443917,
+              14.312167,
+              7.751291,
+              9.527708,
+              7.774709,
+              19.749208,
+              183.210459,
+              310.347417,
+              362.3375,
+              364.944917,
+              359.947667,
+              357.514584,
+              355.525709,
+              349.907459,
+              343.910584
+            ],
+            "frameOverrunMs": [
+              9.787493,
+              124.451577,
+              224.878163,
+              339.771872,
+              372.087417,
+              237.086553,
+              205.475685,
+              140.455901,
+              53.569243,
+              1.175334,
+              -1.158657,
+              -1.26819,
+              -4.18485,
+              -1.656383,
+              -3.404,
+              -3.512159,
+              -3.844401,
+              -3.624393,
+              -2.213718,
+              110.993871,
+              119.362705,
+              282.668497,
+              329.655753,
+              494.518712,
+              525.525802,
+              340.940942,
+              510.395366,
+              515.892831,
+              349.88563,
+              509.63509,
+              404.822513,
+              266.982021,
+              161.573819,
+              155.816447,
+              150.587283,
+              214.775035,
+              137.392291,
+              -1.123204,
+              -8.599613,
+              -6.862355,
+              -8.026263,
+              3.558991,
+              166.977492,
+              297.793077,
+              462.884369,
+              513.102708,
+              344.175223,
+              341.426771,
+              339.745529,
+              333.875703,
+              327.593419
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 51,
+              "min": 7.751291,
+              "median": 156.260541,
+              "max": 366.14325,
+              "p50": 156.260541,
+              "p90": 361.543166,
+              "p95": 362.491626,
+              "p99": 366.14325
+            },
+            "frameOverrunMs": {
+              "n": 51,
+              "min": -8.599613,
+              "median": 166.977492,
+              "max": 525.525802,
+              "p50": 166.977492,
+              "p90": 494.518712,
+              "p95": 513.102708,
+              "p99": 525.525802
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter000",
+            "sha256": "1fdb3867cdd40579016eef68205e95e6b6fe8339aeff694ca760d6e89b286333",
+            "measureBlockMs": 8140.907671,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 88.550415,
+                "runnableMs": 22.354375
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 5277.608748,
+                "runnableMs": 24.069339
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 383.914509,
+                "runnableMs": 34.212784
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 6.190835,
+                "runnableMs": 3.308538
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 114,
+                "inclusiveMs": 10.426129
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 151,
+                "inclusiveMs": 70.121171
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 51,
+              "appDeadlineMisses": 37
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 51,
+              "appDeadlineMissTags": 37,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 51,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 38,
+              "pairedAppOverrunMs": {
+                "n": 51,
+                "min": -8.681988,
+                "median": 166.906908,
+                "max": 525.508593,
+                "p50": 166.906908,
+                "p90": 494.504379,
+                "p95": 513.102708,
+                "p99": 525.508593
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 2.3659465312957764,
+              "endSecondsFromRunner": 10.506854057312012
+            },
+            "alignedHostSamples": {
+              "windows": 3,
+              "cpuIdlePct": {
+                "n": 3,
+                "min": 30.929308975377282,
+                "median": 37.59936406995231,
+                "max": 56.447264076130054,
+                "p50": 37.59936406995231,
+                "p90": 56.447264076130054,
+                "p95": 56.447264076130054,
+                "p99": 56.447264076130054
+              },
+              "loadAvg1": {
+                "n": 3,
+                "min": 8.43408203125,
+                "median": 8.49462890625,
+                "max": 8.79931640625,
+                "p50": 8.49462890625,
+                "p90": 8.79931640625,
+                "p95": 8.79931640625,
+                "p99": 8.79931640625
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 1131.3,
+                "Existing macOS virtual machine service": 11.3,
+                "Interactive desktop applications": 12.9,
+                "System indexing or backup": 0.0,
+                "WindowServer": 17.2
+              }
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              25.08725,
+              138.175792,
+              234.452584,
+              262.073708,
+              263.527208,
+              245.834166,
+              212.1385,
+              142.646209,
+              75.626375,
+              14.07175,
+              13.536791,
+              13.466875,
+              13.353042,
+              14.224625,
+              12.031833,
+              12.367208,
+              13.735625,
+              12.106083,
+              13.805417,
+              26.908042,
+              190.922,
+              358.405125,
+              358.145917,
+              362.257084,
+              362.971167,
+              361.979583,
+              358.977917,
+              358.277,
+              356.72525,
+              357.523626,
+              360.29575,
+              360.424042,
+              359.396583,
+              361.103417,
+              359.51025,
+              361.521417,
+              362.501916,
+              359.173375,
+              361.043376,
+              367.096125,
+              369.02425,
+              359.780083,
+              237.5355,
+              121.951791,
+              122.658291,
+              123.594875,
+              124.551416,
+              120.775,
+              18.32075,
+              17.866791,
+              182.895334,
+              327.87025,
+              357.40775,
+              357.301042
+            ],
+            "frameOverrunMs": [
+              9.715358,
+              122.128609,
+              219.266486,
+              334.365528,
+              366.37674,
+              230.016709,
+              196.172716,
+              126.916308,
+              59.589523,
+              -1.699801,
+              -2.747127,
+              -2.129826,
+              -2.057818,
+              -1.848601,
+              -3.245677,
+              -3.900628,
+              -1.626702,
+              -4.17457,
+              -2.149603,
+              11.49932,
+              175.232903,
+              343.943405,
+              342.046662,
+              506.613955,
+              522.405128,
+              519.437885,
+              516.799227,
+              512.6574,
+              508.387158,
+              505.308415,
+              503.509714,
+              517.275388,
+              514.487145,
+              513.365069,
+              509.17766,
+              509.759501,
+              506.598966,
+              520.866348,
+              688.071397,
+              689.58178,
+              523.78287,
+              518.361795,
+              395.819135,
+              274.442225,
+              152.188608,
+              165.09411,
+              160.917405,
+              105.016992,
+              2.750833,
+              3.541129,
+              166.895796,
+              311.70859,
+              474.593757,
+              502.79118
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 54,
+              "min": 12.031833,
+              "median": 241.68483300000003,
+              "max": 369.02425,
+              "p50": 237.5355,
+              "p90": 361.979583,
+              "p95": 362.971167,
+              "p99": 369.02425
+            },
+            "frameOverrunMs": {
+              "n": 54,
+              "min": -4.17457,
+              "median": 293.0754075,
+              "max": 689.58178,
+              "p50": 274.442225,
+              "p90": 519.437885,
+              "p95": 523.78287,
+              "p99": 689.58178
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter001",
+            "sha256": "213f4b61ee978c63c383e2aa53adf8e64c5128b7da9c68dbaec3a6b1cc5720da",
+            "measureBlockMs": 8830.040005,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 94.747046,
+                "runnableMs": 16.416544
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 6508.052705,
+                "runnableMs": 43.821173
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 393.461306,
+                "runnableMs": 32.81061
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.428126,
+                "runnableMs": 3.235082
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 134,
+                "inclusiveMs": 11.353041
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 178,
+                "inclusiveMs": 80.002591
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 54,
+              "appDeadlineMisses": 44
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 54,
+              "appDeadlineMissTags": 44,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 54,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 44,
+              "pairedAppOverrunMs": {
+                "n": 54,
+                "min": -4.177987,
+                "median": 293.05392900000004,
+                "max": 689.58178,
+                "p50": 274.399268,
+                "p90": 519.39026,
+                "p95": 523.775787,
+                "p99": 689.58178
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 13.442466259002686,
+              "endSecondsFromRunner": 22.27250647544861
+            },
+            "alignedHostSamples": {
+              "windows": 3,
+              "cpuIdlePct": {
+                "n": 3,
+                "min": 28.05458584576325,
+                "median": 31.356336460486563,
+                "max": 44.255587031790995,
+                "p50": 31.356336460486563,
+                "p90": 44.255587031790995,
+                "p95": 44.255587031790995,
+                "p99": 44.255587031790995
+              },
+              "loadAvg1": {
+                "n": 3,
+                "min": 7.97412109375,
+                "median": 7.97412109375,
+                "max": 8.53662109375,
+                "p50": 7.97412109375,
+                "p90": 8.53662109375,
+                "p95": 8.53662109375,
+                "p99": 8.53662109375
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 1094.1,
+                "Existing macOS virtual machine service": 15.8,
+                "Interactive desktop applications": 43.3,
+                "System indexing or backup": 0.0,
+                "WindowServer": 48.3
+              }
+            }
+          }
+        },
+        {
+          "repeat": 3,
+          "frameSamples": {
+            "frameDurationCpuMs": [
+              26.2375,
+              139.365834,
+              220.389584,
+              261.419417,
+              260.387959,
+              243.957792,
+              192.614,
+              137.522459,
+              73.454917,
+              12.069625,
+              14.253125,
+              12.588583,
+              12.184791,
+              15.046083,
+              13.206166,
+              12.467916,
+              12.739583,
+              13.481,
+              13.383459,
+              8.178125,
+              135.330334,
+              298.534126,
+              346.947375,
+              364.234209,
+              351.86725,
+              335.934751,
+              359.288625,
+              362.940958,
+              361.859542,
+              361.513584,
+              359.004125,
+              359.759542,
+              359.769584,
+              363.448709,
+              370.989792,
+              368.021959,
+              358.178584,
+              235.994542,
+              123.257416,
+              120.842666,
+              120.210208,
+              88.184333,
+              7.099375,
+              17.822834,
+              180.511084,
+              309.033083,
+              358.6625,
+              359.440459,
+              346.991584,
+              341.803792
+            ],
+            "frameOverrunMs": [
+              9.951698,
+              123.462907,
+              204.489575,
+              318.365534,
+              365.14258,
+              228.420965,
+              176.614265,
+              125.715688,
+              57.555696,
+              -4.043337,
+              -1.057703,
+              -2.44932,
+              -3.54973,
+              -0.110929,
+              -2.280546,
+              -3.09583,
+              -3.589155,
+              -2.323397,
+              -2.372181,
+              -7.967925,
+              119.464701,
+              282.994577,
+              330.717332,
+              497.52475,
+              499.574423,
+              328.909895,
+              494.949146,
+              510.203819,
+              508.63866,
+              523.406875,
+              519.964633,
+              518.354432,
+              514.80569,
+              516.891155,
+              520.930579,
+              519.707753,
+              514.105802,
+              392.730851,
+              272.245066,
+              148.957491,
+              161.345576,
+              72.418499,
+              -8.353368,
+              2.453553,
+              164.350929,
+              293.914515,
+              456.865474,
+              520.489228,
+              332.669952,
+              325.950668
+            ]
+          },
+          "metrics": {
+            "frameDurationCpuMs": {
+              "n": 50,
+              "min": 7.099375,
+              "median": 228.19206300000002,
+              "max": 370.989792,
+              "p50": 220.389584,
+              "p90": 361.859542,
+              "p95": 364.234209,
+              "p99": 370.989792
+            },
+            "frameOverrunMs": {
+              "n": 50,
+              "min": -8.353368,
+              "median": 250.3330155,
+              "max": 523.406875,
+              "p50": 228.420965,
+              "p90": 518.354432,
+              "p95": 520.489228,
+              "p99": 523.406875
+            }
+          },
+          "trace": {
+            "id": "RefactorMapBenchmark_rideO10_iter002",
+            "sha256": "92f1c628fd3593a5333592211d6c9bbee165a09d420e576c5fddda71c6926bac",
+            "measureBlockMs": 8216.181837,
+            "scheduling": [
+              {
+                "role": "JIT",
+                "threads": 1,
+                "runningMs": 90.979329,
+                "runnableMs": 28.860124
+              },
+              {
+                "role": "RenderThread",
+                "threads": 1,
+                "runningMs": 5814.939013,
+                "runnableMs": 43.036158
+              },
+              {
+                "role": "UI",
+                "threads": 1,
+                "runningMs": 388.309246,
+                "runnableMs": 37.991748
+              },
+              {
+                "role": "worker",
+                "threads": 1,
+                "runningMs": 5.238792,
+                "runnableMs": 9.055453
+              }
+            ],
+            "composeAndGcSlices": [
+              {
+                "name": "Compose:applyChanges",
+                "slices": 122,
+                "inclusiveMs": 10.13983
+              },
+              {
+                "name": "Compose:recompose",
+                "slices": 162,
+                "inclusiveMs": 76.389874
+              }
+            ],
+            "timeline": {
+              "surfaceTokens": 50,
+              "appDeadlineMisses": 38
+            },
+            "firstDrawFrame": null,
+            "mapStatusLookup": null,
+            "timelineOverrunByLegMs": null,
+            "appFrameTimeline": {
+              "actualSurfaceTokens": 50,
+              "appDeadlineMissTags": 38,
+              "droppedPresentTokens": 0,
+              "uniquelyPairedTokens": 50,
+              "unpairedTokens": 0,
+              "pairedPositiveOverrun": 38,
+              "pairedAppOverrunMs": {
+                "n": 50,
+                "min": -8.429576,
+                "median": 250.307141,
+                "max": 523.406875,
+                "p50": 228.381882,
+                "p90": 518.341307,
+                "p95": 520.433645,
+                "p99": 523.406875
+              }
+            },
+            "hostClockAlignedMeasureBlock": {
+              "startSecondsFromRunner": 24.9030020236969,
+              "endSecondsFromRunner": 33.11918377876282
+            },
+            "alignedHostSamples": {
+              "windows": 2,
+              "cpuIdlePct": {
+                "n": 2,
+                "min": 26.669854933843457,
+                "median": 35.65184665884092,
+                "max": 44.63383838383838,
+                "p50": 26.669854933843457,
+                "p90": 44.63383838383838,
+                "p95": 44.63383838383838,
+                "p99": 44.63383838383838
+              },
+              "loadAvg1": {
+                "n": 2,
+                "min": 8.0927734375,
+                "median": 8.369140625,
+                "max": 8.6455078125,
+                "p50": 8.0927734375,
+                "p90": 8.6455078125,
+                "p95": 8.6455078125,
+                "p99": 8.6455078125
+              },
+              "memoryPressureLevels": [
+                1
+              ],
+              "androidEmulatorCounts": [
+                1
+              ],
+              "forbiddenConcurrency": [],
+              "backgroundProcessCategoryPeaksPctOfOneCore": {
+                "Android Emulator": 908.4,
+                "Existing macOS virtual machine service": 15.1,
+                "Interactive desktop applications": 14.3,
+                "System indexing or backup": 0.0,
+                "WindowServer": 28.2
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "pairedSetComparisons": [
+    {
+      "order": [
+        "A9",
+        "C9"
+      ],
+      "metrics": {
+        "frameDurationCpuMs": {
+          "A": 372.554917,
+          "C": 369.63825,
+          "deltaMs": -2.9166669999999613,
+          "deltaPercent": -0.78288243341047
+        },
+        "frameOverrunMs": {
+          "A": 517.256347,
+          "C": 525.171333,
+          "deltaMs": 7.914985999999999,
+          "deltaPercent": 1.5301863468482502
+        }
+      },
+      "overrunInvestigationRuleTriggered": true
+    },
+    {
+      "order": [
+        "C10",
+        "A10"
+      ],
+      "metrics": {
+        "frameDurationCpuMs": {
+          "A": 363.448709,
+          "C": 361.023333,
+          "deltaMs": -2.4253760000000284,
+          "deltaPercent": -0.6673227720833674
+        },
+        "frameOverrunMs": {
+          "A": 520.866348,
+          "C": 516.830027,
+          "deltaMs": -4.036321000000044,
+          "deltaPercent": -0.7749245109611169
+        }
+      },
+      "overrunInvestigationRuleTriggered": false
+    }
+  ],
+  "byBuildThreadStatsAndDeadlineTotals": {
+    "A": {
+      "UI": {
+        "runningMs": {
+          "n": 6,
+          "min": 372.186416,
+          "median": 386.9731435,
+          "max": 393.461306,
+          "p50": 385.96541,
+          "p90": 393.461306,
+          "p95": 393.461306,
+          "p99": 393.461306
+        },
+        "runnableMs": {
+          "n": 6,
+          "min": 24.720423,
+          "median": 31.756280999999998,
+          "max": 37.991748,
+          "p50": 30.701952,
+          "p90": 37.991748,
+          "p95": 37.991748,
+          "p99": 37.991748
+        }
+      },
+      "RenderThread": {
+        "runningMs": {
+          "n": 6,
+          "min": 5058.679958,
+          "median": 5427.6128929999995,
+          "max": 6508.052705,
+          "p50": 5326.837198,
+          "p90": 6508.052705,
+          "p95": 6508.052705,
+          "p99": 6508.052705
+        },
+        "runnableMs": {
+          "n": 6,
+          "min": 24.069339,
+          "median": 40.08998,
+          "max": 49.301835,
+          "p50": 37.143802,
+          "p90": 49.301835,
+          "p95": 49.301835,
+          "p99": 49.301835
+        }
+      },
+      "JIT": {
+        "runningMs": {
+          "n": 6,
+          "min": 86.909036,
+          "median": 89.57471050000001,
+          "max": 94.747046,
+          "p50": 88.785708,
+          "p90": 94.747046,
+          "p95": 94.747046,
+          "p99": 94.747046
+        },
+        "runnableMs": {
+          "n": 6,
+          "min": 16.416544,
+          "median": 26.197189,
+          "max": 36.652585,
+          "p50": 23.534254,
+          "p90": 36.652585,
+          "p95": 36.652585,
+          "p99": 36.652585
+        }
+      },
+      "worker": {
+        "runningMs": {
+          "n": 6,
+          "min": 5.238792,
+          "median": 5.5675419999999995,
+          "max": 6.190835,
+          "p50": 5.517416,
+          "p90": 6.190835,
+          "p95": 6.190835,
+          "p99": 6.190835
+        },
+        "runnableMs": {
+          "n": 6,
+          "min": 3.159831,
+          "median": 3.4091240000000003,
+          "max": 9.055453,
+          "p50": 3.308538,
+          "p90": 9.055453,
+          "p95": 9.055453,
+          "p99": 9.055453
+        }
+      },
+      "measureBlockMs": {
+        "n": 6,
+        "min": 8119.973838,
+        "median": 8138.941796,
+        "max": 8830.040005,
+        "p50": 8136.975921,
+        "p90": 8830.040005,
+        "p95": 8830.040005,
+        "p99": 8830.040005
+      },
+      "actualSurfaceTokens": 306,
+      "appDeadlineMissTags": 231,
+      "uniquelyPairedTokens": 306,
+      "pairedPositiveOverrun": 236,
+      "unpairedTokens": 0,
+      "droppedPresentTokens": 0,
+      "medianRenderThreadRunningPercentOfMeasureBlock": 66.77160863740195,
+      "appDeadlineMissTagsPercent": 75.49019607843137
+    },
+    "C": {
+      "UI": {
+        "runningMs": {
+          "n": 6,
+          "min": 392.994321,
+          "median": 402.342823,
+          "max": 471.147206,
+          "p50": 396.348199,
+          "p90": 471.147206,
+          "p95": 471.147206,
+          "p99": 471.147206
+        },
+        "runnableMs": {
+          "n": 6,
+          "min": 23.556338,
+          "median": 30.4827795,
+          "max": 36.793509,
+          "p50": 27.80767,
+          "p90": 36.793509,
+          "p95": 36.793509,
+          "p99": 36.793509
+        }
+      },
+      "RenderThread": {
+        "runningMs": {
+          "n": 6,
+          "min": 5470.308525,
+          "median": 6002.3446175,
+          "max": 7484.636736,
+          "p50": 5893.27165,
+          "p90": 7484.636736,
+          "p95": 7484.636736,
+          "p99": 7484.636736
+        },
+        "runnableMs": {
+          "n": 6,
+          "min": 16.634419,
+          "median": 24.904604,
+          "max": 46.233185,
+          "p50": 22.864084,
+          "p90": 46.233185,
+          "p95": 46.233185,
+          "p99": 46.233185
+        }
+      },
+      "JIT": {
+        "runningMs": {
+          "n": 6,
+          "min": 88.271209,
+          "median": 92.4284805,
+          "max": 103.865164,
+          "p50": 92.356537,
+          "p90": 103.865164,
+          "p95": 103.865164,
+          "p99": 103.865164
+        },
+        "runnableMs": {
+          "n": 6,
+          "min": 18.192345,
+          "median": 26.217375,
+          "max": 143.196328,
+          "p50": 24.99979,
+          "p90": 143.196328,
+          "p95": 143.196328,
+          "p99": 143.196328
+        }
+      },
+      "worker": {
+        "runningMs": {
+          "n": 6,
+          "min": 5.3355,
+          "median": 5.8032085,
+          "max": 6.090002,
+          "p50": 5.71183,
+          "p90": 6.090002,
+          "p95": 6.090002,
+          "p99": 6.090002
+        },
+        "runnableMs": {
+          "n": 6,
+          "min": 2.670707,
+          "median": 3.2972289999999997,
+          "max": 45.051243,
+          "p50": 3.253626,
+          "p90": 45.051243,
+          "p95": 45.051243,
+          "p99": 45.051243
+        }
+      },
+      "measureBlockMs": {
+        "n": 6,
+        "min": 8097.069712,
+        "median": 8301.114546,
+        "max": 9603.187297,
+        "p50": 8231.290921,
+        "p90": 9603.187297,
+        "p95": 9603.187297,
+        "p99": 9603.187297
+      },
+      "actualSurfaceTokens": 316,
+      "appDeadlineMissTags": 257,
+      "uniquelyPairedTokens": 316,
+      "pairedPositiveOverrun": 259,
+      "unpairedTokens": 0,
+      "droppedPresentTokens": 0,
+      "medianRenderThreadRunningPercentOfMeasureBlock": 70.65739378372407,
+      "appDeadlineMissTagsPercent": 81.32911392405063
+    }
+  },
+  "hostPreflight": {
+    "memoryPressure": "The system has 68719476736 (4194304 pages with a page size of 16384).\nSystem-wide memory free percentage: 48%",
+    "pressureLevel": 1,
+    "swapUsage": "total = 2048.00M  used = 1272.62M  free = 775.38M  (encrypted)",
+    "logicalCpuCount": 16,
+    "thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+    "processSnapshot": [
+      1,
+      [],
+      {
+        "Android Emulator": 158.4,
+        "Existing macOS virtual machine service": 15.5,
+        "Interactive desktop applications": 20.300000000000004,
+        "System indexing or backup": 0.0,
+        "WindowServer": 29.1
+      }
+    ],
+    "hardware": "Mac16,6",
+    "macOS": "26.5.1"
+  },
+  "restoration": {
+    "guestConditionsRestored": true,
+    "originalApksRestored": {
+      "lab.recovery.app.benchmark": true,
+      "lab.recovery.benchmark": true
+    },
+    "retestDeviceFilesVerified": 16,
+    "existingMediaCount": 5,
+    "existingMediaNamesAndBytesMatch": true
+  },
+  "frameOverrunInvestigationRule": {
+    "relativePercent": 10,
+    "absoluteMs": 5,
+    "triggeredInFinalComparison": false
+  },
+  "historicalIndependentComparisons": {
+    "emulatorOriginal": {
+      "aggregates": {
+        "A": {
+          "frameDurationCpuMs": {
+            "n": 431,
+            "min": 6.608208,
+            "median": 182.697083,
+            "max": 527.308959,
+            "p50": 182.697083,
+            "p90": 389.216875,
+            "p95": 446.148333,
+            "p99": 516.990959
+          },
+          "frameOverrunMs": {
+            "n": 431,
+            "min": 43.672141,
+            "median": 244.981535,
+            "max": 692.612498,
+            "p50": 244.981535,
+            "p90": 518.099597,
+            "p95": 600.370142,
+            "p99": 665.82075
+          }
+        },
+        "C": {
+          "frameDurationCpuMs": {
+            "n": 438,
+            "min": 6.88175,
+            "median": 186.829104,
+            "max": 550.963792,
+            "p50": 186.823083,
+            "p90": 376.982251,
+            "p95": 459.236,
+            "p99": 496.660333
+          },
+          "frameOverrunMs": {
+            "n": 438,
+            "min": 44.609015,
+            "median": 250.014376,
+            "max": 705.546226,
+            "p50": 249.095454,
+            "p90": 515.383762,
+            "p95": 631.223364,
+            "p99": 681.29015
+          }
+        }
+      },
+      "order": [
+        "A1",
+        "C1",
+        "C2",
+        "A2",
+        "A3",
+        "C3"
+      ],
+      "candidateVsBaseline": {
+        "frameDurationCpuMs": {
+          "A": 446.148333,
+          "C": 459.236,
+          "deltaMs": 13.08766700000001,
+          "deltaPercent": 2.933478852648763
+        },
+        "frameOverrunMs": {
+          "A": 600.370142,
+          "C": 631.223364,
+          "deltaMs": 30.85322199999996,
+          "deltaPercent": 5.139033379844515
+        }
+      }
+    },
+    "emulatorPriorRideRecheck": {
+      "aggregates": {
+        "A": {
+          "frameDurationCpuMs": {
+            "n": 312,
+            "min": 7.081959,
+            "median": 230.63799999999998,
+            "max": 545.557709,
+            "p50": 228.077125,
+            "p90": 387.298333,
+            "p95": 471.279208,
+            "p99": 521.487792
+          },
+          "frameOverrunMs": {
+            "n": 312,
+            "min": 46.061891,
+            "median": 313.574253,
+            "max": 729.473857,
+            "p50": 311.600935,
+            "p90": 618.801542,
+            "p95": 673.83195,
+            "p99": 703.656269
+          }
+        },
+        "C": {
+          "frameDurationCpuMs": {
+            "n": 310,
+            "min": 7.035291,
+            "median": 225.405479,
+            "max": 1306.041251,
+            "p50": 225.23275,
+            "p90": 480.116125,
+            "p95": 687.536125,
+            "p99": 1102.412334
+          },
+          "frameOverrunMs": {
+            "n": 310,
+            "min": 44.819164,
+            "median": 329.17663400000004,
+            "max": 1650.669879,
+            "p50": 328.913579,
+            "p90": 699.210877,
+            "p95": 1023.310155,
+            "p99": 1535.523697
+          }
+        }
+      },
+      "order": [
+        "C6 (excluded)",
+        "A6",
+        "A7",
+        "C7",
+        "C8"
+      ],
+      "excluded": [
+        {
+          "set": "ride-recheck-C6",
+          "reason": "Gradle evaluation and Perfetto analysis overlapped the beginning of the ride rerun",
+          "rawResultSha256": "d34a235ffe4db43529571998b76624b31a4ee87625aed381deb3548b509145be"
+        }
+      ],
+      "candidateVsBaseline": {
+        "frameDurationCpuMs": {
+          "A": 471.279208,
+          "C": 687.536125,
+          "deltaMs": 216.256917,
+          "deltaPercent": 45.88721788040351
+        },
+        "frameOverrunMs": {
+          "A": 673.83195,
+          "C": 1023.310155,
+          "deltaMs": 349.478205,
+          "deltaPercent": 51.8642971737983
+        }
+      }
+    },
+    "physicalOriginal": {
+      "aggregates": {
+        "A": {
+          "frameDurationCpuMs": {
+            "n": 92,
+            "min": 20.824077,
+            "median": 56.896077,
+            "max": 134.299269,
+            "p50": 56.743731,
+            "p90": 86.983615,
+            "p95": 102.552923,
+            "p99": 134.299269
+          },
+          "frameOverrunMs": {
+            "n": 92,
+            "min": 8.88402,
+            "median": 43.95997,
+            "max": 147.182672,
+            "p50": 43.768135,
+            "p90": 85.306739,
+            "p95": 101.423197,
+            "p99": 147.182672
+          }
+        },
+        "C": {
+          "frameDurationCpuMs": {
+            "n": 92,
+            "min": 37.611192,
+            "median": 61.541269,
+            "max": 141.651654,
+            "p50": 60.524615,
+            "p90": 90.162885,
+            "p95": 103.323039,
+            "p99": 141.651654
+          },
+          "frameOverrunMs": {
+            "n": 92,
+            "min": 23.283966,
+            "median": 48.081188499999996,
+            "max": 151.913814,
+            "p50": 47.987532,
+            "p90": 85.059674,
+            "p95": 102.005514,
+            "p99": 151.913814
+          }
+        }
+      },
+      "order": [
+        "A1",
+        "C1",
+        "C2",
+        "A2",
+        "A3",
+        "C3"
+      ],
+      "candidateVsBaseline": {
+        "frameDurationCpuMs": {
+          "A": 102.552923,
+          "C": 103.323039,
+          "deltaMs": 0.7701159999999874,
+          "deltaPercent": 0.7509449535631374
+        },
+        "frameOverrunMs": {
+          "A": 101.423197,
+          "C": 102.005514,
+          "deltaMs": 0.5823170000000033,
+          "deltaPercent": 0.5741457745608303
+        }
+      }
+    }
+  },
+  "originalEmulatorEvidence": "recovery-ui-pr9-final-api36.json",
+  "physicalEvidence": "sm-g975n-pr9-g7.json",
+  "descriptivePerRepeatOverrunAssociations": {
+    "hostIdlePct": {
+      "repeatCount": 12,
+      "pearson": -0.07801745305201682
+    },
+    "UIrunningMs": {
+      "repeatCount": 12,
+      "pearson": 0.5345593189967857
+    },
+    "UIrunnableMs": {
+      "repeatCount": 12,
+      "pearson": -0.24860990059392665
+    },
+    "RenderThreadrunningMs": {
+      "repeatCount": 12,
+      "pearson": 0.653514699151874
+    },
+    "RenderThreadrunnableMs": {
+      "repeatCount": 12,
+      "pearson": 0.3644641446435798
+    }
+  },
+  "retainedGates": {
+    "G7": "INCONCLUSIVE",
+    "G8": "INCONCLUSIVE",
+    "G9": "INCONCLUSIVE"
+  },
+  "gateG3": "PASS",
+  "acceptanceScope": "Original startup and map-switch evidence plus pooled ride P95 in the final controlled API 36 ARM64 SwiftShader retest",
+  "largePriorCandidateOverrunWorseningReproduced": false,
+  "previousLargeDifferenceCauseConfirmed": false,
+  "apkSha256": {
+    "A/app-benchmark.apk": "fb1fdc7d464cf47c8cb0011a9d2a659dfd43eb2de2b40bdc077d2fb16d8f4f76",
+    "C/app-benchmark.apk": "fa73ac812fb4e28d52a9974bd31dab9ac9c5d15136df08da0d945c109e1ad474",
+    "A/benchmark-benchmark.apk": "0ee2174794b53a278c4f99131f4a3fa39b58d65a9011a07a144f9cff2544e4f2"
+  },
+  "emulator": {
+    "avd": "LocationRecoveryComposeRCA36",
+    "version": "37.1.11.0",
+    "mode": "SwiftShader",
+    "vcpus": 4,
+    "allocatedMiB": 2560,
+    "stoppedAfterRestoration": true
+  },
+  "cameraContract": {
+    "modeAtStart": "Follow",
+    "defaultOsmFollowWidthMeters": 480,
+    "virtualSecondsZoomOutAndOverview": 3,
+    "zoomOutMultiplier": 0.8,
+    "virtualSecondsReturnToFollow": 6,
+    "virtualSecondsStopMeasurement": 8
+  },
+  "exclusionCriteria": [
+    "Original instrumentation did not pass",
+    "Original benchmark data or trace missing or invalid",
+    "Known incompatible concurrent host workload or a guest environment contract violation"
+  ],
+  "observationsBeyondP95": {
+    "frameCpuMedianMs": {
+      "A": 182.895334,
+      "C": 237.247042
+    },
+    "frameOverrunMedianMs": {
+      "A": 199.840625,
+      "C": 238.155881
+    },
+    "cause": "UNRESOLVED"
+  }
+}

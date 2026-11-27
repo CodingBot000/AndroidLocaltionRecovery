@@ -20,6 +20,8 @@
 
 초기 UI 후보 `664d8f5`의 원본 전환 프레임 지표는 두 차례 조사 임계값을 넘었다. 71초 화면을 보완한 `ce617de`는 같은 원본 하네스에서 다시 측정했다. 두 제품 후보의 데이터와 진단 trace는 각각 보존한다. [성능과 재시험](recovery-ui-switch-rca.md)
 
+최종 G3는 API 36 ARM64 SwiftShader에서 주행만 A→C→C→A로 빌드별 6회 실행했다. Frame CPU P95는 365.85→365.83ms, Overrun P95는 520.49→521.45ms였다. 이전의 큰 Overrun P95 악화는 재현되지 않았다. 후보의 더 긴 중앙 프레임과 더 높은 deadline 태그 비율을 기록하고, 기존 P95 기준에서 **PASS**로 G3를 종료했다. [최종 주행·스케줄링·호스트 상태](recovery-ui-emulator-g3-final-ride.md)
+
 모듈 경계, 단위 테스트 83개, Debug Lint, Debug·unsigned Release·계측·Benchmark APK, fixture 해시·재생성·APK 권한 및 Live/HTTP 격리를 새로 실행했다. S 계열, 기존 DEMO, 합성 장시간, OSM, OSM 고난도 평가 JSON 5종은 이전 검증 결과와 바이트 단위로 일치했다. 오프라인 APK의 fixture 119개와 Live APK의 감사 대상 asset 31개를 확인했다.
 
 첫 API 36 전체 계측 중 `longOutageShowsDrThenLastKnownAndRecovers`에서 Compose `SnapshotStateObserver`가 서로 다른 스레드에서 관측되는 예외가 한 번 발생했다. 같은 케이스 단독 재실행은 이전 B와 C에서 각각 2회 통과했다. Live 계측의 전체 디스패처 대안을 시험했으나 오프라인 앱의 초기 화면이 준비되지 않아 기각했다. 오프라인 계측은 연속 Step을 보낼 때만 테스트 프레임 클록을 정지하고 실제 엔진이 기존 경계 시각에 도달한 뒤 화면 작업을 재개하도록 동기화했다. 기존 단언·제한 시간과 제품 코드를 유지했다. [관련 Live 계측 조사](compose-slot-table-rca.md)
@@ -79,7 +81,7 @@ README에는 정상·추정·복구 세 장과 추정 중단 링크를 배치했
 | G0 기준선·변경 추적 | PASS | A/B/C 소스, APK 및 환경을 기록하고 제품 diff를 확인했다. |
 | G1 기존 전환 지표 | PASS | 원본 workload·선택 조건·종료 신호를 보존하고 시나리오별 9회를 수행했다. |
 | G2 지도 전환 RCA | PASS | 동일 요청·run ID로 내부 준비·첫 frame present·외부 관측을 연결하고 접근성 캐시 효과를 대조했다. |
-| G3 최종 에뮬레이터 성능 | INCONCLUSIVE | 지도 준비와 전환 P95는 최종 조사 기준 이내였다. 주행 P95가 재측정에서 크게 달랐다. [수치](recovery-ui-switch-rca.md#f4--최종-제품-성능) |
+| G3 최종 에뮬레이터 성능 | PASS | 기존 기동·전환 근거와 최종 원본 주행 각 6회. 주행 Overrun P95 +0.96ms(+0.18%). [최종 주행](recovery-ui-emulator-g3-final-ride.md) |
 | G4 화면 정보 및 조작 | PASS | OL07 상태별 캡처의 첫 화면 컨트롤과 실제 5× 선택을 확인했다. |
 | G5 기능·엔진 동등성 | PASS | 단위 83개, 평가 JSON 5종 동일, 앱 UI·지도·카메라·재생·Live 계측 및 APK 검사. |
 | G6 OS·접근성 | PASS | API 26·48MiB와 31/33/34/36, 한·영 및 글꼴 130%, 실제 TalkBack. |
@@ -89,7 +91,7 @@ README에는 정상·추정·복구 세 장과 추정 중단 링크를 배치했
 | G10 공개 자료 | PASS | 최종 원본 PNG, 이전 이력, 상대 링크 및 개인정보 노출 검사. |
 | G11 최종 원격 CI | [최종 head 판정](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) | PR과 push의 `build-and-test`·`live-api36`. |
 
-G3·G7–G9가 남아 있어 Draft를 유지했다.
+실기기 G7·G8·G9가 INCONCLUSIVE로 남아 Draft를 유지했다.
 
 ## Phase 0 · 기준선
 

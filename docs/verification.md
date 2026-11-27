@@ -18,7 +18,7 @@
 | 현재 UI 후보 실기기 메모리·내구 | A/C 독립 내구 각 1회에 이어 역순 각 1회, 최초 전환·Live 반복 통과. 반복된 후보 Native Heap PSS 증가는 잔여 위험이다. G8 **INCONCLUSIVE** | [G8 최초](recovery-ui-physical-g8.md) · [G8 최종 재시험](recovery-ui-physical-g8-retest.md) |
 | 현재 UI 후보 실제 GPS·서비스 | A/C Live 및 직접 요청에서 fresh 미수신. 대기 UI·해제 확인, A 303.979초 화면 OFF 동안 세션 유지, 잠금 복귀 범위 BLOCKED. G9 **INCONCLUSIVE** | [G9 실기기 결과](recovery-ui-physical-g9.md) |
 | 과거 실기기 Live | `d0b3822`에서 API 31 실내 fresh GPS 및 별도 FGS·listener 해제 20회 | [2026-11-25 검증](real-device-final-validation.md) |
-| UI 후보 에뮬레이터 성능 | API 36 A/C 시나리오별 9회. 지도 전환은 조사 기준 이내였고 주행 재시험 편차로 **INCONCLUSIVE** | [최종 성능 및 재시험](recovery-ui-switch-rca.md#f4--최종-제품-성능) |
+| UI 후보 에뮬레이터 성능 | API 36 A/C 시나리오별 9회 및 최종 주행 각 6회. 주행 Overrun P95 +0.96ms(+0.18%), G3 **PASS** | [이전 측정](recovery-ui-switch-rca.md#f4--최종-제품-성능) · [최종 주행](recovery-ui-emulator-g3-final-ride.md) |
 | 과거 실기기 성능·내구 | 기준선 및 렌더러 후보 시나리오별 9회, O10 180초 × 10회씩. 렌더러 후보 기각 | [실기기 렌더링 A/B](rendering-memory-rca.md) |
 
 CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않는다. 과거 GPS 무수신 원인과 반복 PSS 증가 기전은 미확정이다. 측정 환경별 한계와 실패·재실행은 상세 보고서에 보존한다.
