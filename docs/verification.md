@@ -32,7 +32,7 @@ CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물�
 
 ## 상세 시험 기록
 
-2026-11-26–27 UI 후속 검증의 비교 기준은 `a732af2`, 최종 제품은 `ce617de`다. 에뮬레이터 G3는 **PASS**, 실기기 G7·G8·G9는 **INCONCLUSIVE**로 종료했다. 프로젝트 소유자의 잔여 위험 수용과 병합 승인은 미완료다. [최종 수용 판단과 잔여 위험](recovery-ui-final-acceptance.md) · [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45790812053) · [PR #9 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) · [UI 검증](recovery-ui-validation.md)
+2026-11-26–27 UI 후속 검증의 비교 기준은 `a732af2`, 최종 제품은 `ce617de`다. 에뮬레이터 G3는 **PASS**, 실기기 G7·G8·G9는 **INCONCLUSIVE**로 종료했다. 2026-11-27 소유자의 CI 통과 조건부 병합 요청과 `298454e`의 네 검사 성공에 따라 개인 포트폴리오 범위에서 main에 병합했다. 미확정 판정은 변경하지 않았다. [최종 수용 판단과 잔여 위험](recovery-ui-final-acceptance.md) · [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45790812053) · [PR #9 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) · [UI 검증](recovery-ui-validation.md)
 
 | 검사 | 확인한 결과 | 상세 근거 |
 |---|---|---|

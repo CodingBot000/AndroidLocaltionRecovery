@@ -4,7 +4,7 @@
 
 구현과 성능 시험은 2026-11-27 KST에 종료했다. 제품 소스와 OL07 공개 캡처의 기준은 `ce617de21ffbf5485564c9d7bc589a3b6085c02c`(C), 비교 기준은 `a732af2dddfb86514fbfa76a6d7971f31e8d23da`(A)다. 포트폴리오 정리 시작 시 PR head `7e1f8ce37fd9427284dd3abc01d74299b28f8e2a`에는 G3까지의 최종 검증 기록이 들어 있다. 제품 기준과 문서 정리 이후의 PR head는 [PR #9 및 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks)에서 각각 확인할 수 있다.
 
-**병합 보류 · Draft 유지. 프로젝트 소유자의 잔여 위험 수용과 `main` 병합 승인은 모두 미완료다.** 기능·자동화 검증 결과와 아래 게이트 판정이 적용되는 범위를 근거로 남긴다. 전체 게이트와 최종 커밋의 PR·push CI는 별도 기록에 있다. [통합 게이트](recovery-ui-validation.md#f7--기존-pr과-수용-게이트) · [PR #9](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9)
+**개인 기술 포트폴리오 범위의 수용 · main 병합 완료.** 2026-11-27 소유자의 CI 통과 조건부 병합 요청에 따라 `298454e`의 PR·push 네 검사 성공을 확인하고 [PR #9](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9)를 [병합 커밋 `7d397eb`](https://github.com/CodingBot000/AndroidLocaltionRecovery/commit/7d397eb53562842d7563032920670e96fb9785b9)에 반영했다. G7·G8·G9의 INCONCLUSIVE 판정과 미검증 범위는 유지하며, 상용 출시 품질 승인을 의미하지 않는다. 기능·자동화 검증 결과와 아래 게이트 판정이 적용되는 범위를 근거로 남긴다. 전체 게이트와 최종 커밋의 PR·push CI는 별도 기록에 있다. [통합 게이트](recovery-ui-validation.md#f7--기존-pr과-수용-게이트) · [PR #9](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9)
 
 | 게이트 | 최종 판정 | 확인 범위 |
 |---|---|---|

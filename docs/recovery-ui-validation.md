@@ -105,7 +105,7 @@ README에는 정상·추정·복구 세 장과 추정 중단 링크를 배치했
 | G10 공개 자료 | PASS | 최종 원본 PNG, 이전 이력, 상대 링크 및 개인정보 노출 검사. |
 | G11 최종 원격 CI | [최종 head 판정](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) | PR과 push의 `build-and-test`·`live-api36`. |
 
-실기기 G7·G8·G9가 INCONCLUSIVE로 남아 Draft 상태다. 프로젝트 소유자의 잔여 위험 수용과 `main` 병합 승인은 모두 미완료다. [판정의 적용 범위](recovery-ui-final-acceptance.md)
+실기기 G7·G8·G9의 INCONCLUSIVE 판정을 유지한다. 2026-11-27 소유자의 CI 통과 조건부 병합 요청에 따라 `298454e`의 PR·push 네 검사 성공을 확인하고 개인 포트폴리오 범위에서 [PR #9](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9)를 main에 병합했다. [판정의 적용 범위](recovery-ui-final-acceptance.md)
 
 ## Phase 0 · 기준선
 
