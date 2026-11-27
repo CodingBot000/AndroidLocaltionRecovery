@@ -2,6 +2,15 @@
 
 [README](../README.md) · [통합 검증](verification.md) · [성능](refactor-performance.md)
 
+## 기능 검증 요약
+
+| 실행 범위 | 확인한 기능 |
+|---|---|
+| SM-G975N · Android 12/API 31 · 최종 제품 `ce617de` | O10 1× 180초×10회 주행·Reset과 유휴 관측, 지도 전환·재생 20회, Activity 재생성 4회, Live 시작·종료 20회. 역순 내구에서도 기능 단언 통과. [내구·전환·서비스](recovery-ui-physical-g8.md) |
+| API 26·31·33·34·36 에뮬레이터 | 위치 권한·서비스 수명, 오프라인 재생 및 API 26·48MiB 저메모리 조건의 회귀. [플랫폼 검증](verification.md#최신-구현-검증-요약) |
+
+기능 시험과 성능·실제 GPS 수신의 판정은 별개다. 아래는 빌드와 환경별 상세 결과다.
+
 ## PR #9 실기기 성능과 내구 (2026-11-27)
 
 SM-G975N에서 `a732af2`와 `ce617de`의 원본 Macrobenchmark를 시나리오별 각 9회 비교했다. 지도 전환과 주행은 조사 기준 이내였다. 콜드 TTFD 차이는 본 시험 +30.7%, 첫 재시험 −4.8%, 최종 재시험 +9.0%였다. 최종 재시험의 인접 비교에서 차이의 방향이 갈렸으며 지속적인 후보 고유 회귀는 확인하지 못했다. G7은 **INCONCLUSIVE**로 종료했다. [G7 본 시험](recovery-ui-physical-g7.md) · [G7 최종 재시험과 복원](recovery-ui-physical-g7-final-cold.md)

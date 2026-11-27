@@ -2,16 +2,7 @@
 
 [README](../README.md) · [위치 알고리즘](algorithm.md) · [지도 렌더링](korea-map-design.md) · [Live 위치](live-location.md) · [HTTP 실험](network-reliability.md)
 
-## 설계 의사결정
-
-| 기술적 과제 | 선택한 구조 | 효과 및 확인 방법 |
-|---|---|---|
-| 위치 처리와 Android UI의 결합 | 순수 Kotlin 코어 / Compose 표현 계층 / Android 위치 어댑터 | JVM에서 결정적 위치 평가와 모듈 의존성 검사 |
-| 빠른 지도 전환과 재생 취소 | 단일 명령 큐, 실행 ID 및 generation, 작업 Dispatcher | 늦은 결과 차단, Reset·Activity 재생성 계측 |
-| 대형 도로망의 처리 비용 | 원본 도로와 표현 데이터를 분리하고 Spatial Grid·LOD·가시 Path 캐시 사용 | 매칭 판정 동등성, Macrobenchmark와 Perfetto |
-| 오프라인·실제 GPS·HTTP 실험의 격리 | 앱 2개와 독립 JVM HTTP 모듈 | 권한·APK·fixture 검사 및 실제 리스너 해제 |
-
-[성능 비교](refactor-performance.md) · [플랫폼 검증](verification.md) · [전체 문서 안내](index.md)
+위치 판단을 순수 Kotlin 엔진에 두고 Android 플랫폼과 Compose 표현 계층을 독립적으로 교체·검증할 수 있도록 설계했다. 기본 재생 앱·Live 위치 앱·HTTP 실험의 실행 경계를 분리하고 Gradle에서 선언 의존성을 검사한다.
 
 ## 전체 9개 모듈
 
@@ -46,6 +37,17 @@ flowchart TD
     R -. 테스트 fixture .-> S
     Q -. 대상 APK .-> A
 ```
+
+## 설계 의사결정
+
+| 기술적 과제 | 선택한 구조 | 효과 및 확인 방법 |
+|---|---|---|
+| 위치 처리와 Android UI의 결합 | 순수 Kotlin 코어 / Compose 표현 계층 / Android 위치 어댑터 | JVM에서 결정적 위치 평가와 모듈 의존성 검사 |
+| 빠른 지도 전환과 재생 취소 | 단일 명령 큐, 실행 ID 및 generation, 작업 Dispatcher | 늦은 결과 차단, Reset·Activity 재생성 계측 |
+| 대형 도로망의 처리 비용 | 원본 도로와 표현 데이터를 분리하고 Spatial Grid·LOD·가시 Path 캐시 사용 | 매칭 판정 동등성, Macrobenchmark와 Perfetto |
+| 오프라인·실제 GPS·HTTP 실험의 격리 | 앱 2개와 독립 JVM HTTP 모듈 | 권한·APK·fixture 검사 및 실제 리스너 해제 |
+
+[성능 비교](refactor-performance.md) · [플랫폼 검증](verification.md) · [전체 문서 안내](index.md)
 
 ## 설계 경계
 

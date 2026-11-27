@@ -1,5 +1,18 @@
 # 지도 전환 성능 조사
 
+[README](../README.md) · [성능 비교](refactor-performance.md) · [렌더링 설계](korea-map-design.md)
+
+## 핵심 분석
+
+지도 전환의 실제 화면 표시와 UIAutomator가 준비 완료를 관측하는 시각을 요청·run ID로 연결했다. 파싱, ReplaySession 준비, Compose 배치, 지도 draw 및 SurfaceFlinger present와 접근성 관측을 구분해, 이전 UI 후보의 큰 외부 지연이 어느 구간에 집중되는지 확인했다.
+
+| 동일 B 빌드의 진단 대조 (각 3회, 중앙값) | 기본 | 접근성 캐시 제거 |
+|---|---:|---:|
+| UIAutomator 준비 관측 | 639.6ms | 126.9ms |
+| 첫 지도 프레임 present | 121.6ms | 116.9ms |
+
+캐시 제거는 진단 APK에서만 적용했다. 제품 최적화 수치가 아니라 측정 도구의 관측 지연을 격리한 결과이며, 최종 비교에서는 원본 벤치마크 계약을 유지했다. [원인 격리](#f2--원인-격리와-수정-결정) · [최종 주행 재시험](recovery-ui-emulator-g3-final-ride.md).
+
 ## F0 · 비교 기준
 
 원격 `main`과 [초안 PR #9](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9)를 조회했다. 기준 A는 `a732af2dddfb86514fbfa76a6d7971f31e8d23da`, 이전 UI 후보 B는 `3e35cf85446d9a2fc8f0079232ea58a0197e43ad`다. 후속 작업 시작 당시 PR head `8c572cd1d5e8c1378834310bccab43b058f16e4a`에서 B와 제품 소스·빌드 설정이 동일했다. 당시 PR/push의 두 작업이 각각 성공했다. 기존 측정값과 결론은 별도 이력으로 보존한다. [기존 반복별 원시 집계](benchmarks/recovery-ui-api36-emulator.json)

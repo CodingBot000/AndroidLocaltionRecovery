@@ -1,8 +1,22 @@
 # Location Recovery Lab
 
-GPS가 튀거나 끊겼을 때 Android 앱이 위치를 언제 보정하고, 어디까지 추정하고, 언제 추정을 멈춰야 하는지 검증한 개인 프로젝트다. Kotlin·Jetpack Compose로 구현했으며 외부 지도 SDK 없이 국내 OpenStreetMap 10개 지역의 도로망을 오프라인으로 표시한다.
+**Android 위치 복구 엔진 · 오프라인 지도 렌더링 · 성능 최적화**
 
-[OL07 시연](docs/demo.md#ol07-시연) · [상세 아키텍처](docs/architecture.md) · [통합 검증](docs/verification.md) · [최종 판정과 잔여 위험](docs/recovery-ui-final-acceptance.md)
+GPS 이상치와 신호 손실 상황에서 언제 위치를 채택하고, 어디까지 추정하며, 언제 복구할지를 판단하는 Android 위치 처리 엔진이다. Kotlin·Jetpack Compose로 구현했으며, 외부 지도 SDK 없이 국내 OpenStreetMap 10개 지역의 실제 도로망을 렌더링한다.
+
+Kotlin · Jetpack Compose · MVVM · Coroutines / StateFlow · Gradle Multi-Module · Macrobenchmark / Perfetto
+
+[상세 아키텍처](docs/architecture.md#전체-9개-모듈) · [위치 알고리즘](docs/algorithm.md) · [성능 최적화](docs/refactor-performance.md) · [장애 분석](docs/stability-investigation.md)
+
+## 핵심 성과
+
+| **81.7%** 도로 매칭 처리 시간 감소 | **95.3%** Native Heap PSS 최대 관측값 감소 |
+|---|---|
+| 42.30 → 7.73µs/관측 · O10의 방향성 에지 18,490개, JVM 7회 비교 중앙값 · 기존 판정 일치. [Spatial Grid 측정](docs/refactor-performance.md#jvm-도로-매칭) | 336,244 → 15,834KiB · API 26·48MiB 저메모리 대응 실험의 스트리밍 파싱 적용 빌드 대비 렌더링 수정 후 최대 관측값(각 13·12개 표본). [OOM 해결](docs/stability-investigation.md#핵심-사례-저메모리-지도-oom) |
+| **83개** JVM·Android 단위 테스트 통과 | **9개** Gradle 모듈 · 의존성 자동 검사 |
+| 독립 위치 평가 결과 JSON 5종의 바이트 단위 동일성 및 실제 UI 재생 결과 검증. [자동화 검증](docs/verification.md#최신-구현-검증-요약) | 순수 Kotlin 코어, Compose 표현 계층, Android 위치 어댑터, 독립 HTTP 실험과 Benchmark 분리. [모듈 설계](docs/architecture.md#전체-9개-모듈) |
+
+성능 수치는 각 최적화 당시의 명시된 환경과 비교 빌드에서 측정한 결과다.
 
 ## 대표 시연 · 남산 터널 OL07
 
@@ -13,28 +27,36 @@ GPS가 튀거나 끊겼을 때 Android 앱이 위치를 언제 보정하고, 어
 </p>
 <p align="center">28초 정상 추적 &nbsp; | &nbsp; 54초 GPS 손실·DR 추정 &nbsp; | &nbsp; 73초 정상 복구</p>
 
-최종 제품 `ce617de`의 실제 앱 실행 화면이다. 도로 형상은 실제 OSM 데이터이며 GPS 관측과 차량 움직임은 가상이다. **대표 사례(Demos) → OL07 → 5× → 재생(Play)**을 선택하면 63초에 추정 한도에 도달해 마지막 확인 위치로 전환하고, 73초에 정상 추적으로 복귀하는 흐름을 볼 수 있다. [63초 추정 중단 화면](docs/demo/recovery-ui/ol07-last-known.png) · [시연 절차와 판정 로그](docs/demo.md#ol07-시연)
+실제 OSM 도로 형상에 가상 차량과 GPS 관측을 재생한 앱 실행 화면이다. **대표 사례(Demos) → OL07 → 5× → 재생(Play)** 으로 주요 판정 흐름을 확인할 수 있다. [63초 추정 중단](docs/demo/recovery-ui/ol07-last-known.png) → [71초 재획득 후보](docs/demo/recovery-ui/ol07-recovering.png) → [주행 평가 결과](docs/demo/recovery-ui/ol07-complete-results.png).
+
+[시연 및 다른 장애 시나리오](docs/demo.md) · [국내 10개 지도 갤러리](docs/osm-visual-verification.md)
 
 ## 핵심 기술 성과
 
-| 기술 과제 | 구현과 검증 |
+| 기술 영역 | 문제 해결 및 구현 |
 |---|---|
-| **위치 엔진** | 시각 오류와 위치 점프를 차단하고 Spatial Grid로 후보 도로를 좁힌다. 신호가 끊기면 최대 15초 Dead Reckoning을 적용하고, 추정 상한에 도달하면 마지막 확인 위치를 표시한다. 연속 유효 관측으로 복구를 확인한다. [위치 알고리즘](docs/algorithm.md) |
-| **저메모리 OOM 대응** | API 26·48MiB에서 지도 로딩 OOM과 Live 반복 중 OS 종료를 재현했다. 항목별 JSON 파싱으로 로딩 할당을 줄이고, 해당 환경의 정적 지도는 Software Canvas와 재사용 비트맵으로 그린다. 최종 제품에서도 O10 기동과 지도 전환·재생 회귀를 확인했다. [장애 재현과 수정](docs/stability-investigation.md#핵심-사례-저메모리-지도-oom) |
-| **성능 계측과 원인 분석** | Macrobenchmark·Perfetto로 지도 준비, 첫 화면 표시, UIAutomator 관측을 같은 요청에 연결했다. 이전 UI 후보의 큰 전환 지연이 주로 화면 표시 뒤 접근성 노드를 기다리는 구간에 집중됨을 확인했다. 접근성 캐시를 비우는 대조 실험으로 관측 지연을 분리했다. [지도 전환 RCA](docs/recovery-ui-switch-rca.md) · [최종 주행](docs/recovery-ui-emulator-g3-final-ride.md) |
-| **Android 생명주기** | 위치 Foreground Service가 세션을 소유하고 Activity는 해당 세션을 관찰한다. Stop·권한 철회 시 리스너와 세션 자원을 해제한다. 최종 제품의 실기기 Live 시작·종료 20회에서 해제를 확인했다. [Live 구조와 권한](docs/live-location.md) · [실기기 자원 해제](docs/recovery-ui-physical-g8.md#지도-전환재생과-live-해제) |
-| **자동화 테스트** | 최종 제품의 JVM·Android 단위 테스트 83개가 통과했다. 독립 위치 평가의 기존 결과 JSON 5종이 바이트 단위로 일치했고, 실제 OL07 UI의 1×·5× 결과는 독립 재생 세션과 일치했다. GitHub Actions에서 모듈 경계·빌드·Lint·fixture 검사와 API 36 Live 계측을 실행한다. [통합 검증](docs/verification.md) · [PR 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) |
+| **위치 처리 엔진** | 시간 역전·중복·위치 점프를 검사하고 원본 도로의 Spatial Grid, 방향·연결성 기반 Map Matching으로 후보를 판단한다. 신호 손실 시 최대 15초 Dead Reckoning, 모호한 분기·추정 한도에서 중단, 연속 유효 관측으로 위치 재획득 및 경로 이탈·복귀를 판정한다. [알고리즘](docs/algorithm.md) |
+| **지도·메모리 최적화** | 실제 도로망과 렌더링 geometry 분리, Viewport Culling·LOD·Path 캐시, 정적·동적·라벨 Canvas 분리. API 26·48MiB에서 OOM과 OS 종료를 재현하고 Streaming JSON parsing 및 Software Canvas의 viewport bitmap 재사용으로 대응했다. [렌더링 설계](docs/korea-map-design.md) · [저메모리 RCA](docs/stability-investigation.md#핵심-사례-저메모리-지도-oom) |
+| **성능 계측·원인 분석** | Macrobenchmark·Perfetto·FrameTimeline으로 기동·지도 전환·주행을 분리 측정했다. 실제 첫 프레임 present와 UIAutomator의 접근성 관측 지연을 요청 단위로 연결하고 캐시 대조 실험으로 구간을 격리했다. 별도 렌더러 A/B에서는 기동·주행까지 비교해 수용 기준을 충족하지 못한 후보를 기각했다. [지도 전환 RCA](docs/recovery-ui-switch-rca.md) · [렌더러 선택](docs/rendering-memory-rca.md) |
+| **Android 플랫폼·안정성** | LocationManager, 위치 FGS, 권한별 처리, 실행 세대 및 제한 큐로 세션을 관리한다. SM-G975N에서 Live 시작·종료 20회의 서비스·리스너 해제를 확인했다. Debug 장애 하네스로 ANR·Crash를 재현하고 ApplicationExitInfo·trace로 진단했다. Compose 계측의 최초 WrongThread와 후속 SlotTable 예외를 구분해 테스트 동기화를 수정했다. [Live 설계](docs/live-location.md) · [장애 분석](docs/stability-investigation.md) · [Compose RCA](docs/compose-slot-table-rca.md) |
+| **네트워크 신뢰성** | 독립 JVM HTTP 경로 요청 실험에서 OkHttp timeout·제한된 retry/backoff·취소, generation/version 검증으로 오래된 응답을 폐기하고 유효한 기존 경로를 보호한다. MockWebServer 기반 테스트 17개로 장애 계약을 검증했다. [네트워크 설계·테스트](docs/network-reliability.md) |
+| **회귀 테스트 및 CI** | JVM·Android 단위 테스트 83개, API 26·31·33·34·36 에뮬레이터의 플랫폼 계측, TalkBack 및 소형 화면 검증. 결정적 가상 위치 평가와 Android 1×·5× 재생의 결과를 대조하고 모듈 경계·APK·fixture·Lint·테스트를 GitHub Actions로 검증한다. [검증 및 재현](docs/verification.md) · [CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions) |
 
 ## 아키텍처
 
-순수 Kotlin 위치·지도·시뮬레이션 코어를 Compose UI와 Android 위치 API에서 분리했다. 기본 앱은 위치·인터넷 권한 없이 가상 주행을 재생하고, 별도 Live APK는 Android 위치 수신과 서비스 수명을 다룬다. HTTP 지연·취소·응답 역전 실험은 독립 JVM 모듈에서 실행한다. [9개 모듈과 데이터 흐름](docs/architecture.md) · [HTTP 장애 실험](docs/network-reliability.md)
+순수 Kotlin 코어와 Android 플랫폼·Compose UI를 분리했다. 기본 앱은 위치·인터넷 권한 없이 가상 주행을 재생한다. 별도 Live APK는 Android 위치 수신과 서비스 수명을 다루고, HTTP 장애 실험은 독립 JVM 모듈로 격리한다. Ground Truth와 렌더링용 단순화 데이터는 위치 판정에 사용하지 않는다.
 
-## 검증 범위와 남은 위험
+**[9개 모듈의 상세 의존성 다이어그램과 데이터 흐름 →](docs/architecture.md#전체-9개-모듈)**
 
-- **최종 제품 `ce617de`** · 에뮬레이터 성능 **G3 PASS**. 실기기 성능·메모리·GPS **G7·G8·G9 INCONCLUSIVE**. Native Heap PSS의 더 큰 증가 기울기가 두 내구 비교에서 반복됐다. A/C 모두 Live와 직접 GPS 요청에서 새 fix가 없어 실제 fix 기반 화면을 검증하지 못했고, A의 잠금 이후 복귀·UI Stop과 C의 화면 OFF·복귀 계측도 미완료다. [최종 수용 판단과 잔여 위험](docs/recovery-ui-final-acceptance.md)
-- **과거 빌드** · 실제 GPS 수신은 `d0b3822`의 실내 시험에서 확인했다. Spatial Grid JVM 측정과 렌더링 후보 기각 또한 각 기준 빌드의 검증 이력이다. [과거 실기기 범위](docs/physical-device-validation.md#기존-확인-범위-2026-11-2526) · [위치 매칭 측정](docs/refactor-performance.md#jvm-도로-매칭) · [렌더링 후보 기각](docs/rendering-memory-rca.md)
+## 실행 검증
 
-프로젝트 소유자의 잔여 위험 수용과 병합 승인은 미완료이며 [PR #9](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9)는 Draft 상태다.
+| 확인한 기능 | 검증 |
+|---|---|
+| 위치 판단·재생 | 기존 합성·장시간·OSM·고난도 평가 84개와 로딩 오류 3개, 최종 결과 JSON 5종 동일; OL07 실제 1×·5× 재생 평가 동등성 |
+| Android 호환성 | API 26·48MiB O10 기동 및 지도 전환·재생 20회, API 31·33·34·36의 플랫폼 계측 |
+| 실기기 기능 내구 | SM-G975N에서 O10 180초×10회 주행·Reset, 지도 전환·재생 20회 및 Live 시작·종료 20회 |
+
+위 표는 확인한 기능 검증 범위다. [검증 근거와 환경별 측정 기록](docs/verification.md)에서 조건과 상세 결과를 확인할 수 있다.
 
 ## Quick Start
 

@@ -13,7 +13,7 @@
 
 [테스트 코드](../route-lab/src/test) · [통합 검증](verification.md)
 
-실패·중복·취소·응답 역전에도 유효한 기존 경로를 보호한다. 독립 JVM 모듈의 loopback HTTP 실험이며 상용 서버 연동은 아니다.
+실패·중복·취소·응답 역전에도 유효한 기존 경로를 보호하도록 설계했다. MockWebServer 기반 JVM 자동 테스트 17건에 중복 20회→실제 HTTP 1회, 지연 응답 폐기 및 취소 후 실행·대기 호출 0 검증이 포함된다. [장애 검증](#장애-검증). 독립 JVM 모듈의 loopback HTTP 실험이며 상용 서버 연동은 아니다.
 
 ```mermaid
 sequenceDiagram

@@ -4,7 +4,7 @@
 
 ## 최신 구현 검증 요약
 
-2026-11-26–27 UI 후속 검증의 비교 기준은 `a732af2`, 최종 제품은 `ce617de`다. 에뮬레이터 G3는 **PASS**, 실기기 G7·G8·G9는 **INCONCLUSIVE**로 종료했다. 프로젝트 소유자의 잔여 위험 수용과 병합 승인은 미완료다. [최종 수용 판단과 잔여 위험](recovery-ui-final-acceptance.md) · [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45790812053) · [PR #9 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) · [UI 검증](recovery-ui-validation.md)
+2026-11-26–27의 최종 제품 `ce617de`에서 확인한 기능·자동화 검증을 정리한다. 기존 평가와 실제 앱 재생의 동등성을 확인하고, API·권한·실행 환경별로 시험했다. [UI 회귀와 실행 화면](recovery-ui-validation.md) · [GitHub Actions](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions)
 
 | 검사 | 확인한 결과 | 상세 근거 |
 |---|---|---|
@@ -14,14 +14,10 @@
 | UI 접근성·실행 | API 36 TalkBack, 320×640·글꼴 130% 한국어, 실제 OL07·OL02·OL10·OL13 | [UI 검증](recovery-ui-validation.md) |
 | Live 계측 | API 26·31·33·34·36 에뮬레이터; 원격 API 36 | [Live](live-location.md) · [CI 장애 RCA](compose-slot-table-rca.md) |
 | 저메모리 회귀 | 최종 제품은 API 26·48MiB O10 기동, 전환·재생 20회, 재생성·Live 수명 계측 통과. Live 20회는 이전 저메모리 수정 빌드의 기록 | [최종 제품](recovery-ui-validation.md#f4--성능과-기능-회귀) · [이전 저메모리 수정](#api-26-48mib-o10-수정-재검증) |
-| 현재 UI 후보 실기기 성능 | SM-G975N에서 G7 원본 각 9회와 콜드 재시험 두 차례 각 6회. 최종 TTFD +9.0%, G7 **INCONCLUSIVE** | [G7 최초](recovery-ui-physical-g7.md) · [콜드 최종 재시험](recovery-ui-physical-g7-final-cold.md) |
-| 현재 UI 후보 실기기 메모리·내구 | A/C 독립 내구 각 1회에 이어 역순 각 1회, 최초 전환·Live 반복 통과. 반복된 후보 Native Heap PSS 증가는 잔여 위험이다. G8 **INCONCLUSIVE** | [G8 최초](recovery-ui-physical-g8.md) · [G8 최종 재시험](recovery-ui-physical-g8-retest.md) |
-| 현재 UI 후보 실제 GPS·서비스 | A/C Live·직접 요청 모두 fresh fix 미수신. 대기 UI·해제와 A 화면 OFF 세션 유지 확인. 실제 fix 기반 UI, A의 잠금 이후 복귀·UI Stop, C의 전체 수명과 추가 GPS 대조는 미완료. G9 **INCONCLUSIVE** | [G9 최초](recovery-ui-physical-g9.md) · [G9 재시험](recovery-ui-physical-g9-followup.md) |
-| 과거 실기기 Live | `d0b3822`에서 API 31 실내 fresh GPS 및 별도 FGS·listener 해제 20회 | [2026-11-25 검증](real-device-final-validation.md) |
-| UI 후보 에뮬레이터 성능 | API 36 A/C 시나리오별 9회 및 최종 주행 각 6회. 주행 Overrun P95 +0.96ms(+0.18%), G3 **PASS** | [이전 측정](recovery-ui-switch-rca.md#f4--최종-제품-성능) · [최종 주행](recovery-ui-emulator-g3-final-ride.md) |
-| 과거 실기기 성능·내구 | 기준선 및 렌더러 후보 시나리오별 9회, O10 180초 × 10회씩. 렌더러 후보 기각 | [실기기 렌더링 A/B](rendering-memory-rca.md) |
+| 실기기 기능 내구 | SM-G975N에서 빌드별 O10 180초×10회와 Reset, 지도 전환·재생 20회, Live 시작·종료 20회 통과. 역순 독립 내구 재시험도 기능 단언 통과 | [실기기 기능 검증 요약](physical-device-validation.md#기능-검증-요약) |
+| CI | 최종 PR/push의 빌드·테스트 및 API 36 Live 계측 통과 | [PR #9 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) |
 
-CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않는다. 과거 GPS 무수신 원인과 반복 PSS 증가 기전은 미확정이다. 측정 환경별 한계와 실패·재실행은 상세 보고서에 보존한다.
+CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않는다.
 
 ## 검증 근거 바로가기
 
@@ -31,8 +27,23 @@ CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물�
 | 의존성·데이터 계약 | [아키텍처](architecture.md) · [OSM 데이터](osm-data-pipeline.md) |
 | 성능·메모리 | [리팩터링 성능](refactor-performance.md) · [실기기 A/B](rendering-memory-rca.md) |
 | OS별 호환성·장애 재현 | [장애 분석](stability-investigation.md) · [Compose 계측 RCA](compose-slot-table-rca.md) |
-| 최종 게이트와 잔여 위험 | [최종 수용 판단](recovery-ui-final-acceptance.md) |
+| 상세 실험 및 빌드별 범위 | [상세 시험 기록](#상세-시험-기록) |
 | 네트워크 | [HTTP 장애 매트릭스](network-reliability.md) |
+
+## 상세 시험 기록
+
+2026-11-26–27 UI 후속 검증의 비교 기준은 `a732af2`, 최종 제품은 `ce617de`다. 에뮬레이터 G3는 **PASS**, 실기기 G7·G8·G9는 **INCONCLUSIVE**로 종료했다. 프로젝트 소유자의 잔여 위험 수용과 병합 승인은 미완료다. [최종 수용 판단과 잔여 위험](recovery-ui-final-acceptance.md) · [기준선 CI](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45790812053) · [PR #9 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) · [UI 검증](recovery-ui-validation.md)
+
+| 검사 | 확인한 결과 | 상세 근거 |
+|---|---|---|
+| 현재 UI 후보 실기기 성능 | SM-G975N에서 G7 원본 각 9회와 콜드 재시험 두 차례 각 6회. 최종 TTFD +9.0%, G7 **INCONCLUSIVE** | [G7 최초](recovery-ui-physical-g7.md) · [콜드 최종 재시험](recovery-ui-physical-g7-final-cold.md) |
+| 현재 UI 후보 실기기 메모리·내구 | A/C 독립 내구 각 1회에 이어 역순 각 1회, 최초 전환·Live 반복 통과. 반복된 후보 Native Heap PSS 증가는 잔여 위험이다. G8 **INCONCLUSIVE** | [G8 최초](recovery-ui-physical-g8.md) · [G8 최종 재시험](recovery-ui-physical-g8-retest.md) |
+| 현재 UI 후보 실제 GPS·서비스 | A/C Live·직접 요청 모두 fresh fix 미수신. 대기 UI·해제와 A 화면 OFF 세션 유지 확인. 실제 fix 기반 UI, A의 잠금 이후 복귀·UI Stop, C의 전체 수명과 추가 GPS 대조는 미완료. G9 **INCONCLUSIVE** | [G9 최초](recovery-ui-physical-g9.md) · [G9 재시험](recovery-ui-physical-g9-followup.md) |
+| 과거 실기기 Live | `d0b3822`에서 API 31 실내 fresh GPS 및 별도 FGS·listener 해제 20회 | [2026-11-25 검증](real-device-final-validation.md) |
+| UI 후보 에뮬레이터 성능 | API 36 A/C 시나리오별 9회 및 최종 주행 각 6회. 주행 Overrun P95 +0.96ms(+0.18%), G3 **PASS** | [이전 측정](recovery-ui-switch-rca.md#f4--최종-제품-성능) · [최종 주행](recovery-ui-emulator-g3-final-ride.md) |
+| 과거 실기기 성능·내구 | 기준선 및 렌더러 후보 시나리오별 9회, O10 180초 × 10회씩. 렌더러 후보 기각 | [실기기 렌더링 A/B](rendering-memory-rca.md) |
+
+CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않는다. 과거 GPS 무수신 원인과 반복 PSS 증가 기전은 미확정이다. 측정 환경별 한계와 실패·재실행은 상세 보고서에 보존한다.
 
 ## 단계별 검증 이력
 
