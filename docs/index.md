@@ -1,6 +1,6 @@
 # 기술 문서 안내
 
-[프로젝트 README](../README.md) · [실행 가이드](demo.md)
+[프로젝트 README](../README.md) · [실행 가이드](demo.md) · [최종 수용 판단과 잔여 위험](recovery-ui-final-acceptance.md)
 
 설계·구현·검증 근거를 찾기 위한 색인이다. 현재 구현과 실험 후보, 과거 측정 이력을 구분한다.
 
@@ -13,7 +13,7 @@
 | 앱 성능 | [지도 렌더링 설계](korea-map-design.md) · [성능 리팩터링](refactor-performance.md) · [실기기 렌더링·메모리 RCA](rendering-memory-rca.md) | Spatial Grid·LOD·Culling·캐시, Macrobenchmark·Perfetto, 후보 기각 |
 | 안정성 | [장애 분석](stability-investigation.md) · [Compose 계측 RCA](compose-slot-table-rca.md) | API 26 저메모리 OOM/OS 종료, Debug ANR·Crash 진단, CI 실패 분석 |
 | 네트워크 | [HTTP 신뢰성](network-reliability.md) | 독립 JVM loopback 서버, timeout·retry·취소·응답 정합성 |
-| 품질 검증 | [통합 검증](verification.md) · [실기기 검증 범위](physical-device-validation.md) · [2026-11-25 실기기 검증](real-device-final-validation.md) | 회귀 테스트·CI, Android 버전별 계측, 실기기 GPS·내구·성능 |
+| 품질 검증 | [통합 검증](verification.md) · [최종 수용 판단](recovery-ui-final-acceptance.md) · [실기기 검증 범위](physical-device-validation.md) | 회귀·CI, 최종 제품의 실기기 판정, 과거 빌드별 근거 |
 
 ## 데이터와 실행 화면
 
@@ -42,6 +42,7 @@
 | 문서 | 범위 |
 |---|---|
 | [렌더링·메모리 분석 지표](rendering-memory-interview-notes.md) | TTID·TTFD·FrameTimeline·PSS·heap 분석 및 실험 설계 |
+| [2026-11-25 실기기 검증](real-device-final-validation.md) | 이전 빌드 `d0b3822`의 실제 GPS 수신과 서비스 해제 |
 | [초기 OSM 성능](korea-map-performance.md) | 에뮬레이터 단회 비교; 최신 실기기 수치와 별개 |
 | [합성 지도·시나리오](map-and-scenarios.md) | OSM 이전 데이터·주행 계약 |
 | [합성 지도 디자인](map-design.md) · [시각 검수](map-visual-verification.md) | OSM 이전 표현 개정과 검수 결과 |

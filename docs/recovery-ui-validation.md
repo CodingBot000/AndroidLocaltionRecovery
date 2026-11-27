@@ -4,6 +4,8 @@
 
 후속 작업의 제품 코드와 새 화면·성능 측정 기준은 `ce617de`다. [지도 전환 RCA](recovery-ui-switch-rca.md)에서 원본 재실행, 요청별 내부·외부 구간, 접근성 캐시 대조를 기록했다. 아래 Phase 0–10은 최초 UI 후보의 검증 이력이다.
 
+구현과 성능 시험을 종료했다. G3는 **PASS**, G7·G8·G9는 **INCONCLUSIVE**다. 반복 관측된 Native Heap PSS 증가와 현재 제품의 실제 GPS·잠금 이후 생명주기 미검증 범위는 별도 기록에 남겼다. [최종 수용 판단과 잔여 위험](recovery-ui-final-acceptance.md)
+
 ### F0–F2 · 기준선과 지도 전환
 
 시작 시 원격 `main` 및 PR head가 명세와 일치했다. A/B 격리 빌드에서 원본 계측 APK가 동일했다. 같은 요청에서 새 지도의 첫 present가 끝난 뒤 외부 접근성 노드 검색이 늦어지는 구간을 확인했다. 동일 B의 진단 캐시 대조에서 U3 중앙값은 639.6→126.9ms, 첫 present는 121.6→116.9ms였다. 진단 전용 코드는 제품 및 원본 벤치마크에 적용하지 않았다.
@@ -91,7 +93,7 @@ README에는 정상·추정·복구 세 장과 추정 중단 링크를 배치했
 | G10 공개 자료 | PASS | 최종 원본 PNG, 이전 이력, 상대 링크 및 개인정보 노출 검사. |
 | G11 최종 원격 CI | [최종 head 판정](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) | PR과 push의 `build-and-test`·`live-api36`. |
 
-실기기 G7·G8·G9가 INCONCLUSIVE로 남아 Draft를 유지했다.
+실기기 G7·G8·G9가 INCONCLUSIVE로 남아 Draft 상태다. 프로젝트 소유자의 잔여 위험 수용과 `main` 병합 승인은 모두 미완료다. [판정의 적용 범위](recovery-ui-final-acceptance.md)
 
 ## Phase 0 · 기준선
 

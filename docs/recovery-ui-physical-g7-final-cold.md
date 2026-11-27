@@ -42,7 +42,7 @@ AndroidX의 원래 TTID와 TTFD를 기준으로 세 번의 측정을 독립 비�
 
 ## JIT와 첫 화면·지도 준비 관련 구간
 
-최종 12개와 이전 콜드 30개 trace의 AndroidX 1.5.0 시작·렌더 프레임 선택 규칙을 재현했다. 42개에서 원본 TTID·TTFD와 모두 일치했다. 일반 Perfetto 시작 모듈의 TTFD는 최종 12개 중 8개 일치, 3개 불일치, 1개 누락이었다. 최초와 첫 재시험의 원본 지표와 표본은 그대로 보존했다. 아래 구간은 AndroidX 계산과 대조를 마친 trace를 사용한다. [Perfetto 일반 시작 모듈](https://perfetto.dev/docs/analysis/stdlib-docs#androidstartup)
+최종 12개와 이전 콜드 30개 trace의 AndroidX 1.5.0 시작·렌더 프레임 선택 규칙을 재현했다. 42개에서 원본 TTID·TTFD와 모두 일치했다. 일반 Perfetto 시작 모듈의 TTFD는 최종 12개 중 8개 일치, 3개 불일치, 1개 누락이었다. 최초와 첫 재시험의 원본 지표와 표본은 그대로 보존했다. 아래 구간은 AndroidX 계산과 대조를 마친 trace를 사용한다. [Perfetto 일반 시작 모듈](https://perfetto.dev/docs/analysis/stdlib-docs#android-startup-time_to_display)
 
 | 세트별 중앙값 (ms) | A6 | C6 | C7 | A7 |
 |---|---:|---:|---:|---:|
