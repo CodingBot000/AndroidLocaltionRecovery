@@ -4,14 +4,14 @@
 
 ## 핵심 분석
 
-지도 전환의 실제 화면 표시와 UIAutomator가 준비 완료를 관측하는 시각을 요청·run ID로 연결했다. 파싱, ReplaySession 준비, Compose 배치, 지도 draw 및 SurfaceFlinger present와 접근성 관측을 구분해, 이전 UI 후보의 큰 외부 지연이 어느 구간에 집중되는지 확인했다.
+지도 전환의 실제 화면 표시와 UIAutomator가 준비 완료를 관측하는 시각을 요청·run ID로 연결했습니다. 파싱, ReplaySession 준비, Compose 배치, 지도 draw 및 SurfaceFlinger present와 접근성 관측을 구분해, 이전 UI 후보의 큰 외부 지연이 어느 구간에 집중되는지 확인했습니다.
 
 | 동일 B 빌드의 진단 대조 (각 3회, 중앙값) | 기본 | 접근성 캐시 제거 |
 |---|---:|---:|
 | UIAutomator 준비 관측 | 639.6ms | 126.9ms |
 | 첫 지도 프레임 present | 121.6ms | 116.9ms |
 
-캐시 제거는 진단 APK에서만 적용했다. 제품 최적화 수치가 아니라 측정 도구의 관측 지연을 격리한 결과이며, 최종 비교에서는 원본 벤치마크 계약을 유지했다. [원인 격리](#f2--원인-격리와-수정-결정) · [최종 주행 재시험](recovery-ui-emulator-g3-final-ride.md).
+캐시 제거는 진단 APK에서만 적용했습니다. 제품 최적화 수치가 아니라 측정 도구의 관측 지연을 격리한 결과이며, 최종 비교에서는 원본 벤치마크 계약을 유지했습니다. [원인 격리](#f2--원인-격리와-수정-결정) · [최종 주행 재시험](recovery-ui-emulator-g3-final-ride.md).
 
 ## F0 · 비교 기준
 

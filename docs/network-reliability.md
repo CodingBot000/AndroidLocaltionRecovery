@@ -13,7 +13,7 @@
 
 [테스트 코드](../route-lab/src/test) · [통합 검증](verification.md)
 
-실패·중복·취소·응답 역전에도 유효한 기존 경로를 보호하도록 설계했다. MockWebServer 기반 JVM 자동 테스트 17건에 중복 20회→실제 HTTP 1회, 지연 응답 폐기 및 취소 후 실행·대기 호출 0 검증이 포함된다. [장애 검증](#장애-검증). 독립 JVM 모듈의 loopback HTTP 실험이며 상용 서버 연동은 아니다.
+실패·중복·취소·응답 역전에도 유효한 기존 경로를 보호하도록 설계했습니다. MockWebServer 기반 JVM 자동 테스트 17건에 중복 20회→실제 HTTP 1회, 지연 응답 폐기 및 취소 후 실행·대기 호출 0 검증이 포함됩니다. [장애 검증](#장애-검증). 독립 JVM 모듈의 loopback HTTP 실험이며 상용 서버 연동은 아닙니다.
 
 ```mermaid
 sequenceDiagram
@@ -40,11 +40,11 @@ sequenceDiagram
     end
 ```
 
-Reset·Stop·지도 변경 또는 새 요청은 이전 generation을 무효화하고 호출을 취소한다. 아래는 요청 계약과 테스트 결과다.
+Reset·Stop·지도 변경 또는 새 요청은 이전 generation을 무효화하고 호출을 취소합니다. 아래는 요청 계약과 테스트 결과입니다.
 
-`:route-lab`은 JVM 모듈이다. `./gradlew :route-lab:test`가 임시 포트의 IPv4 loopback에 MockWebServer를 띄운다. 합성 O05 주행 OL13에서 관측된 기존 `REROUTE_RECOMMENDED`가 읽기 전용 `POST /route/lookup`을 시작한다. 고정된 대체 경로는 O05 공개 도로 ID와 허용 전이로 구성한다. 패키지 연결 상태는 `verifyModuleBoundaries`와 두 앱의 APK 검사에서 확인한다.
+`:route-lab`은 JVM 모듈입니다. `./gradlew :route-lab:test`가 임시 포트의 IPv4 loopback에 MockWebServer를 띄웁니다. 합성 O05 주행 OL13에서 관측된 기존 `REROUTE_RECOMMENDED`가 읽기 전용 `POST /route/lookup`을 시작합니다. 고정된 대체 경로는 O05 공개 도로 ID와 허용 전이로 구성합니다. 패키지 연결 상태는 `verifyModuleBoundaries`와 두 앱의 APK 검사에서 확인합니다.
 
-요청에는 스키마, 합성 세션과 요청 ID, 지도 ID와 SHA-256, 기존 경로 버전, 시작·목적지 edge ID를 넣는다. 응답은 요청·지도·체크섬·스키마·버전의 일치, 경로 길이, 시작과 목적지, 방향별 edge 연결 및 허용 전이를 검사한다. 성공 시 새 immutable 계획과 초기화한 엔진을 같은 잠금 안에서 반영한다. 중복 이탈은 outstanding 요청 하나로 합친다. 새 시작 edge, Reset, Stop과 지도 변경은 기존 호출을 취소하며 뒤늦게 전달된 응답은 현재 경로를 건드리지 못한다.
+요청에는 스키마, 합성 세션과 요청 ID, 지도 ID와 SHA-256, 기존 경로 버전, 시작·목적지 edge ID를 넣습니다. 응답은 요청·지도·체크섬·스키마·버전의 일치, 경로 길이, 시작과 목적지, 방향별 edge 연결 및 허용 전이를 검사합니다. 성공 시 새 immutable 계획과 초기화한 엔진을 같은 잠금 안에서 반영합니다. 중복 이탈은 outstanding 요청 하나로 합칩니다. 새 시작 edge, Reset, Stop과 지도 변경은 기존 호출을 취소하며 뒤늦게 전달된 응답은 현재 경로를 건드리지 못합니다.
 
 ## 요청 정책
 
@@ -53,9 +53,9 @@ Reset·Stop·지도 변경 또는 새 요청은 이전 generation을 무효화�
 | 목적지 | 숫자 IPv4 loopback, 동적 테스트 포트 |
 | HTTP 제한 | 연결 2초, 읽기·쓰기 각 3초, 호출 5초 |
 | 전체 기한과 시도 | 12초, 최초 포함 최대 3회 |
-| 재시도 | 일시적 I/O·timeout과 408·429·502·503·504. 각 시도 바디는 1회 전송하고 클라이언트 자동 follow-up 및 redirect를 제한한다. |
-| Backoff | 250ms·500ms + 0–99ms jitter. 유효한 Retry-After가 더 길면 이를 따르며 3초 상한 또는 전체 기한을 넘길 때 재시도하지 않는다. |
-| 자원 | 동시에 실행하는 HTTP 1개, 응답 최대 32 KiB, 경로 최대 256 edge. 파서는 객체·스칼라와 단일 배열을 읽는다. 종료 시 호출·응답·연결 풀·디스패처와 테스트 서버를 정리한다. |
+| 재시도 | 일시적 I/O·timeout과 408·429·502·503·504. 각 시도 바디는 1회 전송하고 클라이언트 자동 follow-up 및 redirect를 제한합니다. |
+| Backoff | 250ms·500ms + 0–99ms jitter. 유효한 Retry-After가 더 길면 이를 따르며 3초 상한 또는 전체 기한을 넘길 때 재시도하지 않습니다. |
+| 자원 | 동시에 실행하는 HTTP 1개, 응답 최대 32 KiB, 경로 최대 256 edge. 파서는 객체·스칼라와 단일 배열을 읽습니다. 종료 시 호출·응답·연결 풀·디스패처와 테스트 서버를 정리합니다. |
 
 ## 장애 검증
 
@@ -77,8 +77,8 @@ Reset·Stop·지도 변경 또는 새 요청은 이전 generation을 무효화�
 | N14 | Live 위치 모듈과 Java HTTP 실험 간 의존 경계, Live APK DEX에 HTTP·fixture 서버 클래스가 없음을 확인 |
 | N15 | 기본·Live APK의 권한과 DEX, 테스트 독립 실행, 기존 평가 원본 비교 |
 
-N01–N13과 요청 취소 20회 반복은 JVM 자동 테스트 17건에 포함된다. N14–N15는 Gradle 모듈 및 실 APK 검증이다. 기록은 loopback 호출을 대상으로 하며 모바일 네트워크·실제 경로 서버 측정은 범위 밖이다.
+N01–N13과 요청 취소 20회 반복은 JVM 자동 테스트 17건에 포함됩니다. N14–N15는 Gradle 모듈 및 실 APK 검증입니다. 기록은 loopback 호출을 대상으로 하며 모바일 네트워크·실제 경로 서버 측정은 범위 밖입니다.
 
-2026-11-25에 OkHttp 4.12.0의 503, Retry-After 및 one-shot 처리 동작을 소스에서 확인했다. [OkHttp 재시도 구현](https://raw.githubusercontent.com/square/okhttp/parent-4.12.0/okhttp/src/main/kotlin/okhttp3/internal/http/RetryAndFollowUpInterceptor.kt)
+2026-11-25에 OkHttp 4.12.0의 503, Retry-After 및 one-shot 처리 동작을 소스에서 확인했습니다. [OkHttp 재시도 구현](https://raw.githubusercontent.com/square/okhttp/parent-4.12.0/okhttp/src/main/kotlin/okhttp3/internal/http/RetryAndFollowUpInterceptor.kt)
 
 [검증 결과](verification.md)

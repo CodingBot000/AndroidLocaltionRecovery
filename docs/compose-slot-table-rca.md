@@ -1,6 +1,6 @@
 # Live Android 계측의 Compose 종료 크래시 조사
 
-2026-11-25에 원격 `main`의 실패 커밋 `3b951c0`에서 조사했다. 범위는 Android 계측의 Compose 테스트 환경이다.
+2026-11-25에 원격 `main`의 실패 커밋 `3b951c0`에서 조사했습니다. 범위는 Android 계측의 Compose 테스트 환경입니다.
 
 ## 결론
 
@@ -15,28 +15,28 @@
 
 ## 최초 오류와 Activity 종료 오류
 
-직전 성공 `d9cd5da`에서 `3b951c0`까지 변경된 파일 18개는 Markdown이다. 실패 커밋의 API 36 x86_64 계측 두 건은 모두 첫 테스트에서 `SlotWriter.moveSlotGapTo`의 `length=2560; index=-56`로 끝났다. 원본 stdout에는 먼저 발생한 오류가 표시되지 않았다. [직전 성공](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45571046077/job/139057479424) · [원본 실패 1차](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45578634217/job/139082754732) · [원본 실패 2차](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45578634217/job/139087373650)
+직전 성공 `d9cd5da`에서 `3b951c0`까지 변경된 파일 18개는 Markdown입니다. 실패 커밋의 API 36 x86_64 계측 두 건은 모두 첫 테스트에서 `SlotWriter.moveSlotGapTo`의 `length=2560; index=-56`로 끝났습니다. 원본 stdout에는 먼저 발생한 오류가 표시되지 않았습니다. [직전 성공](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45571046077/job/139057479424) · [원본 실패 1차](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45578634217/job/139082754732) · [원본 실패 2차](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45578634217/job/139087373650)
 
-BOM과 원본 assertion을 유지하고 계측 이벤트와 logcat을 수집한 C1에서 실패 순서를 확인했다. [C1 워크플로와 계측 아티팩트](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45586764637)
+BOM과 원본 assertion을 유지하고 계측 이벤트와 logcat을 수집한 C1에서 실패 순서를 확인했습니다. [C1 워크플로와 계측 아티팩트](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions/runs/45586764637)
 
 | 단계 | 관측 |
 |---|---|
-| O01 첫 회차 | 서비스가 ACTIVE가 된 뒤, 지도 준비가 관측되기 전에 테스트 본문에서 오류가 발생했다. |
-| 최초 오류 | Compose 테스트 프레임 클록이 `DefaultDispatcher-worker-1`에서 `Recomposer.applyChanges`를 실행했다. 노드 제거가 `ViewRootImpl.requestLayout`에 도달해 `CalledFromWrongThreadException`이 발생했다. |
-| 테스트 정리 | `@After`가 시작되고 반환했다. |
-| 약 1.8초 뒤 | main 스레드의 Activity 종료 중 `Composition.dispose`가 그룹을 제거하다가 같은 SlotTable 범위 예외를 냈다. |
+| O01 첫 회차 | 서비스가 ACTIVE가 된 뒤, 지도 준비가 관측되기 전에 테스트 본문에서 오류가 발생했습니다. |
+| 최초 오류 | Compose 테스트 프레임 클록이 `DefaultDispatcher-worker-1`에서 `Recomposer.applyChanges`를 실행했습니다. 노드 제거가 `ViewRootImpl.requestLayout`에 도달해 `CalledFromWrongThreadException`이 발생했습니다. |
+| 테스트 정리 | `@After`가 시작되고 반환했습니다. |
+| 약 1.8초 뒤 | main 스레드의 Activity 종료 중 `Composition.dispose`가 그룹을 제거하다가 같은 SlotTable 범위 예외를 냈습니다. |
 
-실제 라이브러리의 AAR 클래스 파일에서 Kotlin SMAP과 라인 테이블을 대조했다. 스택의 `4298`은 `SlotTable.kt`의 `groups.dataAnchor(updateAddress)`에 인라인된 배열 읽기다. 읽기 인덱스가 음수였음을 확인했으며, 실패한 변경 적용이 내부 메타데이터에 남긴 구체적인 값은 계측하지 않았다. [Runtime 1.9.0 소스 JAR](https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-android/1.9.0/runtime-android-1.9.0-sources.jar)
+실제 라이브러리의 AAR 클래스 파일에서 Kotlin SMAP과 라인 테이블을 대조했습니다. 스택의 `4298`은 `SlotTable.kt`의 `groups.dataAnchor(updateAddress)`에 인라인된 배열 읽기입니다. 읽기 인덱스가 음수였음을 확인했으며, 실패한 변경 적용이 내부 메타데이터에 남긴 구체적인 값은 계측하지 않았습니다. [Runtime 1.9.0 소스 JAR](https://dl.google.com/dl/android/maven2/androidx/compose/runtime/runtime-android/1.9.0/runtime-android-1.9.0-sources.jar)
 
 ## 수정 범위와 근거
 
-실패 버전의 앱과 테스트가 해석한 Runtime·UI·Foundation·UI Test는 1.9.0, Material3는 1.3.2다. Kotlin Compose Compiler는 2.2.21, AGP는 8.13.2다. Compose UI Test 1.9.0의 `createAndroidComposeRule`은 기본적으로 `UnconfinedTestDispatcher`를 사용하며, `effectContext`에 전달한 `TestDispatcher`를 composition과 테스트 클록에 사용한다. [UI Test 1.9.0 소스 JAR](https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-android/1.9.0/ui-test-android-1.9.0-sources.jar)
+실패 버전의 앱과 테스트가 해석한 Runtime·UI·Foundation·UI Test는 1.9.0, Material3는 1.3.2입니다. Kotlin Compose Compiler는 2.2.21, AGP는 8.13.2입니다. Compose UI Test 1.9.0의 `createAndroidComposeRule`은 기본적으로 `UnconfinedTestDispatcher`를 사용하며, `effectContext`에 전달한 `TestDispatcher`를 composition과 테스트 클록에 사용합니다. [UI Test 1.9.0 소스 JAR](https://dl.google.com/dl/android/maven2/androidx/compose/ui/ui-test-android/1.9.0/ui-test-android-1.9.0-sources.jar)
 
-`LiveLifecycleTest`에서 `StandardTestDispatcher`를 명시해 composition 작업이 테스트 클록에서 처리되도록 했다. 서비스의 IDLE/ERROR가 관측된 뒤에는 포커스와 활성화된 Start 버튼이 함께 준비됐을 때 실제 터치를 보낸다. 디스패처만 바꾼 실험에서는 기존 동기화가 서비스 상태를 UI 반영 완료로 간주해 Start 버튼을 찾지 못했다. 기존 12초 한도, assertion, 20회 반복과 서비스 수명 계약을 유지한다. `kotlinx-coroutines-test`는 계측 configuration의 직접 의존성으로 선언했다.
+`LiveLifecycleTest`에서 `StandardTestDispatcher`를 명시해 composition 작업이 테스트 클록에서 처리되도록 했습니다. 서비스의 IDLE/ERROR가 관측된 뒤에는 포커스와 활성화된 Start 버튼이 함께 준비됐을 때 실제 터치를 보냅니다. 디스패처만 바꾼 실험에서는 기존 동기화가 서비스 상태를 UI 반영 완료로 간주해 Start 버튼을 찾지 못했습니다. 기존 12초 한도, assertion, 20회 반복과 서비스 수명 계약을 유지합니다. `kotlinx-coroutines-test`는 계측 configuration의 직접 의존성으로 선언했습니다.
 
-Compose 공식 문서는 이후 v2 테스트 API가 기본 디스패처를 `StandardTestDispatcher`로 바꿨음을 설명한다. 해당 버전의 테스트 API는 현재 프로젝트에 포함되지 않는다. 이번 스택과 동일한 공개 결함 번호는 확인되지 않아 공식 이슈 매칭은 **RELATED_ONLY**다. [Compose 테스트 디스패처 설명](https://developer.android.com/develop/ui/compose/testing/migrate-v2)
+Compose 공식 문서는 이후 v2 테스트 API가 기본 디스패처를 `StandardTestDispatcher`로 바꿨음을 설명합니다. 해당 버전의 테스트 API는 현재 프로젝트에 포함되지 않습니다. 이번 스택과 동일한 공개 결함 번호는 확인되지 않아 공식 이슈 매칭은 **RELATED_ONLY**입니다. [Compose 테스트 디스패처 설명](https://developer.android.com/develop/ui/compose/testing/migrate-v2)
 
-실제 앱은 기존 Activity composition, StateFlow, FGS 및 `RoadMap`의 작업 디스패처와 취소 경로를 사용한다. 별도의 API 34 실험에서 Compose 테스트 클록 없이 ActivityScenario와 Android UIAutomator로 즉시 Stop·다시 시작, STARTING 중 Activity 재생성, 지도 출처 대화상자와 지도 선택 팝업에서 Activity 종료를 실행했다. 서비스는 Activity 재생성 및 대화상자 종료 전후에 유지됐고 명시적 Stop에서 해제됐다.
+실제 앱은 기존 Activity composition, StateFlow, FGS 및 `RoadMap`의 작업 디스패처와 취소 경로를 사용합니다. 별도의 API 34 실험에서 Compose 테스트 클록 없이 ActivityScenario와 Android UIAutomator로 즉시 Stop·다시 시작, STARTING 중 Activity 재생성, 지도 출처 대화상자와 지도 선택 팝업에서 Activity 종료를 실행했습니다. 서비스는 Activity 재생성 및 대화상자 종료 전후에 유지됐고 명시적 Stop에서 해제됐습니다.
 
 ## 실험과 회귀 결과
 

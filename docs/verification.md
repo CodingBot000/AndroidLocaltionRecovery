@@ -4,7 +4,7 @@
 
 ## 최신 구현 검증 요약
 
-2026-11-26–27의 최종 제품 `ce617de`에서 확인한 기능·자동화 검증을 정리한다. 기존 평가와 실제 앱 재생의 동등성을 확인하고, API·권한·실행 환경별로 시험했다. [UI 회귀와 실행 화면](recovery-ui-validation.md) · [GitHub Actions](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions)
+2026-11-26–27의 최종 제품 `ce617de`에서 확인한 기능·자동화 검증을 정리합니다. 기존 평가와 실제 앱 재생의 동등성을 확인하고, API·권한·실행 환경별로 시험했습니다. [UI 회귀와 실행 화면](recovery-ui-validation.md) · [GitHub Actions](https://github.com/CodingBot000/AndroidLocaltionRecovery/actions)
 
 | 검사 | 확인한 결과 | 상세 근거 |
 |---|---|---|
@@ -17,7 +17,7 @@
 | 실기기 기능 내구 | SM-G975N에서 빌드별 O10 180초×10회와 Reset, 지도 전환·재생 20회, Live 시작·종료 20회 통과. 역순 독립 내구 재시험도 기능 단언 통과 | [실기기 기능 검증 요약](physical-device-validation.md#기능-검증-요약) |
 | CI | 최종 PR/push의 빌드·테스트 및 API 36 Live 계측 통과 | [PR #9 검사](https://github.com/CodingBot000/AndroidLocaltionRecovery/pull/9/checks) |
 
-CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행한다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않는다.
+CI는 JVM·Android 빌드/테스트 및 API 36 Live 계측을 실행합니다. 물리 단말 Macrobenchmark·내구·GPS 시험은 로컬 별도 실행이며 CI 통과가 실기기 성능 검증을 의미하지 않습니다.
 
 ## 검증 근거 바로가기
 
