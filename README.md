@@ -2,6 +2,8 @@
 
 **Android 위치 복구 엔진 · 오프라인 지도 렌더링 · 성능 최적화**
 
+apk download link: [Download APK](https://github.com/CodingBot000/AndroidLocaltionRecovery/releases/latest/download/location-recovery-lab.apk)
+
 GPS 이상치와 신호 손실 상황에서 언제 위치를 채택하고, 어디까지 추정하며, 언제 복구할지를 판단하는 Android 위치 처리 엔진이다. Kotlin·Jetpack Compose로 구현했으며, 외부 지도 SDK 없이 국내 OpenStreetMap 10개 지역의 실제 도로망을 렌더링한다.
 
 Kotlin · Jetpack Compose · MVVM · Coroutines / StateFlow · Gradle Multi-Module · Macrobenchmark / Perfetto
